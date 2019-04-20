@@ -889,11 +889,11 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #contact .social-links {
-  padding-bottom: 20px;
+  padding-bottom: 40px;
 }
 
 #contact .social-links a {
-  font-size: 18px;
+  font-size: 40px;
   display: inline-block;
   background: #333;
   color: #fff;
@@ -901,8 +901,8 @@ body.mobile-nav-active #mobile-nav-toggle {
   padding: 8px 0;
   border-radius: 50%;
   text-align: center;
-  width: 36px;
-  height: 36px;
+  width: 72px;
+  height: 72px;
   transition: 0.3s;
 }
 
