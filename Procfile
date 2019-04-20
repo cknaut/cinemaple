@@ -1,1 +1,2 @@
-web: gunicorn cinemaple.wsgi
+web: gunicorn myproject.wsgi
+
