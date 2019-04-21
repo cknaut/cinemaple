@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 import urllib, json 
+from .utils import Mailchimp
 
 from .models import Movie, MovieNightEvent
 # ...

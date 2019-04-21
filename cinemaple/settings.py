@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import sys
-import django_heroku 
- 
+import django_heroku
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,6 +22,14 @@ SECRET_KEY = os.environ['SECRET_KEY_DJANGO']
 
 # OMDBAPI Key
 OMDB_API_KEY = os.environ['OMDB_API_KEY']
+
+
+# Mailchimp Settings
+
+MAILCHIMP_API_KEY           = os.environ['MAILCHIMP_API_KEY']
+MAILCHIMP_DATA_CENTER       = os.environ['MAILCHIMP_DATA_CENTER']
+MAILCHIMP_EMAIL_LIST_ID    = os.environ['MAILCHIMP_EMAIL_LIST_ID']
+
 
 
 # Quick-start development settings - unsuitable for production
