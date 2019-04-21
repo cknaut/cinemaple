@@ -3,7 +3,7 @@
 
 ## **Introduction**:
 
-Movienights at 57 Maple Ave. are recurring events that need some organisational overhead, such as inviting people, selecting movies, and performing movie a survey. In a quest for standalone solution not involving Facebook and Co., the goal is to develop a Web Application able to carry out his overhead.
+Movienights at 57 Maple Ave. are recurring events that need some organisational overhead, such as inviting people, selecting movies, and performing movie a survey. In a quest for a standalone solution not involving Facebook and Co., the goal is to develop a Web Application able to carry out his overhead.
 
 
 ## **Technology**:
