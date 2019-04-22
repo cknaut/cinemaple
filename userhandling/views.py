@@ -83,6 +83,7 @@ def activation(request, key):
         if timezone.now() > profile.key_expires:
             activation_expired = True #Display: offer the user to send a new activation link
             id_user = profile.user.id
+            # TODO THis will fail
             new_activation_link(request, id_user)
 
         else: #Activation successful
@@ -95,12 +96,12 @@ def activation(request, key):
             mc.add_email(profile.user.email)
 
             # Todo: Add more fields to Mailchimp.
-            HttpResponse("You have successfully registered {}.".format(profile.user.email))
+            return HttpResponse("You have successfully registered {}.".format(profile.user.email))
 
     #If user is already active, simply display error message
     else:
         already_active = True #Display : error message
-        HttpResponse("User already registered.")
+        return HttpResponse("User already registered.")
 
 
 def new_activation_link(request, user_id):
