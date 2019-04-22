@@ -1,16 +1,14 @@
-''' Testing OMD API '''
-import urllib, json 
+import requests
+from django.conf import settings
 
-imdbid = "tt0133093"
-OMDAPI = "274350fc"
 
-args = {"apikey": OMDAPI, "i": imdbid, "plot" : "full"}
+def send_simple_message():
+	return requests.post(
+		"https://api.mailgun.net/v3/" + settings.MAILGUN_DOMAIN_NAME + "/messages",
+		auth=("api", settings.MAILGUN_API_KEY),
+		data={"from": "Excited User <mg@cinemaple.com>",
+			"to": ["can_knaut@yahoo.de", "me@cinemaple.com"],
+			"subject": "Hello",
+			"text": "Testing some Mailgun awesomness!"})
 
-url_api = " http://www.omdbapi.com/?{}".format(urllib.parse.urlencode(args))
-
-with urllib.request.urlopen(url_api) as url:
-    data = json.loads(url.read().decode())
-
-title = data["Title"]
-
-title = data["Title"]
+send_simple_message()

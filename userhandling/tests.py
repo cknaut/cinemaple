@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .utils import Mailchimp
+from .utils import Mailchimp, Mailgun
 import random
 import urllib, json
 import string
@@ -12,22 +12,22 @@ from django.conf import settings
 class MailchimpSubscribeTest(TestCase):
 
     # random test email
-    test_email =  "testing@cinemaple.com"
+    test_email =  ''.join(random.choices(string.ascii_uppercase + string.digits, k=5)) + "@cinemaple.com"
 
     # TODO: Add delay to subscribe welcome email to prevent triggering by tests.
     def subscribeemail(self):
         """
         Checks if Mailchimp subscription works
         """
-        mc = Mailchimp()
-        mc.resubscribe(self.test_email)
+        mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID_TEST)
+        mc.add_email(self.test_email)
         self.assertEqual(mc.check_subscription_status(self.test_email)[1]["status"], "subscribed")
 
     def unsubscribeemail(self):
         """
         Checks if Mailchimp unsubscription works
         """
-        mc = Mailchimp()
+        mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID_TEST)
         mc.unsubscribe(self.test_email)
         self.assertEqual(mc.check_subscription_status(self.test_email)[1]["status"], "unsubscribed")
 
@@ -59,4 +59,23 @@ class omdb_check(TestCase):
 
         self.assertEqual(data["Title"], self.check_title)
 
+class Mailgun_check(TestCase):
 
+    def test_send_mg_email(self):
+        """
+        Send email and checks if status is ok.
+        """
+        mg = Mailgun()
+
+        sender_email    = "mg_test@cinemaple.com"
+        sender_name     = "Cinemaple Mailgun Test"
+        subject         = "Cinemaple Mailgun Test"
+        recipients      = ["mg_test@cinemaple.com", "can.knaut@gmail.com"]
+        content         = "This is a test email!"
+
+        # Send message and retrieve status and return JSON object.
+        status_code, r_json = mg.send_email(sender_email, sender_name, subject, recipients, content)
+
+        # Check if everything went ok.
+        self.assertEqual(status_code, 200)
+        self.assertEqual(r_json['message'], 'Queued. Thank you.')
