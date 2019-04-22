@@ -102,7 +102,6 @@ def activation(request, key):
         already_active = True #Display : error message
         HttpResponse("User already registered.")
 
-    return redirect('index')
 
 def new_activation_link(request, user_id):
     form = RegistrationForm()

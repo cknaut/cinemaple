@@ -45,7 +45,7 @@ class RegistrationForm(forms.Form):
     #Sending activation email
     def send_activation_email(self, datas):
         mg = Mailgun()
-        link="http://cinemaple.com/activate/"+datas['activation_key']
+        link="http://www.cinemaple.com/activate/"+datas['activation_key']
 
         sender_email    = "admin@cinemaple.com"
         sender_name     = "Cinemaple"
