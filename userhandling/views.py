@@ -1,12 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.conf import settings
-import urllib, json 
-from .utils import Mailchimp
+import urllib, json
+import hashlib
+import random
+from .utils import Mailchimp, Mailgun
+from .forms import RegistrationForm
 
 from .models import Movie, MovieNightEvent
 # ...
- 
+
 
 # Render Index Page
 def index(request):
@@ -35,7 +39,32 @@ def add_movie_fromIMDB(request, imdb_id):
     m.country = data["Country"]
     m.actors = data["Actors"]
     m.save()
- 
-    return render(request, 'userhandling/index.html')
-    
 
+    return render(request, 'userhandling/index.html')
+
+# Register Email
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+    registration_form = RegistrationForm()
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            datas={}
+            datas['username']=form.cleaned_data['username']
+            datas['email']=form.cleaned_data['email']
+            datas['password1']=form.cleaned_data['password1']
+
+            #We generate a random activation key
+            salt =  hashlib.sha256(str(random.getrandbits(256)).encode('utf-8')).hexdigest()
+            usernamesalt = datas['username']
+            datas['activation_key']= hashlib.sha1((salt+usernamesalt).encode('utf-8')).hexdigest()
+
+            form.send_activation_email(datas)
+            form.save(datas) #Save the user and his profile
+
+            request.session['registered']=True #For display purposes
+            return redirect('index')
+        else:
+            registration_form = form #Display form with error messages (incorrect fields, etc)
+    return render(request, 'userhandling/registration.html', {'form': registration_form})
