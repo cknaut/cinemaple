@@ -1,6 +1,7 @@
 # From https://www.codingforentrepreneurs.com/blog/mailchimp-integration/
 
 import hashlib
+import random
 import re
 import json
 import requests
@@ -155,3 +156,12 @@ class Mailgun(object):
 
             r = requests.post(self.api_url, auth=auth, data=data)
             return r.status_code, r.json()
+
+class VerificationHash(object):
+    def __init__(self):
+        super(VerificationHash, self).__init__()
+        self.salt =  hashlib.sha256(str(random.getrandbits(256)).encode('utf-8')).hexdigest()
+
+    def gen_ver_hash(self, username):
+        return hashlib.sha1((self.salt+username).encode('utf-8')).hexdigest()
+

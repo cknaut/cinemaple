@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.conf import settings
 import urllib, json
 import hashlib
 import random
-from .utils import Mailchimp, Mailgun
+from .utils import Mailchimp, Mailgun, VerificationHash
 from .forms import RegistrationForm
 
 from .models import Movie, MovieNightEvent
@@ -56,9 +58,8 @@ def register(request):
             datas['password1']=form.cleaned_data['password1']
 
             #We generate a random activation key
-            salt =  hashlib.sha256(str(random.getrandbits(256)).encode('utf-8')).hexdigest()
-            usernamesalt = datas['username']
-            datas['activation_key']= hashlib.sha1((salt+usernamesalt).encode('utf-8')).hexdigest()
+            vh = VerificationHash()
+            datas['activation_key']= vh.gen_ver_hash(datas['username'])
 
             form.send_activation_email(datas)
             form.save(datas) #Save the user and his profile
@@ -68,3 +69,4 @@ def register(request):
         else:
             registration_form = form #Display form with error messages (incorrect fields, etc)
     return render(request, 'userhandling/registration.html', {'form': registration_form})
+
