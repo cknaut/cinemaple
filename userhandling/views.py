@@ -48,6 +48,7 @@ def index(request):
 
     # Has a registration succesfully been submitted?
     successful_reg_submit = False
+    subscribe_email = ''
 
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -67,13 +68,15 @@ def index(request):
             # TODO: Add success message
             request.session['registered']=True #For display purposes
             successful_reg_submit = True
+            subscribe_email = datas['email']
         else:
             registration_form = form #Display form with error messages (incorrect fields, etc)
 
     context = {
         'form': registration_form,
         'movienights' : movienights,
-        'successful_submit' : successful_reg_submit
+        'successful_submit' : successful_reg_submit,
+        'subscribe_email' :  str(subscribe_email)
     }
     return render(request, 'userhandling/index.html', context)
 
