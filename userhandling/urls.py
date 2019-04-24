@@ -5,6 +5,5 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('<str:imdb_id>/add/', views.add_movie_fromIMDB, name='add_movie_fromIMDB'),
-    path('register/', views.register,  name='register'),
-    path('activate/<str:key>', views.activation,  name='register'),
+    path('activate/<str:key>', views.activation,  name='activation'),
 ]

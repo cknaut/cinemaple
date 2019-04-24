@@ -9,7 +9,7 @@ from .utils import  Mailgun
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
 class RegistrationForm(forms.Form):
     username = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Username','class':'form-control input-perso'}),max_length=30,min_length=3)
-    email = forms.EmailField(label="",widget=forms.EmailInput(attrs={'placeholder': 'Email','class':'form-control input-perso'}),max_length=100,error_messages={'invalid': ("Email invalide.")})
+    email = forms.EmailField(label="",widget=forms.EmailInput(attrs={'placeholder': 'Email','class':'form-control input-perso'}),max_length=100,error_messages={'invalid': ("Invalid Email.")})
     password1 = forms.CharField(label="",max_length=50,min_length=6,
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Password','class':'form-control input-perso'}))
     password2 = forms.CharField(label="",max_length=50,min_length=6,

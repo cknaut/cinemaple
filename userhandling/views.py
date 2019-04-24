@@ -16,11 +16,6 @@ from .models import Movie, MovieNightEvent, Profile
 # ...
 
 
-# Render Index Page
-def index(request):
-    movienights = MovieNightEvent.objects.order_by('-date')[:5]
-    return render(request, 'userhandling/index.html', {'movienights': movienights})
-
 # Access movie info using IMDB and add model instance containing info
 def add_movie_fromIMDB(request, imdb_id):
     args = {"apikey": settings.OMDB_API_KEY, "i": imdb_id, "plot" : "full"}
@@ -46,11 +41,14 @@ def add_movie_fromIMDB(request, imdb_id):
 
     return render(request, 'userhandling/index.html')
 
-# Register Email
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('index')
+# Render Index Page, manage register
+def index(request):
     registration_form = RegistrationForm()
+    movienights = MovieNightEvent.objects.order_by('-date')[:5]
+
+    # Has a registration succesfully been submitted?
+    successful_reg_submit = False
+
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -66,12 +64,18 @@ def register(request):
             form.send_activation_email(datas)
             form.save(datas) #Save the user and his profile
 
+            # TODO: Add success message
             request.session['registered']=True #For display purposes
-            return redirect('index')
+            successful_reg_submit = True
         else:
             registration_form = form #Display form with error messages (incorrect fields, etc)
-    return render(request, 'userhandling/registration.html', {'form': registration_form})
 
+    context = {
+        'form': registration_form,
+        'movienights' : movienights,
+        'successful_submit' : successful_reg_submit
+    }
+    return render(request, 'userhandling/index.html', context)
 
 #View called from activation email. Activate user if link didn't expire (48h default), or offer to
 #send a second link if the first expired.
