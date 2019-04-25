@@ -17,14 +17,7 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(label="",max_length=50,min_length=6,
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password','class':'form-control input-perso'}))
 
-    captcha = ReCaptchaField(
-        widget = ReCaptchaV2Checkbox(
-            attrs = {
-                'data-theme': 'dark',
-                'data-size': 'compact',
-            }
-        )
-    )
+    captcha = ReCaptchaField()
 
     #Override clean method to check password match
     def clean(self):

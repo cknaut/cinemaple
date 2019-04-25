@@ -50,7 +50,14 @@ RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_SITE_KEY']
 #OMDB_API_KEY = secretkeys.OMDB_API_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+# automatically run in debug mode if in production
+environement = os.environ['DJANGO_ENV']
+
+if environement == "DEBUG":
+    DEBUG = True
+elif environement == "PRODUCTION":
+    DEBUG = False
 
 ALLOWED_HOSTS = []
 
