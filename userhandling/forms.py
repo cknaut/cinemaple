@@ -4,6 +4,8 @@ from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
 from .models import Profile
 from .utils import  Mailgun
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 # TODO Think about Validators
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
@@ -15,7 +17,14 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(label="",max_length=50,min_length=6,
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password','class':'form-control input-perso'}))
 
-    #recaptcha = ReCaptchaField()
+    captcha = ReCaptchaField(
+        widget = ReCaptchaV2Checkbox(
+            attrs = {
+                'data-theme': 'dark',
+                'data-size': 'compact',
+            }
+        )
+    )
 
     #Override clean method to check password match
     def clean(self):

@@ -20,21 +20,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY_DJANGO']
 
-# OMDBAPI Key
+# OMDBAPI key
 OMDB_API_KEY = os.environ['OMDB_API_KEY']
 
-
-# Mailchimp Settings
+# Mailchimp keys
 
 MAILCHIMP_API_KEY           = os.environ['MAILCHIMP_API_KEY']
 MAILCHIMP_DATA_CENTER       = os.environ['MAILCHIMP_DATA_CENTER']
 MAILCHIMP_EMAIL_LIST_ID    = os.environ['MAILCHIMP_EMAIL_LIST_ID']
 MAILCHIMP_EMAIL_LIST_ID_TEST    = os.environ['MAILCHIMP_EMAIL_LIST_ID_TEST']
 
-
-# Mailgun Settings
+# Mailgun keys
 MAILGUN_API_KEY = os.environ['MAILGUN_API_KEY']
 MAILGUN_DOMAIN_NAME = os.environ['MAILGUN_DOMAIN_NAME']
+
+# Recaptcha keys
+RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_SECRET_KEY']
+RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_SITE_KEY']
 
 
 
@@ -63,6 +65,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'captcha'
 ]
 
 MIDDLEWARE = [
