@@ -61,7 +61,7 @@ elif environement == "PRODUCTION":
     DEBUG = False
 '''
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
