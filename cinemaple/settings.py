@@ -54,14 +54,14 @@ RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_SITE_KEY']
 # automatically run in debug mode if in production
 environement = os.environ['DJANGO_ENV']
 
-'''
+
 if environement == "DEBUG":
     DEBUG = True
 elif environement == "PRODUCTION":
     DEBUG = False
-'''
 
-DEBUG = True
+
+
 
 ALLOWED_HOSTS = []
 
@@ -167,19 +167,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-django_heroku.settings(locals())
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Define my home IP in order to use UserBasedExceptionMiddleware
 INTERNAL_IPS = ["84.254.94.123"]
+
+django_heroku.settings(locals())
+
+
