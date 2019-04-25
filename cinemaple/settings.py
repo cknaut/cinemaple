@@ -83,9 +83,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'userhandling.middleware.UserBasedExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'cinemaple.urls'
@@ -177,3 +176,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 django_heroku.settings(locals())
+
+# Define my home IP in order to use UserBasedExceptionMiddleware
+INTERNAL_IPS = ["84.254.94.123"]
