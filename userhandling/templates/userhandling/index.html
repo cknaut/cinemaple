@@ -100,7 +100,7 @@
 
 
     <!--==========================
-    Submission Modals, activated by successful_submit = True
+    Success Modals, activated by successful_submit = True
   ============================-->
       <!-- Modal HTML -->
       <div id="RegSubmissionModal" class="modal fade">
@@ -123,9 +123,39 @@
       </div>
 
     <!--==========================
-      Submission Modals
+      Success Modals
     ============================-->
 
+    <!--==========================
+      Submission Modal
+    ============================-->
+      <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="modalRegisterFormLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body mx-3">
+
+
+              <form action="/" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <div class="modal-footer d-flex justify-content-center">
+              <input class="btn btn-deep-orange" type="submit" value="Submit">
+            </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!--==========================
+      Submission Modal
+    ============================-->
 
     <section id="about">
       <div class="container">
@@ -242,32 +272,6 @@
       <!--==========================
     Register Modal
     ============================-->
-
-  <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header text-center">
-          <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body mx-3">
-
-
-              <form action="/" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <div class="modal-footer d-flex justify-content-center">
-              <input class="btn btn-deep-orange" type="submit" value="Submit">
-            </div>
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
           <div class="col-lg-3 cta-btn-container text-center">
             <a class="cta-btn align-middle" href="#" data-toggle="modal" data-target="#modalRegisterForm">Sign Up Now!</a>
           </div>
@@ -389,6 +393,18 @@
         });
     </script>
   {% endif %}
+
+
+  {% if reg_form_reload %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#modalRegisterForm").modal('show');
+        });
+    </script>
+  {% endif %}}
+
+
+
 
   <!-- Contact Form JavaScript File -->
   <script src="{% static 'userhandling/contactform/contactform.js' %}"></script>

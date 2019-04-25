@@ -45,6 +45,7 @@ def add_movie_fromIMDB(request, imdb_id):
 def index(request):
     registration_form = RegistrationForm()
     movienights = MovieNightEvent.objects.order_by('-date')[:5]
+    reg_form_reload = False
 
     # Has a registration succesfully been submitted?
     successful_reg_submit = False
@@ -71,12 +72,14 @@ def index(request):
             subscribe_email = datas['email']
         else:
             registration_form = form #Display form with error messages (incorrect fields, etc)
+            reg_form_reload = True
 
     context = {
         'form': registration_form,
         'movienights' : movienights,
         'successful_submit' : successful_reg_submit,
-        'subscribe_email' :  str(subscribe_email)
+        'subscribe_email' :  str(subscribe_email),
+        'reg_form_reload' : reg_form_reload,
     }
     return render(request, 'userhandling/index.html', context)
 
