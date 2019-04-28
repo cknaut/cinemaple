@@ -1,0 +1,114 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61403405-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-61403405-2');
+  </script>
+
+  <meta charset="utf-8">
+  <title>Cinemaple Movie Nights</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicons -->
+  <link href="{% static 'userhandling/img/favicon.png' %}" rel="icon">
+  <link   href="{% static 'userhandling/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+
+  <!-- Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- Bootstrap CSS File -->
+  <link href="{% static 'userhandling/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="{% static 'userhandling/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'userhandling/lib/animate/animate.min.css' %}" rel="stylesheet">
+
+
+  <!-- Main Stylesheet File -->
+  <link  href="{% static 'userhandling/css/style.css' %}" rel="stylesheet">
+
+  <!-- Emoji Stylesheet File -->
+  <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+{% block css_imports %}
+{% endblock %}
+
+
+
+  <!-- =======================================================
+    Theme Name: Regna
+    Theme URL: https://bootstrapmade.com/regna-bootstrap-onepage-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+</head>
+
+<body>
+
+  <!--==========================
+  Header
+  ============================-->
+
+{% block modals %}
+{% endblock %}
+
+
+{% block header %}
+{% endblock %}
+
+  <!--==========================
+    Hero Section
+  ============================-->
+{% block hero %}
+{% endblock %}
+
+{% block main %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+
+
+  <!-- JavaScript Libraries -->
+
+  <script src="{% static 'userhandling/lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/jquery/jquery-migrate.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/wow/wow.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/waypoints/waypoints.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/counterup/counterup.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/superfish/hoverIntent.js' %}"></script>
+  <script src="{% static 'userhandling/lib/superfish/superfish.min.js' %}"></script>
+
+
+
+{% block js %}
+{% endblock %}
+
+
+
+
+  <!-- Contact Form JavaScript File -->
+  <script src="{% static 'userhandling/contactform/contactform.js' %}"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="{% static 'userhandling/js/main.js' %}"></script>
+
+</body>
+</html>

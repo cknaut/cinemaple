@@ -1,0 +1,76 @@
+
+{% extends 'userhandling/base.html' %}
+{% load static %}
+
+
+{% block css_imports %}
+<!-- Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<!-- Success Modal Stylesheet File -->
+<link  href="{% static 'userhandling/css/successmodal.css' %}" rel="stylesheet">
+
+<!-- Login Form Stylesheet File -->
+<link  href="{% static 'userhandling/css/loginform.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+
+<body>
+
+{% block header %}
+
+
+{% block modals %}
+    <!--==========================
+    Success Modals, activated by successful_submit = True
+  ============================-->
+      <!-- Modal HTML -->
+      <div id="RegSubmissionModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="icon-box">
+                <i class="material-icons">&#xE876;</i>
+              </div>
+              <h4 class="modal-title">Awesome!</h4>
+            </div>
+            <div class="modal-body">
+              <p class="text-center">An activation link has been sent to {{ subscribe_email }}. Please check your email and follow instructions.</p>
+            </div>
+            <div class="modal-footer">
+              <a href="{% url 'index' %}" class="btn btn-success btn-block">Back to home.</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!--==========================
+      Success Modals
+    ============================-->
+{% endblock %}
+
+
+<div class="container register">
+                <div class="row">
+                    <div class="col-md-3 register-left">
+                        <img src={% static 'userhandling/img/camera.png' %} alt=""/>
+                        {% block tagline %}
+                        {% endblock %}
+                    </div>
+                    <div class="col-md-9 register-right">
+                        <div class="tab-content" id="myTabContent">
+                                {% block heading %}
+                                {% endblock %}
+                                <div class="row register-form">
+                                    <div class="col-md-9">
+                                      {% block form %}
+                                    {% endblock %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+{% endblock %}

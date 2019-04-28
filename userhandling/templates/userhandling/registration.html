@@ -1,151 +1,64 @@
+
+{% extends 'userhandling/registration_base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61403405-2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+{% block css_imports %}
+<!-- Success Modal Stylesheet File -->
+<link  href="{% static 'userhandling/css/reg_succ_modal.css' %}" rel="stylesheet">
+<link  href="{% static 'userhandling/css/loginform.css' %}" rel="stylesheet">
+  {% endblock %}
 
-    gtag('config', 'UA-61403405-2');
-  </script>
-
-  <meta charset="utf-8">
-  <title>Cinemaple Movie Nights</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="" name="keywords">
-  <meta content="" name="description">
-
-  <!-- Favicons -->
-  <link href="{% static 'userhandling/img/favicon.png' %}" rel="icon">
-  <link   href="{% static 'userhandling/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
-
-  <!-- Bootstrap CSS File -->
-  <link href="{% static 'userhandling/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
-  <!-- Libraries CSS Files -->
-  <link href="{% static 'userhandling/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
-  <link href="{% static 'userhandling/lib/animate/animate.min.css' %}" rel="stylesheet">
-
-
-  <!-- Main Stylesheet File -->
-  <link  href="{% static 'userhandling/css/style.css' %}" rel="stylesheet">
-
-    <!-- Material Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-
-  <!-- Success Modal Stylesheet File -->
-  <link  href="{% static 'userhandling/css/successmodal.css' %}" rel="stylesheet">
-
-    <!-- Login Form Stylesheet File -->
-  <link  href="{% static 'userhandling/css/loginform.css' %}" rel="stylesheet">
-
-  <!-- Emoji Stylesheet File -->
-  <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-
-
-  <!-- =======================================================
-    Theme Name: Regna
-    Theme URL: https://bootstrapmade.com/regna-bootstrap-onepage-template/
-    Author: BootstrapMade.com
-    License: https://bootstrapmade.com/license/
-  ======================================================= -->
-</head>
-
-<body>
-
-
-    <!--==========================
-    Success Modals, activated by successful_submit = True
-  ============================-->
-      <!-- Modal HTML -->
-      <div id="RegSubmissionModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="icon-box">
-                <i class="material-icons">&#xE876;</i>
-              </div>
-              <h4 class="modal-title">Awesome!</h4>
-            </div>
-            <div class="modal-body">
-              <p class="text-center">An activation link has been sent to {{ subscribe_email }}. Please check your email and follow instructions.</p>
-            </div>
-            <div class="modal-footer">
-              <a href="{% url 'index' %}" class="btn btn-success btn-block">Back to home.</a>
-            </div>
-          </div>
+{% block modals %}
+<div id="RegSubmissionModal" class="modal fade">
+  <div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="icon-box">
+          <i class="material-icons">email</i>
         </div>
+        <h4 class="modal-title">Check your emails!</h4>
       </div>
-
-    <!--==========================
-      Success Modals
-    ============================-->
-
-
-
-<div class="container register">
-                <div class="row">
-                    <div class="col-md-3 register-left">
-                        <img src={% static 'userhandling/img/camera.png' %} alt=""/>
-                        <h3>Welcome</h3>
-                        <p>Please register to recieve invitations for upcoming movie nights!</p>
-                    </div>
-                    <div class="col-md-9 register-right">
-                        <div class="tab-content" id="myTabContent">
-                                <h3 class="register-heading">Register</h3>
-                                <div class="row register-form">
-                                    <div class="col-md-9">
-
-                                      <form action="/registration/" method="post">
-                                    {% csrf_token %}
-                                    {{ form }}
-                                    <div class="modal-footer d-flex justify-content-center">
-                                      <input class="btn btn-deep-orange" type="submit" value="Submit">
-                                    </div>
-                                    </form>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+      <div class="modal-body">
+        <p class="text-center">An activation link has been sent to {{ subscribe_email }}.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'index' %}" class="btn btn-success btn-block">Back to home.</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
 
+{% block tagline %}
+<h3>Welcome</h3>
+<p>Please register to recieve invitations for upcoming movie nights!</p>
+{% endblock %}
+
+{% block heading %}
+<h3 class="register-heading">Register</h3>
+{% endblock %}
+
+{% block form %}
+<form action="/registration/" method="post">
+{% csrf_token %}
+{{ form }}
+<div class="modal-footer d-flex justify-content-center">
+  <input class="btn btn-deep-orange" type="submit" value="Register">
+   <a href="{% url 'index' %}" class="btn btn-deep-orange">Back to home.</a>
+</div>
+</form>
+Already registered? <a href="{% url 'login' %}" class="btn btn-deep-orange">Login here!</a>
+{% endblock %}
 
 
+{% block js %}
+{% if successful_submit %}
+  <script type="text/javascript">
+      $(document).ready(function(){
+          $("#RegSubmissionModal").modal('show');
+      });
+  </script>
+{% endif %}
+{% endblock %}
 
-  <script src="{% static 'userhandling/lib/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/jquery/jquery-migrate.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/easing/easing.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/wow/wow.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/waypoints/waypoints.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/counterup/counterup.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/superfish/hoverIntent.js' %}"></script>
-  <script src="{% static 'userhandling/lib/superfish/superfish.min.js' %}"></script>
-
-  <!-- Contact Form JavaScript File -->
-  <script src="{% static 'userhandling/contactform/contactform.js' %}"></script>
-
-  <!-- Template Main Javascript File -->
-  <script src="{% static 'userhandling/js/main.js' %}"></script>
-
-  <!--Handling of Modals -->
-  {% if successful_submit %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#RegSubmissionModal").modal('show');
-        });
-    </script>
-  {% endif %}
-
-</body>
-</html>

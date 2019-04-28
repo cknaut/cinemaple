@@ -44,8 +44,12 @@ def add_movie_fromIMDB(request, imdb_id):
 # Render Index Page, manage register
 def index(request):
     movienights = MovieNightEvent.objects.order_by('-date')[:5]
+    successful_verified = False
     context = {
-        'movienights' : movienights,
+        'movienights'           : movienights,
+        'successful_verified'   : successful_verified,
+        'email'                 : "",
+        'username'              : ""
     }
     return render(request, 'userhandling/index.html', context)
 
@@ -72,7 +76,16 @@ def activation(request, key):
             mc.add_email(profile.user.email)
 
             # Todo: Add more fields to Mailchimp.
-            return HttpResponse("You have successfully registered {}.".format(profile.user.email))
+
+            movienights = MovieNightEvent.objects.order_by('-date')[:5]
+            successful_verified = True
+            context = {
+            'movienights'           : movienights,
+            'successful_verified'   : successful_verified,
+            'email'                 : profile.user.email,
+            'username'              : profile.user.username
+            }
+            return render(request, 'userhandling/index.html', context)
 
     #If user is already active, simply display error message
     else:
@@ -116,7 +129,6 @@ def new_activation_link(request, user_id):
         request.session['new_link']=True #Display: new link sent
         HttpResponse("Activation link expired. You have resent an activation link for {}.".format(user.email))
 
-
     return redirect('index')
 
 
@@ -131,6 +143,7 @@ def registration(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             datas={}
+            datas['username']=form.cleaned_data['username']
             datas['email']=form.cleaned_data['email']
             datas['password1']=form.cleaned_data['password1']
             datas['first_name']=form.cleaned_data['first_name']
@@ -141,7 +154,7 @@ def registration(request):
 
             #We generate a random activation key
             vh = VerificationHash()
-            datas['activation_key']= vh.gen_ver_hash(datas['email'])
+            datas['activation_key']= vh.gen_ver_hash(datas['username'])
 
             form.send_activation_email(datas)
             form.save(datas) #Save the user and his profile
@@ -158,3 +171,4 @@ def registration(request):
         'subscribe_email' :  str(subscribe_email),
     }
     return render(request, 'userhandling/registration.html', context)
+

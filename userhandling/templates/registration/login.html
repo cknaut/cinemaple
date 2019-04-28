@@ -1,0 +1,51 @@
+
+{% extends 'userhandling/registration_base.html' %}
+{% load static %}
+
+{% block modals %}
+<div id="RegSubmissionModal" class="modal fade">
+  <div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="icon-box">
+          <i class="material-icons">&#xE876;</i>
+        </div>
+        <h4 class="modal-title">Awesome!</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">An activation link has been sent to {{ subscribe_email }}. Please check your email and follow instructions.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'index' %}" class="btn btn-success btn-block">Back to home.</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block tagline %}
+<h3>Welcome</h3>
+<p>Please login to access information about upcoming movie nights!</p>
+{% endblock %}
+
+{% block heading %}
+<h3 class="register-heading">Log in.</h3>
+{% endblock %}
+
+{% block form %}
+<form class="login" method="POST" action="/login/">
+
+  {% csrf_token %}
+
+  {{form.as_p}}
+
+  <div class="modal-footer d-flex justify-content-center">
+  <input class="btn btn-deep-orange" type="submit" value="Log in">
+   <a href="{% url 'index' %}" class="btn btn-deep-orange">Back to home.</a>
+</div>
+  </form>
+
+Not registered yet? <a href="{% url 'registration' %}" class="btn btn-deep-orange">Signup here!</a>
+{% endblock %}
+

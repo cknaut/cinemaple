@@ -1,63 +1,49 @@
+{% extends 'userhandling/base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61403405-2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-61403405-2');
-  </script>
-
-  <meta charset="utf-8">
-  <title>Cinemaple Movie Nights</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="" name="keywords">
-  <meta content="" name="description">
-
-  <!-- Favicons -->
-  <link href="{% static 'userhandling/img/favicon.png' %}" rel="icon">
-  <link   href="{% static 'userhandling/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
-
-  <!-- Material Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-  <!-- Bootstrap CSS File -->
-  <link href="{% static 'userhandling/lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
-  <!-- Libraries CSS Files -->
-  <link href="{% static 'userhandling/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
-  <link href="{% static 'userhandling/lib/animate/animate.min.css' %}" rel="stylesheet">
 
 
-  <!-- Main Stylesheet File -->
-  <link  href="{% static 'userhandling/css/style.css' %}" rel="stylesheet">
+{% block css_imports %}
+<link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
+{% endblock %}
 
-  <!-- Success Modal Stylesheet File -->
-  <link  href="{% static 'userhandling/css/successmodal.css' %}" rel="stylesheet">
+{% block modals %}
+{% if successful_verified %}
+<div id="RegVerifyModall" class="modal fade">
+  <div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="icon-box">
+          <i class="material-icons">&#xE876;</i>
+        </div>
+        <h4 class="modal-title">Validation Successful!</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">You have sucessfully validated <b>{{email}}</b> and may now log in using your username <b>{{username}}</b>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'login' %}" class="btn btn-success btn-block">Login</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 
-  <!-- Emoji Stylesheet File -->
-  <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+<div id="logoutmodal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+      <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+      <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started">Logout</a></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
 
-  <!-- =======================================================
-    Theme Name: Regna
-    Theme URL: https://bootstrapmade.com/regna-bootstrap-onepage-template/
-    Author: BootstrapMade.com
-    License: https://bootstrapmade.com/license/
-  ======================================================= -->
-</head>
 
-<body>
 
+{% block header %}
   <!--==========================
   Header
   ============================-->
@@ -78,13 +64,19 @@
           <li><a href="#call-to-action">Sign Up</a></li>
           <li><a href="#sendmessage">Contact Us</a></li>
         {% if user.is_authenticated %}
+        <li>  <a data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:yellow" class="btn-get-started">Logout</a> </li>
         <li> Welcome, {{request.user.first_name}}! </li>
+        {% else %}
+        <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:yellow" class="btn-get-started">Login</a> </li>
       {% endif %}
         </ul>
       </nav><!-- #nav-menu-container -->
     </div>
   </header><!-- #header -->
+{% endblock %}
 
+
+{% block hero %}
   <!--==========================
     Hero Section
   ============================-->
@@ -96,7 +88,10 @@
       <a href="{% url 'registration' %}" class="btn-get-started">Sign Up Now!</a>
     </div>
   </section><!-- #hero -->
+{% endblock %}
 
+
+{% block main %}
   <main id="main">
 
     <section id="about">
@@ -284,7 +279,10 @@
     </section><!-- #contact -->
 
   </main>
+{% endblock %}
 
+
+{% block footer %}
   <!--==========================
     Footer
   ============================-->
@@ -310,30 +308,16 @@
       </div>
     </div>
   </footer><!-- #footer -->
+{% endblock %}
 
-  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-
-  <!-- JavaScript Libraries -->
-
-  "{% static 'userhandling/img/team-3.jpg' %}"
-
-  <script src="{% static 'userhandling/lib/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/jquery/jquery-migrate.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/easing/easing.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/wow/wow.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/waypoints/waypoints.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/counterup/counterup.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/superfish/hoverIntent.js' %}"></script>
-  <script src="{% static 'userhandling/lib/superfish/superfish.min.js' %}"></script>
+{% block js %}
+{% if successful_verified %}
+  <script type="text/javascript">
+      $(document).ready(function(){
+          $("#RegVerifyModall").modal('show');
+      });
+  </script>
+{% endif %}
+{% endblock %}
 
 
-
-  <!-- Contact Form JavaScript File -->
-  <script src="{% static 'userhandling/contactform/contactform.js' %}"></script>
-
-  <!-- Template Main Javascript File -->
-  <script src="{% static 'userhandling/js/main.js' %}"></script>
-
-</body>
-</html>

@@ -173,3 +173,9 @@ INTERNAL_IPS = ["84.254.94.123"]
 django_heroku.settings(locals())
 
 
+LOGIN_REDIRECT_URL = '/'
+
+
+LOGOUT_REDIRECT_URL = '/'
+
+

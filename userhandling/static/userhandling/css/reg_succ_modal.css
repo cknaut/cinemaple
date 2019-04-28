@@ -38,7 +38,7 @@ body {
     font-size: 13px;
 }
 .modal-confirm .icon-box {
-    color: #fff;
+    color: #636363;
     position: absolute;
     margin: 0 auto;
     left: 0;
@@ -48,7 +48,7 @@ body {
     height: 95px;
     border-radius: 50%;
     z-index: 9;
-    background: #82ce34;
+    background: #fcf801;
     padding: 15px;
     text-align: center;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
@@ -62,16 +62,16 @@ body {
     margin-top: 80px;
 }
 .modal-confirm .btn {
-    color: #fff;
+    color: #636363;
     border-radius: 4px;
-    background: #82ce34;
+    background: #fcf801;
     text-decoration: none;
     transition: all 0.4s;
     line-height: normal;
     border: none;
 }
 .modal-confirm .btn:hover, .modal-confirm .btn:focus {
-    background: #6fb32b;
+    background: #fcf801;
     outline: none;
 }
 .trigger-btn {

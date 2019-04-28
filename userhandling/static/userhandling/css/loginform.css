@@ -1,5 +1,11 @@
-.register{
+body {
     background: -webkit-linear-gradient(left, #31343a, #bfc4cc);
+}
+
+
+.register{
+
+    border-radius: 20px;
     margin-top: 3%;
     padding: 3%;
 }
