@@ -4,7 +4,7 @@ from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
 from .models import Profile
 from .utils import  Mailgun
-from captcha.fields import ReCaptchaField,
+from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
 
@@ -20,7 +20,7 @@ class RegistrationForm(forms.Form):
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password','class':'form-control input-perso'}))
 
     if not settings.DEBUG:
-        captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(label="", attrs={'data-theme': 'light', 'data-size': 'compact'}))
+        captcha = ReCaptchaField(label="", widget=ReCaptchaV2Checkbox(attrs={'data-theme': 'light', 'data-size': 'compact'}))
 
     def clean_email(self):
         username = self.cleaned_data['email']
