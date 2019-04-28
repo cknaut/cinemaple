@@ -20,7 +20,7 @@ class RegistrationForm(forms.Form):
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password','class':'form-control input-perso'}))
 
     if not settings.DEBUG:
-        captcha = ReCaptchaField(label="", widget=ReCaptchaV2Checkbox(attrs={'data-theme': 'light', 'data-size': 'compact'}))
+        captcha = ReCaptchaField(label="", widget=ReCaptchaV2Checkbox(attrs={'data-theme': 'light', 'data-size': 'normal'}))
 
     def clean_email(self):
         username = self.cleaned_data['email']
