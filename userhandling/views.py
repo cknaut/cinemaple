@@ -131,7 +131,6 @@ def new_activation_link(request, user_id):
 
     return redirect('index')
 
-
 def registration(request):
     registration_form = RegistrationForm()
 
