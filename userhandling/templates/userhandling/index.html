@@ -77,6 +77,9 @@
           <li><a href="#movienights">Movienights</a></li>
           <li><a href="#call-to-action">Sign Up</a></li>
           <li><a href="#sendmessage">Contact Us</a></li>
+        {% if user.is_authenticated %}
+        <li> Welcome, {{request.user.first_name}}! </li>
+      {% endif %}
         </ul>
       </nav><!-- #nav-menu-container -->
     </div>
@@ -90,72 +93,11 @@
       <h1>Welcome to Cinemaple!</h1>
       <h2>Movie Nights taken to the next level.</h2>
 
-      <a href="#call-to-action" class="btn-get-started">Sign Up Now!</a>
+      <a href="{% url 'registration' %}" class="btn-get-started">Sign Up Now!</a>
     </div>
   </section><!-- #hero -->
 
   <main id="main">
-
-
-
-
-    <!--==========================
-    Success Modals, activated by successful_submit = True
-  ============================-->
-      <!-- Modal HTML -->
-      <div id="RegSubmissionModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="icon-box">
-                <i class="material-icons">&#xE876;</i>
-              </div>
-              <h4 class="modal-title">Awesome!</h4>
-            </div>
-            <div class="modal-body">
-              <p class="text-center">An activation link has been sent to {{ subscribe_email }}.</p>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    <!--==========================
-      Success Modals
-    ============================-->
-
-    <!--==========================
-      Submission Modal
-    ============================-->
-      <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="modalRegisterFormLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header text-center">
-          <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body mx-3">
-
-
-              <form action="/" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <div class="modal-footer d-flex justify-content-center">
-              <input class="btn btn-deep-orange" type="submit" value="Submit">
-            </div>
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
-    <!--==========================
-      Submission Modal
-    ============================-->
 
     <section id="about">
       <div class="container">
@@ -384,25 +326,6 @@
   <script src="{% static 'userhandling/lib/counterup/counterup.min.js' %}"></script>
   <script src="{% static 'userhandling/lib/superfish/hoverIntent.js' %}"></script>
   <script src="{% static 'userhandling/lib/superfish/superfish.min.js' %}"></script>
-
-<!--Handling of Modals -->
-  {% if successful_submit %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#RegSubmissionModal").modal('show');
-        });
-    </script>
-  {% endif %}
-
-
-  {% if reg_form_reload %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#modalRegisterForm").modal('show');
-        });
-    </script>
-  {% endif %}}
-
 
 
 

@@ -91,14 +91,16 @@ class Email_Verification_Check(TestCase):
     # Valid Form Data
     def UserForm_valid(self, data):
         form = RegistrationForm(data=data)
+        import pdb; pdb.set_trace()
         self.assertTrue(form.is_valid())
 
     def test_register_user(self):
         data = {
-        'username'  : self.randuser,
-        'email'     : 'testuser@cinemaple.com',
-        'password1' : 'password123',
-        'password2' : 'password123'
+        'email'         : self.randuser + "@cinemaple.com",
+        'first_name'    : 'Clément',
+        'last_name'     : 'Müller',
+        'password1'     : 'password123',
+        'password2'     : 'password123'
         }
 
         # CHeck if userform is correct (which it should be)
@@ -120,8 +122,9 @@ class Email_Verification_Check(TestCase):
     # Invalid Form Data
     def test_UserForm_invalid(self):
         data = {
-            'username' : "",
-            'email'     : 'testuser@cinemaple.com',
+            'email'          : '@cinemaple.com',
+            'first_name'     : 'Hans',
+            'last_name'     : 'Müller',
             'password1' : '1',
             'password2' : '2'
         }

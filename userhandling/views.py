@@ -43,43 +43,9 @@ def add_movie_fromIMDB(request, imdb_id):
 
 # Render Index Page, manage register
 def index(request):
-    registration_form = RegistrationForm()
     movienights = MovieNightEvent.objects.order_by('-date')[:5]
-    reg_form_reload = False
-
-    # Has a registration succesfully been submitted?
-    successful_reg_submit = False
-    subscribe_email = ''
-
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            datas={}
-            datas['username']=form.cleaned_data['username']
-            datas['email']=form.cleaned_data['email']
-            datas['password1']=form.cleaned_data['password1']
-
-            #We generate a random activation key
-            vh = VerificationHash()
-            datas['activation_key']= vh.gen_ver_hash(datas['username'])
-
-            form.send_activation_email(datas)
-            form.save(datas) #Save the user and his profile
-
-            # TODO: Add success message
-            request.session['registered']=True #For display purposes
-            successful_reg_submit = True
-            subscribe_email = datas['email']
-        else:
-            registration_form = form #Display form with error messages (incorrect fields, etc)
-            reg_form_reload = True
-
     context = {
-        'form': registration_form,
         'movienights' : movienights,
-        'successful_submit' : successful_reg_submit,
-        'subscribe_email' :  str(subscribe_email),
-        'reg_form_reload' : reg_form_reload,
     }
     return render(request, 'userhandling/index.html', context)
 
@@ -153,3 +119,42 @@ def new_activation_link(request, user_id):
 
     return redirect('index')
 
+
+def registration(request):
+    registration_form = RegistrationForm()
+
+    # Has a registration succesfully been submitted?
+    successful_reg_submit = False
+    subscribe_email = ''
+
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            datas={}
+            datas['email']=form.cleaned_data['email']
+            datas['password1']=form.cleaned_data['password1']
+            datas['first_name']=form.cleaned_data['first_name']
+            datas['last_name']=form.cleaned_data['last_name']
+
+            # Check if user alredy exists
+
+
+            #We generate a random activation key
+            vh = VerificationHash()
+            datas['activation_key']= vh.gen_ver_hash(datas['email'])
+
+            form.send_activation_email(datas)
+            form.save(datas) #Save the user and his profile
+
+            successful_reg_submit = True
+            subscribe_email = datas['email']
+        else:
+            registration_form = form #Display form with error messages (incorrect fields, etc)
+            reg_form_reload = True
+
+    context = {
+        'form': registration_form,
+        'successful_submit' : successful_reg_submit,
+        'subscribe_email' :  str(subscribe_email),
+    }
+    return render(request, 'userhandling/registration.html', context)

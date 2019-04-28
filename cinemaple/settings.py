@@ -38,18 +38,11 @@ MAILGUN_DOMAIN_NAME = os.environ['MAILGUN_DOMAIN_NAME']
 RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_SECRET_KEY']
 RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_SITE_KEY']
 
+# Secret SAlt for email registration
+EMAIL_VERIFICATION_SECRET_SALT = os.environ['EMAIL_VERIFICATION_SECRET_SALT']
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = secretkeys.SECRET_KEY
-
-# OMDBAPI Key
-#OMDB_API_KEY = secretkeys.OMDB_API_KEY
-
-# SECURITY WARNING: don't run with debug turned on in production!
 
 # automatically run in debug mode if in production
 environement = os.environ['DJANGO_ENV']

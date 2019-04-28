@@ -27,7 +27,10 @@ MAILCHIMP_EMAIL_LIST_ID_TEST = getattr(settings, "MAILCHIMP_EMAIL_LIST_ID", None
 if MAILCHIMP_EMAIL_LIST_ID_TEST is None:
     raise NotImplementedError("MAILCHIMP_EMAIL_LIST_ID_TEST must be set in the settings, something like us17")
 
-
+# Get secret salt used for hash generation for email reset
+EMAIL_VERIFICATION_SECRET_SALT = getattr(settings, "MAILCHIMP_API_KEY", None)
+if EMAIL_VERIFICATION_SECRET_SALT is None:
+    raise NotImplementedError("EMAIL_VERIFICATION_SECRET_SALT must be set in the settings")
 
 def check_email(email):
     if not re.match(r".+@.+\..+", email):
@@ -163,5 +166,6 @@ class VerificationHash(object):
         self.salt =  hashlib.sha256(str(random.getrandbits(256)).encode('utf-8')).hexdigest()
 
     def gen_ver_hash(self, username):
-        return hashlib.sha1((self.salt+username).encode('utf-8')).hexdigest()
+        ''' Get Hasch by combining username, salt based on user creation, and secret salt'''
+        return hashlib.sha1((self.salt+username+EMAIL_VERIFICATION_SECRET_SALT).encode('utf-8')).hexdigest()
 

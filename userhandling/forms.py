@@ -10,8 +10,9 @@ from django.conf import settings
 # TODO Think about Validators
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
 class RegistrationForm(forms.Form):
-    username = forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Username','class':'form-control input-perso'}),max_length=30,min_length=3)
     email = forms.EmailField(label="",widget=forms.EmailInput(attrs={'placeholder': 'Email','class':'form-control input-perso'}),max_length=100,error_messages={'invalid': ("Invalid Email.")})
+    first_name =  forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Your first name','class':'form-control input-perso'}),max_length=100)
+    last_name =  forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Your last name','class':'form-control input-perso'}),max_length=100)
     password1 = forms.CharField(label="",max_length=50,min_length=6,
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Password','class':'form-control input-perso'}))
     password2 = forms.CharField(label="",max_length=50,min_length=6,
@@ -20,21 +21,32 @@ class RegistrationForm(forms.Form):
     if not settings.DEBUG:
         captcha = ReCaptchaField()
 
+    def clean_email(self):
+        username = self.cleaned_data['email']
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return username
+        raise forms.ValidationError(u'A user with email "%s" is already registered.' % username)
+
     #Override clean method to check password match
     def clean(self):
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
 
         if password1 and password1 != password2:
-            self._errors['password2'] = ErrorList([u"Passwords don't match."])
+            raise forms.ValidationError("Passwords don't match.")
 
-        return self.cleaned_data
+        return cleaned_data
 
     #Override of save method for saving both User and Profile objects
     def save(self, datas):
-        u = User.objects.create_user(datas['username'],
-                                     datas['email'],
-                                     datas['password1'])
+        u = User.objects.create_user(username = datas['email'],
+                                     email = datas['email'],
+                                     password = datas['password1'],
+                                     first_name = datas['first_name'],
+                                     last_name = datas['last_name'])
         u.is_active = False
 
         # Saving auto-creates profile
