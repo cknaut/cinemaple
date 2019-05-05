@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Example</title>
-    </head>
-    <body>
-        <p>This is an example of a simple HTML page with one paragraph.</p>
-    </body>
-</html>
+
+
+{% extends 'registration_base.html' %}
+{% load static %}
+
+{% block css_imports %}
+<!-- Success Modal Stylesheet File -->
+<link  href="{% static 'userhandling/css/reg_succ_modal.css' %}" rel="stylesheet">
+<link  href="{% static 'userhandling/css/loginform.css' %}" rel="stylesheet">
+  {% endblock %}
