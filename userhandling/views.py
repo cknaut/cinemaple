@@ -127,7 +127,7 @@ def new_activation_link(request, user_id):
 
         assert status_code == 200, "Send of new key failed"
         request.session['new_link']=True #Display: new link sent
-        HttpResponse("Activation link expired. You have resent an activation link for {}.".format(user.email))
+        return HttpResponse("Activation link expired. You have resent an activation link for {}.".format(user.email))
 
     return redirect('index')
 
@@ -170,27 +170,33 @@ def registration(request):
     return render(request, 'userhandling/registration.html', context)
 
 
-def my_login(request):
-    login_form = LoginForm()
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            # At this point, the clean() fuction in the form already made sure that the user is valid and active.
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect(index)
+if  settings.DEBUG:
+    def my_login(request):
+        login_form = LoginForm()
+        if request.method == 'POST':
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                # At this point, the clean() fuction in the form already made sure that the user is valid and active.
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
+                user = authenticate(username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    return redirect(index)
+                else:
+                    return HttpResponse("User is none despite clean in form.")
             else:
-                return HttpResponse("User is none despite clean in form.")
-        else:
-            login_form = form #Display form with error messages (incorrect fields, etc)
+                login_form = form #Display form with error messages (incorrect fields, etc)
 
-    context = {
-        'login_form': login_form,
-    }
-    return render(request, 'userhandling/login.html', context)
+        context = {
+            'login_form': login_form,
+        }
+        return render(request, 'userhandling/login.html', context)
+
+else:
+    def my_login(request):
+        return HttpResponse("User already registered.")
+
 
 def my_logout(request):
     logout(request)
