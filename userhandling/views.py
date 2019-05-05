@@ -2,15 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.utils import timezone
 import datetime
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 import urllib, json
 import hashlib
 import random
 from .utils import Mailchimp, Mailgun, VerificationHash
-from .forms import RegistrationForm
+from .forms import RegistrationForm, LoginForm
 
 from .models import Movie, MovieNightEvent, Profile
 # ...
@@ -148,8 +148,7 @@ def registration(request):
             datas['first_name']=form.cleaned_data['first_name']
             datas['last_name']=form.cleaned_data['last_name']
 
-            # Check if user alredy exists
-
+            # TODO: Check if user alredy exists
 
             #We generate a random activation key
             vh = VerificationHash()
@@ -162,7 +161,6 @@ def registration(request):
             subscribe_email = datas['email']
         else:
             registration_form = form #Display form with error messages (incorrect fields, etc)
-            reg_form_reload = True
 
     context = {
         'form': registration_form,
@@ -171,3 +169,29 @@ def registration(request):
     }
     return render(request, 'userhandling/registration.html', context)
 
+
+def my_login(request):
+    login_form = LoginForm()
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            # At this point, the clean() fuction in the form already made sure that the user is valid and active.
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect(index)
+            else:
+                return HttpResponse("User is none despite clean in form.")
+        else:
+            login_form = form #Display form with error messages (incorrect fields, etc)
+
+    context = {
+        'login_form': login_form,
+    }
+    return render(request, 'userhandling/login.html', context)
+
+def my_logout(request):
+    logout(request)
+    return redirect(index)

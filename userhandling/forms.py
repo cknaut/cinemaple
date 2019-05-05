@@ -74,3 +74,30 @@ class RegistrationForm(forms.Form):
         status_code, r_json = mg.send_email(sender_email, sender_name, subject, recipients, content)
         assert status_code == 200, "Email Verification Email Failed"
 
+class LoginForm(forms.Form):
+   username =  forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Username','class':'form-control input-perso'}),max_length=100)
+   password = forms.CharField(label="",max_length=50,min_length=6,
+                                widget=forms.PasswordInput(attrs={'placeholder': 'Password','class':'form-control input-perso'}))
+   def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+
+        # Check if user exists.
+        try:
+            user = User.objects.get(username=username)
+        except:
+            raise forms.ValidationError(u'Invalid login data.')
+
+        # Check if password mathes.
+        # NOoe that we return the same error message for every login error. This way, it is not possible to poll the site for existing usernames.
+        if not user.check_password(password):
+            raise forms.ValidationError(u'Invalid login data.')
+
+        # Check if user is valid
+        if not user.is_active:
+            raise forms.ValidationError(u'User account is not activated, please verify email adress.')
+
+        # if all checks passed, user should be valid:
+        return cleaned_data
+
