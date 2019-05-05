@@ -64,7 +64,7 @@
           <li><a href="#call-to-action">Sign Up</a></li>
           <li><a href="#sendmessage">Contact Us</a></li>
         {% if user.is_authenticated %}
-        <li>  <a data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:yellow" class="btn-get-started">Logout</a> </li>
+        <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:yellow" class="btn-get-started">Logout</a> </li>
         <li> Welcome, {{request.user.first_name}}! </li>
         {% else %}
         <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:yellow" class="btn-get-started">Login</a> </li>

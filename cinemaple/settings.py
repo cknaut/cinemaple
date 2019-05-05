@@ -40,9 +40,12 @@ RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_SITE_KEY']
 
 # Secret SAlt for email registration
 EMAIL_VERIFICATION_SECRET_SALT = os.environ['EMAIL_VERIFICATION_SECRET_SALT']
+PW_RESET_SECRET_SALT = os.environ['PW_RESET_SECRET_SALT']
 
 
-
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
+MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
 
 # automatically run in debug mode if in production
 environement = os.environ['DJANGO_ENV']

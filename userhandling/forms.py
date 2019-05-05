@@ -7,6 +7,7 @@ from .utils import  Mailgun
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
+from django.core.mail import EmailMessage
 
 
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
@@ -61,7 +62,7 @@ class RegistrationForm(forms.Form):
 
     #Sending activation email
     def send_activation_email(self, datas):
-        mg = Mailgun()
+
         link="http://www.cinemaple.com/activate/"+datas['activation_key']
 
         sender_email    = "admin@cinemaple.com"
@@ -70,9 +71,8 @@ class RegistrationForm(forms.Form):
         recipients      = [datas['email']]
         content         = "Hi " + datas["first_name"] + ", please activate your email using the following link: " + link
 
-        # Send message and retrieve status and return JSON object.
-        status_code, r_json = mg.send_email(sender_email, sender_name, subject, recipients, content)
-        assert status_code == 200, "Email Verification Email Failed"
+        email = EmailMessage(subject,content, sender_email,recipients)
+        email.send()
 
 class LoginForm(forms.Form):
    username =  forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Username','class':'form-control input-perso'}),max_length=100)

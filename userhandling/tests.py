@@ -75,12 +75,11 @@ class Mailgun_check(TestCase):
         recipients      = ["mg_test@cinemaple.com", "can.knaut@gmail.com"]
         content         = "This is a test email!"
 
-        # Send message and retrieve status and return JSON object.
-        status_code, r_json = mg.send_email(sender_email, sender_name, subject, recipients, content)
+        # TODO: Check why this fails.
+        email = EmailMessage(subject,content, sender_email,recipients)
+        import pdb; pdb.set_trace()
+        email.send(fail_silently=False)
 
-        # Check if everything went ok.
-        self.assertEqual(status_code, 200)
-        self.assertEqual(r_json['message'], 'Queued. Thank you.')
 
 
 class Email_Verification_Check(TestCase):
@@ -91,7 +90,6 @@ class Email_Verification_Check(TestCase):
     # Valid Form Data
     def UserForm_valid(self, data):
         form = RegistrationForm(data=data)
-        import pdb; pdb.set_trace()
         self.assertTrue(form.is_valid())
 
     def test_register_user(self):
