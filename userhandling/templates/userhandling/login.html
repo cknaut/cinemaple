@@ -1,6 +1,5 @@
 
 {% extends 'registration_base.html' %}
-{% load static %}
 
 {% block tagline %}
 <h3>Welcome</h3>
@@ -11,4 +10,19 @@
 <h3 class="register-heading">Log in.</h3>
 {% endblock %}
 
+{% block form %}
+<form class="login" method="POST" action="/login/">
+
+  {% csrf_token %}
+
+  {{login_form}}
+
+  <div class="modal-footer d-flex justify-content-center">
+  <input class="btn btn-deep-orange" type="submit" value="Log in">
+   <a href="{% url 'index' %}" class="btn btn-deep-orange">Back to home.</a>
+</div>
+  </form>
+
+Not registered yet? <a href="{% url 'registration' %}" class="btn btn-deep-orange">Signup here!</a>
+{% endblock %}
 
