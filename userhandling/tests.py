@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.shortcuts import get_object_or_404
-from .utils import Mailchimp, Mailgun
+from .utils import Mailchimp
+from django.core import mail
 from django.contrib.auth.models import User
 import random
 import urllib, json
@@ -63,22 +64,29 @@ class omdb_check(TestCase):
 
 class Mailgun_check(TestCase):
 
+
+    def test_no_email_sent(self):
+        ''' No email is sent, check if outbox is empty '''
+        self.assertEqual(len(mail.outbox), 0)
+
+
     def test_send_mg_email(self):
         """
         Send email and checks if status is ok.
         """
-        mg = Mailgun()
 
         sender_email    = "mg_test@cinemaple.com"
-        sender_name     = "Cinemaple Mailgun Test"
         subject         = "Cinemaple Mailgun Test"
         recipients      = ["mg_test@cinemaple.com", "can.knaut@gmail.com"]
         content         = "This is a test email!"
 
         # TODO: Check why this fails.
         email = EmailMessage(subject,content, sender_email,recipients)
-        import pdb; pdb.set_trace()
         email.send(fail_silently=False)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].body, content)
+
 
 
 
@@ -89,7 +97,7 @@ class Email_Verification_Check(TestCase):
 
     # Valid Form Data
     def UserForm_valid(self, data):
-        form = RegistrationForm(data=data)
+        form = RegistrationForm(data=data, testing=True)
         self.assertTrue(form.is_valid())
 
     def test_register_user(self):
@@ -102,6 +110,7 @@ class Email_Verification_Check(TestCase):
         }
 
         # CHeck if userform is correct (which it should be)
+        import pdb; pdb.set_trace()
         self.UserForm_valid(data)
 
         # Call the register view with a valid form.

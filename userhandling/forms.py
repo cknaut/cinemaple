@@ -3,7 +3,6 @@ import datetime
 from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
 from .models import Profile
-from .utils import  Mailgun
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
@@ -12,6 +11,7 @@ from django.core.mail import EmailMessage
 
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
 class RegistrationForm(forms.Form):
+    ''' Testing Flag used for calling form in testing setup in order to avoid recaptcha'''
     username =  forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Username','class':'form-control input-perso'}),max_length=100)
     email = forms.EmailField(label="",widget=forms.EmailInput(attrs={'placeholder': 'Email','class':'form-control input-perso'}),max_length=100,error_messages={'invalid': ("Invalid Email.")})
     first_name =  forms.CharField(label="",widget=forms.TextInput(attrs={'placeholder': 'Your first name','class':'form-control input-perso'}),max_length=100)
@@ -31,6 +31,14 @@ class RegistrationForm(forms.Form):
         except User.DoesNotExist:
             return username
         raise forms.ValidationError(u'A user with username "%s" is already registered.' % username)
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return email
+        raise forms.ValidationError(u'A user with email "%s" is already registered.' % email)
 
     #Override clean method to check password match
     def clean(self):

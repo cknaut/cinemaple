@@ -128,45 +128,6 @@ class Mailchimp(object):
     def unsubscribe(self, email):
         return self.change_subscription_status(email, status='unsubscribed')
 
-# Mailgun Utils
-
-
-MAILGUN_DOMAIN_NAME = getattr(settings, "MAILGUN_DOMAIN_NAME", None)
-if MAILGUN_DOMAIN_NAME is None:
-    raise NotImplementedError("MAILGUN_DOMAIN_NAME must be set in the settings")
-
-
-MAILGUN_API_KEY = getattr(settings, "MAILGUN_API_KEY", None)
-if MAILGUN_API_KEY is None:
-    raise NotImplementedError("MAILGUN_API_KEY must be set in the settings")
-
-class Mailgun(object):
-
-        def __init__(self):
-            super(Mailgun, self).__init__()
-            self.key = MAILGUN_API_KEY
-            self.api_url  = 'https://api.mailgun.net/v3/{dm}/messages'.format(
-                                        dm=MAILGUN_DOMAIN_NAME
-                                    )
-
-        def send_email(self, sender_email, sender_name, subject, recipients, content):
-
-            # Check emails
-            check_email(sender_email)
-            for recipient in recipients:
-                check_email(recipient)
-
-            auth=("api", self.key)
-
-            data={  "from": sender_name + ' <' + sender_email + '>',
-                    "to": recipients,
-                    "subject": subject,
-                    "text": content
-            }
-
-            r = requests.post(self.api_url, auth=auth, data=data)
-            return r.status_code, r.json()
-
 class VerificationHash(object):
     def __init__(self):
         super(VerificationHash, self).__init__()

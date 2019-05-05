@@ -9,7 +9,7 @@ from django.conf import settings
 import urllib, json
 import hashlib
 import random
-from .utils import Mailchimp, Mailgun, VerificationHash
+from .utils import Mailchimp, VerificationHash
 from .forms import RegistrationForm, LoginForm
 
 from .models import Movie, MovieNightEvent, Profile
@@ -191,8 +191,3 @@ def my_login(request):
         'login_form': login_form,
     }
     return render(request, 'userhandling/login.html', context)
-
-
-def my_logout(request):
-    logout(request)
-    return redirect(index)
