@@ -195,10 +195,8 @@ if  settings.DEBUG:
 
 else:
     def my_login(request):
-        context = {
-            'login_form': LoginForm()
-        }
-        return render(request, 'userhandling/login.html', context)
+
+        return render(request, 'userhandling/login.html')
 
 
 def my_logout(request):
