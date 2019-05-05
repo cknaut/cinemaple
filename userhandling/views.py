@@ -195,7 +195,10 @@ if  settings.DEBUG:
 
 else:
     def my_login(request):
-        return HttpResponse("User already registered.")
+        context = {
+            'login_form': LoginForm()
+        }
+        return render(request, 'userhandling/login.html', context)
 
 
 def my_logout(request):
