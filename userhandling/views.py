@@ -170,33 +170,27 @@ def registration(request):
     return render(request, 'userhandling/registration.html', context)
 
 
-if  settings.DEBUG:
-    def my_login(request):
-        login_form = LoginForm()
-        if request.method == 'POST':
-            form = LoginForm(request.POST)
-            if form.is_valid():
-                # At this point, the clean() fuction in the form already made sure that the user is valid and active.
-                username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
-                user = authenticate(username=username, password=password)
-                if user is not None:
-                    login(request, user)
-                    return redirect(index)
-                else:
-                    return HttpResponse("User is none despite clean in form.")
+def my_login(request):
+    login_form = LoginForm()
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            # At this point, the clean() fuction in the form already made sure that the user is valid and active.
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect(index)
             else:
-                login_form = form #Display form with error messages (incorrect fields, etc)
+                return HttpResponse("User is none despite clean in form.")
+        else:
+            login_form = form #Display form with error messages (incorrect fields, etc)
 
-        context = {
-            'login_form': login_form,
-        }
-        return render(request, 'userhandling/login.html', context)
-
-else:
-    def my_login(request):
-
-        return render(request, 'userhandling/login.html')
+    context = {
+        'login_form': login_form,
+    }
+    return render(request, 'userhandling/login.html', context)
 
 
 def my_logout(request):
