@@ -10,9 +10,9 @@ import urllib, json
 import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm
 
-from .models import Movie, MovieNightEvent, Profile
+from .models import Movie, MovieNightEvent, Profile, PasswordReset
 # ...
 
 
@@ -139,14 +139,14 @@ def registration(request):
     subscribe_email = ''
 
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
+        registration_form = RegistrationForm(request.POST)
+        if registration_form.is_valid():
             datas={}
-            datas['username']=form.cleaned_data['username']
-            datas['email']=form.cleaned_data['email']
-            datas['password1']=form.cleaned_data['password1']
-            datas['first_name']=form.cleaned_data['first_name']
-            datas['last_name']=form.cleaned_data['last_name']
+            datas['username']=registration_form.cleaned_data['username']
+            datas['email']=registration_form.cleaned_data['email']
+            datas['password1']=registration_form.cleaned_data['password1']
+            datas['first_name']=registration_form.cleaned_data['first_name']
+            datas['last_name']=registration_form.cleaned_data['last_name']
 
             # TODO: Check if user alredy exists
 
@@ -154,13 +154,11 @@ def registration(request):
             vh = VerificationHash()
             datas['activation_key']= vh.gen_ver_hash(datas['username'])
 
-            form.send_activation_email(datas)
-            form.save(datas) #Save the user and his profile
+            registration_form.send_activation_email(datas)
+            registration_form.save(datas) #Save the user and his profile
 
             successful_reg_submit = True
             subscribe_email = datas['email']
-        else:
-            registration_form = form #Display form with error messages (incorrect fields, etc)
 
     context = {
         'form': registration_form,
@@ -191,3 +189,67 @@ def my_login(request):
         'login_form': login_form,
     }
     return render(request, 'userhandling/login.html', context)
+
+def password_reset_request(request):
+    # TODO: Make active flag to pw_rest
+    form = PasswordResetRequestForm()
+    successful_submit = False
+    reset_email = ""
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            reset_email = form.populate_PasswordReset_send_email()
+            successful_submit = True
+
+    context = {
+        'form': form,
+        'successful_submit' : successful_submit,
+        'reset_email' : reset_email
+    }
+    return render(request, 'userhandling/password_reset_request.html', context)
+
+def password_reset_request_done(request):
+    form = PasswordResetRequestForm(request.POST)
+    context = {
+        'form': form,
+        'successful_submit' : True,
+    }
+    return render(request, 'userhandling/password_reset_request.html', context)
+
+
+def password_reset(request, reset_key):
+
+     # get user
+    try:
+        pr = PasswordReset.objects.get(reset_key=reset_key)
+        pr_exists = True
+    except PasswordReset.DoesNotExist:
+        return HttpResponse("Password link could not be associated with valid username.")
+
+    if pr_exists:
+        if timezone.now() > pr.created_at + datetime.timedelta(days=2):
+            return HttpResponse("Password rest key expired, please restart password reset.")
+
+    form = PasswordResetForm()
+    successful_submit = False
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            # get pw from form
+            pw = form.cleaned_data['password1']
+            if pr_exists:
+                username = pr.username
+                user = User.objects.get(username=username)
+                user.password = pw
+                user.save()
+                successful_submit = True
+    context = {
+        'form': form,
+        'successful_submit' : successful_submit,
+        'reset_key' : reset_key
+    }
+
+    return render(request, 'userhandling/password_reset.html', context)
+
+
+

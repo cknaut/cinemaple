@@ -47,6 +47,8 @@ EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
 MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
 
+DEFAULT_FROM_EMAIL  = 'admin@cinemaple.com'
+
 # automatically run in debug mode if in production
 environement = os.environ['DJANGO_ENV']
 

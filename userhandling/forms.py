@@ -1,12 +1,14 @@
 from django import forms
 import datetime
+from django.utils import timezone
 from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, PasswordReset
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
 from django.core.mail import EmailMessage
+from .utils import VerificationHash
 
 
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
@@ -108,4 +110,60 @@ class LoginForm(forms.Form):
 
         # if all checks passed, user should be valid:
         return cleaned_data
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label="",widget=forms.EmailInput(attrs={'placeholder': 'Email','class':'form-control input-perso'}),max_length=100,error_messages={'invalid': ("Invalid Email.")})
+
+    def populate_PasswordReset_send_email(self):
+        email = self.cleaned_data['email']
+        try:
+            user = User.objects.get(email=email)
+            userexists = True
+        except User.DoesNotExist:
+            userexists = False
+
+        if userexists:
+            # initiate password reste model
+            username = user.username
+
+            # generate reset hash
+            vh = VerificationHash()
+            reset_key = vh.gen_pw_hash(username)
+
+            # save model
+            pr = PasswordReset(username=username, reset_key=reset_key)
+            pr.save()
+
+            link="http://www.cinemaple.com/reset/"+reset_key
+
+            sender_email    = "admin@cinemaple.com"
+            sender_name     = "Cinemaple"
+            subject         = "Password Reset Link"
+            recipients      = [email]
+            content         = "Hi " + user.first_name + ", please reset your password using the following link: " + link
+
+            email_send = EmailMessage(subject,content, sender_email,recipients)
+            email_send.send()
+        return email
+
+class PasswordResetForm(forms.Form):
+    password1 = forms.CharField(label="",max_length=50,min_length=6,
+                            widget=forms.PasswordInput(attrs={'placeholder': 'New Password','class':'form-control input-perso'}))
+    password2 = forms.CharField(label="",max_length=50,min_length=6,
+                            widget=forms.PasswordInput(attrs={'placeholder': 'Confirm new Password','class':'form-control input-perso'}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+
+        if password1 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match.")
+        return cleaned_data
+
+
+
+
+
+
 

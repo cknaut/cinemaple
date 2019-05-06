@@ -25,6 +25,14 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
+class PasswordReset(models.Model):
+    username = models.CharField(max_length=30, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    reset_key = models.CharField(max_length=30, blank=True)
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.username
+
 class Movie(models.Model):
     imdbID = models.CharField(max_length=200)
     title = models.CharField(max_length=500)
