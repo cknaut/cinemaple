@@ -1,3 +1,1 @@
-web: gunicorn cinemaple.wsgi
-web: gunicorn cinemaple.wsgi
-
+web: newrelic-admin run-program gunicorn cinemaple.wsgi
