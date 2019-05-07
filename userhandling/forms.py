@@ -81,7 +81,7 @@ class RegistrationForm(forms.Form):
         recipients      = [datas['email']]
         content         = "Hi " + datas["first_name"] + ", please activate your email using the following link: " + link
 
-        email = EmailMessage(subject,content, sender_email,recipients)
+        email = EmailMessage(subject,content, sender_name + " <" + sender_email + ">", recipients)
         email.send()
 
 class LoginForm(forms.Form):
@@ -142,7 +142,7 @@ class PasswordResetRequestForm(forms.Form):
             recipients      = [email]
             content         = "Hi " + user.first_name + ", please reset your password using the following link: " + link
 
-            email_send = EmailMessage(subject,content, sender_email,recipients)
+            email_send = EmailMessage(subject,content, sender_name + " <" + sender_email + ">", recipients)
             email_send.send()
         return email
 
@@ -159,6 +159,7 @@ class PasswordResetForm(forms.Form):
 
         if password1 and password1 != password2:
             raise forms.ValidationError("Passwords don't match.")
+
         return cleaned_data
 
 

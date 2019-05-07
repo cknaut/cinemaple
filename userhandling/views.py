@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
+from django.core.mail import EmailMessage
 import urllib, json
 import hashlib
 import random
@@ -167,7 +168,6 @@ def registration(request):
     }
     return render(request, 'userhandling/registration.html', context)
 
-
 def my_login(request):
     login_form = LoginForm()
     if request.method == 'POST':
@@ -191,7 +191,6 @@ def my_login(request):
     return render(request, 'userhandling/login.html', context)
 
 def password_reset_request(request):
-    # TODO: Make active flag to pw_rest
     form = PasswordResetRequestForm()
     successful_submit = False
     reset_email = ""
@@ -216,33 +215,66 @@ def password_reset_request_done(request):
     }
     return render(request, 'userhandling/password_reset_request.html', context)
 
+def check_pw_rest_link(request, reset_key):
+    # validate reset link
+    try:
+        PasswordResetObject = PasswordReset.objects.get(reset_key=reset_key)
+        error = 0
+    except PasswordReset.DoesNotExist:
+        error = -1
+        return error
+
+    if timezone.now() > PasswordResetObject.created_at + datetime.timedelta(days=2):
+        error = -2
+    if PasswordResetObject.reset_used:
+        error = -3
+
+    return error
 
 def password_reset(request, reset_key):
 
-     # get user
-    try:
-        pr = PasswordReset.objects.get(reset_key=reset_key)
-        pr_exists = True
-    except PasswordReset.DoesNotExist:
-        return HttpResponse("Password link could not be associated with valid username.")
-
-    if pr_exists:
-        if timezone.now() > pr.created_at + datetime.timedelta(days=2):
-            return HttpResponse("Password rest key expired, please restart password reset.")
-
     form = PasswordResetForm()
     successful_submit = False
+
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
         if form.is_valid():
             # get pw from form
             pw = form.cleaned_data['password1']
-            if pr_exists:
-                username = pr.username
-                user = User.objects.get(username=username)
-                user.password = pw
-                user.save()
-                successful_submit = True
+
+            # Retrieve user object and reset password.
+            PasswordResetObject = PasswordReset.objects.get(reset_key=reset_key)
+            username = PasswordResetObject.username
+            user = User.objects.get(username=username)
+            user.set_password(pw)
+            user.save()
+
+            # Prevent this activation key from beeing reused.
+            PasswordResetObject.reset_used = True
+            PasswordResetObject.save()
+
+            # send confrmation email
+            sender_email    = "admin@cinemaple.com"
+            sender_name     = "Cinemaple"
+            subject         = "Password successfully changed"
+            recipients      = [user.email]
+            content         = "Hi " + user.first_name + ", you have successfully changed your password and can now login using the new password: http://www.cinemaple.com/login"
+
+            email_send = EmailMessage(subject, content, sender_name + " <" + sender_email + ">", recipients)
+            email_send.send()
+            successful_submit = True
+    else:
+
+        # Check password link for multiple error cases.
+        link_check_res = check_pw_rest_link(request, reset_key)
+
+        if link_check_res == -1:
+            return HttpResponse("Password reset link could not be associated with valid username.")
+        if link_check_res == -2:
+         return HttpResponse("Password reset key expired, please restart password reset.")
+        if link_check_res == -3:
+            return HttpResponse("Password reset link has already been used.")
+
     context = {
         'form': form,
         'successful_submit' : successful_submit,
