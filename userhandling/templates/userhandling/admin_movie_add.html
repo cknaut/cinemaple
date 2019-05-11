@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block css_imports %}
+<link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
+<link  href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block modals %}
+{% if successful_verified %}
+<div id="RegVerifyModall" class="modal fade">
+  <div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="icon-box">
+          <i class="material-icons">&#xE876;</i>
+        </div>
+        <h4 class="modal-title">Validation Successful!</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">You have sucessfully validated <b>{{email}}</b> and may now log in using your username <b>{{username}}</b>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'login' %}" class="btn btn-success btn-block">Login</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div id="logoutmodal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+      <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+      <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started">Logout</a></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+
+{% block header %}
+  <!--==========================
+  Header
+  ============================-->
+  <header id="header">
+    <div class="container">
+
+      <div id="logo" class="pull-left">
+        <!-- <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" width="10%" /></img></a> -->
+        <!-- Uncomment below if you prefer to use a text logo -->
+        <h1><a href="#hero">Cinemaple</a></h1>
+      </div>
+
+      <nav id="nav-menu-container">
+        <ul class="nav-menu">
+          <li class="menu-active"><a href="#hero">Home</a></li>
+          <li><a href="#about">About Cinemaple</a></li>
+          <li><a href="#movienights">Movienights</a></li>
+          <li><a href="#call-to-action">Sign Up</a></li>
+          <li><a href="#sendmessage">Contact Us</a></li>
+        {% if user.is_authenticated %}
+        <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:yellow" class="btn-get-started">Logout</a> </li>
+        <li> Welcome, {{request.user.first_name}}! </li>
+        {% else %}
+        <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:yellow" class="btn-get-started">Login</a> </li>
+      {% endif %}
+        </ul>
+      </nav><!-- #nav-menu-container -->
+    </div>
+  </header><!-- #header -->
+{% endblock %}
+
+
+{% block hero %}
+  <!--==========================
+    Hero Section
+  ============================-->
+  <section id="hero">
+    <div class="hero-container">
+      <h1>Welcome to Cinemaple!</h1>
+      <h2>Add an awesome movie night event!</h2>
+
+      <a href="#facts" class="btn-get-started">Let's do it!</a>
+    </div>
+  </section><!-- #hero -->
+{% endblock %}
+
+
+{% block main %}
+  <main id="main">
+
+    <!--==========================
+      Add Movie Night
+    ============================-->
+    <section id="facts">
+      <div class="container wow fadeIn">
+        <div class="section-header">
+          <h3 class="section-title">Facts</h3>
+          <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
+        </div>
+
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+          </div>
+          <input type="text" id="query"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+         <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Year</span>
+          </div>
+          <input type="text" id="year"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <button onclick="find_movies()" type="button" class="btn btn-primary">Search</button>
+
+<table id="movieTable" class="display">
+ </table>
+
+
+
+      </div>
+    </section><!-- #facts -->
+
+  </main>
+{% endblock %}
+
+
+{% block footer %}
+  <!--==========================
+    Footer
+  ============================-->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+
+      </div>
+    </div>
+      <div class="container">
+      <a href="https://www.iubenda.com/privacy-policy/51526038" class="iubenda-white iubenda-embed" title="Privacy Policy ">Privacy Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
+           </div>
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>Regna</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!--
+          All the links in the footer should remain intact.
+          You can delete the links only if you purchased the pro version.
+          Licensing information: https://bootstrapmade.com/license/
+          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Regna
+        -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer><!-- #footer -->
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+
+
+<script language="javascript">
+
+   $(document).ready( function () {
+    $('#testTable').DataTable();
+    } );
+
+  // Builds the HTML Table out of resultdata json data from Ivy restful service.
+ function buildHtmlTable(resultdata) {
+     var columns = addAllColumnHeaders();
+
+     var fields = ["title", "vote_count"];
+
+     for (var i = 0 ; i < resultdata["results"].length ; i++) {
+         var row$ = $('<tr/>');
+         for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
+             var cellValue = resultdata["results"][i][fields[colIndex]];
+
+             if (cellValue == null) { cellValue = ""; }
+
+             row$.append($('<td/>').html(cellValue));
+         }
+         $("#movieTable").append(row$);
+     }
+
+ }
+
+ // Adds a header row to the table and returns the set of columns.
+ // Need to do union of keys from all records as some records may not contain
+ // all records
+ function addAllColumnHeaders(){
+     var headerTr$ = $('<tr/>');
+
+     var fields = ["Title", "Vote Count"];
+     var fieldlength = fields.length;
+
+    for (var i = 0; i < fieldlength; i++) {
+        headerTr$.append($('<th/>').html(fields[i]));
+    }
+
+     $("#movieTable").append(headerTr$);
+
+     return fields;
+ }
+
+
+
+function find_movies() {
+
+  // Empty results table$
+  $("#excelDataTable").empty();
+
+  // Get query string
+	var query = document.getElementById("query").value;
+	var year = document.getElementById("year").value;
+
+  // get JSON using wrapper on TMDB API
+  {% if debug %}
+  url_trunk = "http://127.0.0.1:8000/tmdb/";
+  {% else %}
+  url_trunk = "http://www.cinemaple.com/tmdb/";
+  {% endif %}
+
+
+	if (year == "") {
+		url = url_trunk.concat(query)
+	}
+	else{
+		url = url_trunk.concat(query, "/", year)
+	}
+
+  let data = [];
+
+fetch(url)
+  .then(response => {
+    return response.json()
+  })
+  .then(data => {
+    // Build an new table.
+    buildHtmlTable(data);
+    console.log(data)
+  })
+  .catch(err => {
+    // Do something for an error here
+  })
+
+
+
+}
+
+
+</script>
+{% endblock %}
+
+

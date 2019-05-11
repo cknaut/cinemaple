@@ -8,6 +8,7 @@ import urllib, json
 import string
 from .forms import *
 from django.conf import settings
+import tmdbsimple as tmdb
 
 
 # Test Mailchimp Class: Subscribe and unsubscribe test email
@@ -137,3 +138,15 @@ class Email_Verification_Check(TestCase):
         }
         form = RegistrationForm(data=data)
         self.assertFalse(form.is_valid())
+
+
+class themovieDB(TestCase):
+    ''' Test the TheMovie DB '''
+
+    def test_movite_title(self):
+        tmdb.API_KEY = settings.TMDB_API_KEY
+
+        movie = tmdb.Movies(603)
+        response = movie.info()
+        import pdb; pdb.set_trace()
+        self.assertEquals(response.title, 'The Matrix')

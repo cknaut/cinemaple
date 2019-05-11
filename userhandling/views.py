@@ -14,6 +14,10 @@ from .utils import Mailchimp, VerificationHash
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm
 
 from .models import Movie, MovieNightEvent, Profile, PasswordReset
+import tmdbsimple as tmdb
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
 # ...
 
 
@@ -282,6 +286,43 @@ def password_reset(request, reset_key):
     }
 
     return render(request, 'userhandling/password_reset.html', context)
+
+
+
+def add_movie_night(request):
+    if not request.user.is_superuser:
+        return HttpResponse("Only logged-in superusers are authorised to view this page.")
+
+    context = {
+        'debug'           : settings.DEBUG,
+    }
+    return render(request, 'userhandling/admin_movie_add.html', context)
+
+
+def tmdb_api_wrapper(request, query, year=""):
+    ''' Since we don't want to expose out API key on the client side, we write a wrapper on the tmdb API'''
+
+    args = {
+        "api_key"       : settings.TMDB_API_KEY,
+        "language"      : "en-US",
+        "query"         : query,
+        "page"          : 1,
+        "include_adult" : "false",
+        "region"        : "",
+        "year"          : year,
+    }
+
+    url_api = "https://api.themoviedb.org/3/search/movie?{}".format(urllib.parse.urlencode(args))
+
+    # Load Return Object Into JSON
+    try:
+        with urllib.request.urlopen(url_api) as url:
+            data = json.loads(url.read().decode())
+    except:
+        raise Exception("Critical TMDB API error")
+
+    return JsonResponse(data)
+
 
 
 

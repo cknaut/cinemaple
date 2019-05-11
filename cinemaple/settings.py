@@ -42,6 +42,9 @@ RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_SITE_KEY']
 EMAIL_VERIFICATION_SECRET_SALT = os.environ['EMAIL_VERIFICATION_SECRET_SALT']
 PW_RESET_SECRET_SALT = os.environ['PW_RESET_SECRET_SALT']
 
+# TMDb
+TMDB_API_KEY = os.environ['TMDB_API_KEY']
+
 
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
@@ -55,6 +58,7 @@ environement = os.environ['DJANGO_ENV']
 
 if environement == "DEBUG":
     DEBUG = True
+    CORS_ORIGIN_ALLOW_ALL = True
 elif environement == "PRODUCTION":
     DEBUG = False
 
@@ -74,6 +78,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_nose',
+    'corsheaders',
     'captcha',
 ]
 
@@ -86,6 +92,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'cinemaple.urls'
@@ -181,5 +189,7 @@ LOGIN_REDIRECT_URL = '/'
 
 
 LOGOUT_REDIRECT_URL = '/'
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 

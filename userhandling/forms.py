@@ -162,9 +162,3 @@ class PasswordResetForm(forms.Form):
 
         return cleaned_data
 
-
-
-
-
-
-
