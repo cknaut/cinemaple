@@ -34,6 +34,8 @@
     </div>
   </div>
 </div>
+
+
 {% endif %}
 
 <div id="logoutmodal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
@@ -45,6 +47,67 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="movieModalTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="container">
+              <div class="col-sm" id="movieModalPoster"></div>
+
+
+            <div class="container">
+
+              <div class="row">
+                <div class="col-sm">
+                  <p class="font-weight-bold">Year:</p>
+                </div>
+
+                <div class="col-sm">
+                  LOL
+                </div>
+              </div>
+
+              <div class="col-sm">
+                  <p class="font-weight-bold">Year:</p>
+                </div>
+
+                <div class="col-sm">
+                  LOL
+                </div>
+              </div>
+
+              <div class="col-sm">
+                  <p class="font-weight-bold">Year:</p>
+                </div>
+
+                <div class="col-sm">
+                  LOL
+                </div>
+              </div>
+
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 
@@ -136,8 +199,11 @@
     </thead>
 
  </table>
+
 </div>
 
+
+Powered by <a href="https://www.themoviedb.org/">The Movie DB</a>
 
 
 
@@ -237,8 +303,9 @@ function LoadDataTablesData(data) {
 
 
     // Datatable without destroy option for first executions
-    mov_table.DataTable ({
+    dat_tbl = mov_table.DataTable ({
     "data" : data,
+     "order": [[ 4, "desc" ]],
       searching: false,
     "columns" : [
         { "data"  : "poster_path"},
@@ -250,11 +317,37 @@ function LoadDataTablesData(data) {
         ],
     });
 
+     $('#movietable tbody').on('click', 'tr', function () {
+        var data = dat_tbl.row( this ).data();
+
+        {% if debug %}
+        url_trunk = "http://127.0.0.1:8000/imdb_tmdb/movie/";
+        {% else %}
+        url_trunk = "http://www.cinemaple.com/imdb_tmdb/movie/";
+        {% endif %}
+
+
+        url = url_trunk.concat(data['id'])
+
+        fetch(url)
+          .then(response => {
+          return response.json()
+        })
+        .then(data => {
+          LaunchMovieModal(data);
+          console.log(data);
+        })
+        .catch(err => {
+        // Do something for an error here
+        })
+    } );
+
     }
     else{
-    mov_table.DataTable ({
+    dat_tbl = mov_table.DataTable ({
     "data" : data,
       searching: false,
+      "order": [[ 4, "desc" ]],
       destroy: true,
     "columns" : [
         { "data"  : "poster_path"},
@@ -270,8 +363,33 @@ function LoadDataTablesData(data) {
  search_counter++;
 }
 
+function LaunchMovieModal(data){
+
+  // Empty Modal
+  $( "#movieModalTitle" ).empty();
+  $( "#movieModalPoster" ).empty();
 
 
+  // Title
+  $( "#movieModalTitle" ).append( data["tmdb_json"]["title"] );
+
+  // Poster
+  base_url = "https://image.tmdb.org/t/p/w300";
+  pre_html = "<img src="
+  post_html = "  >"
+  posterlink = pre_html.concat(base_url, data["tmdb_json"]["poster_path"], post_html)
+  $( "#movieModalPoster" ).append(posterlink);
+
+
+
+
+
+
+  $("#movieModal").modal();
+
+
+
+}
 
 
 // Get input from textfield, call TMDB API, render Datatable

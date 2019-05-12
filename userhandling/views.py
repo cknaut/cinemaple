@@ -299,7 +299,7 @@ def add_movie_night(request):
     return render(request, 'userhandling/admin_movie_add.html', context)
 
 
-def tmdb_api_wrapper(request, query, year=""):
+def tmdb_api_wrapper_search(request, query, year=""):
     ''' Since we don't want to expose out API key on the client side, we write a wrapper on the tmdb API'''
 
     args = {
@@ -323,6 +323,44 @@ def tmdb_api_wrapper(request, query, year=""):
 
     return JsonResponse(data)
 
+
+def imdb_get_entry(imdb_id):
+    args = {"apikey": settings.OMDB_API_KEY, "i": imdb_id, "plot" : "full"}
+    url_api = " http://www.omdbapi.com/?{}".format(urllib.parse.urlencode(args))
+
+    # Load Return Object Into JSON
+    try:
+        with urllib.request.urlopen(url_api) as url:
+            data = json.loads(url.read().decode())
+    except:
+        raise Exception("{} is not valid IMDB ID")
+
+    return data
+
+
+def imdb_tmdb_api_wrapper_movie(request, tmdb_id):
+    ''' Once ID is know, can query more information '''
+
+    url_api = "https://api.themoviedb.org/3/movie/" + str(tmdb_id) + "?api_key=" + str(settings.TMDB_API_KEY)
+
+    # Load Return Object Into JSON
+    try:
+        with urllib.request.urlopen(url_api) as url:
+            tmdb_json = json.loads(url.read().decode())
+    except:
+        raise Exception("Critical TMDB API error")
+
+    # The IMDB query retursn the
+    imdb_id = tmdb_json["imdb_id"]
+
+    imdb_json = imdb_get_entry(imdb_id)
+
+    full_json = {
+        "imdb_json" : imdb_json,
+        "tmdb_json" : tmdb_json
+    }
+
+    return JsonResponse(full_json)
 
 
 
