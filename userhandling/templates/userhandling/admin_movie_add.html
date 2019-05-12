@@ -51,7 +51,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade modal-superlarge" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -64,41 +64,60 @@
       <div class="modal-body">
 
         <div class="container">
-              <div class="col-sm" id="movieModalPoster"></div>
+                <!--Grid row-->
+          <div class="row">
+
+            <!--Grid column-->
+            <div class="col-lg-6" id="movieModalPoster">
 
 
-            <div class="container">
 
-              <div class="row">
-                <div class="col-sm">
-                  <p class="font-weight-bold">Year:</p>
-                </div>
-
-                <div class="col-sm">
-                  LOL
-                </div>
-              </div>
-
-              <div class="col-sm">
-                  <p class="font-weight-bold">Year:</p>
-                </div>
-
-                <div class="col-sm">
-                  LOL
-                </div>
-              </div>
-
-              <div class="col-sm">
-                  <p class="font-weight-bold">Year:</p>
-                </div>
-
-                <div class="col-sm">
-                  LOL
-                </div>
-              </div>
 
             </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-3">
+
+              <p class="font-weight-bold">Year:</p> <br />
+              <p class="font-weight-bold">Country:</p> <br />
+               <p class="font-weight-bold">Director:</p> <br />
+              <p class="font-weight-bold">Actors:</p> <br />
+              <p class="font-weight-bold">Runtime:</p> <br />
+              <p class="font-weight-bold">Plot:</p>
+
+
+
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-3">
+
+              <p id="movieModalYear"> </p>  <br />
+              <p id="movieModalCountry"></p> <br />
+               <p id="movieModalDirector"></p> <br />
+              <p id="movieModalActors"></p> <br />
+              <p id="movieModalRuntime"></p> <br />
+              <p id="movieModalPlot"></p> <br />
+
+
+            </div>
+            <!--Grid column-->
+
           </div>
+
+          <div class="row">
+
+
+          </div>
+          <!--Grid row-->
+
+        </div>
+
+
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -368,17 +387,31 @@ function LaunchMovieModal(data){
   // Empty Modal
   $( "#movieModalTitle" ).empty();
   $( "#movieModalPoster" ).empty();
+  $( "#movieModalYear").empty();
+  $( "#movieModalCountry").empty();
+  $( "#movieModalDirector").empty();
+  $( "#movieModalActors").empty();
+  $( "#movieModalRuntime").empty();
+  $( "#movieModalPlot").empty();
 
 
   // Title
   $( "#movieModalTitle" ).append( data["tmdb_json"]["title"] );
 
   // Poster
-  base_url = "https://image.tmdb.org/t/p/w300";
+  base_url = "https://image.tmdb.org/t/p/w400";
   pre_html = "<img src="
-  post_html = "  >"
+  post_html = "  class='img-fluid' >"
   posterlink = pre_html.concat(base_url, data["tmdb_json"]["poster_path"], post_html)
   $( "#movieModalPoster" ).append(posterlink);
+
+  // Movie Infos
+  $( "#movieModalYear").append(data["imdb_json"]["Year"]);
+  $( "#movieModalCountry").append(data["imdb_json"]["Country"]);
+  $( "#movieModalDirector").append(data["imdb_json"]["Director"]);
+  $( "#movieModalActors").append(data["imdb_json"]["Actors"]);
+  $( "#movieModalRuntime").append(data["imdb_json"]["Runtime"]);
+  $( "#movieModalPlot").append(data["imdb_json"]["Plot"]);
 
 
 
