@@ -16,5 +16,5 @@ urlpatterns = [
     path('password_reset_request_done/',  views.password_reset_request_done,  name='password_reset_request_done'),
     path('tmdb/<str:query>',  views.tmdb_api_wrapper,  name='tmdb_api_wrapper_queryonly'),
     path('tmdb/<str:query>/<int:year>',  views.tmdb_api_wrapper,  name='tmdb_api_wrapper_query_year'),
-    path('add_movie_night',  views.add_movie_night,  name='add_movie_night'),
+    path('add_movie_night',  views.add_movie_night,  name='add_movie_night_mask'),
 ]
