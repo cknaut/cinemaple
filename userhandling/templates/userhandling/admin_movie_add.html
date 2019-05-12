@@ -12,20 +12,6 @@
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 
 
-<script type="text/javascript">
-
-
-window.onload=function(){
-
-$(document).ready(function() {
-  $('#example').DataTable( {
-    responsive: true
-      } );
-  } );
-
-}
-
-</script>
 {% endblock %}
 
 {% block modals %}
@@ -148,8 +134,6 @@ $(document).ready(function() {
 </div>
 
 
-<table id="movieTable" class="display">
- </table>
 
 
       </div>
@@ -198,73 +182,13 @@ $(document).ready(function() {
 
 <script language="javascript">
 
-data =
-{"page": 1, "total_results": 103, "total_pages": 6, "results": [{"vote_count": 13996, "id": 597, "video": false, "vote_average": 7.8, "title": "Titanic", "popularity": 28.648, "poster_path": "/kHXEpyfl6zqn8a6YuozZUujufXf.jpg", "original_language": "en", "original_title": "Titanic", "genre_ids": [18, 10749, 53], "backdrop_path": "/xqQztbT6KlPLQLlRtNHoXivEMZA.jpg", "adult": false, "overview": "101-year-old Rose DeWitt Bukater tells the story of her life aboard the Titanic, 84 years later. A young Rose boards the ship with her mother and fianc\u00e9. Meanwhile, Jack Dawson and Fabrizio De Rossi win third-class tickets aboard the ship. Rose tells the whole story from Titanic's departure through to its death\u2014on its first and last voyage\u2014on April 15, 1912.", "release_date": "1997-11-18"}, {"vote_count": 41, "id": 16535, "video": false, "vote_average": 6.4, "title": "Titanic", "popularity": 3.984, "poster_path": "/8DMS4zPRF3uH4BZ8OC4GtZ8ewD9.jpg", "original_language": "en", "original_title": "Titanic", "genre_ids": [28, 18, 10749], "backdrop_path": "/4MlLN6nPOZ6RDFhPcfj4OM1meyY.jpg", "adult": false, "overview": "Unhappily married, Julia Sturges decides to go to America with her two children on the unsinkable Titanic. Her husband, Richard also arranges passage on the luxury liner so as to have custody of their two children. All this fades to insignificance once the ship hits an iceberg.", "release_date": "1953-04-11"}, {"vote_count": 27, "id": 11021, "video": false, "vote_average": 6.1, "title": "Titanic", "popularity": 2.894, "poster_path": "/Al7oIXQ4dZAofBTZWm6OiXS3MEa.jpg", "original_language": "de", "original_title": "Titanic", "genre_ids": [28, 18, 36], "backdrop_path": "/nZo554S2DtQiZhK59TSzrJItD6X.jpg", "adult": false, "overview": "This little-known German film retells the true story of the British ocean liner that met a tragic fate. Ernst Fritz F\u00fcrbringer plays the president of the White Star Line, who unwisely pressed the Titanic's captain (Otto Wernicke) to make the swiftest possible crossing to New York. Interestingly, director Herbert Selpin was arrested by the Gestapo during this film's production, and German censors banned the film for its scenes of panic and terror.", "release_date": "1943-11-10"}, {"vote_count": 88, "id": 44918, "video": false, "vote_average": 3.2, "title": "Titanic 2", "popularity": 6.292, "poster_path": "/tUSMxX60DGkTIoiDnUNNrJLtP3t.jpg", "original_language": "en", "original_title": "Titanic II", "genre_ids": [28, 12, 53], "backdrop_path": "/9nost5nL1EaqgcGpOpC550M0x9A.jpg", "adult": false, "overview": "On the 100th anniversary of the original voyage, a modern luxury liner christened \"Titanic 2,\" follows the path of its namesake. But when a tsunami hurls an ice berg into the new ship's path, the passengers and crew must fight to avoid a similar fate.", "release_date": "2010-08-07"}, {"vote_count": 15, "id": 86938, "video": false, "vote_average": 6.6, "title": "S.O.S. Titanic", "popularity": 1.972, "poster_path": "/bR49KAYEBHm0WNESSsHSxLhUkhx.jpg", "original_language": "en", "original_title": "S.O.S. Titanic", "genre_ids": [36, 18, 53, 10770], "backdrop_path": "/wl2zUUC1OP8NkKgXcoNTZzvPIkn.jpg", "adult": false, "overview": "The Titanic disaster is depicted as seen through the eyes of one couple in each of the three classes on board.", "release_date": "1979-09-23"}, {"vote_count": 0, "id": 499371, "video": false, "vote_average": 0, "title": "Titanic", "popularity": 0.75, "poster_path": "/96HzElhMpJ1FxMNwWFULRiE49kX.jpg", "original_language": "ta", "original_title": "\u0b9f\u0bc8\u0b9f\u0bcd\u0b9f\u0bbe\u0ba9\u0bbf\u0b95\u0bcd", "genre_ids": [35, 10749], "backdrop_path": "/5i7CL06ij1CIvkdpjhW6dFDPzqk.jpg", "adult": false, "overview": "Titanic is an upcoming Tamil-language romantic comedy film written and directed by M. Janakiraman and produced by C. V. Kumar.", "release_date": "2018-12-18"}, {"vote_count": 6, "id": 4240, "video": false, "vote_average": 3.1, "title": "Titanic 2000", "popularity": 1.937, "poster_path": "/fiEKal45vMDeGcxKXHBA4rNSWRy.jpg", "original_language": "en", "original_title": "Titanic 2000", "genre_ids": [35, 27], "backdrop_path": null, "adult": false, "overview": "The luxury liner Titanic 2000 has set sail on its maiden voyage, and one of the passengers is the vampire Vladamina. Vladamina is searching for a woman she can turn into a vampire queen, and frustrated rock groupie Shari looks to be a perfect target. As various people get seduced and/or killed as the liner continues on its doomed voyage, Shari must chose between eternity as a living dead sex slave or a frigid grave at the bottom of the ocean.", "release_date": "1999-01-01"}, {"vote_count": 35, "id": 24575, "video": false, "vote_average": 5.3, "title": "Raise the Titanic", "popularity": 2.93, "poster_path": "/7cahPJXA1fRXRwqqMVQkX3MTZy3.jpg", "original_language": "en", "original_title": "Raise the Titanic", "genre_ids": [28, 18, 53], "backdrop_path": "/qH90VaspwmpCr4rVmIYn01h0rXM.jpg", "adult": false, "overview": "To obtain a supply of a rare mineral, a ship raising operation is conducted for the only known source, the Titanic.", "release_date": "1980-01-01"}, {"vote_count": 3, "id": 285652, "video": false, "vote_average": 6.8, "title": "Titanic: The Complete Story", "popularity": 1.4, "poster_path": "/A3uQMYg0Acc7pKWp0z5mDK1MYR7.jpg", "original_language": "en", "original_title": "Titanic: The Complete Story", "genre_ids": [99, 36], "backdrop_path": "/1BZnGBQsF3hgwL6vnR2reeYeshm.jpg", "adult": false, "overview": "The \"unsinkable\" Titanic was a dream come true: four city blocks long and a passenger list worth 250 million dollars. But on her maiden voyage in April 1912, that dream became a nightmare when the giant ship struck an iceberg and sunk in the cold North Atlantic. More than 1,500 lives were lost in one of the greatest disasters of the 20th century. Now, using newsreels, stills, diaries, and exclusive interviews with survivors, Titanic: The Complete Story recounts the sensational history of the premier liner.  In Part I: Death of a Dream, the largest ship ever built is christened in Ireland before a cheering crowd of 100,000. Witness the disaster this trek becomes as numerous iceberg warnings go unheeded and the ship sinks in the icy North Atlantic.  In Part II: The Legend Lives On, over-packed lifeboats edge away from the crippled liner as a futile SOS signals flare into the night--leaving 1,500 passengers to a watery grave.", "release_date": "1994-07-24"}, {"vote_count": 1, "id": 455679, "video": false, "vote_average": 10, "title": "Titanic", "popularity": 0.6, "poster_path": null, "original_language": "pt", "original_title": "Titanic", "genre_ids": [], "backdrop_path": null, "adult": false, "overview": "", "release_date": ""}, {"vote_count": 0, "id": 357517, "video": false, "vote_average": 0, "title": "Titanic", "popularity": 0.6, "poster_path": "/yi73me6Jl3zDelS9pQK5jtMRhsc.jpg", "original_language": "de", "original_title": "Titanic", "genre_ids": [18], "backdrop_path": "/dbWq9iawF1qGeWwoCNM6eeznovc.jpg", "adult": false, "overview": "", "release_date": "1984-01-01"}, {"vote_count": 17, "id": 44310, "video": false, "vote_average": 2.5, "title": "The Legend of the Titanic", "popularity": 1.747, "poster_path": "/jQKxvgVh5Pij3MqFU2K2G0h5rq8.jpg", "original_language": "it", "original_title": "La leggenda del Titanic", "genre_ids": [16, 10751], "backdrop_path": "/aVlhndRmjZB1eSPamU1KAABswGx.jpg", "adult": false, "overview": "Old Grandpa mouse tells to his grandchildren the \"real\" story of the Titanic disaster, including evil sharks, a giant octopus, and an evil whaling scheme.", "release_date": "1999-01-01"}, {"vote_count": 1, "id": 83036, "video": false, "vote_average": 1, "title": "Titanic Town", "popularity": 1.176, "poster_path": "/zfx8YMEG3sR9t4rKYgOD3O0FoPN.jpg", "original_language": "en", "original_title": "Titanic Town", "genre_ids": [18], "backdrop_path": "/2fSn9K6Z22ngxQe3iyNyevZxdB2.jpg", "adult": false, "overview": "Belfast 1972: The politically naive Bernie is trying to bring up a normal family in less than normal surroundings. Her best friend is accidentally shot dead by the IRA, and her neighbours are constantly raided by the army. In this climate of fear she stands up and condemns the murders. Criticising both factions, her call for a ceasefire is interpreted as an attack against the IRA, and as her peace movement takes momentum, she and her family are placed in the frontline.", "release_date": "1998-08-08"}, {"vote_count": 3, "id": 46940, "video": false, "vote_average": 6.7, "title": "Secrets of the Titanic", "popularity": 1.673, "poster_path": "/yEvumAoCB9Z7o9dAzjxrjcwo2FQ.jpg", "original_language": "en", "original_title": "Secrets of the Titanic", "genre_ids": [99], "backdrop_path": "/lzYDQJVtgP7zUJo7HqBGTIPufaX.jpg", "adult": false, "overview": "Dr. Robert Ballard of Woods Hole Oceanographic Institute and his research team become the first undersea explorers to locate, photograph, and explore the wreckage of the ill-fated HMS Titanic, which sank on its maiden voyage 2 1/2 mile deep in the icy waters of the Atlantic in 1912, taking 1500 passengers and crew with it to a watery grave. Utilizing dazzling state-of-the art equipment and cutting edge expertise they record the decaying remains of the ocean liner once thought \"unsinkable.\"", "release_date": "1986-08-07"}, {"vote_count": 28, "id": 71235, "video": false, "vote_average": 1.9, "title": "Titanic: The Legend Goes On...", "popularity": 2.01, "poster_path": "/AhDDSMvaxPBMY44xKvbPsT2MfpG.jpg", "original_language": "it", "original_title": "Titanic - La leggenda continua", "genre_ids": [16, 10751], "backdrop_path": "/dxynkPX8dPg4sXwHG3vz3iU1ZGv.jpg", "adult": false, "overview": "An animated retelling of the worst passenger ship disaster in history. In this version, love blossoms between the upper-class Sir William and the blue-collar Angelica, who is hoping to find romance in America. At the same time, there are also a number of animal passengers, including talking dogs, cats and mice, who are also looking forward to arriving in the New World.", "release_date": "2001-07-24"}, {"vote_count": 2, "id": 102370, "video": false, "vote_average": 6, "title": "Saving the Titanic", "popularity": 0.915, "poster_path": "/sAVXxt25jEHILAI3s9EGXWmY889.jpg", "original_language": "en", "original_title": "Saving the Titanic", "genre_ids": [10770, 99, 18], "backdrop_path": "/2m6NspBEu2DyuF8M3qm2dSPNz1j.jpg", "adult": false, "overview": "In the hours after the Titanic struck an iceberg 100 years ago, a team of shipbuilders and engineers raced against time to save the stricken vessel.  Based on eye-witness accounts, this film reveals what went on below decks in the hours before the Titanic sank, telling the previously relatively unheralded stories of engineers who fought courageously to hold back the power of the sea and keep the power systems running, even when they learned that all was lost.  Most of these men died but their actions bought enough time to save many lives.  This drama-documentary tells a poignant story of self-sacrifice by the Titanic's engineers, stokers and firemen in the face of impending death.", "release_date": "2012-04-15"}, {"vote_count": 6, "id": 198901, "video": false, "vote_average": 7.3, "title": "Titanic: 100 Years On", "popularity": 1.35, "poster_path": "/uAaXfaJpKjmsA3F1KgowcRJPKPM.jpg", "original_language": "en", "original_title": "Titanic: 100 Years On", "genre_ids": [99], "backdrop_path": null, "adult": false, "overview": "The \"unsinkable\" floating palace set sail from Southampton on 10th April 1912 on her maiden voyage to New York. An iceberg ended this monumental journey 5 days later. Only 705 of the passengers and crew survived. This program features an exclusive look at the Sea City Museum Titanic Exhibit in Southampton, interviews from both survivors and the cast of the blockbuster film.", "release_date": "2012-06-01"}, {"vote_count": 58, "id": 24982, "video": false, "vote_average": 7.1, "title": "Ghosts of the Abyss", "popularity": 3.865, "poster_path": "/z8TwKAeNpbayP7iaR5iVlaOzB8k.jpg", "original_language": "en", "original_title": "Ghosts of the Abyss", "genre_ids": [99], "backdrop_path": "/zvL04vovtDexuNj7kL8HD2GEVS1.jpg", "adult": false, "overview": "Academy Award\u00ae winning director and master storyteller James Cameron journeys back to the site of his greatest inspiration, the legendary wreck of the Titanic. With a team of the world's foremost historic and marine experts and friend Bill Paxton, he embarks on an unscripted adventure back to the final grave where nearly 1,500 souls lost their lives almost a century ago.", "release_date": "2003-04-10"}, {"vote_count": 0, "id": 289134, "video": false, "vote_average": 0, "title": "Titanic: Birth of a Legend", "popularity": 1.293, "poster_path": "/rN5vB8ftW22qqok8MD6Gv1yojxk.jpg", "original_language": "hu", "original_title": "Titanic: Birth of a Legend", "genre_ids": [99, 18], "backdrop_path": "/f8WYXrOvUkckOBBRMy7WNtpreAb.jpg", "adult": false, "overview": "", "release_date": "2005-05-05"}, {"vote_count": 1, "id": 428615, "video": true, "vote_average": 8, "title": "Titanic Waltz", "popularity": 0.674, "poster_path": "/sS1dGIxItLGw12fqO0LSArUwoa6.jpg", "original_language": "ro", "original_title": "Titanic vals", "genre_ids": [35], "backdrop_path": null, "adult": false, "overview": "Based on a play by Tudor Mu\u0219atescu, Titanic Vals is the essence of Romanian genius in comedy, with amazing performances and the beautiful absurd of the quotidian.", "release_date": "1964-12-02"}]}
-
- function buildHtmlTable(resultdata) {
-
-     var columns = addAllColumnHeaders();
-     var fields = ["poster_path", "title", "release_date", "overview", "popularity"];
-     var tbody = $("#table_id").find("tbody");
-
-
-     for (var i = 0 ; i < resultdata.length ; i++) {
-         var row$ = $('<tr/>');
-         for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
-             var cellValue = resultdata[i][fields[colIndex]];
-             // construct linkt to poster
-             if (colIndex == 0){
-                base_url = "https://image.tmdb.org/t/p/w200";
-                full_url = base_url.concat(cellValue);
-                pre_html = "<img src="
-                post_html = "  >"
-                cellValue = pre_html.concat(full_url).concat(post_html)
-             }
-             if (cellValue == null) { cellValue = ""; }
-             row$.append($('<td/>').html(cellValue));
-         }
-         (row$).appendTo(tbody);
-     }
-      if (search_counter == 0){
-        for (var i = 0; i < num_col; i++) {
-            $('<th>'+column_name[i]+'</th>').appendTo(thead);
-        }
-
-       $('#table_id').DataTable({
-          destroy: true,
-       });
-     }
-     else{
-
-       $('#table_id').DataTable({
-          destroy: true,
-       });
-     }
- }
-
-function addAllColumnHeaders(){
-     var thead = $("#table_id").find("thead");
-     var column_name = ["Poster", "Title", "Release Date", "Synopsis", "Popularity"];
-     var num_col = column_name.length;
-
-     if (search_counter == 0){
-        for (var i = 0; i < num_col; i++) {
-            $('<th>'+column_name[i]+'</th>').appendTo(thead);
-        }
-     }
-     search_counter++;
-
-     return column_name
- }
-
-
 
 search_counter = 0;
 
 function LoadDataTablesData(data) {
 
    //Load  datatable
-    var oTblReport = $("#movietable")
+    var mov_table = $("#movietable")
 
 
 
@@ -278,8 +202,13 @@ function LoadDataTablesData(data) {
     post_html = "  >"
 
     for (var i = 0 ; i < data.length ; i++) {
-      full_url = base_url.concat(data[i]["poster_path"]);
-      data[i]["poster_path"] = pre_html.concat(full_url).concat(post_html)
+      if (data[i]["poster_path"] == null){
+        data[i]["poster_path"]=  " <img   src='{% static 'userhandling/img/NAicon.svg' %}' >"
+      }
+      else{
+        full_url = base_url.concat(data[i]["poster_path"]);
+        data[i]["poster_path"] = pre_html.concat(full_url).concat(post_html)
+      }
     }
 
     var num_col = column_name.length;
@@ -289,7 +218,7 @@ function LoadDataTablesData(data) {
       }
 
       // Datatable without destroy option for first executions
-      oTblReport.DataTable ({
+      mov_table.DataTable ({
       "data" : data,
         destroy: true,
         searching: false,
@@ -305,7 +234,7 @@ function LoadDataTablesData(data) {
     }
     else{
       // Datatable with destroy option for subsequent executions
-      oTblReport.DataTable ({
+      mov_table.DataTable ({
       "data" : data,
         destroy: true,
         searching: false,
@@ -351,7 +280,7 @@ fetch(url)
   })
   .then(data => {
     // Build an new table.
-     //buildHtmlTable(data["results"]);
+        console.log(data);
      LoadDataTablesData(data["results"]);
     console.log(data);
   })
@@ -367,7 +296,7 @@ const sleep = (milliseconds) => {
 
 
 $('input[type=text]').bind('input propertychange', function() {
-  sleep(500).then(() => {
+  sleep(1000).then(() => {
     find_movies();
 })
 

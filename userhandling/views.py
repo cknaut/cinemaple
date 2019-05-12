@@ -290,8 +290,8 @@ def password_reset(request, reset_key):
 
 
 def add_movie_night(request):
-    if not request.user.is_superuser:
-        return HttpResponse("Only logged-in superusers are authorised to view this page.")
+    if not request.user.is_staff:
+        return HttpResponse("Only staff users are authorised to view this page.")
 
     context = {
         'debug'           : settings.DEBUG,
