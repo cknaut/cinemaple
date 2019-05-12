@@ -126,11 +126,16 @@
           <input type="text" id="year"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
         </div>
 
-        <button onclick="find_movies()" type="button" class="btn btn-primary">Search</button>
 
 
 <div>
-<table id="movietable" class="display" width="100%"></table>
+<table id="movietable" class="display" width="100%">
+    <thead>
+   <tr>
+    </tr>
+    </thead>
+
+ </table>
 </div>
 
 
@@ -185,108 +190,130 @@
 
 search_counter = 0;
 
-function LoadDataTablesData(data) {
 
-   //Load  datatable
-    var mov_table = $("#movietable")
+// modidify raw json from TMDB to table html
+function prep_movie_json(data){
+  // Convert Poster Path
+  base_url = "https://image.tmdb.org/t/p/w200";
+
+  pre_html = "<img src="
+  post_html = "  >"
 
 
-
-    var column_name = ["Title", "Release Date", "Synopsis", "Popularity", "Poster Path"];
-    var thead = $("#movietable").find("thead");
-
-    // Convert Poster Path
-    base_url = "https://image.tmdb.org/t/p/w200";
-
-    pre_html = "<img src="
-    post_html = "  >"
-
-    for (var i = 0 ; i < data.length ; i++) {
-      if (data[i]["poster_path"] == null){
-        data[i]["poster_path"]=  " <img   src='{% static 'userhandling/img/NAicon.svg' %}' >"
-      }
-      else{
-        full_url = base_url.concat(data[i]["poster_path"]);
-        data[i]["poster_path"] = pre_html.concat(full_url).concat(post_html)
-      }
-    }
-
-    var num_col = column_name.length;
-    if (search_counter == 0){
-      for (var i = 0; i < num_col; i++) {
-          $('<th>'+column_name[i]+'</th>').appendTo(thead);
-      }
-
-      // Datatable without destroy option for first executions
-      mov_table.DataTable ({
-      "data" : data,
-        destroy: true,
-        searching: false,
-      "columns" : [
-          { "data"  : "poster_path"},
-          { "data"  : "title" },
-          { "data"  : "overview" },
-          { "data"  : "release_date"},
-          { "data"  : "popularity"},
-
-          ],
-      });
+  for (var i = 0 ; i < data.length ; i++) {
+    if (data[i]["poster_path"] == null){
+      data[i]["poster_path"]=  " <img  src='{% static 'userhandling/img/NAicon.svg' %}' >"
     }
     else{
-      // Datatable with destroy option for subsequent executions
-      mov_table.DataTable ({
-      "data" : data,
-        destroy: true,
-        searching: false,
-      "columns" : [
-          { "data"  : "poster_path"},
-          { "data"  : "title" },
-          { "data"  : "overview" },
-          { "data"  : "release_date"},
-          { "data"  : "popularity"},
-          ],
-      });
+      full_url = base_url.concat(data[i]["poster_path"]);
+      data[i]["poster_path"] = pre_html.concat(full_url).concat(post_html)
     }
-    search_counter++;
+  }
+
+  return data
+}
+
+function LoadDataTablesData(data) {
+
+  // Add HTML Styling to JSON Data
+  data = prep_movie_json(data);
+
+    //Load  datatable
+    var mov_table = $("#movietable");
+
+
+
+    var column_name = ["Poster", "Title", "Synopsis",  "Release Date", "Popularity"];
+
+    var num_col = column_name.length;
+
+  if (search_counter == 0){
+
+      for (var i = 0; i < num_col; i++) {
+
+        $('#movietable > thead tr').append('<th> '.concat(column_name[i]).concat('</th>'));
+      }
+
+
+
+    // Datatable without destroy option for first executions
+    mov_table.DataTable ({
+    "data" : data,
+      searching: false,
+    "columns" : [
+        { "data"  : "poster_path"},
+        { "data"  : "title" },
+        { "data"  : "overview" },
+        { "data"  : "release_date"},
+        { "data"  : "popularity"},
+
+        ],
+    });
+
+    }
+    else{
+    mov_table.DataTable ({
+    "data" : data,
+      searching: false,
+      destroy: true,
+    "columns" : [
+        { "data"  : "poster_path"},
+        { "data"  : "title" },
+        { "data"  : "overview" },
+        { "data"  : "release_date"},
+        { "data"  : "popularity"},
+
+        ],
+    });
+    }
+
+ search_counter++;
 }
 
 
+
+
+
+// Get input from textfield, call TMDB API, render Datatable
 function find_movies() {
+  console.log(search_counter);
 
   // Get query string
 	var query = document.getElementById("query").value;
 	var year = document.getElementById("year").value;
 
-  // get JSON using wrapper on TMDB API
-  {% if debug %}
-  url_trunk = "http://127.0.0.1:8000/tmdb/";
-  {% else %}
-  url_trunk = "http://www.cinemaple.com/tmdb/";
-  {% endif %}
+  if (query == "" || query == null){
+
+  }
+  else{
+    // get JSON using wrapper on TMDB API
+    {% if debug %}
+    url_trunk = "http://127.0.0.1:8000/tmdb/";
+    {% else %}
+    url_trunk = "http://www.cinemaple.com/tmdb/";
+    {% endif %}
 
 
-	if (year == "") {
-		url = url_trunk.concat(query)
-	}
-	else{
-		url = url_trunk.concat(query, "/", year)
-	}
+    if (year == "") {
+      url = url_trunk.concat(query)
+    }
+    else{
+      url = url_trunk.concat(query, "/", year)
+    }
 
-  let data = [];
-
-fetch(url)
-  .then(response => {
-    return response.json()
-  })
-  .then(data => {
-    // Build an new table.
-        console.log(data);
-     LoadDataTablesData(data["results"]);
-    console.log(data);
-  })
-  .catch(err => {
-    // Do something for an error here
-  })
+    fetch(url)
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      // Build an new table.
+          LoadDataTablesData(data["results"]);
+          console.log(data);
+    })
+    .catch(err => {
+      // Do something for an error here
+    })
+  }
 }
 
 
@@ -295,12 +322,29 @@ const sleep = (milliseconds) => {
 }
 
 
-$('input[type=text]').bind('input propertychange', function() {
-  sleep(1000).then(() => {
-    find_movies();
-})
+// Autp update doneTypingInterval ms after done typing
+// Thanks to https://stackoverflow.com/questions/4220126/run-javascript-function-when-user-finishes-typing-instead-of-on-key-up
+var typingTimer;                //timer identifier
+var doneTypingInterval = 200;  //time in ms, 5 second for example
+var $input = $('input[type=text]');
 
+//on keyup, start the countdown
+$input.on('keyup', function () {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(doneTyping, doneTypingInterval);
 });
+
+//on keydown, clear the countdown
+$input.on('keydown', function () {
+  clearTimeout(typingTimer);
+});
+
+//user is "finished typing," get movies
+function doneTyping () {
+  find_movies();
+}
+
+
 </script>
 {% endblock %}
 
