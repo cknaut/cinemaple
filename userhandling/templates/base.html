@@ -44,6 +44,19 @@
   <!-- Emoji Stylesheet File -->
   <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
 
+
+   <!-- JavaScript Libraries -->
+  <script src="{% static 'userhandling/lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/jquery/jquery-migrate.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/wow/wow.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/waypoints/waypoints.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/counterup/counterup.min.js' %}"></script>
+  <script src="{% static 'userhandling/lib/superfish/hoverIntent.js' %}"></script>
+  <script src="{% static 'userhandling/lib/superfish/superfish.min.js' %}"></script>
+
+
 {% block css_imports %}
 {% endblock %}
 
@@ -84,31 +97,19 @@
 
 
 
-  <!-- JavaScript Libraries -->
-
-  <script src="{% static 'userhandling/lib/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/jquery/jquery-migrate.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/easing/easing.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/wow/wow.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/waypoints/waypoints.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/counterup/counterup.min.js' %}"></script>
-  <script src="{% static 'userhandling/lib/superfish/hoverIntent.js' %}"></script>
-  <script src="{% static 'userhandling/lib/superfish/superfish.min.js' %}"></script>
 
 
+    <!-- Contact Form JavaScript File -->
+  <script src="{% static 'userhandling/contactform/contactform.js' %}"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="{% static 'userhandling/js/main.js' %}"></script>
 
 {% block js %}
 {% endblock %}
 
 
 
-
-  <!-- Contact Form JavaScript File -->
-  <script src="{% static 'userhandling/contactform/contactform.js' %}"></script>
-
-  <!-- Template Main Javascript File -->
-  <script src="{% static 'userhandling/js/main.js' %}"></script>
 
 </body>
 </html>

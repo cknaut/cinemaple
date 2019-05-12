@@ -4,8 +4,28 @@
 
 {% block css_imports %}
 <link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
-<link  href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
 
+
+      <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.js"></script>
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+
+
+<script type="text/javascript">
+
+
+window.onload=function(){
+
+$(document).ready(function() {
+  $('#example').DataTable( {
+    responsive: true
+      } );
+  } );
+
+}
+
+</script>
 {% endblock %}
 
 {% block modals %}
@@ -101,8 +121,8 @@
     <section id="facts">
       <div class="container wow fadeIn">
         <div class="section-header">
-          <h3 class="section-title">Facts</h3>
-          <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
+          <h3 class="section-title">Add Movies</h3>
+          <p class="section-description">Search for movies and add it to movie night event.</p>
         </div>
 
 
@@ -122,12 +142,27 @@
 
         <button onclick="find_movies()" type="button" class="btn btn-primary">Search</button>
 
+
+<div>
+<table id="movietable" class="display" width="100%"></table>
+</div>
+
+
 <table id="movieTable" class="display">
  </table>
 
 
+ <table id="table_id" class="display">
+    <thead>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
       </div>
+
+
+
     </section><!-- #facts -->
 
   </main>
@@ -165,60 +200,121 @@
 {% endblock %}
 
 {% block js %}
-  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+
 
 
 <script language="javascript">
-
-   $(document).ready( function () {
-    $('#testTable').DataTable();
-    } );
-
-  // Builds the HTML Table out of resultdata json data from Ivy restful service.
  function buildHtmlTable(resultdata) {
+
      var columns = addAllColumnHeaders();
+     var fields = ["poster_path", "title", "release_date", "overview", "popularity"];
+     var tbody = $("#table_id").find("tbody");
 
-     var fields = ["title", "vote_count"];
 
-     for (var i = 0 ; i < resultdata["results"].length ; i++) {
+
+
+     for (var i = 0 ; i < resultdata.length ; i++) {
          var row$ = $('<tr/>');
          for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
-             var cellValue = resultdata["results"][i][fields[colIndex]];
-
+             var cellValue = resultdata[i][fields[colIndex]];
+             // construct linkt to poster
+             if (colIndex == 0){
+                base_url = "https://image.tmdb.org/t/p/w200";
+                full_url = base_url.concat(cellValue);
+                pre_html = "<img src="
+                post_html = "  >"
+                cellValue = pre_html.concat(full_url).concat(post_html)
+             }
              if (cellValue == null) { cellValue = ""; }
-
              row$.append($('<td/>').html(cellValue));
          }
-         $("#movieTable").append(row$);
+         (row$).appendTo(tbody);
      }
+      if (search_counter == 0){
+        for (var i = 0; i < num_col; i++) {
+            $('<th>'+column_name[i]+'</th>').appendTo(thead);
+            $('#table_id').DataTable({
+              searching: True,
+            });
+        }
+     }
+     else{
 
+       $('#table_id').DataTable({
+          destroy: true,
+       });
+     }
  }
 
- // Adds a header row to the table and returns the set of columns.
- // Need to do union of keys from all records as some records may not contain
- // all records
- function addAllColumnHeaders(){
-     var headerTr$ = $('<tr/>');
+function addAllColumnHeaders(){
+     var thead = $("#table_id").find("thead");
+     var column_name = ["Poster", "Title", "Release Date", "Synopsis", "Popularity"];
+     var num_col = column_name.length;
 
-     var fields = ["Title", "Vote Count"];
-     var fieldlength = fields.length;
+     if (search_counter == 0){
+        for (var i = 0; i < num_col; i++) {
+            $('<th>'+column_name[i]+'</th>').appendTo(thead);
+        }
+     }
+     search_counter++;
 
-    for (var i = 0; i < fieldlength; i++) {
-        headerTr$.append($('<th/>').html(fields[i]));
+     return column_name
+ }
+
+
+
+search_counter = 0;
+
+function LoadDataTablesData(data) {
+
+   //Load  datatable
+    var oTblReport = $("#movietable")
+
+
+
+    var column_name = ["Title", "Release Date", "Synopsis", "Popularity", "Poster Path"];
+    var thead = $("#movietable").find("thead");
+
+    var num_col = column_name.length;
+    if (search_counter == 0){
+      for (var i = 0; i < num_col; i++) {
+          $('<th>'+column_name[i]+'</th>').appendTo(thead);
+      }
+
+      // Datatable without destroy option for first executions
+      oTblReport.DataTable ({
+      "data" : data,
+        destroy: true,
+        searching: false,
+      "columns" : [
+          { "data"  : "title" },
+          { "data"  : "release_date"},
+          { "data"  : "overview" },
+          { "data"  : "popularity"},
+          { "data"  : "poster_path"},
+          ],
+      });
     }
-
-     $("#movieTable").append(headerTr$);
-
-     return fields;
- }
-
+    else{
+      // Datatable with destroy option for subsequent executions
+      oTblReport.DataTable ({
+      "data" : data,
+        destroy: true,
+        searching: false,
+      "columns" : [
+          { "data"  : "title" },
+          { "data"  : "release_date"},
+          { "data"  : "overview" },
+          { "data"  : "popularity"},
+          { "data"  : "poster_path"},
+          ],
+      });
+    }
+    search_counter++;
+}
 
 
 function find_movies() {
-
-  // Empty results table$
-  $("#excelDataTable").empty();
 
   // Get query string
 	var query = document.getElementById("query").value;
@@ -247,18 +343,16 @@ fetch(url)
   })
   .then(data => {
     // Build an new table.
-    buildHtmlTable(data);
-    console.log(data)
+     buildHtmlTable(data["results"]);
+     //LoadDataTablesData(data["results"]);
+    console.log(data);
   })
   .catch(err => {
     // Do something for an error here
   })
-
-
-
 }
 
-
+find_movies("tHE mATRIX", "")
 </script>
 {% endblock %}
 
