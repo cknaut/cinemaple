@@ -3,6 +3,7 @@
 
 
 {% block css_imports %}
+  <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
 <link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
@@ -13,6 +14,11 @@
 
 
   <link href="{% static 'userhandling/lib/mdb/css/mdb.lite.min.css' %}" rel="stylesheet">
+
+
+
+
+
 
 
 {% endblock %}
@@ -78,7 +84,13 @@
                </div>
                 <div class="row"></div>
                 <div class="row justify-content-center">
-                    <button type="button" class="btn btn-secondary">Watch Trailer</button>
+
+
+
+                <div id="trailerbutton"></div>
+
+
+
                 </div>
 
             </div>
@@ -182,58 +194,29 @@
 </div>
 <!-- Central Modal Small -->
 
-
-<!-- Central Modal Small -->
-<div class="modal fade" id="backdropModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-    <!-- Change class .modal-sm to change the size of the modal -->
-  <div class="modal-dialog modal-lg" role="document">
-
-
+<!-- Movie Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title w-100" id="backdropModalTitle">Modal title</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+
 
       <div class="modal-body">
 
-        <div class="container">
-          <!--Grid row-->
-          <div class="row">
-               <div class="col-lg-12">
-              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators" id="indicators">
-                </ol>
-                <div class="carousel-inner" id="movieModalBackdrop" >
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>
-            </div>
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <!-- 16:9 aspect ratio -->
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" src="" id="video"  allowscriptaccess="always" allow="autoplay"></iframe>
+</div>
 
 
-          </div>
-        </div>
       </div>
 
-
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
-      </div>
     </div>
   </div>
 </div>
+
 
 
 {% endblock %}
@@ -291,6 +274,11 @@
 {% block main %}
   <main id="main">
 
+
+
+
+
+
     <!--==========================
       Add Movie Night
     ============================-->
@@ -327,6 +315,9 @@
 </div>
 
 Powered by <a href="https://www.themoviedb.org/">The Movie DB</a>
+
+
+
 
 
 
@@ -374,244 +365,31 @@ Powered by <a href="https://www.themoviedb.org/">The Movie DB</a>
 
 
 
+
+
 <script language="javascript">
 
-
-search_counter = 0;
-
-
-// modidify raw json from TMDB to table html
-function prep_movie_json(data){
-  // Convert Poster Path
-  base_url = "https://image.tmdb.org/t/p/w200";
-
-  pre_html = "<img src="
-  post_html = "  >"
-
-
-  for (var i = 0 ; i < data.length ; i++) {
-    if (data[i]["poster_path"] == null){
-      data[i]["poster_path"]=  " <img  src='{% static 'userhandling/img/NAicon.svg' %}' >"
-    }
-    else{
-      full_url = base_url.concat(data[i]["poster_path"]);
-      data[i]["poster_path"] = pre_html.concat(full_url).concat(post_html)
-    }
-  }
-
-  return data
-}
-
-function LoadDataTablesData(data) {
-
-  // Add HTML Styling to JSON Data
-  data = prep_movie_json(data);
-
-    //Load  datatable
-    var mov_table = $("#movietable");
+{% if debug %}
+tmdb_url_trunk = "http://127.0.0.1:8000/tmdb/";
+{% else %}
+tmdb_url_trunk = "http://www.cinemaple.com/tmdb/";
+{% endif %}
 
 
 
-    var column_name = ["Poster", "Title", "Synopsis",  "Release Date", "Popularity"];
+{% if debug %}
+tmdbimdb_movie_url_trunk = "http://127.0.0.1:8000/imdb_tmdb/movie/";
+{% else %}
+tmdbimdb_movie_url_trunk = "http://www.cinemaple.com/imdb_tmdb/movie/";
+{% endif %}
 
-    var num_col = column_name.length;
-
-  if (search_counter == 0){
-
-      for (var i = 0; i < num_col; i++) {
-
-        $('#movietable > thead tr').append('<th> '.concat(column_name[i]).concat('</th>'));
-      }
-
-
-
-    // Datatable without destroy option for first executions
-    dat_tbl = mov_table.DataTable ({
-    "data" : data,
-     "order": [[ 4, "desc" ]],
-      searching: false,
-    "columns" : [
-        { "data"  : "poster_path"},
-        { "data"  : "title" },
-        { "data"  : "overview" },
-        { "data"  : "release_date"},
-        { "data"  : "popularity"},
-
-        ],
-    });
-
-     $('#movietable tbody').on('click', 'tr', function () {
-        var data = dat_tbl.row( this ).data();
-
-        {% if debug %}
-        url_trunk = "http://127.0.0.1:8000/imdb_tmdb/movie/";
-        {% else %}
-        url_trunk = "http://www.cinemaple.com/imdb_tmdb/movie/";
-        {% endif %}
-
-
-        url = url_trunk.concat(data['id'])
-
-        fetch(url)
-          .then(response => {
-          return response.json()
-        })
-        .then(data => {
-          console.log(data);
-          LaunchMovieModal(data);
-
-        })
-        .catch(err => {
-        // Do something for an error here
-        })
-    } );
-
-    }
-    else{
-    dat_tbl = mov_table.DataTable ({
-    "data" : data,
-      searching: false,
-      "order": [[ 4, "desc" ]],
-      destroy: true,
-    "columns" : [
-        { "data"  : "poster_path"},
-        { "data"  : "title" },
-        { "data"  : "overview" },
-        { "data"  : "release_date"},
-        { "data"  : "popularity"},
-
-        ],
-    });
-    }
-
- search_counter++;
-}
-
-
-function rep_null(input){
-  if (input == null){
-    input = "";
-  }
-  return input
-};
-
-function LaunchMovieModal(data){
-
-  // Empty Modal
-  $( "#movieModalTitle" ).empty();
-  $( "#movieModalPoster" ).empty();
-  $( "#movieModalYear").empty();
-  $( "#movieModalCountry").empty();
-  $( "#movieModalDirector").empty();
-  $( "#movieModalActors").empty();
-  $( "#movieModalRuntime").empty();
-  $( "#movieModalPlot").empty();
-
-
-
-  // Title
-  $( "#movieModalTitle" ).append( data["tmdb_movie"]["title"] );
-
-  // Poster
-  base_url = "https://image.tmdb.org/t/p/w500";
-  pre_html = "<img class='d-block w-100' src=\'"
-  post_html = "\'   >"
-
-  posterlink = pre_html.concat(base_url, data["tmdb_movie"]["poster_path"], post_html)
-  $( "#movieModalPoster" ).append(posterlink);
-
-
-  // Movie Infos
-  $( "#movieModalYear").append(remove_breaks(rep_null(data["imdb_movie"]["Year"])));
-  $( "#movieModalCountry").append(remove_breaks(rep_null(data["imdb_movie"]["Country"])));
-  $( "#movieModalDirector").append(remove_breaks(rep_null(data["imdb_movie"]["Director"])));
-  $( "#movieModalActors").append(remove_breaks(rep_null(data["imdb_movie"]["Actors"])));
-  $( "#movieModalRuntime").append(remove_breaks(rep_null(data["imdb_movie"]["Runtime"])));
-  $( "#movieModalPlot").append(remove_breaks(rep_null(data["imdb_movie"]["Plot"])));
-
-  $("#movieModal").modal();
-
-}
-
-
-// Get input from textfield, call TMDB API, render Datatable
-function find_movies() {
-  console.log(search_counter);
-
-  // Get query string
-	var query = document.getElementById("query").value;
-	var year = document.getElementById("year").value;
-
-  if (query == "" || query == null){
-
-  }
-  else{
-    // get JSON using wrapper on TMDB API
-    {% if debug %}
-    url_trunk = "http://127.0.0.1:8000/tmdb/";
-    {% else %}
-    url_trunk = "http://www.cinemaple.com/tmdb/";
-    {% endif %}
-
-
-    if (year == "") {
-      url = url_trunk.concat(query)
-    }
-    else{
-      url = url_trunk.concat(query, "/", year)
-    }
-
-    fetch(url)
-    .then(response => {
-      return response.json()
-    })
-    .then(data => {
-      // Build an new table.
-          LoadDataTablesData(data["results"]);
-          console.log(data);
-    })
-    .catch(err => {
-      // Do something for an error here
-    })
-  }
-}
-
-
-const sleep = (milliseconds) => {
-  return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
-
-
-// Autp update doneTypingInterval ms after done typing
-// Thanks to https://stackoverflow.com/questions/4220126/run-javascript-function-when-user-finishes-typing-instead-of-on-key-up
-var typingTimer;                //timer identifier
-var doneTypingInterval = 200;  //time in ms, 5 second for example
-var $input = $('input[type=text]');
-
-//on keyup, start the countdown
-$input.on('keyup', function () {
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(doneTyping, doneTypingInterval);
-});
-
-//on keydown, clear the countdown
-$input.on('keydown', function () {
-  clearTimeout(typingTimer);
-});
-
-//user is "finished typing," get movies
-function doneTyping () {
-  find_movies();
-}
-
-
-function remove_breaks(str){
-  return str.replace(/(\r\n|\n|\r)/gm, "");
-}
 </script>
 
+<script type="text/javascript" src="{% static 'userhandling/js/add_movies.js' %}"></script>
 
   <script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
+
+
 {% endblock %}
 
 

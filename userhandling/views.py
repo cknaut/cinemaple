@@ -363,12 +363,26 @@ def tmdb_get_movie(tmdb_id):
 
     return data
 
+def tmdb_get_trailer_links(tmdb_id):
+
+    url_api = "https://api.themoviedb.org/3/movie/" + str(tmdb_id) + "/videos?api_key=" + str(settings.TMDB_API_KEY)
+
+    # Load Return Object Into JSON
+    try:
+        with urllib.request.urlopen(url_api) as url:
+            data = json.loads(url.read().decode())
+    except:
+        raise Exception("{} is not valid TMDB ID")
+
+    return data
+
 
 def imdb_tmdb_api_wrapper_movie(request, tmdb_id):
     ''' Once ID is know, can query more information '''
 
     tmdb_movie = tmdb_get_movie(tmdb_id)
     tmdb_images = tmdb_get_images(tmdb_id)
+    tmdb_link = tmdb_get_trailer_links(tmdb_id)
 
     # The IMDB query retursn the
     imdb_id = tmdb_movie["imdb_id"]
@@ -378,7 +392,8 @@ def imdb_tmdb_api_wrapper_movie(request, tmdb_id):
     full_json = {
         "imdb_movie"    : imdb_movie,
         "tmdb_movie"    : tmdb_movie,
-        "tmdb_images"   : tmdb_images
+        "tmdb_images"   : tmdb_images,
+        "tmdb_link"     : tmdb_link
     }
 
     return JsonResponse(full_json)
