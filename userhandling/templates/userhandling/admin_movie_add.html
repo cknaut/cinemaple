@@ -72,9 +72,10 @@
           <!--Grid row-->
           <div class="row">
 
-            <div class="col-lg-4" id="movieModalPoster"></div>
+            <div class="col-lg-2" id="movieModalPoster"></div>
 
-            <div class="col-lg-8">
+
+            <div class="col-lg-5">
             <!--Grid column-->
               <div class="row">
                 <div class="col-lg-2">
@@ -156,20 +157,13 @@
               </div>
             <!--Col-->
             </div>
-          </div>
-          <div class="row">
-          <div class="col-lg-0"></div>
-           <div class="col-lg-12">
-              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+
+            <div class="col-lg-5">
+
+                  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators" id="indicators">
                 </ol>
-                <div class="carousel-inner">
-                      <div class="carousel-item active" id="movieModalBackdrop1"></div>
-                  <div class="carousel-item" id="movieModalBackdrop2"></div>
-                  <div class="carousel-item" id="movieModalBackdrop3"></div>
+                <div class="carousel-inner" id="movieModalBackdrop" >
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -181,7 +175,6 @@
                 </a>
               </div>
             </div>
-            <div class="col-lg-0"></div>
           </div>
 
         </div>
@@ -199,8 +192,47 @@
 <!-- Central Modal Small -->
 
 
-{% endblock %}
+<!-- Central Modal Small -->
+<div class="modal fade" id="backdropModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
+    <!-- Change class .modal-sm to change the size of the modal -->
+  <div class="modal-dialog modal-lg" role="document">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100" id="backdropModalTitle">Modal title</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="container">
+          <!--Grid row-->
+          <div class="row">
+               <div class="col-lg-12">
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
 
 
 
@@ -451,59 +483,73 @@ function LoadDataTablesData(data) {
  search_counter++;
 }
 
+
+function rep_null(input){
+  if (input == null){
+    input = "";
+  }
+  return input
+};
+
+$('#openBackdrop').on('click', function() {
+    $('#backdropModal').show();
+});
+
 function LaunchMovieModal(data){
 
   // Empty Modal
   $( "#movieModalTitle" ).empty();
   $( "#movieModalPoster" ).empty();
-  $( "#movieModalBackdrop1" ).empty();
-  $( "#movieModalBackdrop2" ).empty();
-  $( "#movieModalBackdrop3" ).empty();
+  $( "#movieModalBackdrop" ).empty();
   $( "#movieModalYear").empty();
   $( "#movieModalCountry").empty();
   $( "#movieModalDirector").empty();
   $( "#movieModalActors").empty();
   $( "#movieModalRuntime").empty();
   $( "#movieModalPlot").empty();
+  $( "#indicators").empty();
 
 
   // Title
   $( "#movieModalTitle" ).append( data["tmdb_movie"]["title"] );
 
   // Poster
-  base_url = "https://image.tmdb.org/t/p/w400";
+  base_url = "https://image.tmdb.org/t/p/w500";
   pre_html = "<img class='d-block w-100' src=\'"
   post_html = "\'   >"
+
   posterlink = pre_html.concat(base_url, data["tmdb_movie"]["poster_path"], post_html)
   $( "#movieModalPoster" ).append(posterlink);
 
-  backdrop1_link = pre_html.concat(base_url, data["tmdb_images"]["backdrops"][0]["file_path"], post_html)
-  $( "#movieModalBackdrop1" ).append(backdrop1_link);
+  num_bd = data["tmdb_images"]["backdrops"].length
 
-  backdrop2_link = pre_html.concat(base_url, data["tmdb_images"]["backdrops"][1]["file_path"], post_html)
-  $( "#movieModalBackdrop2" ).append(backdrop2_link);
+  for (var i = 0; i < num_bd; i++) {
 
-   backdrop3_link = pre_html.concat(base_url, data["tmdb_images"]["backdrops"][2]["file_path"], post_html)
-  $( "#movieModalBackdrop3" ).append(backdrop3_link);
+  backdrop_link = pre_html.concat(base_url, data["tmdb_images"]["backdrops"][i]["file_path"], post_html)
 
+  if (i == 0){
+    add = "<div class='carousel-item active'>".concat(backdrop_link, "</div>")
+    ind =  "<li data-target='#carouselExampleIndicators' data-slide-to=".concat(i, " class='active'></li>");
+
+  }
+  else{
+    add = "<div class='carousel-item'>".concat(backdrop_link, "</div>")
+    ind =  "<li data-target='#carouselExampleIndicators' data-slide-to=".concat(i, " ></li>");
+  }
+  $( "#movieModalBackdrop" ).append(add);
+  $( "#indicators" ).append(ind);
+  }
 
 
   // Movie Infos
-  $( "#movieModalYear").append(remove_breaks(data["imdb_movie"]["Year"]));
-  $( "#movieModalCountry").append(remove_breaks(data["imdb_movie"]["Country"]));
-  $( "#movieModalDirector").append(remove_breaks(data["imdb_movie"]["Director"]));
-  $( "#movieModalActors").append(remove_breaks(data["imdb_movie"]["Actors"]));
-  $( "#movieModalRuntime").append(remove_breaks(data["imdb_movie"]["Runtime"]));
-  $( "#movieModalPlot").append(remove_breaks(data["imdb_movie"]["Plot"]));
-
-
-
-
-
+  $( "#movieModalYear").append(remove_breaks(rep_null(data["imdb_movie"]["Year"])));
+  $( "#movieModalCountry").append(remove_breaks(rep_null(data["imdb_movie"]["Country"])));
+  $( "#movieModalDirector").append(remove_breaks(rep_null(data["imdb_movie"]["Director"])));
+  $( "#movieModalActors").append(remove_breaks(rep_null(data["imdb_movie"]["Actors"])));
+  $( "#movieModalRuntime").append(remove_breaks(rep_null(data["imdb_movie"]["Runtime"])));
+  $( "#movieModalPlot").append(remove_breaks(rep_null(data["imdb_movie"]["Plot"])));
 
   $("#movieModal").modal();
-
-
 
 }
 
