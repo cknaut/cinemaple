@@ -288,7 +288,15 @@ def password_reset(request, reset_key):
     return render(request, 'userhandling/password_reset.html', context)
 
 
+@login_required
+def welcome(request):
+    return render(request, 'userhandling/logged_in.html')
 
+@login_required
+def search_movie(request):
+    return render(request, 'userhandling/movie_search.html')
+
+@login_required
 def add_movie_night(request):
     if not request.user.is_staff:
         return HttpResponse("Only staff users are authorised to view this page.")

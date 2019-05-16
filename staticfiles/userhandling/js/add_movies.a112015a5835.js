@@ -151,15 +151,16 @@ function LaunchMovieModal(data) {
                 trailerlink = "http://www.youtube.com/embed/".concat(d_res[i]["key"])
             }
             button_link = "<button type='button' class='btn btn-primary video-btn' data-toggle='modal' data-src='".concat(trailerlink, "' data-target='#myModal'> Watch Trailer  </button>")
-            $("#trailerbutton").append(button_link);
 
         }
     }
 
     if (button_link == "") {
         button_link = "<button type='button' class='btn btn-primary disabled'>No trailer available </button>"
-        $("#trailerbutton").append(button_link);
+
     }
+
+    $("#trailerbutton").append(button_link);
 
 
 
@@ -183,7 +184,7 @@ function LaunchMovieModal(data) {
         $('#myModal').on('shown.bs.modal', function(e) {
 
             // set the video src to autoplay and not to show related video. Youtube related video is like a box of chocolates... you never know what you're gonna get
-            $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
+            $("#video").attr('src', $videoSrc + "?autoplay=0&amp;modestbranding=1&amp;showinfo=0");
         })
 
 

@@ -1,18 +1,14 @@
-body {
-    margin: 2rem;
-}
-
-.modal-dialog {
-    max-width: 800px;
+.youtube-modal-dialog {
+    max-width: 65%;
     margin: 30px auto;
 }
 
-.modal-body {
+.youtube-modal-body {
     position: relative;
     padding: 0px;
 }
 
-.close {
+.youtube-modal-close {
     position: absolute;
     right: -30px;
     top: 0;
