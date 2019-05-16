@@ -33,15 +33,15 @@
         <ul class="nav-menu">
           <li class="menu-active"><a href={% url 'welcome' %}>Current movie nights</a></li>
            <li class="menu"><a href="#">Past movie nights</a></li>
-          <li><a href={% url 'search_movie' %}>Search Movies</a></li>
+          <li><a class="menu" href={% url 'search_movie' %}>Search Movies</a></li>
            {% if user.is_staff %}
-          <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
+          <li><a  class="menu" href={% url 'add_movie_night' %}>Add Movie Night</a></li>
           {% endif %}
         {% if user.is_authenticated %}
-        <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:yellow" class="btn-get-started">Logout</a> </li>
+        <li>  <a class="menu" href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:yellow" class="btn-get-started">Logout</a> </li>
         <li> Welcome, {{request.user.first_name}}! </li>
         {% else %}
-        <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:yellow" class="btn-get-started">Login</a> </li>
+        <li>  <a class="menu" href="{% url 'login' %}" style="font-weight:bold; color:yellow" class="btn-get-started">Login</a> </li>
       {% endif %}
         </ul>
       </nav><!-- #nav-menu-container -->

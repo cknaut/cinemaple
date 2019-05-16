@@ -183,7 +183,7 @@ def my_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect(index)
+                return redirect(welcome)
             else:
                 return HttpResponse("User is none despite clean in form.")
         else:
@@ -294,7 +294,10 @@ def welcome(request):
 
 @login_required
 def search_movie(request):
-    return render(request, 'userhandling/movie_search.html')
+    context = {
+        'debug'           : settings.DEBUG,
+    }
+    return render(request, 'userhandling/movie_search.html', context)
 
 @login_required
 def add_movie_night(request):
