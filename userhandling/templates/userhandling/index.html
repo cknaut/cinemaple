@@ -174,24 +174,6 @@
           <h3 class="section-title">Movie Nights</h3>
           <p class="section-description">Please find a selection of the past movie nights.</p>
         </div>
-        {% for movienight in movienights %}
-            <h4 class="section-title">{{ movienight.date }}: {{ movienight.motto }}</h4>
-             <p class="section-description">{{ movienight.description }}</p>
-
-
-              <div class="row">
-              {% for movie in movienight.MovieList.all %}
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-                  <div class="box">
-                    <div class="icon"><a href="https://www.imdb.com/title/{{ movie.imdbID }}/" ><i class="fa fa-desktop"></i></a></div>
-                    <h4 class="title"><a href="https://www.imdb.com/title/{{ movie.imdbID }}/">{{ movie.title }} ({{ movie.year }}), {{ movie.runtime }}</a></h4>
-                    <p class="description">{{ movie.plot|truncatechars:300}}</p>
-                  </div>
-                </div>
-              {% endfor %}
-              </div>
-              <hr>
-      {% endfor %}
       </div>
 
     </section><!-- #services -->

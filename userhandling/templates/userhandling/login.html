@@ -25,12 +25,14 @@
 
 <div class="form-group">
     <label for="exampleInputEmail1">Username:</label>
+      {{login_form.username.errors}}
       {{login_form.username}}
 </div>
 
 
 <div class="form-group">
     <label for="exampleInputEmail1">Password:</label>
+      {{login_form.password.errors}}
       {{login_form.password}}
 </div>
 

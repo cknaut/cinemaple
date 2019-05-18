@@ -49,10 +49,8 @@ def add_movie_fromIMDB(request, imdb_id):
 
 # Render Index Page, manage register
 def index(request):
-    movienights = MovieNightEvent.objects.order_by('-date')[:5]
     successful_verified = False
     context = {
-        'movienights'           : movienights,
         'successful_verified'   : successful_verified,
         'email'                 : "",
         'username'              : ""
