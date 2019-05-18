@@ -11,12 +11,13 @@ import urllib, json
 import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
-from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm
+from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm, MoveNightForm
 
 from .models import Movie, MovieNightEvent, Profile, PasswordReset
 import tmdbsimple as tmdb
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import CreateView
 
 # ...
 
@@ -304,8 +305,10 @@ def add_movie_night(request):
     if not request.user.is_staff:
         return HttpResponse("Only staff users are authorised to view this page.")
 
+    form = MoveNightForm()
     context = {
-        'debug'           : settings.DEBUG,
+        'debug'             : settings.DEBUG,
+        'form'  : form,
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
 

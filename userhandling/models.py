@@ -35,7 +35,8 @@ class PasswordReset(models.Model):
         return self.username
 
 class Movie(models.Model):
-    imdbID = models.CharField(max_length=200)
+    tmdbID = models.CharField(max_length=200)
+    IMDBID = models.CharField(max_length=200)
     title = models.CharField(max_length=500)
     year = models.CharField(max_length=200)
     director = models.CharField(max_length=200)
@@ -43,6 +44,10 @@ class Movie(models.Model):
     actors = models.CharField(max_length=2000)
     plot = models.TextField(max_length=2000)
     country = models.CharField(max_length=200)
+    on_netflix = models.BooleanField(default=False)
+    netflix_link = models.TextField(blank=True)
+    on_amazon = models.BooleanField(default=False)
+    amazon_link = models.TextField(blank=True)
 
     def __str__(self):
         return self.title

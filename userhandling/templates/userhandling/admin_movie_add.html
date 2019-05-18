@@ -1,5 +1,8 @@
 {% extends 'logged_in_base.html' %}
 {% load static %}
+{% load staticfiles %}
+{# Load the tag library #}
+{% load bootstrap3 %}
 
 
 {% block css_imports %}
@@ -10,6 +13,15 @@
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 <link href="{% static 'userhandling/lib/mdb/css/mdb.lite.min.css' %}" rel="stylesheet">
+
+
+<!-- trumbowyg -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.17.0/trumbowyg.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.17.0/ui/trumbowyg.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.17.0/plugins/emoji/trumbowyg.emoji.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.17.0/plugins/emoji/trumbowyg.emoji.min.js">
+
 {% endblock %}
 
 
@@ -212,21 +224,32 @@
           <p class="section-description">Search for movies and add it to movie night event.</p>
         </div>
 
+{{ form.media }}
+
+<form method="post">{% csrf_token %}
+<div class="trumbowyg-dark">
+  {% bootstrap_form form %}
+</div>
+
+
 
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
           </div>
-          <input type="text" id="query"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+          <input type="text" id="querytitle" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
         </div>
 
          <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Year</span>
           </div>
-          <input type="text" id="year"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+          <input type="text" id="queryyear"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
         </div>
 <div>
+
+  <input type="submit" value="Save">
+</form>
 <table id="movietable" class="display" width="100%">
     <thead>
    <tr>
@@ -256,6 +279,28 @@ Powered by <a href="https://www.themoviedb.org/">The Movie DB</a>
 
 
 <script language="javascript">
+
+
+$('#trumbowyg').trumbowyg({
+    btns: [
+        ['viewHTML'],
+        ['undo', 'redo'], // Only supported in Blink browsers
+        ['formatting'],
+        ['strong', 'em', 'del'],
+        ['superscript', 'subscript'],
+        ['link'],
+        ['insertImage'],
+        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+        ['unorderedList', 'orderedList'],
+        ['horizontalRule'],
+        ['removeformat'],
+        ['fullscreen'],
+        ['emoji']
+    ]
+});
+
+
+
 
 {% if debug %}
 tmdb_url_trunk = "http://127.0.0.1:8000/tmdb/";

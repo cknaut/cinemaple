@@ -3,12 +3,14 @@ import datetime
 from django.utils import timezone
 from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
-from .models import Profile, PasswordReset
+from .models import Profile, PasswordReset, MovieNightEvent
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
 from django.core.mail import EmailMessage
 from .utils import VerificationHash
+from django.forms import ModelForm
+from bootstrap_datepicker_plus import DatePickerInput
 
 
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
@@ -161,4 +163,13 @@ class PasswordResetForm(forms.Form):
             raise forms.ValidationError("Passwords don't match.")
 
         return cleaned_data
+
+class MoveNightForm(ModelForm):
+    class Meta:
+        model = MovieNightEvent
+        fields = ['motto', 'description', 'date']
+        widgets = {
+             'date': DatePickerInput(), # default date-format %m/%d/%Y will be used
+             'description': forms.TextInput(attrs={"id": "trumbowyg"})
+         }
 

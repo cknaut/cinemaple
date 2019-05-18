@@ -209,8 +209,8 @@ function find_movies() {
     console.log(search_counter);
 
     // Get query string
-    var query = document.getElementById("query").value;
-    var year = document.getElementById("year").value;
+    var query = document.getElementById("querytitle").value;
+    var year = document.getElementById("queryyear").value;
 
     if (query == "" || query == null) {
 
@@ -247,7 +247,7 @@ const sleep = (milliseconds) => {
 // Thanks to https://stackoverflow.com/questions/4220126/run-javascript-function-when-user-finishes-typing-instead-of-on-key-up
 var typingTimer; //timer identifier
 var doneTypingInterval = 200; //time in ms, 5 second for example
-var $input = $('input[type=text]');
+var $input = $('#querytitle, #queryyear');
 
 //on keyup, start the countdown
 $input.on('keyup', function() {

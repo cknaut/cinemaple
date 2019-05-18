@@ -209,8 +209,8 @@ function find_movies() {
     console.log(search_counter);
 
     // Get query string
-    var query = document.getElementById("querytitle").value;
-    var year = document.getElementById("queryyear").value;
+    var query = document.getElementById("query").value;
+    var year = document.getElementById("year").value;
 
     if (query == "" || query == null) {
 

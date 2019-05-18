@@ -81,6 +81,8 @@ INSTALLED_APPS = [
     'django_nose',
     'corsheaders',
     'captcha',
+    'bootstrap_datepicker_plus',
+    'bootstrap3'
 ]
 
 MIDDLEWARE = [

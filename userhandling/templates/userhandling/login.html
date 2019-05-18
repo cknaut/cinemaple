@@ -22,7 +22,20 @@
 
   {% csrf_token %}
 
-  {{login_form}}
+
+<div class="form-group">
+    <label for="exampleInputEmail1">Username:</label>
+      {{login_form.username}}
+</div>
+
+
+<div class="form-group">
+    <label for="exampleInputEmail1">Password:</label>
+      {{login_form.password}}
+</div>
+
+
+
 
   <div class="modal-footer d-flex justify-content-center">
   <input class="btn btn-deep-orange" type="submit" value="Log in">
