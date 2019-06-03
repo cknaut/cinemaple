@@ -15,8 +15,11 @@
 <link href="{% static 'userhandling/lib/mdb/css/mdb.lite.min.css' %}" rel="stylesheet">
 
 <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=pqiihwpzf32ctpl7kn59g5ivcztnma4qormn1elar66gqrw4"></script>
-  <script>tinymce.init({selector:'#tinymice'});</script>
-
+ <script>
+ tinymce.init({
+    selector: '#tinymice'
+  });
+  </script>
 {% endblock %}
 
 
@@ -219,15 +222,22 @@
           <p class="section-description">Search for movies and add it to movie night event.</p>
         </div>
 
-{{ form.media }}
+      {{ form.media }}
+      {# Display django.contrib.messages as Bootstrap alerts #}
+      {% bootstrap_messages %}
 
 
-<form method="post">{% csrf_token %}
+      <form action="/add_movie_night" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+          <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "star" %} Submit
+          </button>
+        {% endbuttons %}
+      </form>
 
-  {% bootstrap_form form %}
 
-  <button type="submit">Submit</button>
-</form>
 
 
         <div class="input-group mb-3">

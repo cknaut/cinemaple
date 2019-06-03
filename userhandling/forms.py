@@ -171,7 +171,7 @@ class MoveNightForm(ModelForm):
         model = MovieNightEvent
         fields = ['motto', 'description', 'date']
         labels = {
-            'motto': _('Movie Night Motto:'),
+            'motto': _('Movie Night Motto'),
             'description': _('Description:'),
             'date': _('Date:'),
         }
