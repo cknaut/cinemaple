@@ -11,7 +11,6 @@ from django.core.mail import EmailMessage
 from .utils import VerificationHash
 from django.forms import ModelForm
 from bootstrap_datepicker_plus import DatePickerInput
-from tinymce.widgets import TinyMCE
 from django.utils.translation import gettext_lazy as _
 
 
