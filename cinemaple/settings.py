@@ -45,6 +45,8 @@ PW_RESET_SECRET_SALT = os.environ['PW_RESET_SECRET_SALT']
 # TMDb
 TMDB_API_KEY = os.environ['TMDB_API_KEY']
 
+#
+
 
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
@@ -82,7 +84,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'captcha',
     'bootstrap_datepicker_plus',
-    'bootstrap3'
+    'bootstrap3',
+     'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -188,6 +191,7 @@ django_heroku.settings(locals())
 
 
 LOGIN_REDIRECT_URL = '/welcome/'
+LOGIN_URL = '/login/'
 
 
 LOGOUT_REDIRECT_URL = '/'

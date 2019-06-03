@@ -11,6 +11,8 @@ from django.core.mail import EmailMessage
 from .utils import VerificationHash
 from django.forms import ModelForm
 from bootstrap_datepicker_plus import DatePickerInput
+from tinymce.widgets import TinyMCE
+from django.utils.translation import gettext_lazy as _
 
 
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
@@ -168,8 +170,12 @@ class MoveNightForm(ModelForm):
     class Meta:
         model = MovieNightEvent
         fields = ['motto', 'description', 'date']
+        labels = {
+            'motto': _('Movie Night Motto:'),
+            'description': _('Description:'),
+            'date': _('Date:'),
+        }
         widgets = {
              'date': DatePickerInput(), # default date-format %m/%d/%Y will be used
-             'description': forms.TextInput(attrs={"id": "trumbowyg"})
+             'description': forms.TextInput(attrs={"id": "tinymice"})
          }
-

@@ -14,13 +14,8 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 <link href="{% static 'userhandling/lib/mdb/css/mdb.lite.min.css' %}" rel="stylesheet">
 
-
-<!-- trumbowyg -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.17.0/trumbowyg.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.17.0/ui/trumbowyg.min.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.17.0/plugins/emoji/trumbowyg.emoji.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.17.0/plugins/emoji/trumbowyg.emoji.min.js">
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=pqiihwpzf32ctpl7kn59g5ivcztnma4qormn1elar66gqrw4"></script>
+  <script>tinymce.init({selector:'#tinymice'});</script>
 
 {% endblock %}
 
@@ -226,11 +221,13 @@
 
 {{ form.media }}
 
-<form method="post">{% csrf_token %}
-<div class="trumbowyg-dark">
-  {% bootstrap_form form %}
-</div>
 
+<form method="post">{% csrf_token %}
+
+  {% bootstrap_form form %}
+
+  <button type="submit">Submit</button>
+</form>
 
 
         <div class="input-group mb-3">
@@ -281,23 +278,6 @@ Powered by <a href="https://www.themoviedb.org/">The Movie DB</a>
 <script language="javascript">
 
 
-$('#trumbowyg').trumbowyg({
-    btns: [
-        ['viewHTML'],
-        ['undo', 'redo'], // Only supported in Blink browsers
-        ['formatting'],
-        ['strong', 'em', 'del'],
-        ['superscript', 'subscript'],
-        ['link'],
-        ['insertImage'],
-        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-        ['unorderedList', 'orderedList'],
-        ['horizontalRule'],
-        ['removeformat'],
-        ['fullscreen'],
-        ['emoji']
-    ]
-});
 
 
 
