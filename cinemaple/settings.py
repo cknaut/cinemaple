@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'captcha',
     'bootstrap_datepicker_plus',
     'bootstrap3',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -197,4 +198,6 @@ LOGOUT_REDIRECT_URL = '/'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+
+TINYMCE_JS_URL = 'https://cloud.tinymce.com/5/tinymce.min.js?apiKey=pqiihwpzf32ctpl7kn59g5ivcztnma4qormn1elar66gqrw4'
 

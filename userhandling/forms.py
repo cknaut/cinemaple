@@ -14,6 +14,7 @@ from bootstrap_datepicker_plus import DatePickerInput
 from django.utils.translation import gettext_lazy as _
 
 
+
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
 class RegistrationForm(forms.Form):
     ''' Testing Flag used for calling form in testing setup in order to avoid recaptcha'''
@@ -176,5 +177,5 @@ class MoveNightForm(ModelForm):
         }
         widgets = {
              'date': DatePickerInput(), # default date-format %m/%d/%Y will be used
-             'description': forms.TextInput(attrs={"id": "tinymice"})
+             
          }

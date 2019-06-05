@@ -308,9 +308,9 @@ def add_movie_night(request):
         form = MoveNightForm(request.POST, instance = mn) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             form.save()
-            HttpResponse("Movienight added.")
+            return HttpResponse("Movienight added.")
         else:
-            HttpResponse("Form not valid.")
+            return HttpResponse("Form not valid.")
     else:
         form = MoveNightForm() # An unbound form
         # TODO: This Fails.
