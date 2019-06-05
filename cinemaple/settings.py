@@ -85,7 +85,6 @@ INSTALLED_APPS = [
     'captcha',
     'bootstrap_datepicker_plus',
     'bootstrap3',
-     'tinymce',
 ]
 
 MIDDLEWARE = [
