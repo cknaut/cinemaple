@@ -19,7 +19,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 
-# ...
+# ....
 
 
 # Access movie info using IMDB and add model instance containing info
