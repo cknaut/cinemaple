@@ -11,7 +11,7 @@ import urllib, json
 import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
-from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm, MoveNightForm
+from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm, MoveNightForm, MovieAddForm
 
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, MovieNightEvent
 import tmdbsimple as tmdb
@@ -304,19 +304,23 @@ def add_movie_night(request):
         return HttpResponse("Only staff users are authorised to view this page.")
 
     if request.method == 'POST': # If the form has been submitted...
+
+        form2 = MovieAddForm(request.POST, prefix="form2")
         mn = MovieNightEvent()
-        form = MoveNightForm(request.POST, instance = mn) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
-            form.save()
+        form1 = MoveNightForm(request.POST, prefix="form1", instance = mn) # An unbound form
+        if form1.is_valid(): # All validation rules pass
+            form1.save()
             return HttpResponse("Movienight added.")
         else:
             return HttpResponse("Form not valid.")
     else:
-        form = MoveNightForm() # An unbound form
+        form1 = MoveNightForm(prefix="form1") # An unbound form
+        form2 = MovieAddForm(prefix="form2")
         # TODO: This Fails.
     context = {
         'debug' : settings.DEBUG,
-        'form'  : form,
+        'form1'      : form1,
+        "form2"      : form2,
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
 

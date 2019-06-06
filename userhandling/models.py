@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import time
-from tinymce import models as tinymce_models
+
 
 # We create a one-to-one map from the built-in User model to a Profile model
 # From https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html

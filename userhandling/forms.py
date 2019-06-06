@@ -180,3 +180,10 @@ class MoveNightForm(ModelForm):
              'description': forms.TextInput(attrs={"id": "tinymice"})
              
          }
+
+class MovieAddForm(forms.Form):
+    movieID1 = forms.CharField(required=False)
+    movieID2 = forms.CharField(required=False)
+    movieID3 = forms.CharField(required=False)
+    movieID4 = forms.CharField(required=False)
+    movieID5 = forms.CharField(required=False)

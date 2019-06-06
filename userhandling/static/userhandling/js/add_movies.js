@@ -1,5 +1,5 @@
 search_counter = 0;
-
+movie_counter = 0;
 
 // modidify raw json from TMDB to table html
 function prep_movie_json(data) {
@@ -17,6 +17,7 @@ function prep_movie_json(data) {
             full_url = base_url.concat(data[i]["poster_path"]);
             data[i]["poster_path"] = pre_html.concat(full_url).concat(post_html)
         }
+        data[i]["button"] = "<button type='button' id='addbutton' value=" + data[i]["id"] + " class='btn btn-primary addbutton'>Add </button> <button value=" + data[i]["id"] + "  type='button' id='launmoviechmodal' class='btn btn-primary showbutton'>Info </button>"
     }
 
     return data
@@ -32,7 +33,7 @@ function LoadDataTablesData(data) {
 
 
 
-    var column_name = ["Poster", "Title", "Synopsis", "Release Date", "Popularity"];
+    var column_name = ["Poster", "Title", "Synopsis", "Release Date", "Popularity", "Controls"];
 
     var num_col = column_name.length;
 
@@ -42,8 +43,6 @@ function LoadDataTablesData(data) {
 
             $('#movietable > thead tr').append('<th> '.concat(column_name[i]).concat('</th>'));
         }
-
-
 
         // Datatable without destroy option for first executions
         dat_tbl = mov_table.DataTable({
@@ -58,27 +57,9 @@ function LoadDataTablesData(data) {
                 { "data": "overview" },
                 { "data": "release_date" },
                 { "data": "popularity" },
+                { "data": "button" },
 
             ],
-        });
-
-        $('#movietable tbody').on('click', 'tr', function() {
-            var data = dat_tbl.row(this).data();
-
-            url = tmdbimdb_movie_url_trunk.concat(data['id'])
-
-            fetch(url)
-                .then(response => {
-                    return response.json()
-                })
-                .then(data => {
-                    console.log(data);
-                    LaunchMovieModal(data);
-
-                })
-                .catch(err => {
-                    // Do something for an error here
-                })
         });
 
     } else {
@@ -95,10 +76,40 @@ function LoadDataTablesData(data) {
                 { "data": "overview" },
                 { "data": "release_date" },
                 { "data": "popularity" },
+                { "data": "button" },
 
             ],
         });
     }
+
+    $(".showbutton").click(function() {
+        var id = $(this).attr('value');
+        alert
+        url = tmdbimdb_movie_url_trunk.concat(id)
+
+        fetch(url)
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                console.log(data);
+                LaunchMovieModal(data);
+
+            })
+            .catch(err => {
+                // Do something for an error here
+            })
+
+
+        $(".addbutton").click(function() {
+            var id = $(this).attr('value');
+            movieaddfield = "#id_form2-movieID" + movie_counter
+            $(movieaddfield).val(id);
+            movie_counter = movie_counter + 1
+        });
+
+    });
+
 
     search_counter++;
 }
