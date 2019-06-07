@@ -38,7 +38,11 @@ tinymce.init({
 
 
 {% block modals %}
-<!-- Central Modal Small -->
+
+
+
+
+<!--Central Modal Small -->
 <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
     <!-- Change class .modal-sm to change the size of the modal -->
@@ -168,7 +172,7 @@ tinymce.init({
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+        <button type="button" class="btn btn-primary btn-sm addbutton" id="moviemodaladdbutton">Add</button>
       </div>
     </div>
   </div>
@@ -198,6 +202,65 @@ tinymce.init({
   </div>
 </div>
 
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="modalMovieAlreadyAdded" tabindex="-1" role="modal-notify" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Movie already added</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+      <i class="fa fa-times fa-4x mb-3 animated bounce" style="color:red"></i>
+    
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="movieaddSuccess" tabindex="-1" role="modal-notify" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-success" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Movie added!</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+
+         <i class="fa fa-check fa-4x mb-3 animated rotateIn" style="color:green"></i>
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+        <a type="button" class="btn  btn-success waves-effect" data-dismiss="modal">Nice!</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+
+
+
+
+
 
 
 {% endblock %}
@@ -211,7 +274,7 @@ tinymce.init({
     <div class="hero-container">
       <h1>Welcome to Cinemaple!</h1>
       <h2>Add an awesome movie night event!</h2>
-
+    
       <a href="#facts" class="btn-get-started">Let's do it!</a>
     </div>
   </section><!-- #hero -->
@@ -235,7 +298,6 @@ Add Movie Night
       <h3 class="section-title">Add Movies</h3>
       <p class="section-description">Search for movies and add it to movie night event.</p>
     </div>
-
 
     {# Display django.contrib.messages as Bootstrap alerts #}
     {% bootstrap_messages %}

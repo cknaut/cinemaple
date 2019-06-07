@@ -1,5 +1,5 @@
 search_counter = 0;
-movie_counter = 0;
+movie_counter = 1;
 
 // modidify raw json from TMDB to table html
 function prep_movie_json(data) {
@@ -17,7 +17,7 @@ function prep_movie_json(data) {
             full_url = base_url.concat(data[i]["poster_path"]);
             data[i]["poster_path"] = pre_html.concat(full_url).concat(post_html)
         }
-        data[i]["button"] = "<button type='button' id='addbutton' value=" + data[i]["id"] + " class='btn btn-primary addbutton'>Add </button> <button value=" + data[i]["id"] + "  type='button' id='launmoviechmodal' class='btn btn-primary showbutton'>Info </button>"
+        data[i]["button"] = "<button type='button' value=" + data[i]["id"] + " class='btn btn-primary addbutton'>Add </button> <button value=" + data[i]["id"] + "  type='button' class='btn btn-primary showbutton'>Info </button>"
     }
 
     return data
@@ -99,20 +99,39 @@ function LoadDataTablesData(data) {
             .catch(err => {
                 // Do something for an error here
             })
+    });
 
-
-        $(".addbutton").click(function() {
-            var id = $(this).attr('value');
-            movieaddfield = "#id_form2-movieID" + movie_counter
-            $(movieaddfield).val(id);
-            movie_counter = movie_counter + 1
-        });
-
+    // thanks https://stackoverflow.com/questions/20054889/button-onclick-function-firing-twice
+    $('.addbutton').unbind('click').click(function() {
+        var id = $(this).attr('value');
+        movie_already_added = check_movie_input(id)
+        if (movie_already_added) {
+            $("#modalMovieAlreadyAdded").modal();
+            return
+        }
+        movieaddfield = "#id_form2-movieID" + movie_counter
+        $(movieaddfield).val(id);
+        movie_counter = movie_counter + 1
+        $("#movieaddSuccess").modal();
     });
 
 
     search_counter++;
 }
+
+function check_movie_input(id) {
+    // after clicking the add movie button, check if movie id alreay enterd in a movie text field.
+    error = false
+    for (var i = 1; i < 11; i++) {
+        movieaddfield = "#id_form2-movieID" + i;
+        if ($(movieaddfield).val() == id) {
+            error = true
+        }
+    }
+    return error
+
+}
+
 
 
 function rep_null(input) {
@@ -134,11 +153,14 @@ function LaunchMovieModal(data) {
     $("#movieModalRuntime").empty();
     $("#movieModalPlot").empty();
     $("#trailerbutton").empty();
-
-
+    $("#moviemodaladdbutton").val("");
 
     // Title
     $("#movieModalTitle").append(data["tmdb_movie"]["title"]);
+
+
+    $("#moviemodaladdbutton").val(data["tmdb_movie"]["id"]);
+
 
     // Poster
     base_url = "https://image.tmdb.org/t/p/w500";

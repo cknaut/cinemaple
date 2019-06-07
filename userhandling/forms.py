@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from .utils import VerificationHash
 from django.forms import ModelForm
-from bootstrap_datepicker_plus import DatePickerInput
+from bootstrap_datepicker_plus import DateTimePickerInput
 from django.utils.translation import gettext_lazy as _
 
 
@@ -176,7 +176,7 @@ class MoveNightForm(ModelForm):
             'date': _('Date:'),
         }
         widgets = {
-             'date': DatePickerInput(), # default date-format %m/%d/%Y will be used
+             'date': DateTimePickerInput(), # default date-format %m/%d/%Y will be used
              'description': forms.TextInput(attrs={"id": "tinymice"})
              
          }
@@ -187,3 +187,8 @@ class MovieAddForm(forms.Form):
     movieID3 = forms.CharField(required=False)
     movieID4 = forms.CharField(required=False)
     movieID5 = forms.CharField(required=False)
+    movieID6 = forms.CharField(required=False)
+    movieID7 = forms.CharField(required=False)
+    movieID8 = forms.CharField(required=False)
+    movieID9 = forms.CharField(required=False)
+    movieID10 = forms.CharField(required=False)
