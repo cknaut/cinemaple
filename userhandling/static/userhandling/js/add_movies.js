@@ -84,7 +84,6 @@ function LoadDataTablesData(data) {
 
     $(".showbutton").click(function() {
         var id = $(this).attr('value');
-        alert
         url = tmdbimdb_movie_url_trunk.concat(id)
 
         fetch(url)
@@ -111,28 +110,96 @@ function LoadDataTablesData(data) {
         }
         movieaddfield = "#id_form2-movieID" + movie_counter
         $(movieaddfield).val(id);
-        movie_counter = movie_counter + 1
         $("#movieaddSuccess").modal();
+
+        url = tmdbimdb_movie_url_trunk.concat(id)
+
+        fetch(url)
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                console.log(data);
+                AddMovie(data);
+
+            })
+            .catch(err => {
+                // Do something for an error here
+            })
+
     });
 
 
     search_counter++;
 }
 
+function AddMovie(data) {
+    title = data["tmdb_movie"]["title"]
+    year = data["imdb_movie"]["Year"]
+    director = data["imdb_movie"]["Director"]
+    runtime = data["imdb_movie"]["Runtime"]
+    id = data["tmdb_movie"]["id"]
+
+    movie_alert = generate_movie_alert(title, year, director, runtime, id)
+    $("#moviealerts").append(movie_alert);
+
+    movie_counter = movie_counter + 1
+
+    $(".movieclosebutton").unbind('click').click(function() {
+        var id = $(this).attr('value');
+        movie_counter = movie_counter - 1
+        remove_and_reorder_movies(id)
+    });
+
+}
+
 function check_movie_input(id) {
     // after clicking the add movie button, check if movie id alreay enterd in a movie text field.
     error = false
-    for (var i = 1; i < 11; i++) {
+    for (var i = 1; i < 10; i++) {
         movieaddfield = "#id_form2-movieID" + i;
         if ($(movieaddfield).val() == id) {
             error = true
         }
     }
+
     return error
 
 }
 
 
+
+function remove_and_reorder_movies(id) {
+    // when a movie is removed, remove ID from formfield and move following movies up to new movies can be appended.
+
+    pos_movie_removed = 0 // index of movie to be removed
+
+    // remove id 
+    for (var i = 1; i < 11; i++) {
+        movieaddfield = "#id_form2-movieID" + i;
+        if ($(movieaddfield).val() == id) {
+            $(movieaddfield).val("")
+            pos_movie_removed = i
+        }
+    }
+
+    // move movies afer removed ID one up
+    for (var i = pos_movie_removed; i < 11; i++) {
+        movieaddfield = "#id_form2-movieID" + i;
+        next_index = i + 1
+        movieaddfield_next = "#id_form2-movieID" + next_index;
+        next_val = $(movieaddfield_next).val()
+        $(movieaddfield).val(next_val) //set value of next field))
+    }
+}
+
+
+
+function generate_movie_alert(title, year, director, runtime, mov_id) {
+    // generate html displaying the movie alert
+    movie_alert = "<div class='alert alert-success alert-dismissible fade show moviealert' role='alert'> <strong>" + title + "</strong>, (" + year + "), Director: " + director + ", Runtime: " + runtime + "<button type='button' value=" + mov_id + " class='close movieclosebutton' data-dismiss='alert' aria-label='Close' > <span aria-hidden='true'> &times; </span></button> </div>"
+    return movie_alert
+}
 
 function rep_null(input) {
     if (input == null) {
@@ -235,6 +302,7 @@ function LaunchMovieModal(data) {
     $("#movieModal").modal();
 
 }
+
 
 
 // Get input from textfield, call TMDB API, render Datatable
