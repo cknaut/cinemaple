@@ -182,13 +182,13 @@ class MoveNightForm(ModelForm):
          }
 
 class MovieAddForm(forms.Form):
-    movieID1 = forms.CharField(required=False)
-    movieID2 = forms.CharField(required=False)
-    movieID3 = forms.CharField(required=False)
-    movieID4 = forms.CharField(required=False)
-    movieID5 = forms.CharField(required=False)
-    movieID6 = forms.CharField(required=False)
-    movieID7 = forms.CharField(required=False)
-    movieID8 = forms.CharField(required=False)
-    movieID9 = forms.CharField(required=False)
-    movieID10 = forms.CharField(required=False)
+    movieID1    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID2    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID3    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID4    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID5    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID6    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID7    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID8    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID9    = forms.CharField(required=False, widget=forms.HiddenInput())
+    movieID10   = forms.CharField(required=False, widget=forms.HiddenInput())

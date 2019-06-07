@@ -110,7 +110,8 @@ function LoadDataTablesData(data) {
         }
         movieaddfield = "#id_form2-movieID" + movie_counter
         $(movieaddfield).val(id);
-        $("#movieaddSuccess").modal();
+        $("#advisealert").hide()
+            //$("#movieaddSuccess").modal();
 
         url = tmdbimdb_movie_url_trunk.concat(id)
 

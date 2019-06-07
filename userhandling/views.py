@@ -308,9 +308,10 @@ def add_movie_night(request):
         form2 = MovieAddForm(request.POST, prefix="form2")
         mn = MovieNightEvent()
         form1 = MoveNightForm(request.POST, prefix="form1", instance = mn) # An unbound form
-        if form1.is_valid(): # All validation rules pass
+        if form1.is_valid() and form2.is_valid(): # All validation rules pass
             form1.save()
-            return HttpResponse("Movienight added.")
+            testid = form2.cleaned_data['movieID1']
+            return HttpResponse(testid)
         else:
             return HttpResponse("Form not valid.")
     else:
