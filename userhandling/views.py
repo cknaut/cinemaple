@@ -275,12 +275,13 @@ def search_movie(request):
 
 
 
-def add_movies_from_form(request, mov_ID_add):
+def add_movies_from_form(request, movienight,  mov_ID_add):
     ''' Given a list of movie IDs, create movies and add to DB '''
 
     for movie_id in mov_ID_add:
         # retrieve json via tmdb API
         data = json.loads(imdb_tmdb_api_wrapper_movie(request, tmdb_id=movie_id).content)
+
 
         # create and svae movie object
         m = Movie(tmdbID=data["id"])
@@ -295,7 +296,9 @@ def add_movies_from_form(request, mov_ID_add):
         m.country         = data["Country"]
         m.posterpath      = data["poster_path"]
         m.trailerlink     = data["Trailerlink"]
-        m.save()         
+        m.save()      
+
+        movienight.MovieList.add(m)   
 
 
 @login_required
@@ -323,10 +326,7 @@ def add_movie_night(request):
                     mov_ID_add.append(movie_id)
                     
             # Create and save movies objects
-            add_movies_from_form(request, mov_ID_add)
-
-
-            # link movie instance
+            add_movies_from_form(request, mn, mov_ID_add)
 
             testid = form2.cleaned_data['movieID1']
             return HttpResponse(testid)
@@ -425,7 +425,7 @@ def tmdb_get_movie_images_videos(tmdb_id):
 
     # Retrieve runtime
     if data["runtime"] == None:
-        data["runtime"] = ""
+        data["Runtime"] = ""
     else:
         data["Runtime"] = str(data["runtime"]) + " min"
 
