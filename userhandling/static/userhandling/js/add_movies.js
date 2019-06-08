@@ -205,7 +205,7 @@ function generate_movie_alert(title, year, director, runtime, mov_id) {
 }
 
 function rep_null(input) {
-    if (input == null) {
+    if (input == null || input == "") {
         input = "N/A";
     }
     return input
@@ -246,28 +246,11 @@ function LaunchMovieModal(data) {
 
     $("#movieModalPoster").append(posterlink);
 
-    // Check if trailer link is available and add it to href of button
-    d_res = data["videos"]["results"];
-    num_movies = d_res.length
-    trailerlink = ""
-
-    button_link = ""
-    if (num_movies > 0) {
-        for (var i = 0; i < num_movies; i++) {
-            type = d_res[i]["type"]
-            site = d_res[i]["site"]
-            if (site == "YouTube" && type == "Trailer") {
-                trailerlink = "http://www.youtube.com/embed/".concat(d_res[i]["key"])
-                button_link = "<button type='button' class='btn btn-primary video-btn' data-src='".concat(trailerlink, "' > Watch Trailer  </button>")
-            }
-
-
-        }
-    }
-
-    if (button_link == "") {
+    //set trailerlink
+    if (data["Trailerlink"] == "") {
         button_link = "<button type='button' class='btn btn-primary disabled'>No trailer available. </button>"
-
+    } else {
+        button_link = "<button type='button' class='btn btn-primary video-btn' data-src='".concat(data["Trailerlink"], "' > Watch Trailer  </button>")
     }
 
     $("#trailerbutton").append(button_link);

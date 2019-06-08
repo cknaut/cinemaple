@@ -20,9 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY_DJANGO']
 
-# OMDBAPI key
-OMDB_API_KEY = os.environ['OMDB_API_KEY']
-
 # Mailchimp keys
 
 MAILCHIMP_API_KEY           = os.environ['MAILCHIMP_API_KEY']

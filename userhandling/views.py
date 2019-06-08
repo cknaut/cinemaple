@@ -22,32 +22,6 @@ import requests
 
 # ....
 
-
-# Access movie info using IMDB and add model instance containing info
-def add_movie_fromIMDB(request, imdb_id):
-    args = {"apikey": settings.OMDB_API_KEY, "i": imdb_id, "plot" : "full"}
-    url_api = " http://www.omdbapi.com/?{}".format(urllib.parse.urlencode(args))
-
-    # Load Return Object Into JSON
-    try:
-        with urllib.request.urlopen(url_api) as url:
-            data = json.loads(url.read().decode())
-    except:
-        raise Exception("{} is not valid IMDB ID")
-
-    # Create movie instance from returned JSON
-    m = Movie(imdbID=imdb_id)
-    m.title = data["Title"]
-    m.year = data["Year"]
-    m.director = data["Director"]
-    m.runtime = data["Runtime"]
-    m.plot = data["Plot"]
-    m.country = data["Country"]
-    m.actors = data["Actors"]
-    m.save()
-
-    return render(request, 'userhandling/index.html')
-
 # Render Index Page, manage register
 def index(request):
     successful_verified = False
@@ -301,19 +275,27 @@ def search_movie(request):
 
 
 
-def add_movies_from_form(request, form):
-    ''' This handles the hidden form fields containing movie IDs and adds model instances '''
-    num_formfields = 10
+def add_movies_from_form(request, mov_ID_add):
+    ''' Given a list of movie IDs, create movies and add to DB '''
 
-    for i in range(1, num_formfields+1):
-        movie_id = form.cleaned_data['movieID{}'.format(i)]
-        if movie_id  != "":
-            result_json = imdb_tmdb_api_wrapper_movie(request, tmdb_id=movie_id)
-            title = result_json["imdb_movie"]["Title"]
+    for movie_id in mov_ID_add:
+        # retrieve json via tmdb API
+        data = json.loads(imdb_tmdb_api_wrapper_movie(request, tmdb_id=movie_id).content)
 
-        
-            print("Lol")
-            
+        # create and svae movie object
+        m = Movie(tmdbID=data["id"])
+        m.tmdbID          = data["id"]
+        m.title           = data["title"]
+        m.year            = data["Year"]
+        m.director        = data["Director"]
+        m.producer        = data["Producer"]
+        m.runtime         = data["Runtime"]
+        m.actors          = data["Actors"]
+        m.plot            = data["Plot"]
+        m.country         = data["Country"]
+        m.posterpath      = data["poster_path"]
+        m.trailerlink     = data["Trailerlink"]
+        m.save()         
 
 
 @login_required
@@ -328,7 +310,22 @@ def add_movie_night(request):
         form1 = MoveNightForm(request.POST, prefix="form1", instance = mn) # An unbound form
         if form1.is_valid() and form2.is_valid(): # All validation rules pass
             form1.save() # This creates the movienight
-            add_movies_from_form(request, form2) # This creates Movie instances
+
+            # generate list of movie ids to be added:
+            num_formfields = 10
+            mov_ID_add = []
+
+            for i in range(1, num_formfields+1):
+                # Look at correct formfield
+                movie_id = form2.cleaned_data['movieID{}'.format(i)]
+                # If not empty, generate 
+                if movie_id  != "":
+                    mov_ID_add.append(movie_id)
+                    
+            # Create and save movies objects
+            add_movies_from_form(request, mov_ID_add)
+
+
             # link movie instance
 
             testid = form2.cleaned_data['movieID1']
@@ -427,7 +424,10 @@ def tmdb_get_movie_images_videos(tmdb_id):
     data["Country"] = get_printable_list(prod_countries, "name", num_countries, False)
 
     # Retrieve runtime
-    data["Runtime"] = str(data["runtime"]) + " min"
+    if data["runtime"] == None:
+        data["runtime"] = ""
+    else:
+        data["Runtime"] = str(data["runtime"]) + " min"
 
     # Retrieve Director and producer list
     directors = get_person_by_job( data["credits"]["crew"], "Director")
@@ -437,11 +437,21 @@ def tmdb_get_movie_images_videos(tmdb_id):
     data["Director"] = get_printable_list(directors, "name", num_directors, True)
     data["Producer"] = get_printable_list(producers, "name", num_producers, True)
 
+    # retrieve youtube link
 
+    video_res = data["videos"]["results"]
+    num_videos = len(video_res)
 
+    trailerlink = ""
 
-
-
+    if num_videos > 0:
+        for i in range(num_videos):
+            linktype = video_res[i]["type"]
+            site = video_res[i]["site"]
+            if site == "YouTube" and linktype == "Trailer":
+                trailerlink =  "http://www.youtube.com/embed/" + video_res[i]["key"]
+    
+    data["Trailerlink"] = trailerlink
 
     return data
 
