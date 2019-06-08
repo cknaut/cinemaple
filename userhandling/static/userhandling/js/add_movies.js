@@ -38,7 +38,7 @@ function LoadDataTablesData(data) {
     var num_col = column_name.length;
 
     if (search_counter == 0) {
-
+        // build header
         for (var i = 0; i < num_col; i++) {
 
             $('#movietable > thead tr').append('<th> '.concat(column_name[i]).concat('</th>'));
@@ -82,6 +82,10 @@ function LoadDataTablesData(data) {
         });
     }
 
+    search_counter++;
+}
+
+function initiate_datatables_buttons() {
     $(".showbutton").click(function() {
         var id = $(this).attr('value');
         url = tmdbimdb_movie_url_trunk.concat(id)
@@ -129,10 +133,8 @@ function LoadDataTablesData(data) {
             })
 
     });
-
-
-    search_counter++;
 }
+
 
 function AddMovie(data) {
     title = data["title"]
@@ -217,6 +219,7 @@ function LaunchMovieModal(data) {
     $("#movieModalYear").empty();
     $("#movieModalCountry").empty();
     $("#movieModalDirector").empty();
+    $("#movieModalProducer").empty();
     $("#movieModalActors").empty();
     $("#movieModalRuntime").empty();
     $("#movieModalPlot").empty();
@@ -296,6 +299,7 @@ function LaunchMovieModal(data) {
     $("#movieModalYear").append(remove_breaks(rep_null(data["Year"])));
     $("#movieModalCountry").append(remove_breaks(rep_null(data["Country"])));
     $("#movieModalDirector").append(remove_breaks(rep_null(data["Director"])));
+    $("#movieModalProducer").append(remove_breaks(rep_null(data["Producer"])));
     $("#movieModalActors").append(remove_breaks(rep_null(data["Actors"])));
     $("#movieModalRuntime").append(remove_breaks(rep_null(data["Runtime"])));
     $("#movieModalPlot").append(remove_breaks(rep_null(data["Plot"])));
@@ -371,3 +375,9 @@ function doneTyping() {
 function remove_breaks(str) {
     return str.replace(/(\r\n|\n|\r)/gm, "");
 }
+
+
+// Initialize Buttons after each redraw of table.
+$('#movietable').on('draw.dt', function() {
+    initiate_datatables_buttons()
+});
