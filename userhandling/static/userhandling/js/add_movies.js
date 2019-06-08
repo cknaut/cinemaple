@@ -135,11 +135,11 @@ function LoadDataTablesData(data) {
 }
 
 function AddMovie(data) {
-    title = data["tmdb_movie"]["title"]
-    year = data["imdb_movie"]["Year"]
-    director = data["imdb_movie"]["Director"]
-    runtime = data["imdb_movie"]["Runtime"]
-    id = data["tmdb_movie"]["id"]
+    title = data["title"]
+    year = data["Year"]
+    director = data["Director"]
+    runtime = data["Runtime"]
+    id = data["id"]
 
     movie_alert = generate_movie_alert(title, year, director, runtime, id)
     $("#moviealerts").append(movie_alert);
@@ -224,10 +224,10 @@ function LaunchMovieModal(data) {
     $("#moviemodaladdbutton").val("");
 
     // Title
-    $("#movieModalTitle").append(data["tmdb_movie"]["title"]);
+    $("#movieModalTitle").append(data["title"]);
 
 
-    $("#moviemodaladdbutton").val(data["tmdb_movie"]["id"]);
+    $("#moviemodaladdbutton").val(data["id"]);
 
 
     // Poster
@@ -235,11 +235,11 @@ function LaunchMovieModal(data) {
     pre_html = "<img class='d-block w-100' src=\'"
     post_html = "\'   >"
 
-    posterlink = pre_html.concat(base_url, data["tmdb_movie"]["poster_path"], post_html)
+    posterlink = pre_html.concat(base_url, data["poster_path"], post_html)
     $("#movieModalPoster").append(posterlink);
 
     // Check if trailer link is available and add it to href of button
-    d_res = data["tmdb_link"]["results"];
+    d_res = data["videos"]["results"];
     num_movies = d_res.length
     trailerlink = ""
 
@@ -293,12 +293,12 @@ function LaunchMovieModal(data) {
     });
 
     // Update Movie Infos
-    $("#movieModalYear").append(remove_breaks(rep_null(data["imdb_movie"]["Year"])));
-    $("#movieModalCountry").append(remove_breaks(rep_null(data["imdb_movie"]["Country"])));
-    $("#movieModalDirector").append(remove_breaks(rep_null(data["imdb_movie"]["Director"])));
-    $("#movieModalActors").append(remove_breaks(rep_null(data["imdb_movie"]["Actors"])));
-    $("#movieModalRuntime").append(remove_breaks(rep_null(data["imdb_movie"]["Runtime"])));
-    $("#movieModalPlot").append(remove_breaks(rep_null(data["imdb_movie"]["Plot"])));
+    $("#movieModalYear").append(remove_breaks(rep_null(data["Year"])));
+    $("#movieModalCountry").append(remove_breaks(rep_null(data["Country"])));
+    $("#movieModalDirector").append(remove_breaks(rep_null(data["Director"])));
+    $("#movieModalActors").append(remove_breaks(rep_null(data["Actors"])));
+    $("#movieModalRuntime").append(remove_breaks(rep_null(data["Runtime"])));
+    $("#movieModalPlot").append(remove_breaks(rep_null(data["Plot"])));
 
     $("#movieModal").modal();
 

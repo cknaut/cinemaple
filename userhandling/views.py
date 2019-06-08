@@ -18,6 +18,7 @@ import tmdbsimple as tmdb
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
+import requests
 
 # ....
 
@@ -298,6 +299,23 @@ def search_movie(request):
     }
     return render(request, 'userhandling/movie_search.html', context)
 
+
+
+def add_movies_from_form(request, form):
+    ''' This handles the hidden form fields containing movie IDs and adds model instances '''
+    num_formfields = 10
+
+    for i in range(1, num_formfields+1):
+        movie_id = form.cleaned_data['movieID{}'.format(i)]
+        if movie_id  != "":
+            result_json = imdb_tmdb_api_wrapper_movie(request, tmdb_id=movie_id)
+            title = result_json["imdb_movie"]["Title"]
+
+        
+            print("Lol")
+            
+
+
 @login_required
 def add_movie_night(request):
     if not request.user.is_staff:
@@ -309,7 +327,10 @@ def add_movie_night(request):
         mn = MovieNightEvent()
         form1 = MoveNightForm(request.POST, prefix="form1", instance = mn) # An unbound form
         if form1.is_valid() and form2.is_valid(): # All validation rules pass
-            form1.save()
+            form1.save() # This creates the movienight
+            add_movies_from_form(request, form2) # This creates Movie instances
+            # link movie instance
+
             testid = form2.cleaned_data['movieID1']
             return HttpResponse(testid)
         else:
@@ -343,87 +364,93 @@ def tmdb_api_wrapper_search(request, query, year=""):
 
     # Load Return Object Into JSON
     try:
-        with urllib.request.urlopen(url_api) as url:
-            data = json.loads(url.read().decode())
+        data = requests.get(url_api).json()
     except:
         raise Exception("Critical TMDB API error")
 
     return JsonResponse(data)
 
+def get_printable_list(data, fieldname, num_retrieve, harvard_comma):
+    ''' Using the full JSON, returns print-friendly string of first n occurences'''
+  
+    resultsstring = ""
+    num_retrieve = min(num_retrieve, len(data))
 
-def imdb_get_entry(imdb_id):
-    args = {"apikey": settings.OMDB_API_KEY, "i": imdb_id, "plot" : "full"}
-    url_api = " http://www.omdbapi.com/?{}".format(urllib.parse.urlencode(args))
+    for i  in range(num_retrieve):
+        if i == num_retrieve - 1:
+            if num_retrieve == 1:
+                resultsstring = data[i][fieldname]
+            elif harvard_comma:
+                resultsstring = resultsstring + "and " + data[i][fieldname]
+            else:
+                resultsstring = resultsstring + data[i][fieldname]
+        else:
+            resultsstring = resultsstring + data[i][fieldname]+ ", "
 
-    # Load Return Object Into JSON
-    try:
-        with urllib.request.urlopen(url_api) as url:
-            data = json.loads(url.read().decode())
-    except:
-        raise Exception("{} is not valid IMDB ID")
+    return resultsstring
 
-    return data
+def get_person_by_job(data, job_desc):
+    ''' Search crew list by job description'''
 
-def tmdb_get_images(tmdb_id):
+    resultarray = []
+    for entry in data:
+        if entry["job"] == job_desc:
+            resultarray.append(entry)
+            
+    return resultarray
 
-    url_api = "https://api.themoviedb.org/3/movie/" + str(tmdb_id) + "/images?api_key=" + str(settings.TMDB_API_KEY)
 
-    # Load Return Object Into JSON
-    try:
-        with urllib.request.urlopen(url_api) as url:
-            data = json.loads(url.read().decode())
-    except:
-        raise Exception("{} is not valid TMDB ID")
 
-    return data
+def tmdb_get_movie_images_videos(tmdb_id):
 
-def tmdb_get_movie(tmdb_id):
-
-    url_api = "https://api.themoviedb.org/3/movie/" + str(tmdb_id) + "?api_key=" + str(settings.TMDB_API_KEY)
-
-    # Load Return Object Into JSON
-    try:
-        with urllib.request.urlopen(url_api) as url:
-            data = json.loads(url.read().decode())
-    except:
-        raise Exception("{} is not valid TMDB ID")
-
-    return data
-
-def tmdb_get_trailer_links(tmdb_id):
-
-    url_api = "https://api.themoviedb.org/3/movie/" + str(tmdb_id) + "/videos?api_key=" + str(settings.TMDB_API_KEY)
+    url_api = "https://api.themoviedb.org/3/movie/" + str(tmdb_id) + "?api_key=" + str(settings.TMDB_API_KEY) + "&append_to_response=videos,credits"
 
     # Load Return Object Into JSON
     try:
-        with urllib.request.urlopen(url_api) as url:
-            data = json.loads(url.read().decode())
+        data = requests.get(url_api).json()
     except:
-        raise Exception("{} is not valid TMDB ID")
+        raise Exception("{} is not valid TMDB ID".format(tmdb_id))
+
+    # retrive some interesting data from lower level json 
+
+    # Actor list
+    num_actors = 4
+    cast = data["credits"]["cast"]
+    data["Actors"] = get_printable_list(cast, "name", num_actors, True)
+
+    data["Year"] = data["release_date"][:4]
+    data["Plot"] = data["overview"]
+
+    # Production Country list
+    num_countries = 3
+    prod_countries = data["production_countries"]
+    data["Country"] = get_printable_list(prod_countries, "name", num_countries, False)
+
+    # Retrieve runtime
+    data["Runtime"] = str(data["runtime"]) + " min"
+
+    # Retrieve Director and producer list
+    directors = get_person_by_job( data["credits"]["crew"], "Director")
+    producers = get_person_by_job( data["credits"]["crew"], "Producer")
+    num_directors = 3
+    num_producers = 3
+    data["Director"] = get_printable_list(directors, "name", num_directors, True)
+    data["Producer"] = get_printable_list(producers, "name", num_producers, True)
+
+
+
+
+
+
 
     return data
-
 
 def imdb_tmdb_api_wrapper_movie(request, tmdb_id):
-    ''' Once ID is know, can query more information '''
+    ''' Once ID is know, can query more information'''
 
-    tmdb_movie = tmdb_get_movie(tmdb_id)
-    tmdb_images = tmdb_get_images(tmdb_id)
-    tmdb_link = tmdb_get_trailer_links(tmdb_id)
+    tmdb_movie_images_links = tmdb_get_movie_images_videos(tmdb_id)
 
-    # The IMDB query retursn the
-    imdb_id = tmdb_movie["imdb_id"]
-
-    imdb_movie = imdb_get_entry(imdb_id)
-
-    full_json = {
-        "imdb_movie"    : imdb_movie,
-        "tmdb_movie"    : tmdb_movie,
-        "tmdb_images"   : tmdb_images,
-        "tmdb_link"     : tmdb_link
-    }
-
-    return JsonResponse(full_json)
+    return JsonResponse(tmdb_movie_images_links)
 
 
 

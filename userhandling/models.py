@@ -45,6 +45,8 @@ class Movie(models.Model):
     actors = models.CharField(max_length=2000)
     plot = models.TextField(max_length=2000)
     country = models.CharField(max_length=200)
+    posterlink = models.CharField(max_length=200)
+    trailerlink = models.CharField(max_length=200)
     on_netflix = models.BooleanField(default=False)
     netflix_link = models.TextField(blank=True)
     on_amazon = models.BooleanField(default=False)
