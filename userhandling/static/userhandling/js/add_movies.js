@@ -12,7 +12,7 @@ function prep_movie_json(data) {
 
     for (var i = 0; i < data.length; i++) {
         if (data[i]["poster_path"] == null) {
-            data[i]["poster_path"] = " <img  src='{% static 'userhandling/img/NAicon.svg' %}' >"
+            data[i]["poster_path"] = " <button type='button' class='btn btn-primary disabled'>No poster available. </button>"
         } else {
             full_url = base_url.concat(data[i]["poster_path"]);
             data[i]["poster_path"] = pre_html.concat(full_url).concat(post_html)
@@ -115,7 +115,7 @@ function initiate_datatables_buttons() {
         movieaddfield = "#id_form2-movieID" + movie_counter
         $(movieaddfield).val(id);
         $("#advisealert").hide()
-            //$("#movieaddSuccess").modal();
+        $("#movieaddSuccess").modal();
 
         url = tmdbimdb_movie_url_trunk.concat(id)
 
@@ -238,7 +238,12 @@ function LaunchMovieModal(data) {
     pre_html = "<img class='d-block w-100' src=\'"
     post_html = "\'   >"
 
-    posterlink = pre_html.concat(base_url, data["poster_path"], post_html)
+    if (data["poster_path"] == null) {
+        posterlink = " <button type='button' class='btn btn-primary disabled'>No poster available. </button> "
+    } else {
+        posterlink = pre_html.concat(base_url, data["poster_path"], post_html)
+    }
+
     $("#movieModalPoster").append(posterlink);
 
     // Check if trailer link is available and add it to href of button
@@ -261,7 +266,7 @@ function LaunchMovieModal(data) {
     }
 
     if (button_link == "") {
-        button_link = "<button type='button' class='btn btn-primary disabled'>No trailer available </button>"
+        button_link = "<button type='button' class='btn btn-primary disabled'>No trailer available. </button>"
 
     }
 
