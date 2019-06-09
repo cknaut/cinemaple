@@ -195,5 +195,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+SECURE_SSL_REDIRECT = True
+
+
+
 
 
