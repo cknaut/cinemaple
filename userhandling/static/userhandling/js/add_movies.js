@@ -47,6 +47,7 @@ function LoadDataTablesData(data) {
         // Datatable without destroy option for first executions
         dat_tbl = mov_table.DataTable({
             "data": data,
+            responsive: true,
             "order": [
                 [4, "desc"]
             ],
@@ -66,6 +67,7 @@ function LoadDataTablesData(data) {
         dat_tbl = mov_table.DataTable({
             "data": data,
             searching: false,
+            responsive: true,
             "order": [
                 [4, "desc"]
             ],
