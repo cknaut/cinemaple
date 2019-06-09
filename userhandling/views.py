@@ -152,13 +152,13 @@ def my_login(request):
     
     if request.method == 'POST':
         form = LoginForm(request.POST)
+        next_url = request.POST.get('next')
         if form.is_valid():
             # At this point, the clean() fuction in the form already made sure that the user is valid and active.
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(username=username, password=password)
             if user is not None:
-                next_url = request.POST.get('next')
                 login(request, user)
                 if next_url != 'None':
                     return HttpResponseRedirect(next_url)

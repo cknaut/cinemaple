@@ -42,9 +42,6 @@ PW_RESET_SECRET_SALT = os.environ['PW_RESET_SECRET_SALT']
 # TMDb
 TMDB_API_KEY = os.environ['TMDB_API_KEY']
 
-#
-
-
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
 MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
@@ -195,10 +192,11 @@ LOGOUT_REDIRECT_URL = '/'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 if environement == "DEBUG":
     SECURE_SSL_REDIRECT = False
-    CORS_ORIGIN_ALLOW_ALL = True
 elif environement == "PRODUCTION":
     SECURE_SSL_REDIRECT = True
 
