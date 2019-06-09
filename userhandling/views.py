@@ -160,7 +160,7 @@ def my_login(request):
             if user is not None:
                 next_url = request.POST.get('next')
                 login(request, user)
-                if next_url:
+                if next_url != 'None':
                     return HttpResponseRedirect(next_url)
                 else:
                     return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)

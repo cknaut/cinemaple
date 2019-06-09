@@ -195,7 +195,14 @@ LOGOUT_REDIRECT_URL = '/'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-SECURE_SSL_REDIRECT = True
+
+if environement == "DEBUG":
+    SECURE_SSL_REDIRECT = False
+    CORS_ORIGIN_ALLOW_ALL = True
+elif environement == "PRODUCTION":
+    SECURE_SSL_REDIRECT = True
+
+
 
 
 
