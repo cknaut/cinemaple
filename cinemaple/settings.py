@@ -187,7 +187,7 @@ INTERNAL_IPS = ["84.254.94.123"]
 django_heroku.settings(locals())
 
 
-LOGIN_REDIRECT_URL = '/welcome/'
+LOGIN_REDIRECT_URL = '/curr_mov_nights'
 LOGIN_URL = '/login/'
 
 

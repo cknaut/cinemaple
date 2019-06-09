@@ -148,6 +148,8 @@ def registration(request):
 
 def my_login(request):
     login_form = LoginForm()
+
+    
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -156,15 +158,24 @@ def my_login(request):
             password = form.cleaned_data['password']
             user = authenticate(username=username, password=password)
             if user is not None:
+                next_url = request.POST.get('next')
                 login(request, user)
-                return redirect(curr_mov_nights)
+                if next_url:
+                    return HttpResponseRedirect(next_url)
+                else:
+                    return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
             else:
                 return HttpResponse("User is none despite clean in form.")
         else:
             login_form = form #Display form with error messages (incorrect fields, etc)
+    else:
+        next_url = request.GET.get('next')
+
+
 
     context = {
         'login_form': login_form,
+        'next'  : next_url,
     }
     return render(request, 'userhandling/login.html', context)
 
@@ -282,21 +293,24 @@ def add_movies_from_form(request, movienight,  mov_ID_add):
         # retrieve json via tmdb API
         data = json.loads(imdb_tmdb_api_wrapper_movie(request, tmdb_id=movie_id).content)
 
-
-        # create and svae movie object
-        m = Movie(tmdbID=data["id"])
-        m.tmdbID          = data["id"]
-        m.title           = data["title"]
-        m.year            = data["Year"]
-        m.director        = data["Director"]
-        m.producer        = data["Producer"]
-        m.runtime         = data["Runtime"]
-        m.actors          = data["Actors"]
-        m.plot            = data["Plot"]
-        m.country         = data["Country"]
-        m.posterpath      = data["poster_path"]
-        m.trailerlink     = data["Trailerlink"]
-        m.save()      
+        # Try to get movie object of previously added, if not exists, add object.
+        try:
+            m = Movie.objects.get(tmdbID=data["id"])
+        except Movie.DoesNotExist:
+            # create and svae movie object
+            m = Movie(tmdbID=data["id"])
+            m.tmdbID          = data["id"]
+            m.title           = data["title"]
+            m.year            = data["Year"]
+            m.director        = data["Director"]
+            m.producer        = data["Producer"]
+            m.runtime         = data["Runtime"]
+            m.actors          = data["Actors"]
+            m.plot            = data["Plot"]
+            m.country         = data["Country"]
+            m.posterpath      = data["poster_path"]
+            m.trailerlink     = data["Trailerlink"]
+            m.save()      
 
         movienight.MovieList.add(m)   
 
