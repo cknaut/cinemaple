@@ -19,5 +19,6 @@ urlpatterns = [
     path('add_movie_night',  views.add_movie_night,  name='add_movie_night'),
     path('search_movie',  views.search_movie,  name='search_movie'),
     path('curr_mov_nights',  views.curr_mov_nights,  name='curr_mov_nights'),
+    path('man_mov_nights',  views.man_mov_nights,  name='man_mov_nights'),
     path('dashboard',  views.dashboard,  name='dashboard')
 ]

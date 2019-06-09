@@ -43,6 +43,26 @@ html {
     -webkit-tap-highlight-color: transparent
 }
 
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    overflow: auto;
+    height: 100%;
+}
+
+
+/* unset bs3 setting */
+
+
+/* thank you https://stackoverflow.com/questions/19337238/twitter-bootstrap-modal-pushes-html-content-to-the-left */
+
+.modal-open {
+    overflow: auto;
+}
+
 article,
 aside,
 figcaption,
@@ -10776,8 +10796,8 @@ a.text-dark:hover {
 
 @media print {
     *,
-    ::after,
-    ::before {
+     ::after,
+     ::before {
         text-shadow: none!important;
         -webkit-box-shadow: none!important;
         box-shadow: none!important

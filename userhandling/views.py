@@ -13,7 +13,7 @@ import random
 from .utils import Mailchimp, VerificationHash
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm, MoveNightForm, MovieAddForm
 
-from .models import Movie, MovieNightEvent, Profile, PasswordReset, MovieNightEvent
+from .models import Movie, MovieNightEvent, Profile, PasswordReset
 import tmdbsimple as tmdb
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -342,8 +342,7 @@ def add_movie_night(request):
             # Create and save movies objects
             add_movies_from_form(request, mn, mov_ID_add)
 
-            testid = form2.cleaned_data['movieID1']
-            return HttpResponse(testid)
+            return redirect('/man_mov_nights')
         else:
             return HttpResponse("Form not valid.")
     else:
@@ -478,6 +477,19 @@ def imdb_tmdb_api_wrapper_movie(request, tmdb_id):
 @login_required
 def dashboard(request):
     return render(request, 'userhandling/dashboard.html')
+
+
+@login_required
+def man_mov_nights(request):
+
+    if not request.user.is_staff:
+        return HttpResponse("Only staff users are authorised to view this page.")
+
+    movienights = MovieNightEvent.objects.order_by('-date')
+    context = {
+        'movienights': movienights
+    }
+    return render(request, 'userhandling/admin_movie_night_manage.html', context)
 
 
 
