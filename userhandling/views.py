@@ -462,7 +462,7 @@ def tmdb_get_movie_images_videos(tmdb_id):
             linktype = video_res[i]["type"]
             site = video_res[i]["site"]
             if site == "YouTube" and linktype == "Trailer":
-                trailerlink =  "http://www.youtube.com/embed/" + video_res[i]["key"]
+                trailerlink =  "https://www.youtube.com/embed/" + video_res[i]["key"]
     
     data["Trailerlink"] = trailerlink
 
