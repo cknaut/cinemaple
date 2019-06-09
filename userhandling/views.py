@@ -157,7 +157,7 @@ def my_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect(welcome)
+                return redirect(curr_mov_nights)
             else:
                 return HttpResponse("User is none despite clean in form.")
         else:
@@ -263,8 +263,8 @@ def password_reset(request, reset_key):
 
 
 @login_required
-def welcome(request):
-    return render(request, 'userhandling/logged_in.html')
+def curr_mov_nights(request):
+    return render(request, 'userhandling/curr_mov_nights.html')
 
 @login_required
 def search_movie(request):
@@ -274,7 +274,7 @@ def search_movie(request):
     return render(request, 'userhandling/movie_search.html', context)
 
 
-
+@login_required
 def add_movies_from_form(request, movienight,  mov_ID_add):
     ''' Given a list of movie IDs, create movies and add to DB '''
 
@@ -397,7 +397,6 @@ def get_person_by_job(data, job_desc):
     return resultarray
 
 
-
 def tmdb_get_movie_images_videos(tmdb_id):
 
     url_api = "https://api.themoviedb.org/3/movie/" + str(tmdb_id) + "?api_key=" + str(settings.TMDB_API_KEY) + "&append_to_response=videos,credits"
@@ -462,6 +461,9 @@ def imdb_tmdb_api_wrapper_movie(request, tmdb_id):
 
     return JsonResponse(tmdb_movie_images_links)
 
+@login_required
+def dashboard(request):
+    return render(request, 'userhandling/dashboard.html')
 
 
 

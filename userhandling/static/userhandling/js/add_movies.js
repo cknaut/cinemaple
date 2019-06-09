@@ -202,7 +202,7 @@ function remove_and_reorder_movies(id) {
 
 function generate_movie_alert(title, year, director, runtime, mov_id) {
     // generate html displaying the movie alert
-    movie_alert = "<div class='alert alert-success alert-dismissible fade show moviealert' role='alert'> <strong>" + title + "</strong>, (" + year + "), Director: " + director + ", Runtime: " + runtime + "<button type='button' value=" + mov_id + " class='close movieclosebutton' data-dismiss='alert' aria-label='Close' > <span aria-hidden='true'> &times; </span></button> </div>"
+    movie_alert = "<div class='alert alert-success alert-dismissible fade show moviealert' role='alert'> <strong>" + title + "</strong> (" + year + "), " + director + ", " + runtime + "<button type='button' value=" + mov_id + " class='close movieclosebutton' data-dismiss='alert' aria-label='Close' > <span aria-hidden='true'> &times; </span></button> </div>"
     return movie_alert
 }
 

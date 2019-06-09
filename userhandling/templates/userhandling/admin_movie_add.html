@@ -1,4 +1,4 @@
-{% extends 'logged_in_base.html' %}
+{% extends 'dashboard_base.html' %}
 {% load static %}
 
 {# Load the tag library #}
@@ -26,7 +26,7 @@
  <script>
 tinymce.init({
     selector: "#tinymice",
-    min_height: 300,
+    min_height: 150,
   plugins: "emoticons",
   toolbar: 'emoticons | formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pageembed | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat | addcomment',
 
@@ -40,11 +40,232 @@ tinymce.init({
 {% endblock %}
 
 
+{% block sidebar %}
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <div class="sidebar-brand-icon rotate-n-15">
+        <i class="fas fa-laugh-wink"></i>
+    </div>
+    <div class="sidebar-brand-text mx-3">Cinemaple</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+    <a class="nav-link"  href={% url 'curr_mov_nights' %}>
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Currrent Movie Nights</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    {% if request.user.is_superuser %}
+    <!-- Heading -->
+    <div class="sidebar-heading">
+    Admin
+    </div>
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+    <a class="nav-link"  href={% url 'add_movie_night' %}>
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Add Movie Nights</span></a>
+    </li>
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+    <a class="nav-link" href="index.html">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Manage Movie Nights</span></a>
+    </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    {% endif %}
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+    Addons
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+        <i class="fas fa-fw fa-folder"></i>
+        <span>Pages</span>
+    </a>
+    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Login Screens:</h6>
+        <a class="collapse-item" href="login.html">Login</a>
+        <a class="collapse-item" href="register.html">Register</a>
+        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+        <div class="collapse-divider"></div>
+        <h6 class="collapse-header">Other Pages:</h6>
+        <a class="collapse-item" href="404.html">404 Page</a>
+        <a class="collapse-item" href="blank.html">Blank Page</a>
+        </div>
+    </div>
+    </li>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+    <a class="nav-link" href="charts.html">
+        <i class="fas fa-fw fa-chart-area"></i>
+        <span>Charts</span></a>
+    </li>
+
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+    <a class="nav-link" href="tables.html">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Tables</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="row">
+
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-12" data-spy="affix" data-offset-top="197">
+        <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Add Movie Night</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            					<!-- Movienight Add Form -->
+					{% bootstrap_messages %}
+					<form action="/add_movie_night" method="post" class="form">
+					{% csrf_token %}
+					
+           <div class="row">
+
+            <div class="col-xl-2 col-lg-2">
+              <div class="form-group">
+              <label for="exampleInputEmail1">Movie Night Motto:</label>
+                {{form1.motto.errors}}
+                {{form1.motto}}
+              </div>
+
+              <div class="form-group">
+              <label for="exampleInputEmail1">Date:</label>
+                {{form1.date.errors}}
+                {{form1.date}}
+              </div>
+
+              {% buttons %}
+              <button type="submit" class="btn btn-primary">
+                {% bootstrap_icon "star" %} Add Movie Night
+              </button>
+              {% endbuttons %}
+
+
+            </div>
+        
+            <div class="col-xl-6 col-lg-6">
+              <div class="form-group">
+              <label for="exampleInputEmail1">Description:</label>
+                {{form1.description.errors}}
+                {{form1.description}}
+              </div>
+            </div>
+
+            {{ form2.as_p }}
+
+            <div class="col-xl-4 col-lg-4">
+              <div class="form-group">
+                <label class="control-label" for="">Movies:</label>
+                <div  id="moviealerts"></div> 
+                <div id="advisealert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                Add movies by searching for movies below <i class="fas fa-arrow-down"></i>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+              </div>
+
+            </div>
+
+        </div>
+					</form>
+					<!-- \Movienight Add Form -->
+        </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <!-- Pie Chart -->
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Search and add Movies</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+             <div class="form-group">
+        <label class="control-label" for="">Search to add movies:</label>
+        <div  id="moviealerts"></div> 
+      </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+      </div>
+      <input type="text" id="querytitle" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Year</span>
+      </div>
+        <input type="text" id="queryyear"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+      </div>
+    <div>
+
+  
+
+      <table id="movietable" class="display" width="100%">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+
+      </table>
+
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
+
+
 {% block modals %}
-
-
-
-
 <!--Central Modal Small -->
 <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
@@ -269,121 +490,6 @@ tinymce.init({
     <!--/.Content-->
   </div>
 </div>
-
-
-
-
-
-
-
-{% endblock %}
-
-
-{% block hero %}
-  <!--==========================
-    Hero Section
-  ============================-->
-  <section id="hero">
-    <div class="hero-container">
-      <h1>Welcome to Cinemaple!</h1>
-      <h2>Add an awesome movie night event!</h2>
-    
-      <a href="#facts" class="btn-get-started">Let's do it!</a>
-    </div>
-  </section><!-- #hero -->
-{% endblock %}
-
-
-{% block main %}
-  <main id="main">
-
-
-
-
-
-
-<!--==========================
-Add Movie Night
-============================-->
-<section id="facts">
-  <div class="container wow fadeIn">
-    <div class="section-header">
-      <h3 class="section-title">Add Movies</h3>
-      <p class="section-description">Search for movies and add it to movie night event.</p>
-    </div>
-
-
-
-
-    {# Display django.contrib.messages as Bootstrap alerts #}
-    {% bootstrap_messages %}
-    <form action="/add_movie_night" method="post" class="form">
-      {% csrf_token %}
-      {% bootstrap_form form1 %}
-      {{ form2.as_p }}
-
-
-        <div class="form-group">
-          <label class="control-label" for="">Movies:</label>
-          <div  id="moviealerts"></div> 
-          <div id="advisealert" class="alert alert-warning alert-dismissible fade show" role="alert">
-          Add movies by searching for movies below!
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-         </button>
-</div>
-        </div>
-   
-      
-    
-      {% buttons %}
-      <button type="submit" class="btn btn-primary">
-      {% bootstrap_icon "star" %} Add Movie Night
-      </button>
-      {% endbuttons %}
-    </form>
-
-
-      <div class="form-group">
-        <label class="control-label" for="">Search to add movies:</label>
-        <div  id="moviealerts"></div> 
-      </div>
-
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
-      </div>
-      <input type="text" id="querytitle" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-    </div>
-
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-default">Year</span>
-      </div>
-        <input type="text" id="queryyear"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-      </div>
-    <div>
-
-  
-
-      <table id="movietable" class="display" width="100%">
-        <thead>
-          <tr>
-          </tr>
-        </thead>
-
-      </table>
-
-    </div>
-
-  Powered by <a href="https://www.themoviedb.org/">The Movie DB</a>
-
-
-  </div>
-
-</section><!-- #facts -->
-
-  </main>
 {% endblock %}
 
 
@@ -419,8 +525,5 @@ tmdbimdb_movie_url_trunk = "http://www.cinemaple.com/imdb_tmdb/movie/";
 
 <script type="text/javascript" src="{% static 'userhandling/js/add_movies.js' %}"></script>
 
-  <script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
-
-
+<script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
 {% endblock %}
-

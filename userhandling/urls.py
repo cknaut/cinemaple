@@ -18,5 +18,6 @@ urlpatterns = [
     path('imdb_tmdb/movie/<int:tmdb_id>',  views.imdb_tmdb_api_wrapper_movie,  name='tmdb_api_wrapper_movie'),
     path('add_movie_night',  views.add_movie_night,  name='add_movie_night'),
     path('search_movie',  views.search_movie,  name='search_movie'),
-    path('welcome',  views.welcome,  name='welcome')
+    path('curr_mov_nights',  views.curr_mov_nights,  name='curr_mov_nights'),
+    path('dashboard',  views.dashboard,  name='dashboard')
 ]

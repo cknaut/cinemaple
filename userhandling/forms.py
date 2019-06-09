@@ -177,7 +177,8 @@ class MoveNightForm(ModelForm):
         }
         widgets = {
              'date': DateTimePickerInput(), # default date-format %m/%d/%Y will be used
-             'description': forms.TextInput(attrs={"id": "tinymice"})
+             'description': forms.TextInput(attrs={"id": "tinymice"}),
+             'motto' : forms.TextInput(attrs={'placeholder': '','class':'form-control input-perso'})
              
          }
 
