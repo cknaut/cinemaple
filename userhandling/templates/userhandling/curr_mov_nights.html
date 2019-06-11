@@ -1,6 +1,11 @@
 {% extends 'dashboard_base.html' %}
 {% load static %}
 
+{% block css_imports %}
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
+<link  href="{% static 'userhandling/lib/picturemodal/picmodal.css' %}" rel="stylesheet">
+{% endblock%}
+
 
 {% block sidebar %}
 <!-- Sidebar -->
@@ -107,12 +112,298 @@
 {% block main %}
 <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4" id="page-top">
-    <h1 class="h3 mb-0 text-gray-800" >Welcome! </h1>
+     <!-- Content Row -->
+    <div class="row">
+
+    <!-- Earnings (Monthly) Card Example -->
+       <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">{{movienight.motto}}</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 " >
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-lg-3 " > When: </div>
+                    <div class="col-xl-9 col-lg-9 " >{{movienight.date}} </div>
+                </div>
+
+               <div class="row mb-4">
+                    <div class="col-xl-3 col-lg-3 " > Where: </div>
+                    <div class="col-xl-9 col-lg-9 " > 57 Maple Avenue, 02139 Cambridge Massachusetts </div>
+                </div>
+
+
+               <div class="row mb-4">
+                    <div class="col-xl-3 col-lg-3 " > What: </div>
+                    <div class="col-xl-9 col-lg-9 " > {% autoescape off %} {{movienight.description}} {% endautoescape %} </div>
+                </div>
+
+
+         
+            </div>
+
+            <div class="col-xl-8 col-lg-8 ">
+            <div id="accordion">
+
+            {% for movie in movienight.MovieList.all %}
+
+                                <div class="card">
+                                <div class="card-header" id="heading{{ forloop.counter0 }}">
+                                <h5 class="mb-0">
+                                {% if forloop.counter0 == 0 %}
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{ forloop.counter0 }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter0 }}">
+                                   {{ movie.title }} ({{movie.year}})
+                                {% else %}
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse{{ forloop.counter0 }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter0 }}">
+                                   {{ movie.title }} ({{movie.year}})
+                                {% endif%}
+                                    </button>
+                                </h5>
+                                </div>
+                                {% if forloop.counter0 == 0 %}
+                                <div id="collapse{{ forloop.counter0 }}" class="collapse show" aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion">
+                                {% else %}
+                                <div id="collapse{{ forloop.counter0 }}" class="collapse" aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion">
+                                {% endif%}
+                                <div class="card-body">
+                                 <div class="row">
+                                    <div class="col-xl-2 col-lg-2 " >
+
+                                     <div class="row justify-content-center">
+                                    <img  src="https://image.tmdb.org/t/p/w200{{movie.posterpath}}" class="img-fluid modalimage" alt="Responsive image">
+
+                  
+                                    </div>
+                                        <div class="row"></div>
+                                        <div class="row justify-content-center">
+                                        <div id="trailerbutton"></div>
+                                                <button type='button' class='btn btn-primary video-btn' data-src="{{movie.trailerlink}}" > Watch Trailer  </button>"
+                                        </div>
+
+
+
+
+
+                                     </div>
+
+
+                                    <div class="col-xl-9 col-lg-9 " >
+                                            <!--Grid column-->
+        
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                            <p class="font-weight-bold">Country:</p>
+                                            </div>
+
+                                            <!--Grid column-->
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-10">
+                                            <p id="movieModalCountry"> {{movie.country}} </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                            <p class="font-weight-bold">Director:</p>
+                                            </div>
+
+                                            <!--Grid column-->
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-10">
+                                            <p id="movieModalDirector">  {{movie.director}} </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                            <p class="font-weight-bold">Producer:</p>
+                                            </div>
+
+                                            <!--Grid column-->
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-10">
+                                            <p id="movieModalProducer"> {{movie.producer}} </p>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                            <p class="font-weight-bold">Actors:</p>
+                                            </div>
+
+                                            <!--Grid column-->
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-10">
+                                            <p id="movieModalActors">  {{movie.actors}} </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                            <p class="font-weight-bold">Runtime:</p>
+                                            </div>
+
+                                            <!--Grid column-->
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-10">
+                                            <p id="movieModalRuntime">  {{movie.runtime}} </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                            <p class="font-weight-bold">Plot:</p>
+                                            </div>
+
+                                            <!--Grid column-->
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-10">
+                                            <p id="movieModalPlot"> {{movie.plot}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                            </div>
+            {% endfor %}
+            </div>
+
+         </div>
+
+
+
+
+            
+        </div>
+        </div>
     </div>
 
+     <!-- Content Row -->
+    </div>
 
+</div>
 </div>
 <!-- /.container-fluid -->
 {% endblock %}
+
+
+
+{% block js %}
+ <script>
+var modal = document.getElementById("myModal");
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.getElementById("myImg");
+var modalImg = document.getElementById("img01");
+
+
+
+ $('.modalimage').on("click", function () {
+
+     // Get the modal
+
+
+
+        modal.style.display = "block";
+     modalImg.src = this.src;
+
+ });
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() { 
+  modal.style.display = "none";
+}
+
+// Change Link in Button.
+
+    $(document).ready(function() {
+
+        // Gets the video src from the data-src on each button
+
+        var $videoSrc;
+        $('.video-btn').click(function() {
+            $videoSrc = $(this).data("src");
+            $("#video").attr('src', $videoSrc + "?autoplay=0&amp;modestbranding=1&amp;showinfo=0");
+            $("#ytmodal").modal();
+        });
+        console.log($videoSrc);
+
+
+        // stop playing the youtube video when I close the modal
+        $('#ytmodal').on('hide.bs.modal', function(e) {
+            // a poor man's stop video
+            $("#video").attr('src', "");
+        })
+
+        // document ready
+    });
+
+
+
+ </script>
+ {% endblock %}
+
+
+{% block modals%}
+ <!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- The Close Button -->
+  <span class="close">&times;</span>
+
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="img01">
+
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption"></div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="myModal2">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <img class="modal-content" id="img01">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="ytmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog youtube-modal-dialog" role="document">
+    <div class="modal-content">
+
+
+      <div class="modal-body youtube-modal-body">
+
+       <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <!-- 16:9 aspect ratio -->
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" src="" id="video"  allowscriptaccess="always" allow="autoplay"></iframe>
+</div>
+
+ {% endblock %}

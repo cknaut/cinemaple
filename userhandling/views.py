@@ -275,7 +275,12 @@ def password_reset(request, reset_key):
 
 @login_required
 def curr_mov_nights(request):
-    return render(request, 'userhandling/curr_mov_nights.html')
+
+    movienight = MovieNightEvent.objects.order_by('-date')[0]
+    context = {
+        'movienight' : movienight,
+    }
+    return render(request, 'userhandling/curr_mov_nights.html', context)
 
 @login_required
 def search_movie(request):
