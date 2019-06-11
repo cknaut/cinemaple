@@ -6,6 +6,20 @@
 <!-- Success Modal Stylesheet File -->
 <link  href="{% static 'userhandling/css/reg_succ_modal.css' %}" rel="stylesheet">
 <link  href="{% static 'userhandling/css/loginform.css' %}" rel="stylesheet">
+
+{% if successful_reg_submit %}
+<script type="text/javascript">
+    $(window).on('load',function(){
+        $('#RegSubmissionModal').modal('show');
+    });
+</script>
+{% endif %}
+
+
+
+
+
+
   {% endblock %}
 
 {% block modals %}
@@ -27,10 +41,16 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
 
 
 {% block tagline %}
+{% if successful_reg_submit %}
+YASS
+{% endif %}
+
+
 <h3>Welcome</h3>
 <p>Please register to recieve invitations for upcoming movie nights!</p>
 {% endblock %}
@@ -109,12 +129,6 @@ Already registered? <a href="{% url 'login' %}" class="btn btn-deep-orange">Logi
 
 
 {% block js %}
-{% if successful_submit %}
-  <script type="text/javascript">
-      $(document).ready(function(){
-          $("#RegSubmissionModal").modal('show');
-      });
-  </script>
-{% endif %}
+
 {% endblock %}
 
