@@ -7,7 +7,7 @@
 <link  href="{% static 'userhandling/css/reg_succ_modal.css' %}" rel="stylesheet">
 <link  href="{% static 'userhandling/css/loginform.css' %}" rel="stylesheet">
 
-{% if successful_reg_submit %}
+{% if successful_submit %}
 <script type="text/javascript">
     $(window).on('load',function(){
         $('#RegSubmissionModal').modal('show');
@@ -46,13 +46,6 @@
 
 
 {% block tagline %}
-
-
-{% if successful_reg_submit %}
-YASS
-{% endif %}
-fd
-
 <h3>Welcome</h3>
 <p>Please register to recieve invitations for upcoming movie nights!</p>
 {% endblock %}
