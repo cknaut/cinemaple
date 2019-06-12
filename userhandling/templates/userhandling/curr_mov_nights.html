@@ -3,7 +3,6 @@
 
 {% block css_imports %}
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
-<link  href="{% static 'userhandling/lib/picturemodal/picmodal.css' %}" rel="stylesheet">
 {% endblock%}
 
 
@@ -172,17 +171,19 @@
                                 {% endif%}
                                 <div class="card-body">
                                  <div class="row">
-                                    <div class="col-xl-2 col-lg-2 " >
+                                    <div class="col-xl-3 col-lg-3 " >
 
-                                     <div class="row justify-content-center">
-                                    <img  src="https://image.tmdb.org/t/p/w200{{movie.posterpath}}" class="img-fluid modalimage" alt="Responsive image">
-
+                                     <div class="row justify-content-center mb-2">
+                                   
+                
+                                    <img src="https://image.tmdb.org/t/p/w200{{movie.posterpath}}" class="img-fluid">
+                                        
                   
                                     </div>
                                         <div class="row"></div>
                                         <div class="row justify-content-center">
                                         <div id="trailerbutton"></div>
-                                                <button type='button' class='btn btn-primary video-btn' data-src="{{movie.trailerlink}}" > Watch Trailer  </button>"
+                                                <button type='button' class='btn btn-primary video-btn' data-src="{{movie.trailerlink}}" > Watch Trailer  </button>
                                         </div>
 
 
@@ -301,97 +302,9 @@
 {% endblock %}
 
 
-
-{% block js %}
- <script>
-var modal = document.getElementById("myModal");
-
-// Get the image and insert it inside the modal - use its "alt" text as a caption
-var img = document.getElementById("myImg");
-var modalImg = document.getElementById("img01");
-
-
-
- $('.modalimage').on("click", function () {
-
-     // Get the modal
-
-
-
-        modal.style.display = "block";
-     modalImg.src = this.src;
-
- });
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() { 
-  modal.style.display = "none";
-}
-
-// Change Link in Button.
-
-    $(document).ready(function() {
-
-        // Gets the video src from the data-src on each button
-
-        var $videoSrc;
-        $('.video-btn').click(function() {
-            $videoSrc = $(this).data("src");
-            $("#video").attr('src', $videoSrc + "?autoplay=0&amp;modestbranding=1&amp;showinfo=0");
-            $("#ytmodal").modal();
-        });
-        console.log($videoSrc);
-
-
-        // stop playing the youtube video when I close the modal
-        $('#ytmodal').on('hide.bs.modal', function(e) {
-            // a poor man's stop video
-            $("#video").attr('src', "");
-        })
-
-        // document ready
-    });
-
-
-
- </script>
- {% endblock %}
-
-
-{% block modals%}
- <!-- The Modal -->
-<div id="myModal" class="modal">
-
-  <!-- The Close Button -->
-  <span class="close">&times;</span>
-
-  <!-- Modal Content (The Image) -->
-  <img class="modal-content" id="img01">
-
-  <!-- Modal Caption (Image Text) -->
-  <div id="caption"></div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" id="myModal2">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-       <img class="modal-content" id="img01">
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal fade" id="ytmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{% block modals %}
+ 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog youtube-modal-dialog" role="document">
     <div class="modal-content">
 
@@ -407,3 +320,35 @@ span.onclick = function() {
 </div>
 
  {% endblock %}
+
+
+{% block js %}
+<script>
+ $(document).ready(function() {
+
+        // Gets the video src from the data-src on each button
+
+        var $videoSrc;
+        $('.video-btn').click(function() {
+            $videoSrc = $(this).data("src");
+            $videoSrc =$videoSrc + "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
+            console.log($videoSrc);
+            $("#video").attr('src', $videoSrc);
+            $("#myModal").modal();
+        });
+        
+
+
+        // stop playing the youtube video when I close the modal
+        $('#myModal').on('hide.bs.modal', function(e) {
+            // a poor man's stop video
+            $("#video").attr('src', "");
+        })
+
+        // document ready
+    });
+</script>
+
+ {% endblock %}
+
+
