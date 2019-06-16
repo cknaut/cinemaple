@@ -171,7 +171,7 @@
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             <a class="dropdown-item"  id = "activate_confirm" href="#" src="{% url 'activate_movie_night' movienight_id=movienight.id %}">Activate</a>
-                                            <a class="dropdown-item" href="#">Modify</a>
+                                            <a class="dropdown-item" href="{% url 'change_movie_night' movienight_id=movienight.id %}">Modify</a>
                                             <a class="dropdown-item"  id = "delete_confirm" href="#" src="{% url 'delete_mov_night' movienight_id=movienight.id %}">Delete</a>
                                         </div>
                                     </div>
@@ -374,6 +374,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">

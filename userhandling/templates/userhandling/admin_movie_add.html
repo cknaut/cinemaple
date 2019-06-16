@@ -7,37 +7,44 @@
 
 {% block css_imports %}
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
-<link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+<link href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+<link rel="stylesheet" type="text/css"
+  href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 <link href="{% static 'userhandling/lib/mdb/css/mdb.lite.min.css' %}" rel="stylesheet">
 <link href="{% static 'userhandling/lib/animate/animate.css' %}" rel="stylesheet">
 
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" type="text/css" media="all" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"
+  type="text/css" media="all" rel="stylesheet">
 <link href="/static/bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js">
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js">
+</script>
 <script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script>
 
-<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=pqiihwpzf32ctpl7kn59g5ivcztnma4qormn1elar66gqrw4"></script>
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=pqiihwpzf32ctpl7kn59g5ivcztnma4qormn1elar66gqrw4">
+</script>
 
- <script>
-tinymce.init({
+<script>
+  tinymce.init({
     selector: "#tinymice",
-    min_height: 150,
-  plugins: "emoticons",
-  toolbar: 'emoticons | formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pageembed | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat | addcomment',
+    min_height: 300,
+    plugins: "emoticons",
+    toolbar: 'emoticons | formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pageembed | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat | addcomment',
 
     setup: function (editor) {
-        editor.on('change', function () {
-            editor.save();
-        });
+      editor.on('change', function () {
+        editor.save();
+      });
     }
-});
-  </script>
+  });
+</script>
 {% endblock %}
 
 
@@ -45,65 +52,66 @@ tinymce.init({
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+  <!-- Sidebar - Brand -->
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
     <div class="sidebar-brand-icon rotate-n-15">
-        <i class="fas fa-laugh-wink"></i>
+      <i class="fas fa-laugh-wink"></i>
     </div>
     <div class="sidebar-brand-text mx-3">Cinemaple</div>
-    </a>
+  </a>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
+  <!-- Divider -->
+  <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-    <a class="nav-link"  href={% url 'curr_mov_nights' %}>
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Currrent Movie Nights</span></a>
-    </li>
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item">
+    <a class="nav-link" href={% url 'curr_mov_nights' %}>
+      <i class="fas fa-fw fa-tachometer-alt"></i>
+      <span>Currrent Movie Nights</span></a>
+  </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+  <!-- Divider -->
+  <hr class="sidebar-divider">
 
-    {% if request.user.is_superuser %}
-    <!-- Heading -->
-    <div class="sidebar-heading">
+  {% if request.user.is_superuser %}
+  <!-- Heading -->
+  <div class="sidebar-heading">
     Admin
-    </div>
+  </div>
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-    <a class="nav-link"  href={% url 'add_movie_night' %}>
-        <i class="fas fa-fw fa-cog"></i>
-        <span>Add Movie Nights</span></a>
-    </li>
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item {% if navbar == "mod_movie" %}  {% else %} active {% endif %}">
+    <a class="nav-link" href={% url 'add_movie_night' %}>
+      <i class="fas fa-fw fa-cog"></i>
+      <span>Add Movie Nights</span></a>
+  </li>
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-    <a class="nav-link"  href={% url 'man_mov_nights' %}>
-        <i class="fas fa-fw fa-cog"></i>
-        <span>Manage Movie Nights</span></a>
-    </li>
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item">
+    <a class="nav-link" href={% url 'man_mov_nights' %}>
+      <i class="fas fa-fw fa-cog"></i>
+      <span>Manage Movie Nights</span></a>
+  </li>
 
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-    {% endif %}
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+  {% endif %}
 
-    <!-- Heading -->
-    <div class="sidebar-heading">
+  <!-- Heading -->
+  <div class="sidebar-heading">
     Addons
-    </div>
+  </div>
 
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-        <i class="fas fa-fw fa-folder"></i>
-        <span>Pages</span>
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
+      aria-controls="collapsePages">
+      <i class="fas fa-fw fa-folder"></i>
+      <span>Pages</span>
     </a>
     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
+      <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Login Screens:</h6>
         <a class="collapse-item" href="login.html">Login</a>
         <a class="collapse-item" href="register.html">Register</a>
@@ -112,31 +120,31 @@ tinymce.init({
         <h6 class="collapse-header">Other Pages:</h6>
         <a class="collapse-item" href="404.html">404 Page</a>
         <a class="collapse-item" href="blank.html">Blank Page</a>
-        </div>
+      </div>
     </div>
-    </li>
+  </li>
 
-    <!-- Nav Item - Charts -->
-    <li class="nav-item">
+  <!-- Nav Item - Charts -->
+  <li class="nav-item">
     <a class="nav-link" href="charts.html">
-        <i class="fas fa-fw fa-chart-area"></i>
-        <span>Charts</span></a>
-    </li>
+      <i class="fas fa-fw fa-chart-area"></i>
+      <span>Charts</span></a>
+  </li>
 
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
+  <!-- Nav Item - Tables -->
+  <li class="nav-item">
     <a class="nav-link" href="tables.html">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Tables</span></a>
-    </li>
+      <i class="fas fa-fw fa-table"></i>
+      <span>Tables</span></a>
+  </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+  <!-- Divider -->
+  <hr class="sidebar-divider d-none d-md-block">
 
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
+  <!-- Sidebar Toggler (Sidebar) -->
+  <div class="text-center d-none d-md-inline">
     <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+  </div>
 
 </ul>
 <!-- End of Sidebar -->
@@ -144,75 +152,93 @@ tinymce.init({
 
 {% block main %}
 <div class="container-fluid">
-    <div class="row">
+  <div class="row">
 
     <!-- Area Chart -->
     <div class="col-xl-12 col-lg-12" data-spy="affix" data-offset-top="197">
-        <div class="card shadow mb-4">
+      <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary" id="page-top">Add Movie Night</h6>
+          <h6 class="m-0 font-weight-bold text-primary" id="page-top">{% if navbar == 'mod_movie' %} Modify {% else %} Add {% endif %} Movie Night</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body">
-            					<!-- Movienight Add Form -->
-					{% bootstrap_messages %}
-					<form action="/add_movie_night" method="post" class="form">
-					{% csrf_token %}
-					
-           <div class="row">
+          <!-- Movienight Add Form -->
+          {% bootstrap_messages %}
+          <form action="/add_movie_night"  method="post" class="form">
+            {% csrf_token %}
 
-            <div class="col-xl-2 col-lg-2">
-              <div class="form-group">
-              <label for="exampleInputEmail1">Movie Night Motto:</label>
-                {{form1.motto.errors}}
-                {{form1.motto}}
-              </div>
+            <div class="row">
 
-              <div class="form-group">
-              <label for="exampleInputEmail1">Date:</label>
-                {{form1.date.errors}}
-                {{form1.date}}
-              </div>
+              <div class="col-xl-2 col-lg-2">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Movie Night Motto:</label>
+                  {{form1.motto.errors}}
+                  {{form1.motto}}
+                </div>
 
-              {% buttons %}
-              <button type="submit" class="btn btn-primary">
-                {% bootstrap_icon "star" %} Add Movie Night
-              </button>
-              {% endbuttons %}
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Date:</label>
+                  {{form1.date.errors}}
+                  {{form1.date}}
+                </div>
 
-
-            </div>
-        
-            <div class="col-xl-6 col-lg-6">
-              <div class="form-group">
-              <label for="exampleInputEmail1">Description:</label>
-                {{form1.description.errors}}
-                {{form1.description}}
-              </div>
-            </div>
-
-            {{ form2.as_p }}
-
-            <div class="col-xl-4 col-lg-4">
-              <div class="form-group">
-                <label class="control-label" for="">Movies:</label>
-                <div  id="moviealerts"></div> 
-                <div id="advisealert" class="alert alert-warning alert-dismissible fade show" role="alert">
-                Add movies by searching for movies below <i class="fas fa-arrow-down"></i>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                {% buttons %}
+                <button type="submit" class="btn btn-primary">
+                  {% bootstrap_icon "star" %} {% if navbar == 'mod_movie' %} Modify {% else %} Add {% endif %} Movie Night
                 </button>
+                {% endbuttons %}
+
+
+              </div>
+
+              <div class="col-xl-6 col-lg-6">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Description:</label>
+                  {{form1.description.errors}}
+                  {{form1.description}}
                 </div>
               </div>
 
-            </div>
+              {{ form2.as_p }}
+              {{ form3.as_p }}
 
+              <div class="col-xl-4 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label" for="">Movies:</label>
+                  <div id="moviealerts"></div>
+
+                  {% if navbar != "mod_movie" %}
+                  <div id="advisealert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Add movies by searching for movies below <i class="fas fa-arrow-down"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  {% endif %}
+
+                  {% for i in i|rjust:10 %}
+                        <div class='alert alert-success alert-dismissible fade show moviealert invisible' display=none id="moviealert{{ forloop.counter }}" role='alert'>
+                                      <div id="movietag_content{{ forloop.counter }}"></div>
+                                      <button type='button' value=" " id="movieclosebutton{{ forloop.counter }}" class='close movieclosebutton' data-dismiss='alert'
+                                        aria-label='Close'>
+                                        <span aria-hidden='true'> &times; </span>
+                                      </button>
+                                    </div>
+                  {% endfor %}
+
+
+
+
+                </div>
+
+              </div>
+
+            </div>
+          </form>
+          <!-- \Movienight Add Form -->
         </div>
-					</form>
-					<!-- \Movienight Add Form -->
-        </div>
-        </div>
+      </div>
     </div>
   </div>
 
@@ -220,313 +246,383 @@ tinymce.init({
 
     <!-- Pie Chart -->
     <div class="col-xl-12 col-lg-12">
-        <div class="card shadow mb-4">
+      <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Search and add Movies</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Search and add Movies</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body">
-             <div class="form-group">
-        <label class="control-label" for="">Search to add movies:</label>
-        <div  id="moviealerts"></div> 
-      </div>
-
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
-      </div>
-      <input type="text" id="querytitle" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-    </div>
-
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-default">Year</span>
-      </div>
-        <input type="text" id="queryyear"class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-      </div>
-    <div>
-
-  
-
-      <table id="movietable" class="display" width="100%">
-        <thead>
-          <tr>
-          </tr>
-        </thead>
-
-      </table>
-
-       <p> Powered by <a href="https://www.themoviedb.org/">The Movie DB</a> </p>
-
-        </div>
-        </div>
-    </div>
-    </div>
-</div>
-<!-- /.container-fluid -->
-{% endblock %}
-
-
-{% block modals %}
-<!--Central Modal Small -->
-<div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-    <!-- Change class .modal-sm to change the size of the modal -->
-  <div class="modal-dialog modal-lg" role="document">
-
-
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title w-100" id="movieModalTitle">Modal title</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-
-        <div class="container">
-          <!--Grid row-->
-          <div class="row">
-
-            <div class="col-lg-4">
-              <div class="row justify-content-center">
-                  <div  id="movieModalPoster"></div>
-                  
-               </div>
-                <div class="row"></div>
-                <div class="row justify-content-center">
-                <div id="trailerbutton"></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-lg-8">
-            <!--Grid column-->
-              <div class="row">
-                <div class="col-lg-2">
-                  <p class="font-weight-bold">Year:</p>
-                </div>
-
-            <!--Grid column-->
-
-              <!--Grid column-->
-                <div class="col-lg-10">
-                  <p id="movieModalYear"> </p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2">
-                  <p class="font-weight-bold">Country:</p>
-                </div>
-
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-10">
-                  <p id="movieModalCountry"> </p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2">
-                  <p class="font-weight-bold">Director:</p>
-                </div>
-
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-10">
-                  <p id="movieModalDirector"> </p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2">
-                  <p class="font-weight-bold">Producer:</p>
-                </div>
-
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-10">
-                  <p id="movieModalProducer"> </p>
-                </div>
-              </div>
-
-
-
-              <div class="row">
-                <div class="col-lg-2">
-                  <p class="font-weight-bold">Actors:</p>
-                </div>
-
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-10">
-                  <p id="movieModalActors"> </p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2">
-                  <p class="font-weight-bold">Runtime:</p>
-                </div>
-
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-10">
-                  <p id="movieModalRuntime"> </p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2">
-                  <p class="font-weight-bold">Plot:</p>
-                </div>
-
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-10">
-                  <p id="movieModalPlot"> </p>
-                </div>
-              </div>
-            <!--Col-->
-            </div>
+          <div class="form-group">
+            <label class="control-label" for="">Search to add movies:</label>
+            <div id="moviealerts"></div>
           </div>
 
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+            </div>
+            <input type="text" id="querytitle" class="form-control" aria-label="Default"
+              aria-describedby="inputGroup-sizing-default">
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Year</span>
+            </div>
+            <input type="text" id="queryyear" class="form-control" aria-label="Default"
+              aria-describedby="inputGroup-sizing-default">
+          </div>
+          <div>
+
+
+
+            <table id="movietable" class="display" width="100%">
+              <thead>
+                <tr>
+                </tr>
+              </thead>
+
+            </table>
+
+            <p> Powered by <a href="https://www.themoviedb.org/">The Movie DB</a> </p>
+
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+  {% endblock %}
+
+
+  {% block modals %}
+  <!--Central Modal Small -->
+  <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <!-- Change class .modal-sm to change the size of the modal -->
+    <div class="modal-dialog modal-lg" role="document">
+
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title w-100" id="movieModalTitle">Modal title</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="container">
+            <!--Grid row-->
+            <div class="row">
+
+              <div class="col-lg-4">
+                <div class="row justify-content-center">
+                  <div id="movieModalPoster"></div>
+
+                </div>
+                <div class="row"></div>
+                <div class="row justify-content-center">
+                  <div id="trailerbutton"></div>
+
+                </div>
+
+              </div>
+
+
+              <div class="col-lg-8">
+                <!--Grid column-->
+                <div class="row">
+                  <div class="col-lg-2">
+                    <p class="font-weight-bold">Year:</p>
+                  </div>
+
+                  <!--Grid column-->
+
+                  <!--Grid column-->
+                  <div class="col-lg-10">
+                    <p id="movieModalYear"> </p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-2">
+                    <p class="font-weight-bold">Country:</p>
+                  </div>
+
+                  <!--Grid column-->
+
+                  <!--Grid column-->
+                  <div class="col-lg-10">
+                    <p id="movieModalCountry"> </p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-2">
+                    <p class="font-weight-bold">Director:</p>
+                  </div>
+
+                  <!--Grid column-->
+
+                  <!--Grid column-->
+                  <div class="col-lg-10">
+                    <p id="movieModalDirector"> </p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-2">
+                    <p class="font-weight-bold">Producer:</p>
+                  </div>
+
+                  <!--Grid column-->
+
+                  <!--Grid column-->
+                  <div class="col-lg-10">
+                    <p id="movieModalProducer"> </p>
+                  </div>
+                </div>
 
 
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm addbutton" id="moviemodaladdbutton">Add</button>
+                <div class="row">
+                  <div class="col-lg-2">
+                    <p class="font-weight-bold">Actors:</p>
+                  </div>
+
+                  <!--Grid column-->
+
+                  <!--Grid column-->
+                  <div class="col-lg-10">
+                    <p id="movieModalActors"> </p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-2">
+                    <p class="font-weight-bold">Runtime:</p>
+                  </div>
+
+                  <!--Grid column-->
+
+                  <!--Grid column-->
+                  <div class="col-lg-10">
+                    <p id="movieModalRuntime"> </p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-2">
+                    <p class="font-weight-bold">Plot:</p>
+                  </div>
+
+                  <!--Grid column-->
+
+                  <!--Grid column-->
+                  <div class="col-lg-10">
+                    <p id="movieModalPlot"> </p>
+                  </div>
+                </div>
+                <!--Col-->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary btn-sm addbutton" id="moviemodaladdbutton">Add</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Central Modal Small -->
+  <!-- Central Modal Small -->
 
-<!-- Movie Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog youtube-modal-dialog" role="document">
-    <div class="modal-content">
+  <!-- Movie Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog youtube-modal-dialog" role="document">
+      <div class="modal-content">
 
 
-      <div class="modal-body youtube-modal-body">
+        <div class="modal-body youtube-modal-body">
 
-       <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <!-- 16:9 aspect ratio -->
-<div class="embed-responsive embed-responsive-16by9">
-  <iframe class="embed-responsive-item" src="" id="video"  allowscriptaccess="always" allow="autoplay"></iframe>
-</div>
+          <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <!-- 16:9 aspect ratio -->
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
+              allow="autoplay"></iframe>
+          </div>
 
+
+        </div>
 
       </div>
-
     </div>
   </div>
-</div>
 
-<!--Modal: modalConfirmDelete-->
-<div class="modal fade" id="modalMovieAlreadyAdded" tabindex="-1" role="modal-notify" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-    <!--Content-->
-    <div class="modal-content text-center">
-      <!--Header-->
-      <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Movie already added</p>
+  <!--Modal: modalConfirmDelete-->
+  <div class="modal fade" id="modalMovieAlreadyAdded" tabindex="-1" role="modal-notify"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+      <!--Content-->
+      <div class="modal-content text-center">
+        <!--Header-->
+        <div class="modal-header d-flex justify-content-center">
+          <p class="heading">Movie already added</p>
+        </div>
+
+        <!--Body-->
+        <div class="modal-body">
+          <i class="fa fa-times fa-4x mb-3 animated bounce" style="color:#FF3547"></i>
+
+
+        </div>
+
+        <!--Footer-->
+        <div class="modal-footer flex-center">
+          <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
+        </div>
       </div>
-
-      <!--Body-->
-      <div class="modal-body">
-      <i class="fa fa-times fa-4x mb-3 animated bounce" style="color:#FF3547"></i>
-    
-
-      </div>
-
-      <!--Footer-->
-      <div class="modal-footer flex-center">
-        <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
-      </div>
+      <!--/.Content-->
     </div>
-    <!--/.Content-->
   </div>
-</div>
 
 
-<!--Modal: modalConfirmDelete-->
-<div class="modal fade" id="movieaddSuccess" tabindex="-1" role="modal-notify" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-success" role="document">
-    <!--Content-->
-    <div class="modal-content text-center">
-      <!--Header-->
-      <div class="modal-header d-flex justify-content-center">
-        <p class="heading">Movie added!</p>
+  <!--Modal: modalConfirmDelete-->
+  <div class="modal fade" id="movieaddSuccess" tabindex="-1" role="modal-notify" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-notify modal-success" role="document">
+      <!--Content-->
+      <div class="modal-content text-center">
+        <!--Header-->
+        <div class="modal-header d-flex justify-content-center">
+          <p class="heading">Movie added!</p>
+        </div>
+
+        <!--Body-->
+        <div class="modal-body">
+
+          <i class="fa fa-check fa-4x mb-3 animated rotateIn" style="color:#00C851"></i>
+
+        </div>
+
+        <!--Footer-->
+        <div class="moda<img  src='{% static 'userhandling/img/NAicon.svg' %}' >l-footer flex-center">
+          <a type="button" class="btn  btn-success waves-effect" data-dismiss="modal">Nice!</a>
+        </div>
       </div>
-
-      <!--Body-->
-      <div class="modal-body">
-
-         <i class="fa fa-check fa-4x mb-3 animated rotateIn" style="color:#00C851"></i>
-
-      </div>
-
-      <!--Footer-->
-      <div class="moda<img  src='{% static 'userhandling/img/NAicon.svg' %}' >l-footer flex-center">
-        <a type="button" class="btn  btn-success waves-effect" data-dismiss="modal">Nice!</a>
-      </div>
+      <!--/.Content-->
     </div>
-    <!--/.Content-->
   </div>
-</div>
-{% endblock %}
+
+
+ <!--Modal: modalConfirmDelete-->
+  <div class="modal fade" id="too_much_movies" tabindex="-1" role="modal-notify"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+      <!--Content-->
+      <div class="modal-content text-center">
+        <!--Header-->
+        <div class="modal-header d-flex justify-content-center">
+          <p class="heading">Too many movies</p>
+        </div>
+
+        <!--Body-->
+        <div class="modal-body">
+          <i class="fa fa-sort-numeric-up fa-4x mb-3 animated bounce" style="color:#FF3547"></i>
+
+        </div>
+
+        <!--Footer-->
+        <div class="modal-footer flex-center">
+          <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
+        </div>
+      </div>
+      <!--/.Content-->
+    </div>
+  </div>
+
+  {% endblock %}
 
 
 
-{% block js %}
+  {% block js %}
 
 
 
 
+
+  <script language="javascript">
+    {% if debug %}
+    tmdb_url_trunk = "http://127.0.0.1:8000/tmdb/";
+    {% else %}
+    tmdb_url_trunk = "https://www.cinemaple.com/tmdb/";
+    {% endif %}
+
+
+    {% if debug %}
+    tmdbimdb_movie_url_trunk = "http://127.0.0.1:8000/imdb_tmdb/movie/";
+    {% else %}
+    tmdbimdb_movie_url_trunk = "https://www.cinemaple.com/imdb_tmdb/movie/";
+    {% endif %}
+
+
+  </script>
+
+  <script type="text/javascript" src="{% static 'userhandling/js/add_movies.js' %}"></script>
+
+  <script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
 
 <script language="javascript">
 
 
-
-
-
-
-{% if debug %}
-tmdb_url_trunk = "http://127.0.0.1:8000/tmdb/";
+{% if movielist %}
+    movie_counter = {{ movielist|length }} + 1;
 {% else %}
-tmdb_url_trunk = "https://www.cinemaple.com/tmdb/";
+    movie_counter = 1;
 {% endif %}
 
 
+function prep_movalerts(){
+      {% for movie in movielist %}
 
-{% if debug %}
-tmdbimdb_movie_url_trunk = "http://127.0.0.1:8000/imdb_tmdb/movie/";
-{% else %}
-tmdbimdb_movie_url_trunk = "https://www.cinemaple.com/imdb_tmdb/movie/";
-{% endif %}
+    movie_tag = $("#moviealert{{forloop.counter}}");
+    button = $("#movieclosebutton{{forloop.counter}}");
+    movietag_content = $("#movietag_content{{forloop.counter}}");
+    movieaddfield = "#id_form2-movieID{{forloop.counter}}";
+    movieid = "<strong> {{ movie.title }} </strong> ({{ movie.year }}), {{ movie.director }}, {{ movie.runtime}}"
+
+    movietag_content.append(movieid);
+    button.val("{{ movie.tmdbID }}")
+    movie_tag.removeClass("invisible");
+    movie_tag.addClass("visible");
+
+
+    {% endfor %}
+}
+
+
+
+
+$(document).ready(function() {
+  prep_movalerts();
+
+  $(".movieclosebutton").unbind('click').click(function() {
+        var id = $(this).attr('value');
+        movie_counter = movie_counter - 1
+        remove_and_reorder_movies(id)
+    });
+
+});
 
 </script>
-
-<script type="text/javascript" src="{% static 'userhandling/js/add_movies.js' %}"></script>
-
-<script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
-{% endblock %}
+  {% endblock %}

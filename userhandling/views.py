@@ -11,7 +11,7 @@ import urllib, json
 import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
-from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm, MoveNightForm, MovieAddForm
+from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm
 
 from .models import Movie, MovieNightEvent, Profile, PasswordReset
 import tmdbsimple as tmdb
@@ -23,7 +23,6 @@ from django.core import serializers
 from rest_framework import viewsets
 from .serializers import MovieNightEventSerializer
 from django.contrib.auth.decorators import user_passes_test
-
 # ....
 
 # Render Index Page, manage register
@@ -333,15 +332,29 @@ def add_movie_night(request):
 
     if request.method == 'POST': # If the form has been submitted...
 
+        # CHeck if hidden field is populated with id, this is only the case if view called to change
+        form3 =  SneakymovienightIDForm(request.POST, prefix="form3")
+        movienightid = form3.data['form3-movienightid']
+
+        if movienightid != "":
+            mn = get_object_or_404(MovieNightEvent, pk=movienightid)
+        else:
+            mn = MovieNightEvent()
+
         form2 = MovieAddForm(request.POST, prefix="form2")
-        mn = MovieNightEvent()
+
         form1 = MoveNightForm(request.POST, prefix="form1", instance = mn) # An unbound form
         if form1.is_valid() and form2.is_valid(): # All validation rules pass
-            form1.save() # This creates the movienight
+            form1.save() # This creates or updates the movienight
 
             # generate list of movie ids to be added:
             num_formfields = 10
             mov_ID_add = []
+
+            # if change mode: first delete all movies
+            if movienightid != "":
+                movielist = mn.MovieList.all()
+                movielist.delete()
 
             for i in range(1, num_formfields+1):
                 # Look at correct formfield
@@ -357,13 +370,16 @@ def add_movie_night(request):
         else:
             return HttpResponse("Form not valid.")
     else:
+
         form1 = MoveNightForm(prefix="form1") # An unbound form
         form2 = MovieAddForm(prefix="form2")
+        form3 = SneakymovienightIDForm(prefix="form3")
         # TODO: This Fails.
     context = {
         'debug' : settings.DEBUG,
         'form1'      : form1,
         "form2"      : form2,
+        "form3"      : form3,
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
 
@@ -530,5 +546,33 @@ class MovieNightEventViewSet(viewsets.ModelViewSet):
 
 
 
+def get_instantciated_movie_add_form(MovieNight):
+    # Ugly way to initialize movieform
+    initial_dict = {}
+    movielist = MovieNight.MovieList.all()
+    num_movies = len(movielist)
+    for i, movie in enumerate(movielist):
+        initial_dict["movieID{}".format(i+1)]= movie.tmdbID
+
+    form2 = MovieAddForm(initial = initial_dict, prefix="form2") # An unbound for
+
+    return form2, movielist
 
 
+
+@user_passes_test(lambda u: u.is_staff)
+def change_movie_night(request, movienight_id):
+    MovieNight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    form1 = MoveNightForm(prefix="form1", instance = MovieNight) # An unbound for
+
+    form2, movielist = get_instantciated_movie_add_form(MovieNight)
+    form3 = SneakymovienightIDForm(prefix="form3", initial={"movienightid" : movienight_id})
+    context = {
+        'debug' : settings.DEBUG,
+        'form1'                 : form1,
+        "form2"                 : form2,
+        "form3"                 : form3,
+        "movielist"            : movielist,
+        "navbar"            : "mod_movie",
+    }
+    return render(request, 'userhandling/admin_movie_add.html', context)

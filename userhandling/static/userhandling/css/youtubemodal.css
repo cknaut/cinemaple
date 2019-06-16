@@ -18,3 +18,11 @@
     color: #fff;
     opacity: 1;
 }
+
+.youtube-modal {
+    overflow-y: auto;
+}
+
+.youtube-modal-open {
+    overflow: auto;
+}

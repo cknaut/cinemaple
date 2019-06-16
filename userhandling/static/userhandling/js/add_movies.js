@@ -1,5 +1,5 @@
 search_counter = 0;
-movie_counter = 1;
+
 
 // modidify raw json from TMDB to table html
 function prep_movie_json(data) {
@@ -114,6 +114,12 @@ function initiate_datatables_buttons() {
             $("#modalMovieAlreadyAdded").modal();
             return
         }
+        console.log(movie_counter);
+        if (movie_counter == 11) {
+            $("#too_much_movies").modal();
+            return
+        }
+
         movieaddfield = "#id_form2-movieID" + movie_counter
         $(movieaddfield).val(id);
         $("#advisealert").hide()
@@ -146,15 +152,20 @@ function AddMovie(data) {
     id = data["id"]
 
     movie_alert = generate_movie_alert(title, year, director, runtime, id)
-    $("#moviealerts").append(movie_alert);
+
+    movie_tag = $("#moviealert" + movie_counter);
+    button = $("#movieclosebutton" + movie_counter);
+    movietag_content = $("#movietag_content" + movie_counter);
+
+    movietag_content.append(movie_alert);
+    button.val(id)
+    movie_tag.removeClass("invisible");
+    movie_tag.addClass("visible");
+
 
     movie_counter = movie_counter + 1
 
-    $(".movieclosebutton").unbind('click').click(function() {
-        var id = $(this).attr('value');
-        movie_counter = movie_counter - 1
-        remove_and_reorder_movies(id)
-    });
+
 
 }
 
@@ -179,7 +190,7 @@ function remove_and_reorder_movies(id) {
 
     pos_movie_removed = 0 // index of movie to be removed
 
-    // remove id 
+    // remove id
     for (var i = 1; i < 11; i++) {
         movieaddfield = "#id_form2-movieID" + i;
         if ($(movieaddfield).val() == id) {
@@ -202,7 +213,7 @@ function remove_and_reorder_movies(id) {
 
 function generate_movie_alert(title, year, director, runtime, mov_id) {
     // generate html displaying the movie alert
-    movie_alert = "<div class='alert alert-success alert-dismissible fade show moviealert' role='alert'> <strong>" + title + "</strong> (" + year + "), " + director + ", " + runtime + "<button type='button' value=" + mov_id + " class='close movieclosebutton' data-dismiss='alert' aria-label='Close' > <span aria-hidden='true'> &times; </span></button> </div>"
+    movie_alert = "<strong>" + title + "</strong> (" + year + "), " + director + ", " + runtime
     return movie_alert
 }
 
@@ -264,6 +275,7 @@ function LaunchMovieModal(data) {
     $("#movieModal").modal();
 
     $(document).ready(function() {
+
 
         // Gets the video src from the data-src on each button
 
@@ -371,3 +383,5 @@ function remove_breaks(str) {
 $('#movietable').on('draw.dt', function() {
     initiate_datatables_buttons()
 });
+
+// fii function
