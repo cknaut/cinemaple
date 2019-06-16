@@ -510,7 +510,20 @@ def details_mov_nights(request, movienight_id):
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
 
+@login_required
+def delete_mov_night(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    movienight.delete()
+
+    return redirect("index")
+
+
+
 class MovieNightEventViewSet(viewsets.ModelViewSet):
     queryset = MovieNightEvent.objects.all().order_by('-date')
     serializer_class = MovieNightEventSerializer
+
+
+
+
 
