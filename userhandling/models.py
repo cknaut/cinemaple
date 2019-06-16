@@ -60,8 +60,18 @@ class MovieNightEvent(models.Model):
     motto = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
     date = models.DateTimeField('date published')
+    isactive = models.BooleanField(default=False)
     MovieList = models.ManyToManyField(Movie, blank=True)
 
     def __str__(self):
         return self.motto
+
+class VoteHandler(models.Model):
+    movienight = models.OneToOneField(MovieNightEvent, on_delete=models.CASCADE)
+    movie = models.OneToOneField(Movie, on_delete=models.CASCADE)
+    VoterList = models.ManyToManyField(User)
+    votecount = models.IntegerField(blank=False, default=0)
+
+    def __str__(self): 
+        return self.movienight.motto + ", " + self.movie.title
 

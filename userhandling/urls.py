@@ -1,8 +1,11 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from django.contrib.auth import views as auth_views
+from rest_framework import routers
 
 
 from . import views
+router = routers.DefaultRouter()
+router.register(r'movienights', views.MovieNightEventViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -20,5 +23,7 @@ urlpatterns = [
     path('search_movie',  views.search_movie,  name='search_movie'),
     path('curr_mov_nights',  views.curr_mov_nights,  name='curr_mov_nights'),
     path('man_mov_nights',  views.man_mov_nights,  name='man_mov_nights'),
-    path('dashboard',  views.dashboard,  name='dashboard')
+    path('dashboard',  views.dashboard,  name='dashboard'),
+    path('mov_night/<str:movienight_id>', views.details_mov_nights,  name='details_mov_nights'),
+    re_path('^api/', include(router.urls)),
 ]

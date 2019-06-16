@@ -19,11 +19,17 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 import requests
+from django.core import serializers
+from rest_framework import viewsets
+from .serializers import MovieNightEventSerializer
 
 # ....
 
 # Render Index Page, manage register
 def index(request):
+
+    if request.user.is_authenticated:
+        redirect("curr_mov_nights/")
     successful_verified = False
     context = {
         'successful_verified'   : successful_verified,
@@ -279,6 +285,7 @@ def curr_mov_nights(request):
     movienight = MovieNightEvent.objects.order_by('-date')[0]
     context = {
         'movienight' : movienight,
+        'navbar' : 'curr_mov_night',
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
@@ -490,12 +497,20 @@ def man_mov_nights(request):
     if not request.user.is_staff:
         return HttpResponse("Only staff users are authorised to view this page.")
 
-    movienights = MovieNightEvent.objects.order_by('-date')
+   
+    return render(request, 'userhandling/admin_movie_night_manage.html')
+
+@login_required
+def details_mov_nights(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
     context = {
-        'movienights': movienights
+        'movienight' : movienight,
+        'navbar' : "movie_night_manage",
     }
-    return render(request, 'userhandling/admin_movie_night_manage.html', context)
+    return render(request, 'userhandling/curr_mov_nights.html', context)
 
 
-
+class MovieNightEventViewSet(viewsets.ModelViewSet):
+    queryset = MovieNightEvent.objects.all().order_by('-date')
+    serializer_class = MovieNightEventSerializer
 
