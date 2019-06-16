@@ -232,9 +232,13 @@
                                                         <div class="row"></div>
                                                         <div class="row justify-content-center">
                                                             <div id="trailerbutton"></div>
+                                                            {% if movie.trailerlink == "" %}
+                                                             <button type='button' class='btn btn-primary disabled'>No trailer available. </button>
+                                                             {% else %}
                                                             <button type='button' class='btn btn-primary video-btn'
                                                                 data-src="{{movie.trailerlink}}"> Watch Trailer
                                                             </button>
+                                                            {% endif %}
                                                         </div>
 
 
