@@ -29,7 +29,7 @@ from .serializers import MovieNightEventSerializer
 def index(request):
 
     if request.user.is_authenticated:
-        redirect("curr_mov_nights/")
+        return redirect("curr_mov_nights")
     successful_verified = False
     context = {
         'successful_verified'   : successful_verified,
@@ -155,7 +155,7 @@ def registration(request):
 def my_login(request):
     login_form = LoginForm()
 
-    
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         next_url = request.POST.get('next')
@@ -322,9 +322,9 @@ def add_movies_from_form(request, movienight,  mov_ID_add):
             m.country         = data["Country"]
             m.posterpath      = data["poster_path"]
             m.trailerlink     = data["Trailerlink"]
-            m.save()      
+            m.save()
 
-        movienight.MovieList.add(m)   
+        movienight.MovieList.add(m)
 
 
 @login_required
@@ -347,14 +347,14 @@ def add_movie_night(request):
             for i in range(1, num_formfields+1):
                 # Look at correct formfield
                 movie_id = form2.cleaned_data['movieID{}'.format(i)]
-                # If not empty, generate 
+                # If not empty, generate
                 if movie_id  != "":
                     mov_ID_add.append(movie_id)
-                    
+
             # Create and save movies objects
             add_movies_from_form(request, mn, mov_ID_add)
 
-            return redirect('/man_mov_nights')
+            return redirect('/mov_night/{}'.format(mn.id))
         else:
             return HttpResponse("Form not valid.")
     else:
@@ -394,7 +394,7 @@ def tmdb_api_wrapper_search(request, query, year=""):
 
 def get_printable_list(data, fieldname, num_retrieve, harvard_comma):
     ''' Using the full JSON, returns print-friendly string of first n occurences'''
-  
+
     resultsstring = ""
     num_retrieve = min(num_retrieve, len(data))
 
@@ -418,7 +418,7 @@ def get_person_by_job(data, job_desc):
     for entry in data:
         if entry["job"] == job_desc:
             resultarray.append(entry)
-            
+
     return resultarray
 
 
@@ -432,7 +432,7 @@ def tmdb_get_movie_images_videos(tmdb_id):
     except:
         raise Exception("{} is not valid TMDB ID".format(tmdb_id))
 
-    # retrive some interesting data from lower level json 
+    # retrive some interesting data from lower level json
 
     # Actor list
     num_actors = 4
@@ -474,7 +474,7 @@ def tmdb_get_movie_images_videos(tmdb_id):
             site = video_res[i]["site"]
             if site == "YouTube" and linktype == "Trailer":
                 trailerlink =  "https://www.youtube.com/embed/" + video_res[i]["key"]
-    
+
     data["Trailerlink"] = trailerlink
 
     return data
@@ -497,7 +497,7 @@ def man_mov_nights(request):
     if not request.user.is_staff:
         return HttpResponse("Only staff users are authorised to view this page.")
 
-   
+
     return render(request, 'userhandling/admin_movie_night_manage.html')
 
 @login_required

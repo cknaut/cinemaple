@@ -162,16 +162,21 @@
         </div>
         <!-- Card Body -->
         <div class="card-body">
+          <div class="col-xl-12 col-lg-12">
 
-        <table id="movienight_table" class="display" style="width:100%" data-server-side="true" data-ajax="/api/movienights?format=datatables">
-        <thead>
-            <tr>
-                <th>Motto</th>
-                <th>Date</th>
-                <th>Is Active</th>
-            </tr>
-        </thead>
-
+            <table id="movienight_table" class="display" style="width:100%" data-server-side="true"
+              data-ajax="/api/movienights/?format=datatables">
+              <thead>
+                <tr>
+                  <th data-data="id">ID</th>
+                  <th data-data="motto">Motto</th>
+                  <th data-data="date">Date</th>
+                  <th data-data="isactive">Is Active</th>
+                  <th>Link</th>
+                </tr>
+              </thead>
+              </table>
+          </div>
         </div>
       </div>
     </div>
@@ -189,12 +194,32 @@
 
 {% block js %}
 <script>
+  $(document).ready(function () {
+    var table = $('#movienight_table').DataTable({
 
 
-
-$(document).ready(function() {
-    $('#movienight_table').DataTable();
-} );
+      "columnDefs": [{
+          "targets": -1,
+          "data": "id",
+          "render": function (data, type, row, meta) {
+            return "<a class='btn btn-primary btn-sm' href='mov_night/" + data +
+              "' role='button'>Manage</a>";
+          }
+        },
+        {
+          "targets": -2,
+          "data": "isactive",
+          "render": function (data, type, row, meta) {
+            if (data) {
+              return "<span class='badge badge-success'>Active</span>";
+            } else {
+              return "<span class='badge badge-danger'> Inactive</span>";
+            }
+          }
+        }
+      ]
+    });
+  });
 </script>
 
 
