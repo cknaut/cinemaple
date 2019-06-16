@@ -22,6 +22,7 @@ import requests
 from django.core import serializers
 from rest_framework import viewsets
 from .serializers import MovieNightEventSerializer
+from django.contrib.auth.decorators import user_passes_test
 
 # ....
 
@@ -327,10 +328,8 @@ def add_movies_from_form(request, movienight,  mov_ID_add):
         movienight.MovieList.add(m)
 
 
-@login_required
+@user_passes_test(lambda u: u.is_staff)
 def add_movie_night(request):
-    if not request.user.is_staff:
-        return HttpResponse("Only staff users are authorised to view this page.")
 
     if request.method == 'POST': # If the form has been submitted...
 
@@ -491,13 +490,8 @@ def dashboard(request):
     return render(request, 'userhandling/dashboard.html')
 
 
-@login_required
+@user_passes_test(lambda u: u.is_staff)
 def man_mov_nights(request):
-
-    if not request.user.is_staff:
-        return HttpResponse("Only staff users are authorised to view this page.")
-
-
     return render(request, 'userhandling/admin_movie_night_manage.html')
 
 @login_required
@@ -510,12 +504,23 @@ def details_mov_nights(request, movienight_id):
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
 
-@login_required
+
+@user_passes_test(lambda u: u.is_staff)
 def delete_mov_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
     movienight.delete()
 
-    return redirect("index")
+    return redirect("man_mov_nights")
+
+@user_passes_test(lambda u: u.is_superuser)
+def activate_movie_night(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    movienight.isactive = True
+    movienight.save()
+
+    return redirect("man_mov_nights")
+
+
 
 
 

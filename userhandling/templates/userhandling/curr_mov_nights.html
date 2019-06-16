@@ -170,9 +170,9 @@
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item" href="#">Activate</a>
+                                            <a class="dropdown-item"  id = "activate_confirm" href="#" src="{% url 'activate_movie_night' movienight_id=movienight.id %}">Activate</a>
                                             <a class="dropdown-item" href="#">Modify</a>
-                                            <a class="dropdown-item" href="{% url 'delete_mov_night' movienight_id=movienight.id %}">Delete</a>
+                                            <a class="dropdown-item"  id = "delete_confirm" href="#" src="{% url 'delete_mov_night' movienight_id=movienight.id %}">Delete</a>
                                         </div>
                                     </div>
 
@@ -233,8 +233,9 @@
                                                         <div class="row justify-content-center">
                                                             <div id="trailerbutton"></div>
                                                             {% if movie.trailerlink == "" %}
-                                                             <button type='button' class='btn btn-primary disabled'>No trailer available. </button>
-                                                             {% else %}
+                                                            <button type='button' class='btn btn-primary disabled'>No
+                                                                trailer available </button>
+                                                            {% else %}
                                                             <button type='button' class='btn btn-primary video-btn'
                                                                 data-src="{{movie.trailerlink}}"> Watch Trailer
                                                             </button>
@@ -333,24 +334,19 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                         {% endfor %}
+
+
+
                                     </div>
 
                                 </div>
-
-
-
-
-
                             </div>
                         </div>
                     </div>
-
                     <!-- Content Row -->
                 </div>
-
             </div>
         </div>
     </div>
@@ -360,6 +356,44 @@
 
 
 {% block modals %}
+<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Do you want to permanentely delete this movie night?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger"  id="deletbutton" href="">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Activating the movienight will send out invitation emails and opens the poll.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary"  id="activatebutton" href="">Activate</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog youtube-modal-dialog" role="document">
@@ -376,36 +410,53 @@
                     <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
                         allow="autoplay"></iframe>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                {% endblock %}
-
-
-                {% block js %}
-                <script>
-                    $(document).ready(function () {
-
-                        // Gets the video src from the data-src on each button
-
-                        var $videoSrc;
-                        $('.video-btn').click(function () {
-                            $videoSrc = $(this).data("src");
-                            $videoSrc = $videoSrc +
-                                "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
-                            console.log($videoSrc);
-                            $("#video").attr('src', $videoSrc);
-                            $("#myModal").modal();
-                        });
+    {% endblock %}
 
 
+    {% block js %}
+    <script>
+        $(document).ready(function () {
 
-                        // stop playing the youtube video when I close the modal
-                        $('#myModal').on('hide.bs.modal', function (e) {
-                            // a poor man's stop video
-                            $("#video").attr('src', "");
-                        })
+            // Gets the video src from the data-src on each button
 
-                        // document ready
-                    });
-                </script>
+            var $videoSrc;
+            $('.video-btn').click(function () {
+                $videoSrc = $(this).data("src");
+                $videoSrc = $videoSrc +
+                    "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
+                console.log($videoSrc);
+                $("#video").attr('src', $videoSrc);
+                $("#myModal").modal();
+            });
 
-                {% endblock %}
+
+               $('#activate_confirm').click(function () {
+                $activateURL = $(this).attr("src");
+                $("#activatebutton").attr('href', $activateURL);
+                $("#activatemodal").modal();
+            });
+
+            $('#delete_confirm').click(function () {
+                $deleteURL = $(this).attr("src");
+                $("#deletbutton").attr('href', $deleteURL);
+                $("#deletemodal").modal();
+            });
+
+
+
+            // stop playing the youtube video when I close the modal
+            $('#myModal').on('hide.bs.modal', function (e) {
+                // a poor man's stop video
+                $("#video").attr('src', "");
+            })
+
+            // document ready
+        });
+    </script>
+
+    {% endblock %}

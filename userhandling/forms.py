@@ -179,7 +179,7 @@ class MoveNightForm(ModelForm):
              'date': DateTimePickerInput(), # default date-format %m/%d/%Y will be used
              'description': forms.TextInput(attrs={"id": "tinymice"}),
              'motto' : forms.TextInput(attrs={'placeholder': '','class':'form-control input-perso'})
-             
+
          }
 
 class MovieAddForm(forms.Form):
@@ -193,3 +193,6 @@ class MovieAddForm(forms.Form):
     movieID8    = forms.CharField(required=False, widget=forms.HiddenInput())
     movieID9    = forms.CharField(required=False, widget=forms.HiddenInput())
     movieID10   = forms.CharField(required=False, widget=forms.HiddenInput())
+
+
+# forms.HiddenInput()

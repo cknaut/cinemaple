@@ -59,6 +59,10 @@ body {
 
 /* thank you https://stackoverflow.com/questions/19337238/twitter-bootstrap-modal-pushes-html-content-to-the-left */
 
+.modal {
+    overflow-y: auto;
+}
+
 .modal-open {
     overflow: auto;
 }
