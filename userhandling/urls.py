@@ -30,5 +30,6 @@ urlpatterns = [
     path('deactivate_movie_night/<str:movienight_id>', views.deactivate_movie_night,  name='deactivate_movie_night'),
     path('change_movie_night/<str:movienight_id>', views.change_movie_night,  name='change_movie_night'),
     path('reg_movie_night/<str:movienight_id>', views.reg_movie_night,  name='reg_movie_night'),
+    path('ureg_movie_night/<str:movienight_id>', views.ureg_movie_night,  name='ureg_movie_night'),
     re_path('^api/', include(router.urls)),
 ]

@@ -146,7 +146,7 @@
                                     {% endautoescape %} </div>
                             </div>
 
-                             {% if navbar == "curr_mov_night" %}
+                             {% if navbar == "curr_mov_night" and movienight.isactive%}
                             <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
                                 <div class="col-xl-9 col-lg-9 ">
@@ -164,7 +164,28 @@
                                 <div class="col-xl-3 col-lg-3 "> User Action: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                 {% if request.user in movienight.AttendenceList.all %}
-                                    <a class='btn btn-primary btn-sm' href="#" role='button'>Vote!</a>
+
+
+                                     <div class="dropdown">
+                                        <a class="btn btn-primary dropdown-toggle btn-sm" href="#" role="button"
+                                            id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Select Action
+                                        </a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+                                            <a class="dropdown-item" id="#" href="{% url 'ureg_movie_night' movienight_id=movienight.id %}">Unregister</a>
+
+
+
+
+                                               <a class="dropdown-item"
+                                                href="#">Vote</a>
+                                        </div>
+                                    </div>
+
+
                                     {% else %}
                                     <a class='btn btn-primary btn-sm' href="{% url 'reg_movie_night' movienight_id=movienight.id %}" role='button'>Register Now!</a>
 
@@ -486,7 +507,6 @@
 
     {% block js %}
 
-  <script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
     <script>
         $(document).ready(function () {
 
