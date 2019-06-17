@@ -183,6 +183,12 @@
                   {{form1.date}}
                 </div>
 
+                  <div class="form-group">
+                  <label for="exampleInputEmail1">Maximal Attendence:</label>
+                  {{form1.MaxAttendence.errors}}
+                  {{form1.MaxAttendence}}
+                </div>
+
                 {% buttons %}
                 <button type="submit" class="btn btn-primary">
                   {% bootstrap_icon "star" %} {% if navbar == 'mod_movie' %} Modify {% else %} Add {% endif %} Movie Night

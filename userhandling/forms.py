@@ -169,7 +169,7 @@ class PasswordResetForm(forms.Form):
 class MoveNightForm(ModelForm):
     class Meta:
         model = MovieNightEvent
-        fields = ['motto', 'description', 'date']
+        fields = ['motto', 'description', 'date', 'MaxAttendence']
         labels = {
             'motto': _('Movie Night Motto'),
             'description': _('Description:'),
@@ -178,7 +178,9 @@ class MoveNightForm(ModelForm):
         widgets = {
              'date': DateTimePickerInput(), # default date-format %m/%d/%Y will be used
              'description': forms.TextInput(attrs={"id": "tinymice"}),
-             'motto' : forms.TextInput(attrs={'placeholder': '','class':'form-control input-perso'})
+             'motto' : forms.TextInput(attrs={'placeholder': '','class':'form-control input-perso'}),
+             'MaxAttendence' : forms.NumberInput(attrs={'placeholder': '','class':'form-control input-perso'})
+
 
          }
 

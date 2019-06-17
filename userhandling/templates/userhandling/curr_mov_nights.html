@@ -3,6 +3,7 @@
 
 {% block css_imports %}
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
+
 {% endblock%}
 
 
@@ -139,11 +140,45 @@
                             </div>
 
 
-                            <div class="row mb-4">
+                            <div class="row mb-4 ">
                                 <div class="col-xl-3 col-lg-3 "> What: </div>
                                 <div class="col-xl-9 col-lg-9 "> {% autoescape off %} {{movienight.description}}
                                     {% endautoescape %} </div>
                             </div>
+
+                             {% if navbar == "curr_mov_night" %}
+                            <div class="row mb-4">
+                                <div class="col-xl-3 col-lg-3 "> Status: </div>
+                                <div class="col-xl-9 col-lg-9 ">
+                                    {% if request.user in movienight.AttendenceList.all %}
+                                    <span class='badge badge-success'>Registered</span>
+                                    {% else %}
+                                    <span class='badge badge-danger'> Not registered</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+
+
+                            <div class="row mb-4 justify-content-center">
+                                <div class="col-xl-3 col-lg-3 "> User Action: </div>
+                                <div class="col-xl-9 col-lg-9 ">
+                                {% if request.user in movienight.AttendenceList.all %}
+                                    <a class='btn btn-primary btn-sm' href="#" role='button'>Vote!</a>
+                                    {% else %}
+                                    <a class='btn btn-primary btn-sm' href="{% url 'reg_movie_night' movienight_id=movienight.id %}" role='button'>Register Now!</a>
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+                            {% endif %}
+
+
+                            {% if request.user.is_superuser %}
+
+                            <hr class="sidebar-divider">
 
                             <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
@@ -156,7 +191,7 @@
                                 </div>
                             </div>
 
-                            {% if request.user.is_superuser %}
+
 
                             <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-3 "> Admin Action: </div>
@@ -358,142 +393,144 @@
             </div>
         </div>
     </div>
-<!-- /.container-fluid -->
-{% endblock %}
+    <!-- /.container-fluid -->
+    {% endblock %}
 
 
-{% block modals %}
-<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Do you want to permanentely delete this movie night?</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Activating the movienight will send out invitation emails and opens the poll.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Deactivating the movienight will send out notifications to all registered users.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" id="dectivatebutton" href="">Deactivate</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog youtube-modal-dialog" role="document">
-        <div class="modal-content">
-
-
-            <div class="modal-body youtube-modal-body">
-
-                <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <!-- 16:9 aspect ratio -->
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
-                        allow="autoplay"></iframe>
+    {% block modals %}
+    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Do you want to permanentely delete this movie night?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-{% endblock %}
 
 
-{% block js %}
-<script>
-    $(document).ready(function () {
+    <div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Activating the movienight will send out invitation emails and opens the poll.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // Gets the video src from the data-src on each button
+    <div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Deactivating the movienight will send out notifications to all registered users.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" id="dectivatebutton" href="">Deactivate</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        var $videoSrc;
-        $('.video-btn').click(function () {
-            $videoSrc = $(this).data("src");
-            $videoSrc = $videoSrc +
-                "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
-            console.log($videoSrc);
-            $("#video").attr('src', $videoSrc);
-            $("#myModal").modal();
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog youtube-modal-dialog" role="document">
+            <div class="modal-content">
+
+
+                <div class="modal-body youtube-modal-body">
+
+                    <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <!-- 16:9 aspect ratio -->
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
+                            allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% endblock %}
+
+
+    {% block js %}
+
+  <script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+
+            // Gets the video src from the data-src on each button
+
+            var $videoSrc;
+            $('.video-btn').click(function () {
+                $videoSrc = $(this).data("src");
+                $videoSrc = $videoSrc +
+                    "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
+                console.log($videoSrc);
+                $("#video").attr('src', $videoSrc);
+                $("#myModal").modal();
+            });
+
+
+            $('#deactivate_confirm').click(function () {
+                $activateURL = $(this).attr("src");
+                $("#dectivatebutton").attr('href', $activateURL);
+                $("#disactivatemodal").modal();
+            });
+
+            $('#activate_confirm').click(function () {
+                $activateURL = $(this).attr("src");
+                $("#activatebutton").attr('href', $activateURL);
+                $("#activatemodal").modal();
+            });
+
+            $('#delete_confirm').click(function () {
+                $deleteURL = $(this).attr("src");
+                $("#deletbutton").attr('href', $deleteURL);
+                $("#deletemodal").modal();
+            });
+
+
+
+            // stop playing the youtube video when I close the modal
+            $('#myModal').on('hide.bs.modal', function (e) {
+                // a poor man's stop video
+                $("#video").attr('src', "");
+            })
+
+            // document ready
         });
+    </script>
 
-
-
-
-
-        $('#deactivate_confirm').click(function () {
-            $activateURL = $(this).attr("src");
-            $("#dectivatebutton").attr('href', $activateURL);
-            $("#disactivatemodal").modal();
-        });
-
-        $('#activate_confirm').click(function () {
-            $activateURL = $(this).attr("src");
-            $("#activatebutton").attr('href', $activateURL);
-            $("#activatemodal").modal();
-        });
-
-        $('#delete_confirm').click(function () {
-            $deleteURL = $(this).attr("src");
-            $("#deletbutton").attr('href', $deleteURL);
-            $("#deletemodal").modal();
-        });
-
-
-
-        // stop playing the youtube video when I close the modal
-        $('#myModal').on('hide.bs.modal', function (e) {
-            // a poor man's stop video
-            $("#video").attr('src', "");
-        })
-
-        // document ready
-    });
-</script>
-
-{% endblock %}
+    {% endblock %}

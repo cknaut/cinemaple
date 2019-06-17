@@ -283,6 +283,7 @@ def password_reset(request, reset_key):
 def curr_mov_nights(request):
 
     movienight = MovieNightEvent.objects.order_by('-date')[0]
+
     context = {
         'movienight' : movienight,
         'navbar' : 'curr_mov_night',
@@ -582,3 +583,16 @@ def change_movie_night(request, movienight_id):
         "navbar"            : "mod_movie",
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
+
+
+
+
+
+@login_required
+def reg_movie_night(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+    movienight.AttendenceList.add(request.user)
+
+    return redirect(curr_mov_nights)
+

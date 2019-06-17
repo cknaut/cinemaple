@@ -62,6 +62,8 @@ class MovieNightEvent(models.Model):
     date = models.DateTimeField('date published')
     isactive = models.BooleanField(default=False)
     MovieList = models.ManyToManyField(Movie, blank=True)
+    MaxAttendence = models.IntegerField(blank=False, default=25)
+    AttendenceList = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.motto
@@ -72,6 +74,6 @@ class VoteHandler(models.Model):
     VoterList = models.ManyToManyField(User)
     votecount = models.IntegerField(blank=False, default=0)
 
-    def __str__(self): 
+    def __str__(self):
         return self.movienight.motto + ", " + self.movie.title
 
