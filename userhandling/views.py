@@ -536,6 +536,17 @@ def activate_movie_night(request, movienight_id):
 
     return redirect("man_mov_nights")
 
+@user_passes_test(lambda u: u.is_superuser)
+def deactivate_movie_night(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    movienight.isactive = False
+    movienight.save()
+
+    # TODO: Send Notification
+
+    return redirect("man_mov_nights")
+
+
 
 
 

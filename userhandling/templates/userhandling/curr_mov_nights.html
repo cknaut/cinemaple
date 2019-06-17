@@ -170,7 +170,15 @@
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item"  id = "activate_confirm" href="#" src="{% url 'activate_movie_night' movienight_id=movienight.id %}">Activate</a>
+                                        {% if movienight.isactive %}
+                                    <a class="dropdown-item"  id = "deactivate_confirm" href="#" src="{% url 'deactivate_movie_night' movienight_id=movienight.id %}">Deactivate</a>
+
+                                    {% else %}
+                                    <a class="dropdown-item"  id = "activate_confirm" href="#" src="{% url 'activate_movie_night' movienight_id=movienight.id %}">Activate</a>
+
+                                    {% endif %}
+
+
                                             <a class="dropdown-item" href="{% url 'change_movie_night' movienight_id=movienight.id %}">Modify</a>
                                             <a class="dropdown-item"  id = "delete_confirm" href="#" src="{% url 'delete_mov_night' movienight_id=movienight.id %}">Delete</a>
                                         </div>
@@ -395,6 +403,25 @@
     </div>
 </div>
 
+<div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Deactivating the movienight will send out notifications to all registered users.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary"  id="dectivatebutton" href="">Deactivate</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog youtube-modal-dialog" role="document">
@@ -435,6 +462,15 @@
                 $("#myModal").modal();
             });
 
+
+
+
+
+               $('#deactivate_confirm').click(function () {
+                $activateURL = $(this).attr("src");
+                $("#dectivatebutton").attr('href', $activateURL);
+                $("#disactivatemodal").modal();
+            });
 
                $('#activate_confirm').click(function () {
                 $activateURL = $(this).attr("src");
