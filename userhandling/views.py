@@ -505,7 +505,6 @@ def imdb_tmdb_api_wrapper_movie(request, tmdb_id):
 def dashboard(request):
     return render(request, 'userhandling/dashboard.html')
 
-
 @user_passes_test(lambda u: u.is_staff)
 def man_mov_nights(request):
     return render(request, 'userhandling/admin_movie_night_manage.html')
@@ -519,8 +518,6 @@ def details_mov_nights(request, movienight_id):
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
-
-
 @user_passes_test(lambda u: u.is_staff)
 def delete_mov_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
@@ -528,7 +525,7 @@ def delete_mov_night(request, movienight_id):
 
     return redirect("man_mov_nights")
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 def activate_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
     movienight.isactive = True
@@ -536,7 +533,7 @@ def activate_movie_night(request, movienight_id):
 
     return redirect("man_mov_nights")
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 def deactivate_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
     movienight.isactive = False
@@ -545,8 +542,6 @@ def deactivate_movie_night(request, movienight_id):
     # TODO: Send Notification
 
     return redirect("man_mov_nights")
-
-
 
 
 
