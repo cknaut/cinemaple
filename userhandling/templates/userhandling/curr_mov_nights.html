@@ -170,17 +170,21 @@
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        {% if movienight.isactive %}
-                                    <a class="dropdown-item"  id = "deactivate_confirm" href="#" src="{% url 'deactivate_movie_night' movienight_id=movienight.id %}">Deactivate</a>
+                                            {% if movienight.isactive %}
+                                            <a class="dropdown-item" id="deactivate_confirm" href="#"
+                                                src="{% url 'deactivate_movie_night' movienight_id=movienight.id %}">Deactivate</a>
 
-                                    {% else %}
-                                    <a class="dropdown-item"  id = "activate_confirm" href="#" src="{% url 'activate_movie_night' movienight_id=movienight.id %}">Activate</a>
+                                            {% else %}
+                                            <a class="dropdown-item" id="activate_confirm" href="#"
+                                                src="{% url 'activate_movie_night' movienight_id=movienight.id %}">Activate</a>
 
-                                    {% endif %}
+                                            {% endif %}
 
 
-                                            <a class="dropdown-item" href="{% url 'change_movie_night' movienight_id=movienight.id %}">Modify</a>
-                                            <a class="dropdown-item"  id = "delete_confirm" href="#" src="{% url 'delete_mov_night' movienight_id=movienight.id %}">Delete</a>
+                                            <a class="dropdown-item"
+                                                href="{% url 'change_movie_night' movienight_id=movienight.id %}">Modify</a>
+                                            <a class="dropdown-item" id="delete_confirm" href="#"
+                                                src="{% url 'delete_mov_night' movienight_id=movienight.id %}">Delete</a>
                                         </div>
                                     </div>
 
@@ -343,22 +347,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {% endfor %}
-
-
 
                                     </div>
-
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Content Row -->
                 </div>
             </div>
         </div>
     </div>
-</div>
 <!-- /.container-fluid -->
 {% endblock %}
 
@@ -377,7 +376,7 @@
             <div class="modal-body">Do you want to permanentely delete this movie night?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger"  id="deletbutton" href="">Delete</a>
+                <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
             </div>
         </div>
     </div>
@@ -397,7 +396,7 @@
             <div class="modal-body">Activating the movienight will send out invitation emails and opens the poll.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary"  id="activatebutton" href="">Activate</a>
+                <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
             </div>
         </div>
     </div>
@@ -413,10 +412,11 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Deactivating the movienight will send out notifications to all registered users.</div>
+            <div class="modal-body">Deactivating the movienight will send out notifications to all registered users.
+            </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary"  id="dectivatebutton" href="">Deactivate</a>
+                <a class="btn btn-primary" id="dectivatebutton" href="">Deactivate</a>
             </div>
         </div>
     </div>
@@ -443,57 +443,57 @@
     </div>
 </div>
 
-    {% endblock %}
+{% endblock %}
 
 
-    {% block js %}
-    <script>
-        $(document).ready(function () {
+{% block js %}
+<script>
+    $(document).ready(function () {
 
-            // Gets the video src from the data-src on each button
+        // Gets the video src from the data-src on each button
 
-            var $videoSrc;
-            $('.video-btn').click(function () {
-                $videoSrc = $(this).data("src");
-                $videoSrc = $videoSrc +
-                    "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
-                console.log($videoSrc);
-                $("#video").attr('src', $videoSrc);
-                $("#myModal").modal();
-            });
-
-
-
-
-
-               $('#deactivate_confirm').click(function () {
-                $activateURL = $(this).attr("src");
-                $("#dectivatebutton").attr('href', $activateURL);
-                $("#disactivatemodal").modal();
-            });
-
-               $('#activate_confirm').click(function () {
-                $activateURL = $(this).attr("src");
-                $("#activatebutton").attr('href', $activateURL);
-                $("#activatemodal").modal();
-            });
-
-            $('#delete_confirm').click(function () {
-                $deleteURL = $(this).attr("src");
-                $("#deletbutton").attr('href', $deleteURL);
-                $("#deletemodal").modal();
-            });
-
-
-
-            // stop playing the youtube video when I close the modal
-            $('#myModal').on('hide.bs.modal', function (e) {
-                // a poor man's stop video
-                $("#video").attr('src', "");
-            })
-
-            // document ready
+        var $videoSrc;
+        $('.video-btn').click(function () {
+            $videoSrc = $(this).data("src");
+            $videoSrc = $videoSrc +
+                "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
+            console.log($videoSrc);
+            $("#video").attr('src', $videoSrc);
+            $("#myModal").modal();
         });
-    </script>
 
-    {% endblock %}
+
+
+
+
+        $('#deactivate_confirm').click(function () {
+            $activateURL = $(this).attr("src");
+            $("#dectivatebutton").attr('href', $activateURL);
+            $("#disactivatemodal").modal();
+        });
+
+        $('#activate_confirm').click(function () {
+            $activateURL = $(this).attr("src");
+            $("#activatebutton").attr('href', $activateURL);
+            $("#activatemodal").modal();
+        });
+
+        $('#delete_confirm').click(function () {
+            $deleteURL = $(this).attr("src");
+            $("#deletbutton").attr('href', $deleteURL);
+            $("#deletemodal").modal();
+        });
+
+
+
+        // stop playing the youtube video when I close the modal
+        $('#myModal').on('hide.bs.modal', function (e) {
+            // a poor man's stop video
+            $("#video").attr('src', "");
+        })
+
+        // document ready
+    });
+</script>
+
+{% endblock %}
