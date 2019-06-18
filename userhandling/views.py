@@ -11,9 +11,9 @@ import urllib, json
 import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
-from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm
-
-from .models import Movie, MovieNightEvent, Profile, PasswordReset
+from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
+    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm
+from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference
 import tmdbsimple as tmdb
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -23,6 +23,7 @@ from django.core import serializers
 from rest_framework import viewsets
 from .serializers import MovieNightEventSerializer
 from django.contrib.auth.decorators import user_passes_test
+from django.forms import formset_factory
 # ....
 
 # Render Index Page, manage register
@@ -591,6 +592,8 @@ def reg_movie_night(request, movienight_id):
 
     movienight.AttendenceList.add(request.user)
 
+
+
     return redirect(curr_mov_nights)
 
 
@@ -601,5 +604,64 @@ def ureg_movie_night(request, movienight_id):
     movienight.AttendenceList.remove(request.user)
 
     return redirect(curr_mov_nights)
+
+@login_required
+def vote_movie_night(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    movielist = list(movienight.MovieList.all())
+
+    # create formset
+    prefFormList = formset_factory(VotePreferenceForm, extra=0)
+
+
+
+    if request.method == 'POST':
+
+        formset = prefFormList(request.POST, initial=[
+        {'UserID'           :   request.user.id,
+        'movienightID'      :   movienight_id,
+        'movieID'           :   movie.id,
+        'name'              :   movie.title
+        } for movie in movielist
+        ])
+
+        if formset.is_valid():
+            for form in formset:
+                movie = get_object_or_404(Movie, pk=form.cleaned_data['movieID'])
+                vp = VotePreference(movienight=movienight, user=request.user, movie=movie)
+                vp.preference = form.cleaned_data['rating']
+                vp.save()
+
+
+
+    else:
+        random.shuffle(movielist)
+
+
+
+
+        formset = prefFormList(initial=[
+            {'UserID'           :   request.user.id,
+            'movienightID'      :   movienight_id,
+            'movieID'           :   movie.id,
+            'name'              :   movie.title
+            } for movie in movielist
+        ])
+
+
+
+    movielist_formset = zip(movielist, formset)
+
+
+
+
+
+    context = {
+        'movienight'        : movienight,
+        'formset'           : formset,
+        'movielist_formset' : movielist_formset
+    }
+    return render(request, 'userhandling/movienight_vote.html', context)
+
 
 

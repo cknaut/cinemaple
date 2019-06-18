@@ -68,12 +68,10 @@ class MovieNightEvent(models.Model):
     def __str__(self):
         return self.motto
 
-class VoteHandler(models.Model):
-    movienight = models.OneToOneField(MovieNightEvent, on_delete=models.CASCADE)
-    movie = models.OneToOneField(Movie, on_delete=models.CASCADE)
-    VoterList = models.ManyToManyField(User)
-    votecount = models.IntegerField(blank=False, default=0)
 
-    def __str__(self):
-        return self.movienight.motto + ", " + self.movie.title
+class VotePreference(models.Model):
+    movienight = models.ForeignKey(MovieNightEvent, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    movie = models.ForeignKey(Movie, on_delete=models.PROTECT)
+    preference  = models.IntegerField(blank=True) #0 to 5
 

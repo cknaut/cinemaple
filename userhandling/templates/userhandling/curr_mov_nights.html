@@ -1,8 +1,12 @@
 {% extends 'dashboard_base.html' %}
 {% load static %}
+{% load shuffle %}
+
 
 {% block css_imports %}
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
+
+
 
 {% endblock%}
 
@@ -127,6 +131,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
+
                     <div class="row">
                         <div class="col-xl-4 col-lg-4 ">
                             <div class="row mb-4">
@@ -174,15 +179,10 @@
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-
                                             <a class="dropdown-item" id="#" href="{% url 'ureg_movie_night' movienight_id=movienight.id %}">Unregister</a>
-
-
-
-
-                                               <a class="dropdown-item"
-                                                href="#">Vote</a>
+                                            <a class="dropdown-item" id="#" href="{% url 'vote_movie_night' movienight_id=movienight.id %}">Vote</a>
                                         </div>
+
                                     </div>
 
 
@@ -259,7 +259,7 @@
                         <div class="col-xl-8 col-lg-8 ">
                             <div id="accordion">
 
-                                {% for movie in movienight.MovieList.all %}
+                                {% for movie in movienight.MovieList.all|shuffle %}
 
                                 <div class="card">
                                     <div class="card-header" id="heading{{ forloop.counter0 }}">

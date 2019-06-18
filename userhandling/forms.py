@@ -3,15 +3,16 @@ import datetime
 from django.utils import timezone
 from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
-from .models import Profile, PasswordReset, MovieNightEvent
+from .models import Profile, PasswordReset, MovieNightEvent, VotePreference
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
 from django.core.mail import EmailMessage
 from .utils import VerificationHash
-from django.forms import ModelForm
+from django.forms import ModelForm, formset_factory
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django.utils.translation import gettext_lazy as _
+
 
 
 
@@ -201,4 +202,15 @@ class SneakymovienightIDForm(forms.Form):
     movienightid    = forms.CharField(required=False, widget = forms.HiddenInput())
 
 
-# forms.HiddenInput()
+
+# forms.HiddenInput
+
+class VotePreferenceForm(forms.Form):
+    movieID         = forms.IntegerField(widget = forms.HiddenInput())
+    movienightID    = forms.IntegerField(widget = forms.HiddenInput())
+    UserID          = forms.IntegerField(widget = forms.HiddenInput())
+    rating          = forms.IntegerField()
+
+
+
+

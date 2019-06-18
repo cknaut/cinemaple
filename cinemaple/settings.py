@@ -81,7 +81,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'tinymce',
     'rest_framework',
-    'rest_framework_datatables'
+    'rest_framework_datatables',
 ]
 
 MIDDLEWARE = [
