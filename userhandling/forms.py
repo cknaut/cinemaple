@@ -207,9 +207,7 @@ class SneakymovienightIDForm(forms.Form):
 
 class VotePreferenceForm(forms.Form):
     movieID         = forms.IntegerField(widget = forms.HiddenInput())
-    movienightID    = forms.IntegerField(widget = forms.HiddenInput())
-    UserID          = forms.IntegerField(widget = forms.HiddenInput())
-    rating          = forms.IntegerField()
+    rating          = forms.IntegerField(widget = forms.HiddenInput())
 
 
 

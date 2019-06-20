@@ -75,3 +75,7 @@ class VotePreference(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.PROTECT)
     preference  = models.IntegerField(blank=True) #0 to 5
 
+    def __str__(self):
+        return self.user.username + "/" + self.movienight.motto + "/" + self.movie.title + ": " + str(self.preference)
+
+

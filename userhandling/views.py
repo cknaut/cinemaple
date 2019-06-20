@@ -24,6 +24,7 @@ from rest_framework import viewsets
 from .serializers import MovieNightEventSerializer
 from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory
+import numpy as np
 # ....
 
 # Render Index Page, manage register
@@ -613,21 +614,19 @@ def vote_movie_night(request, movienight_id):
     # create formset
     prefFormList = formset_factory(VotePreferenceForm, extra=0)
 
-
-
     if request.method == 'POST':
 
-        formset = prefFormList(request.POST, initial=[
-        {'UserID'           :   request.user.id,
-        'movienightID'      :   movienight_id,
-        'movieID'           :   movie.id,
-        'name'              :   movie.title
-        } for movie in movielist
-        ])
+        formset = prefFormList(request.POST)
 
         if formset.is_valid():
             for form in formset:
                 movie = get_object_or_404(Movie, pk=form.cleaned_data['movieID'])
+
+                # In case someone tampers with the hidden input field.
+                if not movie in movielist:
+                    return HttpResponse("The movie you're voting for is not associated to the movienight you're voting for.")
+
+
                 vp = VotePreference(movienight=movienight, user=request.user, movie=movie)
                 vp.preference = form.cleaned_data['rating']
                 vp.save()
@@ -637,9 +636,6 @@ def vote_movie_night(request, movienight_id):
     else:
         random.shuffle(movielist)
 
-
-
-
         formset = prefFormList(initial=[
             {'UserID'           :   request.user.id,
             'movienightID'      :   movienight_id,
@@ -648,18 +644,16 @@ def vote_movie_night(request, movienight_id):
             } for movie in movielist
         ])
 
-
-
     movielist_formset = zip(movielist, formset)
 
-
-
-
+    looper = np.arange(len(movielist))
 
     context = {
         'movienight'        : movienight,
         'formset'           : formset,
-        'movielist_formset' : movielist_formset
+        'movielist_formset' : movielist_formset,
+        'looper'            : looper,
+        'num_movs'          : len(movielist)
     }
     return render(request, 'userhandling/movienight_vote.html', context)
 

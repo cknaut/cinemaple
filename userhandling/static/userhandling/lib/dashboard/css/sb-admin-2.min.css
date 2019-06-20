@@ -12454,6 +12454,10 @@ a:focus {
     position: relative;
 }
 
+.badge-starvote {
+    background-color: #a0a0a0
+}
+
 #accordion .panel-title a:before,
 #accordion .panel-title a.collapsed:before {
     content: "\f107";
