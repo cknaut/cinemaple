@@ -6,17 +6,6 @@
     font-size: 2em;
 }
 
-@font-face {
-    font-family: "raty";
-    font-style: normal;
-    font-weight: normal;
-    src: url("./fonts/raty.eot");
-    src: url("./fonts/raty.eot?#iefix") format("embedded-opentype");
-    src: url("./fonts/raty.svg#raty") format("svg");
-    src: url("./fonts/raty.ttf") format("truetype");
-    src: url("./fonts/raty.woff") format("woff");
-}
-
 .cancel-on-png,
 .cancel-off-png,
 .star-on-png,

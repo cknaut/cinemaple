@@ -8,6 +8,19 @@
 <script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
 
+<style>
+@font-face {
+    font-family: "raty";
+    font-style: normal;
+    font-weight: normal;
+    src: url("{% static 'userhandling/lib/starrating/fonts/fonts/raty.eot' %}");
+    src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot?#iefix' %}") format("embedded-opentype");
+    src: url("{% static 'userhandling/lib/starrating/fonts/raty.svg#raty' %}") format("svg");
+    src: url("{% static 'userhandling/lib/starrating/fonts/raty.ttf' %}") format("truetype");
+    src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
+}
+
+</style>
 
 
 {% endblock%}
@@ -501,7 +514,6 @@
                 hints:      ['Hell no', 'Meh', 'Dunno', 'Yes, Please', 'F*** Yeah'],
                 targetKeep: true,
                 number:      5,
-                path: "{% static 'userhandling/lib/starrating/images' %}",
 
             });
 
