@@ -15,15 +15,15 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     date = serializers.DateTimeField(format="%B %d, %Y, %I:%M %p")
     date_delta = serializers.SerializerMethodField()
-
-
     movies = serializers.SerializerMethodField()
     vote_enabled = serializers.SerializerMethodField()
-
-
+    status = serializers.SerializerMethodField()
 
     def get_movies(self, MovieNight):
         return ', '.join([str(movie.title) for movie in MovieNight.MovieList.all()])
+
+    def get_status(self, MovieNight):
+        return MovieNight.get_status()
 
     def get_vote_enabled(self, MovieNight):
         return MovieNight.voting_enabled()
@@ -45,13 +45,10 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
             timedelta =  now - date
             return date_boston_time.strftime(fmt) + " (" +  strfdelta(timedelta, "{days}d, {hours}hrs, {minutes}min ago") + ")"
 
-
-
-
     class Meta:
         model = MovieNightEvent
         fields = (
-            'id', 'motto', 'date', "movies", "isactive", "movies", "date_delta", "vote_enabled"
+            'id', 'motto', 'date', "movies", "isdraft", "movies", "date_delta", "vote_enabled", "status"
         )
 
 

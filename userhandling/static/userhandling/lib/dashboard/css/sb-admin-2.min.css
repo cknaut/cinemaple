@@ -59,14 +59,6 @@ body {
 
 /* thank you https://stackoverflow.com/questions/19337238/twitter-bootstrap-modal-pushes-html-content-to-the-left */
 
-.modal {
-    overflow-y: auto;
-}
-
-.modal-open {
-    overflow: auto;
-}
-
 article,
 aside,
 figcaption,
@@ -6358,13 +6350,25 @@ a.close.disabled {
 }
 
 .modal-open {
-    overflow: hidden
+    overflow: scroll
 }
+
+.modal {
+    overflow-y: auto;
+}
+
+
+/*
 
 .modal-open .modal {
     overflow-x: hidden;
-    overflow-y: auto
+    overflow-y: scroll
 }
+
+
+.modal-open {
+    overflow: scroll;
+}*/
 
 .modal {
     position: fixed;

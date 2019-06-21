@@ -284,11 +284,21 @@ def password_reset(request, reset_key):
 @login_required
 def curr_mov_nights(request):
 
-    movienight = MovieNightEvent.objects.order_by('-date')[0]
+    movienights = MovieNightEvent.objects.order_by('-date')
+
+    # Horribly inefficiently retrieve active movie night.
+    movienight_return = None
+    no_movie = True
+    for movienight in movienights:
+        if movienight.is_active():
+            movienight_return = movienight
+            no_movie = False
+
 
     context = {
-        'movienight' : movienight,
+        'movienight' : movienight_return,
         'navbar' : 'curr_mov_night',
+        'no_movie' : no_movie
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
@@ -518,6 +528,7 @@ def details_mov_nights(request, movienight_id):
     context = {
         'movienight' : movienight,
         'navbar' : "movie_night_manage",
+        'activeMovieExists' : False,
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
@@ -531,20 +542,39 @@ def delete_mov_night(request, movienight_id):
 @user_passes_test(lambda u: u.is_staff)
 def activate_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-    movienight.isactive = True
-    movienight.save()
+
+    # First check if there exists more than allowed movies:
+    activeMovieExists = False
+
+    for movienight_test in MovieNightEvent.objects.all():
+        if movienight_test.get_status() == "ACTIVE":
+            activeMovieExists = True
+            break
+
+    if activeMovieExists:
+        context = {
+            'movienight' : movienight,
+            'navbar' : "movie_night_manage",
+            'activeMovieExists' : activeMovieExists,
+        }
+        return render(request, 'userhandling/curr_mov_nights.html', context)
+    else:
+        movienight.isdraft = False
+        movienight.save()
 
     return redirect("man_mov_nights")
 
 @user_passes_test(lambda u: u.is_staff)
 def deactivate_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-    movienight.isactive = False
-    movienight.save()
 
-    # TODO: Send Notification
+    if movienight.get_status() == "PAST":
+        return HttpResponse("Cannot deactivate a movie night in the past.")
+    else:
+        movienight.isdeactivated = True
+        movienight.save()
+        return redirect("man_mov_nights")
 
-    return redirect("man_mov_nights")
 
 
 
@@ -552,8 +582,6 @@ def deactivate_movie_night(request, movienight_id):
 class MovieNightEventViewSet(viewsets.ModelViewSet):
     queryset = MovieNightEvent.objects.all().order_by('-date')
     serializer_class = MovieNightEventSerializer
-
-
 
 def get_instantciated_movie_add_form(MovieNight):
     # Ugly way to initialize movieform
@@ -566,8 +594,6 @@ def get_instantciated_movie_add_form(MovieNight):
     form2 = MovieAddForm(initial = initial_dict, prefix="form2") # An unbound for
 
     return form2, movielist
-
-
 
 @user_passes_test(lambda u: u.is_staff)
 def change_movie_night(request, movienight_id):
@@ -590,11 +616,7 @@ def change_movie_night(request, movienight_id):
 @login_required
 def reg_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-
     movienight.AttendenceList.add(request.user)
-
-
-
     return redirect(curr_mov_nights)
 
 
@@ -630,9 +652,6 @@ def vote_movie_night(request, movienight_id):
                 vp = VotePreference(movienight=movienight, user=request.user, movie=movie)
                 vp.preference = form.cleaned_data['rating']
                 vp.save()
-
-
-
     else:
         random.shuffle(movielist)
 

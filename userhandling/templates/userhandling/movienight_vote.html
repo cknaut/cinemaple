@@ -9,16 +9,16 @@
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
 
 <style>
-@font-face {
-    font-family: "raty";
-    font-style: normal;
-    font-weight: normal;
-    src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot' %}");
-    src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot?#iefix' %}") format("embedded-opentype");
-    src: url("{% static 'userhandling/lib/starrating/fonts/raty.svg#raty' %}") format("svg");
-    src: url("{% static 'userhandling/lib/starrating/fonts/raty.ttf' %}") format("truetype");
-    src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
-}
+    @font-face {
+        font-family: "raty";
+        font-style: normal;
+        font-weight: normal;
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot' %}");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot?#iefix' %}") format("embedded-opentype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.svg#raty' %}") format("svg");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.ttf' %}") format("truetype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
+    }
 </style>
 
 
@@ -151,440 +151,471 @@
                     <div class="row">
 
 
-<button class="btn btn-secondary" type="button" id="votetrigger">Vote</button>
-
-                        <div class="col-xl-12 col-lg-12 ">
-                            <div class="col-xl-12 col-lg-12 ">
-
-                                <div id="accordion">
-                                    <form id='voteform' method="post"> {% csrf_token %}
-                                        {{ formset.management_form }}
 
 
-                                        {% for ab in movielist_formset %}
+                        <div class="col-xl-4 col-lg-4 ">
 
-                                        <div class="card">
-                                            <div class="card-header" id="heading{{ forloop.counter0 }}">
+                            <div id="advisealert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                                Click on movie title to expand movie info. <i class="fas fa-arrow-down"></i>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 "></div>
+
+
+                        <div class="col-xl-4 col-lg-4 ">
+
+                            <div id="ratealert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                                Indicate your preference on a 5-star scale. <i class="fas fa-arrow-down"></i>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xl-12 col-lg-12 mb-4 ">
+
+                            <div id="accordion">
+                                <form id='voteform' method="post"> {% csrf_token %}
+                                    {{ formset.management_form }}
+
+
+                                    {% for ab in movielist_formset %}
+
+                                    <div class="card">
+                                        <div class="card-header" id="heading{{ forloop.counter0 }}">
 
 
 
-                                                <h5 class="mb-0">
-                                                    <div class="row">
-                                                        <div class="col-xl-9 col-lg-9 ">
-                                                            <button type='button' class="btn btn-link collapsed"
-                                                                data-toggle="collapse"
-                                                                data-target="#collapse{{ forloop.counter0 }}"
-                                                                aria-expanded="false"
-                                                                aria-controls="collapse{{ forloop.counter0 }}">
+                                            <h5 class="mb-0">
+                                                <div class="row">
+                                                    <div class="col-xl-9 col-lg-9 ">
+                                                        <button type='button' class="hintcollapser btn btn-link collapsed"
+                                                            data-toggle="collapse"
+                                                            data-target="#collapse{{ forloop.counter0 }}"
+                                                            aria-expanded="false"
+                                                            aria-controls="collapse{{ forloop.counter0 }}">
 
-                                                                {{ ab.0.title }} ({{ab.0.year}})
+                                                            {{ ab.0.title }} ({{ab.0.year}})
 
+                                                        </button>
+                                                    </div>
+
+
+                                                    <div class="col-xl-3 col-lg-3  float-right">
+                                                        {{ ab.1 }}
+
+
+                                                        <span class="badge badge-pill badge-starvote">
+                                                            <div id="star{{ forloop.counter0 }}"></div>
+                                                        </span>
+
+                                                    </div>
+
+
+                                                </div>
+                                            </h5>
+
+
+                                        </div>
+                                        <div id="collapse{{ forloop.counter0 }}" class="collapse"
+                                            aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion">
+
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-xl-3 col-lg-3 ">
+
+                                                        <div class="row justify-content-center mb-2">
+
+
+                                                            <img src="https://image.tmdb.org/t/p/w200{{ab.0.posterpath}}"
+                                                                class="img-fluid">
+
+
+                                                        </div>
+                                                        <div class="row"></div>
+                                                        <div class="row justify-content-center">
+                                                            <div id="trailerbutton"></div>
+                                                            {% if ab.0.trailerlink == "" %}
+                                                            <button type='button' class='btn btn-primary disabled'>No
+                                                                trailer available </button>
+                                                            {% else %}
+                                                            <button type='button' class='btn btn-primary video-btn'
+                                                                data-src="{{ab.0.trailerlink}}"> Watch Trailer
                                                             </button>
+                                                            {% endif %}
                                                         </div>
 
 
-                                                        <div class="col-xl-3 col-lg-3  float-right">
-                                                            {{ ab.1 }}
 
-
-                                                             <span class="badge badge-pill badge-starvote">
-                                                              <div id="star{{ forloop.counter0 }}"></div>
-                                                             </span>
-
-                                                        </div>
 
 
                                                     </div>
-                                                </h5>
 
 
-                                            </div>
-                                            <div id="collapse{{ forloop.counter0 }}" class="collapse"
-                                                aria-labelledby="heading{{ forloop.counter0 }}"
-                                                data-parent="#accordion">
+                                                    <div class="col-xl-9 col-lg-9 ">
+                                                        <!--Grid column-->
 
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-xl-3 col-lg-3 ">
-
-                                                            <div class="row justify-content-center mb-2">
-
-
-                                                                <img src="https://image.tmdb.org/t/p/w200{{ab.0.posterpath}}"
-                                                                    class="img-fluid">
-
-
-                                                            </div>
-                                                            <div class="row"></div>
-                                                            <div class="row justify-content-center">
-                                                                <div id="trailerbutton"></div>
-                                                                {% if ab.0.trailerlink == "" %}
-                                                                <button type='button'
-                                                                    class='btn btn-primary disabled'>No
-                                                                    trailer available </button>
-                                                                {% else %}
-                                                                <button type='button' class='btn btn-primary video-btn'
-                                                                    data-src="{{ab.0.trailerlink}}"> Watch Trailer
-                                                                </button>
-                                                                {% endif %}
+                                                        <div class="row">
+                                                            <div class="col-lg-2">
+                                                                <p class="font-weight-bold">Country:</p>
                                                             </div>
 
+                                                            <!--Grid column-->
 
+                                                            <!--Grid column-->
+                                                            <div class="col-lg-10">
+                                                                <p id="movieModalCountry"> {{ab.0.country}} </p>
+                                                            </div>
+                                                        </div>
 
+                                                        <div class="row">
+                                                            <div class="col-lg-2">
+                                                                <p class="font-weight-bold">Director:</p>
+                                                            </div>
 
+                                                            <!--Grid column-->
 
+                                                            <!--Grid column-->
+                                                            <div class="col-lg-10">
+                                                                <p id="movieModalDirector"> {{ab.0.director}} </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-lg-2">
+                                                                <p class="font-weight-bold">Producer:</p>
+                                                            </div>
+
+                                                            <!--Grid column-->
+
+                                                            <!--Grid column-->
+                                                            <div class="col-lg-10">
+                                                                <p id="movieModalProducer"> {{ab.0.producer}} </p>
+                                                            </div>
                                                         </div>
 
 
-                                                        <div class="col-xl-9 col-lg-9 ">
+
+                                                        <div class="row">
+                                                            <div class="col-lg-2">
+                                                                <p class="font-weight-bold">Actors:</p>
+                                                            </div>
+
                                                             <!--Grid column-->
 
-                                                            <div class="row">
-                                                                <div class="col-lg-2">
-                                                                    <p class="font-weight-bold">Country:</p>
-                                                                </div>
+                                                            <!--Grid column-->
+                                                            <div class="col-lg-10">
+                                                                <p id="movieModalActors"> {{ab.0.actors}} </p>
+                                                            </div>
+                                                        </div>
 
-                                                                <!--Grid column-->
-
-                                                                <!--Grid column-->
-                                                                <div class="col-lg-10">
-                                                                    <p id="movieModalCountry"> {{ab.0.country}} </p>
-                                                                </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-2">
+                                                                <p class="font-weight-bold">Runtime:</p>
                                                             </div>
 
-                                                            <div class="row">
-                                                                <div class="col-lg-2">
-                                                                    <p class="font-weight-bold">Director:</p>
-                                                                </div>
+                                                            <!--Grid column-->
 
-                                                                <!--Grid column-->
+                                                            <!--Grid column-->
+                                                            <div class="col-lg-10">
+                                                                <p id="movieModalRuntime"> {{ab.0.runtime}} </p>
+                                                            </div>
+                                                        </div>
 
-                                                                <!--Grid column-->
-                                                                <div class="col-lg-10">
-                                                                    <p id="movieModalDirector"> {{ab.0.director}} </p>
-                                                                </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-2">
+                                                                <p class="font-weight-bold">Plot:</p>
                                                             </div>
 
-                                                            <div class="row">
-                                                                <div class="col-lg-2">
-                                                                    <p class="font-weight-bold">Producer:</p>
-                                                                </div>
+                                                            <!--Grid column-->
 
-                                                                <!--Grid column-->
-
-                                                                <!--Grid column-->
-                                                                <div class="col-lg-10">
-                                                                    <p id="movieModalProducer"> {{ab.0.producer}} </p>
-                                                                </div>
-                                                            </div>
-
-
-
-                                                            <div class="row">
-                                                                <div class="col-lg-2">
-                                                                    <p class="font-weight-bold">Actors:</p>
-                                                                </div>
-
-                                                                <!--Grid column-->
-
-                                                                <!--Grid column-->
-                                                                <div class="col-lg-10">
-                                                                    <p id="movieModalActors"> {{ab.0.actors}} </p>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col-lg-2">
-                                                                    <p class="font-weight-bold">Runtime:</p>
-                                                                </div>
-
-                                                                <!--Grid column-->
-
-                                                                <!--Grid column-->
-                                                                <div class="col-lg-10">
-                                                                    <p id="movieModalRuntime"> {{ab.0.runtime}} </p>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col-lg-2">
-                                                                    <p class="font-weight-bold">Plot:</p>
-                                                                </div>
-
-                                                                <!--Grid column-->
-
-                                                                <!--Grid column-->
-                                                                <div class="col-lg-10">
-                                                                    <p id="movieModalPlot"> {{ab.0.plot}}</p>
-                                                                </div>
+                                                            <!--Grid column-->
+                                                            <div class="col-lg-10">
+                                                                <p id="movieModalPlot"> {{ab.0.plot}}</p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
-                                        {% endfor %}
+                                    </div>
+                                    {% endfor %}
                                 </div>
-                                </form>
-                            </div>
+                            </form>
+
                         </div>
+
+                         <div class="col-lg-12">
+    <button class="btn btn-primary" type="button" id="votetrigger">Vote</button>
+    </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- /.container-fluid -->
-    {% endblock %}
+
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
 
 
-    {% block modals %}
-    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Do you want to permanentely delete this movie night?</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
-                </div>
+{% block modals %}
+<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Do you want to permanentely delete this movie night?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
             </div>
         </div>
     </div>
+</div>
 
 
-    <div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Activating the movienight will send out invitation emails and opens the
-                    poll.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
-                </div>
+<div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Activating the movienight will send out invitation emails and opens the
+                poll.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Deactivating the movienight will send out notifications to all registered
-                    users.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" id="dectivatebutton" href="">Deactivate</a>
-                </div>
+<div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Deactivating the movienight will send out notifications to all registered
+                users.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" id="dectivatebutton" href="">Deactivate</a>
             </div>
         </div>
     </div>
+</div>
 
 
 <div class="modal fade" id="ConfirmVote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Once voted, your votes cannot be changed!
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <input class="btn btn-primary odom-submit" type="submit" value="Vote!">
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Once voted, your votes cannot be changed!
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <input class="btn btn-primary odom-submit" type="submit" value="Vote!">
 
-                </div>
             </div>
         </div>
     </div>
+</div>
 
 
-  <!--Modal: modalConfirmDelete-->
-  <div class="modal fade" id="notenoughvotes" tabindex="-1" role="modal-notify"
-    aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="notenoughvotes" tabindex="-1" role="modal-notify" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-      <!--Content-->
-      <div class="modal-content text-center">
-        <!--Header-->
-        <div class="modal-header d-flex justify-content-center">
-          <p class="heading">Please rate all {{num_movs}} movies.</p>
+        <!--Content-->
+        <div class="modal-content text-center">
+            <!--Header-->
+            <div class="modal-header d-flex justify-content-center">
+                <p class="heading">Please rate all {{num_movs}} movies.</p>
+            </div>
+
+            <!--Body-->
+            <div class="modal-body">
+                <i class="fa fa-times fa-4x mb-3 animated bounce" style="color:#FF3547"></i>
+
+
+            </div>
+
+            <!--Footer-->
+            <div class="modal-footer flex-center">
+                <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
+            </div>
         </div>
-
-        <!--Body-->
-        <div class="modal-body">
-          <i class="fa fa-times fa-4x mb-3 animated bounce" style="color:#FF3547"></i>
-
-
-        </div>
-
-        <!--Footer-->
-        <div class="modal-footer flex-center">
-          <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
-        </div>
-      </div>
-      <!--/.Content-->
+        <!--/.Content-->
     </div>
-  </div>
+</div>
 
 
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog youtube-modal-dialog" role="document">
-            <div class="modal-content">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog youtube-modal-dialog" role="document">
+        <div class="modal-content">
 
 
-                <div class="modal-body youtube-modal-body">
+            <div class="modal-body youtube-modal-body">
 
-                    <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <!-- 16:9 aspect ratio -->
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
-                            allow="autoplay"></iframe>
-                    </div>
+                <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <!-- 16:9 aspect ratio -->
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
+                        allow="autoplay"></iframe>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
-    {% endblock %}
+{% endblock %}
 
 
-    {% block js %}
+{% block js %}
 
 
-    <script>
-
-
-
+<script>
     var voted_movs = [];
 
-    function increment_cv(){
+    function increment_cv() {
         voted_movs.push(num);
         console.log(voted_movs)
     }
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-
-
-            {% for i in looper %}
-
-             $('#star{{ forloop.counter0 }}').raty({
-                 starType: 'i',
-                 target : "#id_form-{{ forloop.counter0 }}-rating",
-                targetType: 'number',
-                number : {{ forloop.counter0 }},
-                click:      function (){
-                            if (voted_movs.includes({{ forloop.counter0 }})){
-
-                            }
-                            else{
-                                voted_movs.push( {{ forloop.counter0 }});
-                            }
-                            console.log(voted_movs)
-                        },
-                hints:      ['Hell no', 'Meh', 'Dunno', 'Yes, Please', 'F*** Yeah'],
-                targetKeep: true,
-                number:      5,
-
-            });
-
-            {% endfor %}
-
-            // Gets the video src from the data-src on each button
-
-            $('#votetrigger').click(function () {
-                if (voted_movs.length < {{num_movs}}){
-                    $("#notenoughvotes").modal();
-                }
-                else{
-                     $("#ConfirmVote").modal();
-                }
-
+            $('.hintcollapser').click(function () {
+            $("#advisealert").hide()
             });
 
 
-            $(function () {
-                $('body').on('click', '.odom-submit', function (e) {
+
+        {%for i in looper %}
+
+        $('#star{{ forloop.counter0 }}').raty({
+            starType: 'i',
+            target: "#id_form-{{ forloop.counter0 }}-rating",
+            targetType: 'number',
+            number: {{ forloop.counter0 }},
+            click: function () {
+                if (voted_movs.includes({{ forloop.counter0 }})) {
+
+                } else {
+                    voted_movs.push({{ forloop.counter0 }});
+                }
+                $("#ratealert").hide()
+                console.log(voted_movs)
+            },
+            hints: ['Hell no', 'Meh', 'Dunno', 'Yes, Please', 'F*** Yeah'],
+            targetKeep: true,
+            number: 5,
+
+        });
+
+        {% endfor %}
+
+        // Gets the video src from the data-src on each button
+
+        $('#votetrigger').click(function () {
+            if (voted_movs.length < {{num_movs }}) {
+                $("#notenoughvotes").modal();
+            } else {
+                $("#ConfirmVote").modal();
+            }
+
+        });
+
+
+        $(function () {
+            $('body').on('click', '.odom-submit', function (e) {
                 $('#voteform').submit();
                 $('#ConfirmVote').modal('hide');
-                });
             });
-
-
-            var $videoSrc;
-            $('.video-btn').click(function () {
-                $videoSrc = $(this).data("src");
-                $videoSrc = $videoSrc +
-                    "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
-                console.log($videoSrc);
-                $("#video").attr('src', $videoSrc);
-                $("#myModal").modal();
-            });
-
-
-            $(function () {
-                $('body').on('click', '.odom-submit', function (e) {
-                    $(this.form).submit();
-                    $('#myModal').modal('hide');
-                });
-            });
-
-            $('#deactivate_confirm').click(function () {
-                $activateURL = $(this).attr("src");
-                $("#dectivatebutton").attr('href', $activateURL);
-                $("#disactivatemodal").modal();
-            });
-
-            $('#activate_confirm').click(function () {
-                $activateURL = $(this).attr("src");
-                $("#activatebutton").attr('href', $activateURL);
-                $("#activatemodal").modal();
-            });
-
-            $('#delete_confirm').click(function () {
-                $deleteURL = $(this).attr("src");
-                $("#deletbutton").attr('href', $deleteURL);
-                $("#deletemodal").modal();
-            });
-
-
-
-            // stop playing the youtube video when I close the modal
-            $('#myModal').on('hide.bs.modal', function (e) {
-                // a poor man's stop video
-                $("#video").attr('src', "");
-            })
-
-            // document ready
         });
-    </script>
 
-    {% endblock %}
+
+        var $videoSrc;
+        $('.video-btn').click(function () {
+            $videoSrc = $(this).data("src");
+            $videoSrc = $videoSrc +
+                "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
+            console.log($videoSrc);
+            $("#video").attr('src', $videoSrc);
+            $("#myModal").modal();
+        });
+
+
+        $(function () {
+            $('body').on('click', '.odom-submit', function (e) {
+                $(this.form).submit();
+                $('#myModal').modal('hide');
+            });
+        });
+
+        $('#deactivate_confirm').click(function () {
+            $activateURL = $(this).attr("src");
+            $("#dectivatebutton").attr('href', $activateURL);
+            $("#disactivatemodal").modal();
+        });
+
+        $('#activate_confirm').click(function () {
+            $activateURL = $(this).attr("src");
+            $("#activatebutton").attr('href', $activateURL);
+            $("#activatemodal").modal();
+        });
+
+        $('#delete_confirm').click(function () {
+            $deleteURL = $(this).attr("src");
+            $("#deletbutton").attr('href', $deleteURL);
+            $("#deletemodal").modal();
+        });
+
+
+
+        // stop playing the youtube video when I close the modal
+        $('#myModal').on('hide.bs.modal', function (e) {
+            // a poor man's stop video
+            $("#video").attr('src', "");
+        })
+
+        // document ready
+    });
+</script>
+
+{% endblock %}

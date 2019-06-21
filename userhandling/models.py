@@ -71,25 +71,54 @@ class MovieNightEvent(models.Model):
     motto = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
     date = models.DateTimeField('date published')
-    isactive = models.BooleanField(default=False)
+    isdraft = models.BooleanField(default=True)
+    isdeactivated = models.BooleanField(default=False)
     MovieList = models.ManyToManyField(Movie, blank=True)
     MaxAttendence = models.IntegerField(blank=False, default=25)
     AttendenceList = models.ManyToManyField(User, blank=True)
 
-    def __str__(self):
-        return self.motto
 
-    def voting_enabled(self):
+    def vote_until(self):
         voting_parameters = VotingParameters.objects.all()
         assert len(voting_parameters) == 1, "More than one voting parameters settings found."
         voting_delta = voting_parameters[0].vote_disable_before
-        return  (self.date - timezone.now()  >= voting_delta and self.isactive)
+        return self.date - voting_delta
+
+    def voting_enabled(self):
+        vote_until_val = self.vote_until()
+        return  (timezone.now()  <= vote_until_val and self.is_active())
+
+    def is_in_future(self):
+        return self.date  > timezone.now()
+
+    # if in future and not in draft: Active
+    def is_active(self):
+        return self.is_in_future() and not self.isdraft and not self.isdeactivated
+
+    # Flof of status:
+    # Creation --> DRAFT
+    # Activate by Button --> ACTIVE (Emails sent out)
+    # Date of movienight passed --> PAST
+    # Deactivated by button > DEAC
+    def get_status(self):
+        if self.isdraft:
+            return "DRAFT"
+        elif self.is_active():
+            return "ACTIVE"
+        elif self.isdeactivated:
+            return "DEAC"
+        elif  not self.is_in_future():
+            return "PAST"
+
+
+    def __str__(self):
+        return self.motto
 
 
 class VotePreference(models.Model):
-    movienight = models.ForeignKey(MovieNightEvent, on_delete=models.PROTECT)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    movie = models.ForeignKey(Movie, on_delete=models.PROTECT)
+    movienight = models.ForeignKey(MovieNightEvent, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     preference  = models.IntegerField(blank=True) #0 to 5
 
     def __str__(self):

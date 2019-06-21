@@ -68,7 +68,7 @@
   <li class="nav-item">
     <a class="nav-link" href={% url 'curr_mov_nights' %}>
       <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Currrent Movie Nights</span></a>
+      <span>Currrent Movie Night</span></a>
   </li>
 
   <!-- Divider -->
@@ -173,7 +173,7 @@
                   <th data-data="id">ID</th>
                   <th data-data="motto">Motto</th>
                   <th data-data="date_delta">Date</th>
-                  <th data-data="isactive">Status</th>
+                  <th data-data="status">Status</th>
                    <th data-data="vote_enabled">Voting enabled?</th>
                   <th>Link</th>
                 </tr>
@@ -211,12 +211,18 @@
         },
         {
           "targets": -3,
-          "data": "isactive",
+          "data": "status",
           "render": function (data, type, row, meta) {
-            if (data) {
+            if (data=="DRAFT") {
+              return "<span class='badge badge-secondary'>Draft</span>";
+            } else if (data=="ACTIVE") {
               return "<span class='badge badge-success'>Active</span>";
-            } else {
-              return "<span class='badge badge-danger'> Inactive</span>";
+            }
+            else if (data=="PAST") {
+              return "<span class='badge badge-primary'>In past</span>";
+            }
+            else if (data=="DEAC") {
+              return "<span class='badge badge-danger'>Cancelled</span>";
             }
           }
         },
