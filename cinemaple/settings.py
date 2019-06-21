@@ -200,7 +200,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 if environement == "DEBUG":
     SECURE_SSL_REDIRECT = False
 elif environement == "PRODUCTION":
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
 
 
 REST_FRAMEWORK = {
