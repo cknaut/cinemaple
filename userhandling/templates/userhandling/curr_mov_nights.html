@@ -197,7 +197,7 @@
                             {% endif %}
 
 
-                            {% if request.user.is_superuser %}
+                            {% if request.user.is_staff %}
 
                             <hr class="sidebar-divider">
 
@@ -208,6 +208,17 @@
                                     <span class='badge badge-success'>Active</span>
                                     {% else %}
                                     <span class='badge badge-danger'> Inactive</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-xl-3 col-lg-3 "> Voting enabled: </div>
+                                <div class="col-xl-9 col-lg-9 ">
+                                    {% if movienight.voting_enabled %}
+                                    <span class='badge badge-success'>Enabled</span>
+                                    {% else %}
+                                    <span class='badge badge-danger'> Disabled</span>
                                     {% endif %}
                                 </div>
                             </div>

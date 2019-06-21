@@ -2,7 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 import time
+
 
 
 # We create a one-to-one map from the built-in User model to a Profile model
@@ -56,6 +58,15 @@ class Movie(models.Model):
         return self.title
 
 
+class VotingParameters(models.Model):
+    vote_disable_before = models.DurationField() # how long before the movienight the vote should e closed
+    reminder_email_before = models.DurationField() # how long before the movienight the final reminder email sould be sent
+    initial_email_before = models.DurationField() # how long before the movienight the first invitation_email
+
+    def __str__(self):
+        return "Only instance of this model."
+
+
 class MovieNightEvent(models.Model):
     motto = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
@@ -68,6 +79,12 @@ class MovieNightEvent(models.Model):
     def __str__(self):
         return self.motto
 
+    def voting_enabled(self):
+        voting_parameters = VotingParameters.objects.all()
+        assert len(voting_parameters) == 1, "More than one voting parameters settings found."
+        voting_delta = voting_parameters[0].vote_disable_before
+        return  (self.date - timezone.now()  >= voting_delta and self.isactive)
+
 
 class VotePreference(models.Model):
     movienight = models.ForeignKey(MovieNightEvent, on_delete=models.PROTECT)
@@ -77,5 +94,8 @@ class VotePreference(models.Model):
 
     def __str__(self):
         return self.user.username + "/" + self.movienight.motto + "/" + self.movie.title + ": " + str(self.preference)
+
+
+
 
 

@@ -173,7 +173,8 @@
                   <th data-data="id">ID</th>
                   <th data-data="motto">Motto</th>
                   <th data-data="date_delta">Date</th>
-                  <th data-data="isactive">Is Active</th>
+                  <th data-data="isactive">Status</th>
+                   <th data-data="vote_enabled">Voting enabled?</th>
                   <th>Link</th>
                 </tr>
               </thead>
@@ -209,13 +210,24 @@
           }
         },
         {
-          "targets": -2,
+          "targets": -3,
           "data": "isactive",
           "render": function (data, type, row, meta) {
             if (data) {
               return "<span class='badge badge-success'>Active</span>";
             } else {
               return "<span class='badge badge-danger'> Inactive</span>";
+            }
+          }
+        },
+        {
+          "targets": -2,
+          "data": "vote_enabled",
+          "render": function (data, type, row, meta) {
+            if (data) {
+              return "<span class='badge badge-success'>Enabled</span>";
+            } else {
+              return "<span class='badge badge-danger'> Disabled</span>";
             }
           }
         }

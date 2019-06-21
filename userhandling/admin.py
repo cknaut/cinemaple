@@ -1,6 +1,7 @@
 from django.contrib import admin
+from singlemodeladmin import SingleModelAdmin
 
-from .models import MovieNightEvent, Movie, Profile, PasswordReset, VotePreference
+from .models import MovieNightEvent, Movie, Profile, PasswordReset, VotePreference, VotingParameters
 
 # Register your models here.
 #admin.site.register(MovieNightEvent)
@@ -13,7 +14,6 @@ class PasswordResetAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', )
 
 
-
 @admin.register(MovieNightEvent)
 class MovieNightEventAdmin(admin.ModelAdmin):
      readonly_fields = ('id',)
@@ -21,3 +21,6 @@ class MovieNightEventAdmin(admin.ModelAdmin):
 @admin.register(VotePreference)
 class VotePreferenceAdmin(admin.ModelAdmin):
      readonly_fields = ('id',)
+
+
+admin.site.register(VotingParameters, SingleModelAdmin)
