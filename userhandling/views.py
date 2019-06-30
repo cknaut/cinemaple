@@ -12,7 +12,7 @@ import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
-    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm
+    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, TopingMovienightForm
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference
 import tmdbsimple as tmdb
 from django.http import JsonResponse
@@ -612,8 +612,16 @@ def change_movie_night(request, movienight_id):
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
 
-def rate_movie_night(request, movienight_id):
+
+def topping_add_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    form = TopingMovienightForm(instance = movienight)
+    context = {
+        'form' : form
+     }
+    return render(request, 'userhandling/topping_add.html', context)
+
+def rate_movie_night(request, movienight):
     movielist = list(movienight.MovieList.all())
 
     # create formset
@@ -662,13 +670,14 @@ def rate_movie_night(request, movienight_id):
 
 @login_required
 def reg_movie_night(request, movienight_id):
+
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
     if request.user.profile.has_voted(movienight):
         return HttpResponse("You've already rated this movienight.")
     else:
         movienight.AttendenceList.add(request.user)
-        return rate_movie_night(request, movienight_id)
+        return rate_movie_night(request, movienight)
 
 @login_required
 def ureg_movie_night(request, movienight_id):

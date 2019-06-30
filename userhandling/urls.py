@@ -32,6 +32,7 @@ urlpatterns = [
     path('reg_movie_night/<str:movienight_id>', views.reg_movie_night,  name='reg_movie_night'),
     path('ureg_movie_night/<str:movienight_id>', views.ureg_movie_night,  name='ureg_movie_night'),
     re_path('^api/', include(router.urls)),
+    path('topping_add_movie_night/<str:movienight_id>', views.topping_add_movie_night,  name='topping_add_movie_night')
     #path('vote_movie_night/<str:movienight_id>', views.vote_movie_night,  name='vote_movie_night'),
 
 ]
