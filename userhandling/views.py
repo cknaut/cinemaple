@@ -612,24 +612,7 @@ def change_movie_night(request, movienight_id):
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
 
-
-@login_required
-def reg_movie_night(request, movienight_id):
-    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-    movienight.AttendenceList.add(request.user)
-    return redirect(curr_mov_nights)
-
-
-@login_required
-def ureg_movie_night(request, movienight_id):
-    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-
-    movienight.AttendenceList.remove(request.user)
-
-    return redirect(curr_mov_nights)
-
-@login_required
-def vote_movie_night(request, movienight_id):
+def rate_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
     movielist = list(movienight.MovieList.all())
 
@@ -675,6 +658,23 @@ def vote_movie_night(request, movienight_id):
         'num_movs'          : len(movielist)
     }
     return render(request, 'userhandling/movienight_vote.html', context)
+
+
+@login_required
+def reg_movie_night(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    #movienight.AttendenceList.add(request.user)
+    return rate_movie_night(request, movienight_id)
+
+@login_required
+def ureg_movie_night(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+    movienight.AttendenceList.remove(request.user)
+
+    return redirect(curr_mov_nights)
+
+
 
 
 
