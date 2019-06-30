@@ -663,8 +663,12 @@ def rate_movie_night(request, movienight_id):
 @login_required
 def reg_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-    #movienight.AttendenceList.add(request.user)
-    return rate_movie_night(request, movienight_id)
+
+    if request.user.profile.has_voted(movienight):
+        return HttpResponse("You've already rated this movienight.")
+    else:
+        movienight.AttendenceList.add(request.user)
+        return rate_movie_night(request, movienight_id)
 
 @login_required
 def ureg_movie_night(request, movienight_id):

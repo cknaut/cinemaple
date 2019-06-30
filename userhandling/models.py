@@ -19,6 +19,16 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def has_voted(self, MovieNightEvent):
+        votepreference_list = VotePreference.objects.filter(movienight = MovieNightEvent)
+
+        # loop through preferences and checks if user has voted.
+        for preference in votepreference_list:
+            if preference.user == self.user:
+                return True
+            else:
+                return False
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -124,6 +134,13 @@ class VotePreference(models.Model):
     def __str__(self):
         return self.user.username + "/" + self.movienight.motto + "/" + self.movie.title + ": " + str(self.preference)
 
+class Toping(models.Model):
+    toping = models.CharField(max_length=300)
+    movienight = models.ForeignKey(MovieNightEvent, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.toping
 
 
 
