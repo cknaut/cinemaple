@@ -648,7 +648,7 @@ def rate_movie_night(request, movienight):
 
         formset = prefFormList(initial=[
             {'UserID'           :   request.user.id,
-            'movienightID'      :   movienight_id,
+            'movienightID'      :   movienight.id,
             'movieID'           :   movie.id,
             'name'              :   movie.title
             } for movie in movielist
