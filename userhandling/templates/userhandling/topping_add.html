@@ -133,11 +133,18 @@
                 <!-- Card Body -->
                 <div class="card-body">
 
-<form action="/topping_add_movie_night/" method="post">
+<form action="{{ request.path }}" method="post">
     {% csrf_token %}
     {{ form }}
+    <ul class="listnobullets">
+    <li><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#AddToppingModal">Add Topping</button>
+    </li>
+</ul>
+
+    {{ form_brought_along }}
     <input type="submit" value="Submit">
 </form>
+
 
 
 
@@ -152,7 +159,49 @@
 
 
 
+
+{% block modals %}
+
+<div class="modal fade" id="AddToppingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Topping</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="AddToppingForm" action="{{ request.path }}" method="post">
+                {% csrf_token %}
+                {{ toppingaddform }}
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <input class="btn btn-primary odom-submit" type="submit" value="Add Topping">
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
 {% block js %}
+<script>
+
+        $(function () {
+            $('body').on('click', '.odom-submit', function (e) {
+                $('#AddToppingForm').submit();
+                $('#AddToppingModal').modal('hide');
+            });
+        });
+
+</script>
 
 
 {% endblock %}

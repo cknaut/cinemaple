@@ -6314,6 +6314,10 @@ a.close.disabled {
     border-radius: .25rem
 }
 
+.listnobullets {
+    list-style-type: none;
+}
+
 .toast:not(:last-child) {
     margin-bottom: .75rem
 }

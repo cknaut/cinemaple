@@ -219,5 +219,26 @@ class ToppingForm(forms.Form):
         super(ToppingForm, self).__init__(*args, **kwargs)
         self.fields['toppings'] = forms.MultipleChoiceField(
             choices=[(o.id, str(o.topping)) for o in available_topings],
-            widget=forms.CheckboxSelectMultiple
+            widget=(forms.CheckboxSelectMultiple(attrs={"class" : "listnobullets"})),
+            label='Select topping to bring:'
         )
+
+class AlreadyBroughtToppingForm(forms.Form):
+    def __init__(self, movienight, *args, **kwargs):
+
+        # retrieve available topping
+        un_available_toppings, _ = movienight.get_topping_list()
+
+        super(AlreadyBroughtToppingForm, self).__init__(*args, **kwargs)
+        self.fields['toppings'] = forms.MultipleChoiceField(
+            choices=[(o.id, str(o.topping)) for o in un_available_toppings],
+            widget=(forms.CheckboxSelectMultiple(attrs={"checked":"", "class" : "listnobullets"},)),
+            label='Toppings already brought along:',
+            disabled = True,
+        )
+
+
+class ToppingAddForm(ModelForm):
+    class Meta:
+        model = Topping
+        fields = ['topping']

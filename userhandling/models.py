@@ -90,7 +90,7 @@ class MovieNightEvent(models.Model):
     def get_topping_list(self):
         already_chosen_topings = MovienightTopping.objects.filter(movienight = self)
 
-        topings_to_exclude = [o.topings for o in already_chosen_topings]
+        topings_to_exclude = [o.topping for o in already_chosen_topings]
 
         available_topings = Topping.objects.exclude(topping__in=topings_to_exclude)
         return already_chosen_topings, available_topings

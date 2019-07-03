@@ -12,8 +12,8 @@ import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
-    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm
-from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference
+    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm
+from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping
 import tmdbsimple as tmdb
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -614,10 +614,41 @@ def change_movie_night(request, movienight_id):
 
 
 def topping_add_movie_night(request, movienight_id):
+
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-    form = ToppingForm(movienight)
+
+    if request.method == 'POST':
+
+        form = ToppingForm(movienight, request.POST)
+        form_brought_along = AlreadyBroughtToppingForm(movienight)
+        toppingaddform = ToppingAddForm(request.POST)
+
+        if form.is_valid():
+
+            for id in form.cleaned_data['toppings']:
+                topping = Topping.objects.get(pk=id)
+                mt = MovienightTopping(topping=topping, user=request.user, movienight=movienight)
+                mt.save()
+
+        elif toppingaddform.is_valid():
+
+            t = Topping()
+            instanciated_form = ToppingAddForm(request.POST, instance=t)
+            instanciated_form.save()
+
+            # Update Add Form
+            form = ToppingForm(movienight)
+            form_brought_along = AlreadyBroughtToppingForm(movienight)
+            toppingaddform = ToppingAddForm()
+    else:
+        form = ToppingForm(movienight)
+        form_brought_along = AlreadyBroughtToppingForm(movienight)
+        toppingaddform = ToppingAddForm()
+
     context = {
-        'form' : form
+        'form' : form,
+        'form_brought_along' : form_brought_along,
+        'toppingaddform'     : toppingaddform
      }
     return render(request, 'userhandling/topping_add.html', context)
 
@@ -643,6 +674,10 @@ def rate_movie_night(request, movienight):
                 vp = VotePreference(movienight=movienight, user=request.user, movie=movie)
                 vp.preference = form.cleaned_data['rating']
                 vp.save()
+
+                # Proceed to Toppings Add
+                return redirect(topping_add_movie_night, movienight_id=movienight.id)
+
     else:
         random.shuffle(movielist)
 
