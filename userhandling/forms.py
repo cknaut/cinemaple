@@ -3,7 +3,7 @@ import datetime
 from django.utils import timezone
 from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
-from .models import Profile, PasswordReset, MovieNightEvent, VotePreference, Toping, MovienightTopping
+from .models import Profile, PasswordReset, MovieNightEvent, VotePreference, Topping
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
@@ -209,14 +209,15 @@ class VotePreferenceForm(forms.Form):
     movieID         = forms.IntegerField(widget = forms.HiddenInput())
     rating          = forms.IntegerField(widget = forms.HiddenInput())
 
-class TopingMovienightForm(ModelForm):
-    class Meta:
-        model = MovienightTopping
-        fields = ["toping"]
 
-    toppings = forms.ModelMultipleChoiceField(queryset=Toping.objects.all())
+class ToppingForm(forms.Form):
+    def __init__(self, movienight, *args, **kwargs):
 
+        # retrieve available topping
+        _, available_topings = movienight.get_topping_list()
 
-
-
-
+        super(ToppingForm, self).__init__(*args, **kwargs)
+        self.fields['toppings'] = forms.MultipleChoiceField(
+            choices=[(o.id, str(o.topping)) for o in available_topings],
+            widget=forms.CheckboxSelectMultiple
+        )

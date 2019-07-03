@@ -12,7 +12,7 @@ import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
-    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, TopingMovienightForm
+    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference
 import tmdbsimple as tmdb
 from django.http import JsonResponse
@@ -615,7 +615,7 @@ def change_movie_night(request, movienight_id):
 
 def topping_add_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-    form = TopingMovienightForm(instance = movienight)
+    form = ToppingForm(movienight)
     context = {
         'form' : form
      }

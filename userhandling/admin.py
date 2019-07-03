@@ -1,13 +1,18 @@
 from django.contrib import admin
 from singlemodeladmin import SingleModelAdmin
+from django.contrib.auth.models import User
 
-from .models import MovieNightEvent, Movie, Profile, PasswordReset, VotePreference, VotingParameters, Toping
+
+from .models import MovieNightEvent, Movie, Profile, PasswordReset, VotePreference, \
+     VotingParameters, Topping
 
 # Register your models here.
 #admin.site.register(MovieNightEvent)
 admin.site.register(Movie)
 admin.site.register(Profile)
 #admin.site.register(PasswordReset)
+
+
 
 @admin.register(PasswordReset)
 class PasswordResetAdmin(admin.ModelAdmin):
@@ -22,9 +27,12 @@ class MovieNightEventAdmin(admin.ModelAdmin):
 class VotePreferenceAdmin(admin.ModelAdmin):
      readonly_fields = ('id',)
 
-@admin.register(Toping)
-class TopingPreferenceAdmin(admin.ModelAdmin):
+@admin.register(Topping)
+class TopingAdmin(admin.ModelAdmin):
      readonly_fields = ('id',)
 
+# @admin.register(MovienightTopping)
+# class MovienightToppingAdmin(admin.ModelAdmin):
+#      readonly_fields = ('id',)
 
 admin.site.register(VotingParameters, SingleModelAdmin)

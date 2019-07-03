@@ -87,6 +87,13 @@ class MovieNightEvent(models.Model):
     MaxAttendence = models.IntegerField(blank=False, default=25)
     AttendenceList = models.ManyToManyField(User, blank=True)
 
+    def get_topping_list(self):
+        already_chosen_topings = MovienightTopping.objects.filter(movienight = self)
+
+        topings_to_exclude = [o.topings for o in already_chosen_topings]
+
+        available_topings = Topping.objects.exclude(topping__in=topings_to_exclude)
+        return already_chosen_topings, available_topings
 
     def vote_until(self):
         voting_parameters = VotingParameters.objects.all()
@@ -105,7 +112,7 @@ class MovieNightEvent(models.Model):
     def is_active(self):
         return self.is_in_future() and not self.isdraft and not self.isdeactivated
 
-    # Flof of status:
+    # Flow of status:
     # Creation --> DRAFT
     # Activate by Button --> ACTIVE (Emails sent out)
     # Date of movienight passed --> PAST
@@ -120,7 +127,6 @@ class MovieNightEvent(models.Model):
         elif  not self.is_in_future():
             return "PAST"
 
-
     def __str__(self):
         return self.motto
 
@@ -134,15 +140,17 @@ class VotePreference(models.Model):
     def __str__(self):
         return self.user.username + "/" + self.movienight.motto + "/" + self.movie.title + ": " + str(self.preference)
 
-class Toping(models.Model):
-    toping = models.CharField(max_length=300)
+class Topping(models.Model):
+    topping = models.CharField(max_length=300)
 
     def __str__(self):
-        return self.toping
+        return self.topping
 
 class MovienightTopping(models.Model):
+    topping = models.ForeignKey(Topping, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     movienight = models.ForeignKey(MovieNightEvent, on_delete=models.CASCADE)
-    toping = models.ForeignKey(Toping, on_delete=models.CASCADE)
+
 
 
 
