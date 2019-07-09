@@ -242,3 +242,6 @@ class ToppingAddForm(ModelForm):
     class Meta:
         model = Topping
         fields = ['topping']
+        widgets = {
+            'topping' : forms.TextInput(attrs={'placeholder': '','class':'form-control input-perso'})
+        }
