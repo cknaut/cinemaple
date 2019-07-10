@@ -289,18 +289,14 @@ def curr_mov_nights(request):
     # Horribly inefficiently retrieve active movie night.
     movienight_return = None
     no_movie = True
+    movienight_id = None
     for movienight in movienights:
         if movienight.is_active():
             movienight_return = movienight
             no_movie = False
+            movienight_id = movienight_return.id
 
-
-    context = {
-        'movienight' : movienight_return,
-        'navbar' : 'curr_mov_night',
-        'no_movie' : no_movie
-    }
-    return render(request, 'userhandling/curr_mov_nights.html', context)
+    return details_mov_nights(request, movienight_id, no_movie)
 
 @login_required
 def search_movie(request):
@@ -523,31 +519,42 @@ def man_mov_nights(request):
     return render(request, 'userhandling/admin_movie_night_manage.html')
 
 @login_required
-def details_mov_nights(request, movienight_id):
-    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-    movielist = list(movienight.MovieList.all())
-    votelist = VotePreference.objects.filter(movienight = movienight, user = request.user)
+def details_mov_nights(request, movienight_id, no_movie=False):
 
-    ordered_votelist = []
+    if not no_movie:
+        movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+        movielist = list(movienight.MovieList.all())
+        votelist = VotePreference.objects.filter(movienight = movienight, user = request.user)
+        user_has_voted = request.user.profile.has_voted(movienight)
 
-    for movie in movielist:
-        ratingobject = VotePreference.objects.filter(movienight=movienight, user=request.user, movie=movie)
-
-        if len(ratingobject) > 1:
-            return HttpResponse("More than one vote for movie {} found.".format(movie.title))
-        elif len(ratingobject) == 0:
-            return HttpResponse("No vote found for movie {}.".format(movie.title))
+        # if user has voted, show rating
 
 
-        ordered_votelist.append(ratingobject[0].rating)
+        ordered_votelist = []
+
+        if user_has_voted:
+            for movie in movielist:
+                ratingobject = VotePreference.objects.filter(movienight=movienight, user=request.user, movie=movie)
+
+                if len(ratingobject) > 1:
+                    return HttpResponse("More than one vote for movie {} found.".format(movie.title))
+                elif len(ratingobject) == 0:
+                    return HttpResponse("No vote found for movie {}.".format(movie.title))
+
+
+                ordered_votelist.append(ratingobject[0].preference)
+    else:
+        movienight = None
+        user_has_voted = None
+        ordered_votelist = None
 
     context = {
         'movienight' : movienight,
         'navbar' : "movie_night_manage",
         'activeMovieExists' : False,
-        'user_has_voted'    : request.user.profile.has_voted(movienight),
-        'looper'            : np.arange(len(movielist)),
-        'ordered_votelist'  : ordered_votelist
+        'user_has_voted'    : user_has_voted,
+        'ordered_votelist'  : ordered_votelist,
+        'no_movie' : no_movie
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
