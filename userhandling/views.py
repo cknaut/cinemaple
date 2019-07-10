@@ -694,8 +694,8 @@ def rate_movie_night(request, movienight):
                 vp.preference = form.cleaned_data['rating']
                 vp.save()
 
-                # Proceed to Toppings Add
-                return redirect(topping_add_movie_night, movienight_id=movienight.id)
+            # Proceed to Toppings Add
+            return redirect(topping_add_movie_night, movienight_id=movienight.id)
 
     else:
         random.shuffle(movielist)
