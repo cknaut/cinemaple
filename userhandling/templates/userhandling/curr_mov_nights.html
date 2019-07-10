@@ -5,7 +5,21 @@
 
 {% block css_imports %}
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
+<script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
 
+<style>
+    @font-face {
+        font-family: "raty";
+        font-style: normal;
+        font-weight: normal;
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot' %}");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot?#iefix' %}") format("embedded-opentype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.svg#raty' %}") format("svg");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.ttf' %}") format("truetype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
+    }
+</style>
 
 
 {% endblock%}
@@ -299,6 +313,10 @@
                                                 data-target="#collapse{{ forloop.counter0 }}" aria-expanded="true"
                                                 aria-controls="collapse{{ forloop.counter0 }}">
                                                 {{ movie.title }} ({{movie.year}})
+                                                <span class="badge badge-pill badge-starvote">
+                                                        <div id="star{{ forloop.counter0 }}"></div>
+                                                    </span>
+
                                                 {% else %}
                                                 <button class="btn btn-link collapsed" data-toggle="collapse"
                                                     data-target="#collapse{{ forloop.counter0 }}" aria-expanded="false"
@@ -567,6 +585,26 @@
 
     <script>
         $(document).ready(function () {
+
+
+        {% if user_has_voted %}
+            {%for i in looper %}
+
+            $('#star{{ forloop.counter0 }}').raty({
+                starType: 'i',
+                targetType: 'number',
+                readOnly:   true,
+                score: 1,
+                number: {{ forloop.counter0 }},
+                hints: ['Hell no', 'Meh', 'Dunno', 'Yes, Please', 'F*** Yeah'],
+                number: 5,
+
+            });
+
+            {% endfor %}
+        {% endif %}
+
+
 
             // Gets the video src from the data-src on each button
 

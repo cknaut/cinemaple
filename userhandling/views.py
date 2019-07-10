@@ -525,10 +525,29 @@ def man_mov_nights(request):
 @login_required
 def details_mov_nights(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    movielist = list(movienight.MovieList.all())
+    votelist = VotePreference.objects.filter(movienight = movienight, user = request.user)
+
+    ordered_votelist = []
+
+    for movie in movielist:
+        ratingobject = VotePreference.objects.filter(movienight=movienight, user=request.user, movie=movie)
+
+        if len(ratingobject) > 1:
+            return HttpResponse("More than one vote for movie {} found.".format(movie.title))
+        elif len(ratingobject) == 0:
+            return HttpResponse("No vote found for movie {}.".format(movie.title))
+
+
+        ordered_votelist.append(ratingobject[0].rating)
+
     context = {
         'movienight' : movienight,
         'navbar' : "movie_night_manage",
         'activeMovieExists' : False,
+        'user_has_voted'    : request.user.profile.has_voted(movienight),
+        'looper'            : np.arange(len(movielist)),
+        'ordered_votelist'  : ordered_votelist
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
