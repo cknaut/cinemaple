@@ -554,7 +554,8 @@ def details_mov_nights(request, movienight_id, no_movie=False):
         'activeMovieExists' : False,
         'user_has_voted'    : user_has_voted,
         'ordered_votelist'  : ordered_votelist,
-        'no_movie' : no_movie
+        'no_movie'          : no_movie,
+        'navbar'            : 'curr_mov_night'
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
