@@ -531,6 +531,7 @@ def details_mov_nights(request, movienight_id, no_movie=False):
 
 
         ordered_votelist = []
+        toppings = None
 
         if user_has_voted:
             for movie in movielist:
@@ -541,12 +542,14 @@ def details_mov_nights(request, movienight_id, no_movie=False):
                 elif len(ratingobject) == 0:
                     return HttpResponse("No vote found for movie {}.".format(movie.title))
 
-
                 ordered_votelist.append(ratingobject[0].preference)
+
+            toppings = movienight.get_user_topping_list(request.user)
     else:
         movienight = None
         user_has_voted = None
         ordered_votelist = None
+        toppings = None
 
     context = {
         'movienight' : movienight,
@@ -555,7 +558,8 @@ def details_mov_nights(request, movienight_id, no_movie=False):
         'user_has_voted'    : user_has_voted,
         'ordered_votelist'  : ordered_votelist,
         'no_movie'          : no_movie,
-        'navbar'            : 'curr_mov_night'
+        'navbar'            : 'curr_mov_night',
+        'toppings'          : toppings
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
@@ -657,6 +661,8 @@ def topping_add_movie_night(request, movienight_id):
                 mt = MovienightTopping(topping=topping, user=request.user, movienight=movienight)
                 mt.save()
 
+            return redirect(curr_mov_nights)
+
         elif toppingaddform.is_valid():
 
             t = Topping()
@@ -667,6 +673,7 @@ def topping_add_movie_night(request, movienight_id):
             form = ToppingForm(movienight)
             form_brought_along = AlreadyBroughtToppingForm(movienight)
             toppingaddform = ToppingAddForm()
+
     else:
         form = ToppingForm(movienight)
         form_brought_along = AlreadyBroughtToppingForm(movienight)
@@ -745,7 +752,9 @@ def reg_movie_night(request, movienight_id):
 def ureg_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
-    movienight.AttendenceList.remove(request.user)
+    # remove user from attendence list, delete votes, delete toppings
+    movienight.unregister_user(request.user)
+
 
     return redirect(curr_mov_nights)
 

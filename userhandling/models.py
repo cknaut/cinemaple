@@ -127,6 +127,21 @@ class MovieNightEvent(models.Model):
         elif  not self.is_in_future():
             return "PAST"
 
+    def unregister_user(self, user):
+
+        # delete user from attendence list
+        self.AttendenceList.remove(user)
+
+        # delete votes
+        self.votepreference_set.filter(user=user).delete()
+
+        # delete toppings
+        self.movienighttopping_set.filter(user=user).delete()
+
+    def get_user_topping_list(self, user):
+        return ', '.join([str(Topping.topping) for Topping in self.movienighttopping_set.filter(user=user)])
+
+
     def __str__(self):
         return self.motto
 
@@ -150,6 +165,10 @@ class MovienightTopping(models.Model):
     topping = models.ForeignKey(Topping, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movienight = models.ForeignKey(MovieNightEvent, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username + "/" + self.movienight.motto + "/" + self.topping.topping
+
 
 
 
