@@ -13,7 +13,7 @@ import random
 from .utils import Mailchimp, VerificationHash
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
     PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm
-from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping
+from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence
 import tmdbsimple as tmdb
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -524,18 +524,20 @@ def details_mov_nights(request, movienight_id, no_movie=False):
     if not no_movie:
         movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
         movielist = list(movienight.MovieList.all())
-        votelist = VotePreference.objects.filter(movienight = movienight, user = request.user)
-        user_has_voted = request.user.profile.has_voted(movienight)
 
-        # if user has voted, show rating
+        user_has_voted = movienight.user_has_registered(request.user)
+
+        # if user has registered, show rating and toppings
 
 
         ordered_votelist = []
         toppings = None
 
         if user_has_voted:
+
+            votelist, toppings = movienight.get_user_info(request.user)
             for movie in movielist:
-                ratingobject = VotePreference.objects.filter(movienight=movienight, user=request.user, movie=movie)
+                ratingobject = votelist.filter(movie=movie)
 
                 if len(ratingobject) > 1:
                     return HttpResponse("More than one vote for movie {} found.".format(movie.title))
@@ -606,10 +608,6 @@ def deactivate_movie_night(request, movienight_id):
         movienight.save()
         return redirect("man_mov_nights")
 
-
-
-
-
 class MovieNightEventViewSet(viewsets.ModelViewSet):
     queryset = MovieNightEvent.objects.all().order_by('-date')
     serializer_class = MovieNightEventSerializer
@@ -644,7 +642,7 @@ def change_movie_night(request, movienight_id):
     return render(request, 'userhandling/admin_movie_add.html', context)
 
 
-def topping_add_movie_night(request, movienight_id):
+def topping_add_movie_night(request, movienight_id, user_attendence):
 
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
@@ -657,9 +655,14 @@ def topping_add_movie_night(request, movienight_id):
         if form.is_valid():
 
             for id in form.cleaned_data['toppings']:
-                topping = Topping.objects.get(pk=id)
-                mt = MovienightTopping(topping=topping, user=request.user, movienight=movienight)
+                topping = get_object_or_404(Topping, pk=id)
+                mt = MovienightTopping(topping=topping, user_attendence=user_attendence)
                 mt.save()
+
+            # active movinight
+
+            user_attendence.registration_complete = True
+            user_attendence.save()
 
             return redirect(curr_mov_nights)
 
@@ -686,7 +689,7 @@ def topping_add_movie_night(request, movienight_id):
      }
     return render(request, 'userhandling/topping_add.html', context)
 
-def rate_movie_night(request, movienight):
+def rate_movie_night(request, movienight, user_attendence):
     movielist = list(movienight.MovieList.all())
 
     # create formset
@@ -705,12 +708,12 @@ def rate_movie_night(request, movienight):
                     return HttpResponse("The movie you're voting for is not associated to the movienight you're voting for.")
 
 
-                vp = VotePreference(movienight=movienight, user=request.user, movie=movie)
+                vp = VotePreference(user_attendence=user_attendence, movie=movie)
                 vp.preference = form.cleaned_data['rating']
                 vp.save()
 
             # Proceed to Toppings Add
-            return redirect(topping_add_movie_night, movienight_id=movienight.id)
+            return redirect(topping_add_movie_night(request, movienight_id=movienight.id, user_attendence=user_attendence))
 
     else:
         random.shuffle(movielist)
@@ -742,11 +745,12 @@ def reg_movie_night(request, movienight_id):
 
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
-    if request.user.profile.has_voted(movienight):
-        return HttpResponse("You've already rated this movienight.")
+    if movienight.user_has_registered(request.user):
+        return HttpResponse("You've already registered for this movienight.")
     else:
-        movienight.AttendenceList.add(request.user)
-        return rate_movie_night(request, movienight)
+        ua = UserAttendence(movienight=movienight, user=request.user)
+        ua.save()
+        return rate_movie_night(request, movienight, ua)
 
 @login_required
 def ureg_movie_night(request, movienight_id):
@@ -755,9 +759,7 @@ def ureg_movie_night(request, movienight_id):
     # remove user from attendence list, delete votes, delete toppings
     movienight.unregister_user(request.user)
 
-
     return redirect(curr_mov_nights)
-
 
 
 

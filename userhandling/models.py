@@ -19,15 +19,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-    def has_voted(self, MovieNightEvent):
-        votepreference_list = VotePreference.objects.filter(movienight = MovieNightEvent)
-
-        # loop through preferences and checks if user has voted.
-        for preference in votepreference_list:
-            if preference.user == self.user:
-                return True
-            else:
-                return False
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -85,12 +76,16 @@ class MovieNightEvent(models.Model):
     isdeactivated = models.BooleanField(default=False)
     MovieList = models.ManyToManyField(Movie, blank=True)
     MaxAttendence = models.IntegerField(blank=False, default=25)
-    AttendenceList = models.ManyToManyField(User, blank=True)
+
+
 
     def get_topping_list(self):
-        already_chosen_topings = MovienightTopping.objects.filter(movienight = self)
+        ua = UserAttendence.objects.filter(movienight=self)
 
-        topings_to_exclude = [o.topping for o in already_chosen_topings]
+        # TODO: Fix this.
+        movienight_toppings = [u.movienighttopping_set for u in ua]
+
+        topings_to_exclude = [o.topping for o in movienight_toppings]
 
         available_topings = Topping.objects.exclude(topping__in=topings_to_exclude)
         return already_chosen_topings, available_topings
@@ -138,22 +133,51 @@ class MovieNightEvent(models.Model):
         # delete toppings
         self.movienighttopping_set.filter(user=user).delete()
 
+    def user_has_registered(self, user):
+        ua = self.userattendence_set.filter(user=user)
+        if len(ua) == 0:
+            return False
+        else:
+            return ua[0].registration_complete
+
+    def get_user_info(self, user):
+        # get list of VotePreference and MovienightTopping associated to user and movienight
+        if self.user_has_registered(user):
+            ua = self.userattendence_set.filter(user=user)
+            votes = ua.get_votes()
+            toppings = ua.get_toppings()
+            return votes, toppings
+        else:
+            return None, None
+
+
     def get_user_topping_list(self, user):
-        return ', '.join([str(Topping.topping) for Topping in self.movienighttopping_set.filter(user=user)])
+        _, toppings = self.get_user_info(user)
+        return ', '.join([str(Topping.topping) for Topping in toppings])
 
 
     def __str__(self):
         return self.motto
 
+class UserAttendence(models.Model):
+    movienight = models.ForeignKey(MovieNightEvent, on_delete=models.CASCADE)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    registration_complete = models.BooleanField(default=False)
+
+    def get_votes(self):
+        return self.votepreference_set
+
+    def get_toppings(self):
+        return self.movienighttopping_set
 
 class VotePreference(models.Model):
-    movienight = models.ForeignKey(MovieNightEvent, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_attendence = models.ForeignKey(UserAttendence, on_delete=models.CASCADE, blank=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     preference  = models.IntegerField(blank=True) #0 to 5
 
     def __str__(self):
-        return self.user.username + "/" + self.movienight.motto + "/" + self.movie.title + ": " + str(self.preference)
+        return self.movie.title + ": " + str(self.preference)
 
 class Topping(models.Model):
     topping = models.CharField(max_length=300)
@@ -163,13 +187,10 @@ class Topping(models.Model):
 
 class MovienightTopping(models.Model):
     topping = models.ForeignKey(Topping, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    movienight = models.ForeignKey(MovieNightEvent, on_delete=models.CASCADE)
+    user_attendence = models.ForeignKey(UserAttendence, on_delete=models.CASCADE, blank=True)
 
     def __str__(self):
-        return self.user.username + "/" + self.movienight.motto + "/" + self.topping.topping
-
-
+        return  self.topping.topping
 
 
 

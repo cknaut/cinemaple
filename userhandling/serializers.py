@@ -1,6 +1,8 @@
 from .models import MovieNightEvent, Movie
 from rest_framework import serializers
 from django.utils import timezone
+from django.contrib.auth.models import User
+
 import pytz
 
 
@@ -10,6 +12,7 @@ def strfdelta(tdelta, fmt):
     d["hours"], rem = divmod(tdelta.seconds, 3600)
     d["minutes"], d["seconds"] = divmod(rem, 60)
     return fmt.format(**d)
+
 
 class MovieNightEventSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -50,5 +53,15 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'motto', 'date', "movies", "isdraft", "movies", "date_delta", "vote_enabled", "status"
         )
+
+
+
+
+
+
+
+
+
+
 
 
