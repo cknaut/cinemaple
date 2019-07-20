@@ -521,6 +521,11 @@ def man_mov_nights(request):
 @login_required
 def details_mov_nights(request, movienight_id, no_movie=False):
 
+    movienight = None
+    ordered_votelist = None
+    toppings = None
+    user_has_voted = None
+
     if not no_movie:
         movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
         movielist = list(movienight.MovieList.all())
@@ -547,11 +552,6 @@ def details_mov_nights(request, movienight_id, no_movie=False):
                 ordered_votelist.append(ratingobject[0].preference)
 
             toppings = movienight.get_user_topping_list(request.user)
-    else:
-        movienight = None
-        user_has_voted = None
-        ordered_votelist = None
-        toppings = None
 
     context = {
         'movienight' : movienight,
@@ -642,9 +642,10 @@ def change_movie_night(request, movienight_id):
     return render(request, 'userhandling/admin_movie_add.html', context)
 
 
-def topping_add_movie_night(request, movienight_id, user_attendence):
+def topping_add_movie_night(request, movienight_id, ):
 
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    user_attendence = UserAttendence.objects.filter(movienight=movienight, user=request.user)[0]
 
     if request.method == 'POST':
 
@@ -660,7 +661,6 @@ def topping_add_movie_night(request, movienight_id, user_attendence):
                 mt.save()
 
             # active movinight
-
             user_attendence.registration_complete = True
             user_attendence.save()
 
@@ -713,7 +713,7 @@ def rate_movie_night(request, movienight, user_attendence):
                 vp.save()
 
             # Proceed to Toppings Add
-            return redirect(topping_add_movie_night(request, movienight_id=movienight.id, user_attendence=user_attendence))
+            return  redirect(topping_add_movie_night, movienight_id=movienight.id)
 
     else:
         random.shuffle(movielist)
@@ -748,16 +748,23 @@ def reg_movie_night(request, movienight_id):
     if movienight.user_has_registered(request.user):
         return HttpResponse("You've already registered for this movienight.")
     else:
-        ua = UserAttendence(movienight=movienight, user=request.user)
-        ua.save()
+
+        # look for attendence object and create one if not found
+        try:
+            ua = UserAttendence.objects.filter(movienight=movienight, user=request.user)[0]
+        except:
+            ua = UserAttendence(movienight=movienight, user=request.user)
+            ua.save()
+
         return rate_movie_night(request, movienight, ua)
 
 @login_required
 def ureg_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    ua = UserAttendence.objects.filter(movienight=movienight, user=request.user)[0]
 
     # remove user from attendence list, delete votes, delete toppings
-    movienight.unregister_user(request.user)
+    ua.delete()
 
     return redirect(curr_mov_nights)
 

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 from .models import MovieNightEvent, Movie, Profile, PasswordReset, VotePreference, \
-     VotingParameters, Topping, MovienightTopping
+     VotingParameters, Topping, MovienightTopping, UserAttendence
 
 # Register your models here.
 #admin.site.register(MovieNightEvent)
@@ -36,3 +36,7 @@ class MovienightToppingAdmin(admin.ModelAdmin):
      readonly_fields = ('id',)
 
 admin.site.register(VotingParameters, SingleModelAdmin)
+
+@admin.register(UserAttendence)
+class UserAttendenceAdmin(admin.ModelAdmin):
+     readonly_fields = ('id',)

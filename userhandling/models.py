@@ -77,15 +77,11 @@ class MovieNightEvent(models.Model):
     MovieList = models.ManyToManyField(Movie, blank=True)
     MaxAttendence = models.IntegerField(blank=False, default=25)
 
-
-
     def get_topping_list(self):
         ua = UserAttendence.objects.filter(movienight=self)
+        already_chosen_topings = MovienightTopping.objects.filter(user_attendence=ua[0])
 
-        # TODO: Fix this.
-        movienight_toppings = [u.movienighttopping_set for u in ua]
-
-        topings_to_exclude = [o.topping for o in movienight_toppings]
+        topings_to_exclude = [o.topping for o in already_chosen_topings]
 
         available_topings = Topping.objects.exclude(topping__in=topings_to_exclude)
         return already_chosen_topings, available_topings
@@ -122,17 +118,6 @@ class MovieNightEvent(models.Model):
         elif  not self.is_in_future():
             return "PAST"
 
-    def unregister_user(self, user):
-
-        # delete user from attendence list
-        self.AttendenceList.remove(user)
-
-        # delete votes
-        self.votepreference_set.filter(user=user).delete()
-
-        # delete toppings
-        self.movienighttopping_set.filter(user=user).delete()
-
     def user_has_registered(self, user):
         ua = self.userattendence_set.filter(user=user)
         if len(ua) == 0:
@@ -143,9 +128,9 @@ class MovieNightEvent(models.Model):
     def get_user_info(self, user):
         # get list of VotePreference and MovienightTopping associated to user and movienight
         if self.user_has_registered(user):
-            ua = self.userattendence_set.filter(user=user)
+            ua = self.userattendence_set.filter(user=user)[0]
             votes = ua.get_votes()
-            toppings = ua.get_toppings()
+            toppings = [u.topping for u in ua.get_toppings()]
             return votes, toppings
         else:
             return None, None
@@ -166,10 +151,10 @@ class UserAttendence(models.Model):
     registration_complete = models.BooleanField(default=False)
 
     def get_votes(self):
-        return self.votepreference_set
+        return self.votepreference_set.all()
 
     def get_toppings(self):
-        return self.movienighttopping_set
+        return self.movienighttopping_set.all()
 
 class VotePreference(models.Model):
     user_attendence = models.ForeignKey(UserAttendence, on_delete=models.CASCADE, blank=True)
