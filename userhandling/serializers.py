@@ -1,4 +1,4 @@
-from .models import MovieNightEvent, Movie
+from .models import MovieNightEvent, Movie, UserAttendence
 from rest_framework import serializers
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -52,6 +52,23 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
         model = MovieNightEvent
         fields = (
             'id', 'motto', 'date', "movies", "isdraft", "movies", "date_delta", "vote_enabled", "status"
+        )
+
+class UserAttendenceSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    user = serializers.SerializerMethodField()
+    toppings = serializers.SerializerMethodField()
+
+    def get_user(self, UserAttendence):
+        return UserAttendence.user.username
+
+    def get_toppings(self, UserAttendence):
+        return ', '.join([o.topping.topping for o in  UserAttendence.get_toppings()])
+
+    class Meta:
+        model = UserAttendence
+        fields = (
+            'id', 'user', 'toppings', 'registered_at', "registration_complete"
         )
 
 

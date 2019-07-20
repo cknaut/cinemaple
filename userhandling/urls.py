@@ -6,6 +6,9 @@ from rest_framework import routers
 from . import views
 router = routers.DefaultRouter()
 router.register(r'movienights', views.MovieNightEventViewSet)
+router.register(r'userattendence', views.UserAttendenceViewSet)
+
+
 
 urlpatterns = [
     path('', views.index, name='index'),

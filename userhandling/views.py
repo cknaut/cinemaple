@@ -21,7 +21,7 @@ from django.views.generic.edit import CreateView
 import requests
 from django.core import serializers
 from rest_framework import viewsets
-from .serializers import MovieNightEventSerializer
+from .serializers import MovieNightEventSerializer, UserAttendenceSerializer
 from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory
 import numpy as np
@@ -607,6 +607,10 @@ def deactivate_movie_night(request, movienight_id):
         movienight.isdeactivated = True
         movienight.save()
         return redirect("man_mov_nights")
+
+class UserAttendenceViewSet(viewsets.ModelViewSet):
+    queryset = UserAttendence.objects.all()
+    serializer_class = UserAttendenceSerializer
 
 class MovieNightEventViewSet(viewsets.ModelViewSet):
     queryset = MovieNightEvent.objects.all().order_by('-date')
