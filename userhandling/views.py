@@ -27,6 +27,7 @@ from django.forms import formset_factory
 import numpy as np
 # ....
 
+
 # Render Index Page, manage register
 def index(request):
 
@@ -551,7 +552,7 @@ def details_mov_nights(request, movienight_id, no_movie=False):
 
                 ordered_votelist.append(ratingobject[0].preference)
 
-            toppings = movienight.get_user_topping_list(request.user)
+            toppings = movienight.get_user_topping_list(request.user, 'primary')
 
     context = {
         'movienight' : movienight,

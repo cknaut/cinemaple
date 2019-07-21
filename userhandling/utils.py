@@ -7,6 +7,12 @@ import json
 import requests
 from django.conf import settings
 
+
+# Wrap Bootrap Badge HTML around string
+def badgify(string, badge_type):
+    badge_html = "<span class='badge badge-" + badge_type + "'>" + string + "</span>"
+    return badge_html
+
 # Mailchimp utils
 MAILCHIMP_API_KEY = getattr(settings, "MAILCHIMP_API_KEY", None)
 if MAILCHIMP_API_KEY is None:

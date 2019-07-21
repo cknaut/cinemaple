@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from .utils import badgify
 import time
 
 
@@ -136,10 +137,12 @@ class MovieNightEvent(models.Model):
             return None, None
 
 
-    def get_user_topping_list(self, user):
+    def get_user_topping_list(self, user, badgestatus=None):
         _, toppings = self.get_user_info(user)
-        return ', '.join([str(Topping.topping) for Topping in toppings])
-
+        if not badgestatus == None:
+            return ' '.join([badgify(str(Topping.topping), badgestatus) for Topping in toppings])
+        else:
+            return ', '.join([str(Topping.topping) for Topping in toppings])
 
     def __str__(self):
         return self.motto
