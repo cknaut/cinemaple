@@ -757,6 +757,9 @@ def reg_movie_night(request, movienight_id):
         # look for attendence object and create one if not found
         try:
             ua = UserAttendence.objects.filter(movienight=movienight, user=request.user)[0]
+
+            # delete all votes
+            ua.get_votes().delete()
         except:
             ua = UserAttendence(movienight=movienight, user=request.user)
             ua.save()
