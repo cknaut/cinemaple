@@ -79,8 +79,8 @@ class MovieNightEvent(models.Model):
     MaxAttendence = models.IntegerField(blank=False, default=25)
 
     def get_topping_list(self):
-        ua = UserAttendence.objects.filter(movienight=self)
-        already_chosen_topings = MovienightTopping.objects.filter(user_attendence=ua[0])
+        uas = UserAttendence.objects.filter(movienight=self)
+        already_chosen_topings = MovienightTopping.objects.filter(user_attendence__in = uas)
 
         topings_to_exclude = [o.topping for o in already_chosen_topings]
 
