@@ -206,7 +206,13 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             <a class="dropdown-item" id="#"
                                                 href="{% url 'ureg_movie_night' movienight_id=movienight.id %}">Unregister</a>
+                                                  <a class="dropdown-item" id="#"
+                                                href="{% url 'attendence_list' movienight_id=movienight.id %}">Attendence List</a>
                                         </div>
+
+
+
+
 
                                     </div>
 
@@ -256,6 +262,12 @@
                                     {% endif %}
                                 </div>
                             </div>
+
+                            <div class="row mb-4 ">
+                                <div class="col-xl-3 col-lg-3 "> Number of attendees: </div>
+                                <div class="col-xl-9 col-lg-9 ">  {{movienight.get_num_registered }}   </div>
+                            </div>
+
 
                             <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-3 "> Admin Action: </div>

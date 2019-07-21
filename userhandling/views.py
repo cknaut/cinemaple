@@ -25,6 +25,8 @@ from .serializers import MovieNightEventSerializer, UserAttendenceSerializer
 from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory
 import numpy as np
+from rest_framework import generics
+
 # ....
 
 
@@ -519,6 +521,15 @@ def dashboard(request):
 def man_mov_nights(request):
     return render(request, 'userhandling/admin_movie_night_manage.html')
 
+def attendence_list(request, movienight_id):
+
+    context = {
+        'movienight'        : get_object_or_404(MovieNightEvent, pk=movienight_id),
+        'navbar'            : 'curr_mov_night',
+    }
+
+    return render(request, 'userhandling/attendence_list.html', context)
+
 @login_required
 def details_mov_nights(request, movienight_id, no_movie=False):
 
@@ -609,9 +620,19 @@ def deactivate_movie_night(request, movienight_id):
         movienight.save()
         return redirect("man_mov_nights")
 
-class UserAttendenceViewSet(viewsets.ModelViewSet):
-    queryset = UserAttendence.objects.all()
+class UserAttendenceList(generics.ListAPIView):
     serializer_class = UserAttendenceSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        movienight_id = self.kwargs['movienight_id']
+
+        movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+        return UserAttendence.objects.filter(movienight=movienight)
 
 class MovieNightEventViewSet(viewsets.ModelViewSet):
     queryset = MovieNightEvent.objects.all().order_by('-date')

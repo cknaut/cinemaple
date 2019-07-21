@@ -21,28 +21,7 @@
 <link href="/static/bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js">
 </script>
-<script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js">
-</script>
-<script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script>
 
-<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=pqiihwpzf32ctpl7kn59g5ivcztnma4qormn1elar66gqrw4">
-</script>
-
-<script>
-  tinymce.init({
-    selector: "#tinymice",
-    min_height: 150,
-    plugins: "emoticons",
-    toolbar: 'emoticons | formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pageembed | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat | addcomment',
-
-    setup: function (editor) {
-      editor.on('change', function () {
-        editor.save();
-      });
-    }
-  });
-</script>
 
 
 
@@ -65,7 +44,7 @@
   <hr class="sidebar-divider my-0">
 
   <!-- Nav Item - Dashboard -->
-  <li class="nav-item">
+  <li class="nav-item active">
     <a class="nav-link" href={% url 'curr_mov_nights' %}>
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Currrent Movie Night</span></a>
@@ -88,7 +67,7 @@
   </li>
 
   <!-- Nav Item - Dashboard -->
-  <li class="nav-item active">
+  <li class="nav-item">
     <a class="nav-link" href={% url 'man_mov_nights' %}>
       <i class="fas fa-fw fa-cog"></i>
       <span>Manage Movie Nights</span></a>
@@ -160,7 +139,7 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary" id="page-top">All Movie Nights</h6>
+          <h6 class="m-0 font-weight-bold text-primary" id="page-top">{{movienight.motto}}: Attendence List</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -169,13 +148,10 @@
             <table id="movienight_table" class="display" style="width:100%">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Motto</th>
-                  <th>Date</th>
-                  <th>Registered Users</th>
-                  <th>Status</th>
-                  <th>Voting enabled?</th>
-                  <th>Link</th>
+                  <th>Name</th>
+                  <th>Toppings</th>
+                  <th>Registration Date</th>
+                  <th>Reg. complete?</th>
                 </tr>
               </thead>
             </table>
@@ -200,65 +176,35 @@
   $(document).ready(function () {
     var table = $('#movienight_table').DataTable({
       "ajax": {
-        "url": "/api/movienights/?format=json",
+        "url": "/api/attendence_list/{{movienight.id}}?format=json",
         "dataSrc": function (json) {
           return json["results"];
         }
       },
-      "columns": [{
-          "data": "id"
+      "columns": [ {
+          "data": "firstlastname"
         },
         {
-          "data": "motto"
+          "data": "toppings"
         }, {
-          "data": "date_delta"
+          "data": "reg_date"
         },
         {
-          "data": "reg_users"
-        },
-        {
-          "data": "status"
-        },
-        {
-          "data": "vote_enabled"
-        },
-        {}
+          "data": "registration_complete"
+        }
       ],
       "columnDefs": [{
-          "targets": -1,
-          "data": "id",
-          "render": function (data, type, row, meta) {
-            return "<a class='btn btn-primary btn-sm' href='mov_night/" + data +
-              "' role='button'>Manage</a>";
-          }
-        },
-        {
-          "targets": -3,
-          "data": "status",
-          "render": function (data, type, row, meta) {
-            if (data == "DRAFT") {
-              return "<span class='badge badge-secondary'>Draft</span>";
-            } else if (data == "ACTIVE") {
-              return "<span class='badge badge-success'>Active</span>";
-            } else if (data == "PAST") {
-              return "<span class='badge badge-primary'>In past</span>";
-            } else if (data == "DEAC") {
-              return "<span class='badge badge-danger'>Cancelled</span>";
-            }
-          }
-        },
-        {
-          "targets": -2,
-          "data": "vote_enabled",
-          "render": function (data, type, row, meta) {
-            if (data) {
-              return "<span class='badge badge-success'>Enabled</span>";
-            } else {
-              return "<span class='badge badge-danger'> Disabled</span>";
-            }
+        "targets": -1,
+        "data": "registration_complete",
+        "render": function (data, type, row, meta) {
+          if (data) {
+            return "<span class='badge badge-success'>Yes</span>"
+          } else {
+            return "<span class='badge badge-danger'>No</span>"
           }
         }
-      ]
+      }],
+
     });
   });
 </script>

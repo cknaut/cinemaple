@@ -144,6 +144,10 @@ class MovieNightEvent(models.Model):
         else:
             return ', '.join([str(Topping.topping) for Topping in toppings])
 
+    def get_num_registered(self):
+        uas = UserAttendence.objects.filter(movienight=self, registration_complete=True)
+        return len(uas)
+
     def __str__(self):
         return self.motto
 
