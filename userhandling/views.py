@@ -26,8 +26,6 @@ from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory
 import numpy as np
 from rest_framework import generics
-from .vote import get_pref_lists
-
 
 # ....
 
@@ -539,6 +537,7 @@ def details_mov_nights(request, movienight_id, no_movie=False):
     ordered_votelist = None
     toppings = None
     user_has_voted = None
+    winning_movie = None
 
     if not no_movie:
         movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
@@ -553,6 +552,8 @@ def details_mov_nights(request, movienight_id, no_movie=False):
         toppings = None
 
         if user_has_voted:
+
+            winning_movie = movienight.get_winning_movie()
 
             votelist, toppings = movienight.get_user_info(request.user)
             for movie in movielist:
@@ -575,7 +576,8 @@ def details_mov_nights(request, movienight_id, no_movie=False):
         'ordered_votelist'  : ordered_votelist,
         'no_movie'          : no_movie,
         'navbar'            : 'curr_mov_night',
-        'toppings'          : toppings
+        'toppings'          : toppings,
+        'winning_movie'     : winning_movie
     }
     return render(request, 'userhandling/curr_mov_nights.html', context)
 
@@ -804,12 +806,9 @@ def ureg_movie_night(request, movienight_id):
 def count_votes(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
-    movienight2 = get_pref_lists(movienight)
-    assert movienight2==movienight
+    winning_movie = movienight.get_winning_movie()
 
-
-
-    return HttpResponse("lol")
+    return HttpResponse(winning_movie)
 
 
 

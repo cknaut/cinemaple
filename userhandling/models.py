@@ -6,6 +6,9 @@ from django.utils import timezone
 from .utils import badgify
 import time
 
+from py3votecore.schulze_method import SchulzeMethod
+from py3votecore.condorcet import CondorcetHelper
+from .vote import get_pref_lists, prepare_voting_dict
 
 
 # We create a one-to-one map from the built-in User model to a Profile model
@@ -151,6 +154,25 @@ class MovieNightEvent(models.Model):
     def get_registered_userattend(self):
         uas = UserAttendence.objects.filter(movienight=self, registration_complete=True)
         return uas
+
+    # counts votes and returns current schulze winner
+    def get_winning_movie(self):
+
+        user_attendences = self.get_registered_userattend()
+        pref_orderings = get_pref_lists(user_attendences)
+        input_dict = prepare_voting_dict(pref_orderings)
+
+        vote_result = SchulzeMethod(input_dict, ballot_notation = CondorcetHelper.BALLOT_NOTATION_GROUPING).as_dict()
+
+        winner_movie_id = vote_result["winner"]
+        winning_movie = Movie.objects.get(pk=winner_movie_id)
+
+        return winning_movie
+
+
+
+
+
 
 
     def __str__(self):
