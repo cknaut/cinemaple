@@ -26,6 +26,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory
 import numpy as np
 from rest_framework import generics
+from .vote import get_pref_lists
+
 
 # ....
 
@@ -796,6 +798,19 @@ def ureg_movie_night(request, movienight_id):
     ua.delete()
 
     return redirect(curr_mov_nights)
+
+
+@login_required
+def count_votes(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+    movienight2 = get_pref_lists(movienight)
+    assert movienight2==movienight
+
+
+
+    return HttpResponse("lol")
+
 
 
 

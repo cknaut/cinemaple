@@ -35,6 +35,8 @@ urlpatterns = [
     path('topping_add_movie_night/<str:movienight_id>', views.topping_add_movie_night,  name='topping_add_movie_night'),
     path('attendence_list/<str:movienight_id>', views.attendence_list,  name='attendence_list'),
     path('api/attendence_list/<str:movienight_id>', views.UserAttendenceList.as_view()),
+    path('count_votes/<str:movienight_id>', views.count_votes,  name='count_votes'),
+
     #path('vote_movie_night/<str:movienight_id>', views.vote_movie_night,  name='vote_movie_night'),
 
 ]

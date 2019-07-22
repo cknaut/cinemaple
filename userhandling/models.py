@@ -148,6 +148,11 @@ class MovieNightEvent(models.Model):
         uas = UserAttendence.objects.filter(movienight=self, registration_complete=True)
         return len(uas)
 
+    def get_registered_userattend(self):
+        uas = UserAttendence.objects.filter(movienight=self, registration_complete=True)
+        return uas
+
+
     def __str__(self):
         return self.motto
 
