@@ -17,16 +17,28 @@ def get_pref_ordering(user_attendence):
     ratings = np.asarray(list(votes.values_list('preference'))).flatten()
 
     ranks = rankdata(ratings, method='min')-1
-    num_ranks = len(set(ranks))
+
+    # unique_ranks = set(ranks) # e.g. can get [0, 0, 2] if two
+    # num_ranks = len(unique_ranks)
+    max_rank = max(ranks)
 
     ordered_lists = []
-    for i in range(num_ranks):
+    for i in range(max_rank+1):
         ith_rankset = []
         for j, rank_val in enumerate(ranks):
             if i==rank_val:
                 ith_rankset.append((movie_ids[j]))
         if not ith_rankset == []:
-         ordered_lists.append(ith_rankset)
+            ordered_lists.append(ith_rankset)
+
+
+
+    # Check for correct number of movies
+    ordered_list_flat = [item for sublist in ordered_lists for item in sublist]
+
+    num_movies_pref = len(ordered_list_flat)
+    num_movies_ref = len(movie_ids)
+    assert num_movies_pref == num_movies_ref, "Preference order contains {} movies, should contain {} movies.".format(num_movies_pref, num_movies_ref)
 
     # flip to get decreasing preference order
     ordered_lists = np.flip(ordered_lists, 0).tolist()

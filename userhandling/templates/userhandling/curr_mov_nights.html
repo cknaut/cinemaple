@@ -305,7 +305,7 @@
                             </div>
 
 
-
+                            <hr class="sidebar-divider">
                             {% endif%}
 
                                                     <div class="row mb-4">
@@ -330,14 +330,14 @@
                                             <button class="btn btn-link" data-toggle="collapse"
                                                 data-target="#collapse{{ forloop.counter0 }}" aria-expanded="true"
                                                 aria-controls="collapse{{ forloop.counter0 }}">
-                                                {{ movie.title }} ({{movie.year}}) {% if movie ==  winning_movie %} <span class='badge badge-success'>Winner</span> {% endif %}
+                                                {{ movie.title }} ({{movie.year}}) {% if movie ==  winning_movie %} <a href={% url  'count_votes' movienight_id=movienight.id %}> <span class='badge badge-success'>Winner</span> </a> {% endif %}
 
 
                                                 {% else %}
                                                 <button class="btn btn-link collapsed" data-toggle="collapse"
                                                     data-target="#collapse{{ forloop.counter0 }}" aria-expanded="false"
                                                     aria-controls="collapse{{ forloop.counter0 }}">
-                                                    {{ movie.title }} ({{movie.year}}) {% if movie ==  winning_movie %} <span class='badge badge-success'>Winner</span> {% endif %}
+                                                    {{ movie.title }} ({{movie.year}}) {% if movie ==  winning_movie %}  <a href={% url  'count_votes' movienight_id=movienight.id %}> <span class='badge badge-success'>Winner</span> </a> {% endif %}
                                                     {% endif%}
                                                 </button>
                                         </h5>

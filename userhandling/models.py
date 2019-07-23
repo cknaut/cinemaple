@@ -98,7 +98,7 @@ class MovieNightEvent(models.Model):
 
     def voting_enabled(self):
         vote_until_val = self.vote_until()
-        return  (timezone.now()  <= vote_until_val and self.is_active())
+        return  (timezone.now() <= vote_until_val and self.is_active())
 
     def is_in_future(self):
         return self.date  > timezone.now()
@@ -167,13 +167,7 @@ class MovieNightEvent(models.Model):
         winner_movie_id = vote_result["winner"]
         winning_movie = Movie.objects.get(pk=winner_movie_id)
 
-        return winning_movie
-
-
-
-
-
-
+        return winning_movie, vote_result
 
     def __str__(self):
         return self.motto

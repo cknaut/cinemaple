@@ -553,7 +553,7 @@ def details_mov_nights(request, movienight_id, no_movie=False):
 
         if user_has_voted:
 
-            winning_movie = movienight.get_winning_movie()
+            winning_movie, _ = movienight.get_winning_movie()
 
             votelist, toppings = movienight.get_user_info(request.user)
             for movie in movielist:
@@ -802,13 +802,31 @@ def ureg_movie_night(request, movienight_id):
     return redirect(curr_mov_nights)
 
 
+
 @login_required
 def count_votes(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
-    winning_movie = movienight.get_winning_movie()
+    winning_movie, vote_result = movienight.get_winning_movie()
 
-    return HttpResponse(winning_movie)
+    pairs = vote_result["pairs"]
+
+    #candidates = {k: v for k, v in paris.items()}
+
+    # prettify voting dict by resolving movies
+    pairs = vote_result["pairs"]
+    pairs_dict_movies = { tuple(get_object_or_404(Movie, pk=j).title for j in k): v for k, v in pairs.items()}
+
+    strong_pairs = vote_result["strong_pairs"]
+    strong_pairs_dict_movies = { tuple(get_object_or_404(Movie, pk=j).title for j in k): v for k, v in strong_pairs.items()}
+
+
+    context = {
+        'winning_movie'                     : winning_movie,
+        'pairs_dict_movies'                 : pairs_dict_movies.items(),
+        'strong_pairs_dict_movies'          : strong_pairs_dict_movies.items(),
+    }
+    return render(request, 'userhandling/vote_details.html', context)
 
 
 
