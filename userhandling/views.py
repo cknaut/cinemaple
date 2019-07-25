@@ -538,24 +538,30 @@ def details_mov_nights(request, movienight_id, no_movie=False):
     toppings = None
     user_has_voted = None
     winning_movie = None
+    toppings = None
+    user_has_reg = None
 
     if not no_movie:
+
         movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+        user_has_reg = movienight.user_has_registered(request.user)
+
+        if user_has_reg:
+            toppings = movienight.get_user_topping_list(request.user, 'primary')
+
         movielist = list(movienight.MovieList.all())
 
-        user_has_voted = movienight.user_has_registered(request.user)
+        user_has_voted = movienight.user_has_voted(request.user)
 
         # if user has registered, show rating and toppings
-
-
         ordered_votelist = []
-        toppings = None
 
         if user_has_voted:
 
             winning_movie, _ = movienight.get_winning_movie()
 
-            votelist, toppings = movienight.get_user_info(request.user)
+            votelist, _ = movienight.get_user_info(request.user)
 
             for movie in movielist:
                 ratingobject = votelist.filter(movie=movie)
@@ -567,13 +573,14 @@ def details_mov_nights(request, movienight_id, no_movie=False):
 
                 ordered_votelist.append(ratingobject[0].preference)
 
-            toppings = movienight.get_user_topping_list(request.user, 'primary')
+
 
     context = {
         'movienight' : movienight,
         'navbar' : "movie_night_manage",
         'activeMovieExists' : False,
         'user_has_voted'    : user_has_voted,
+        'user_has_reg'      : user_has_reg,
         'ordered_votelist'  : ordered_votelist,
         'no_movie'          : no_movie,
         'navbar'            : 'curr_mov_night',
@@ -673,9 +680,12 @@ def change_movie_night(request, movienight_id):
     return render(request, 'userhandling/admin_movie_add.html', context)
 
 
-def topping_add_movie_night(request, movienight_id, ):
+def topping_add_movie_night(request, movienight_id):
 
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    voting_enabled = movienight.voting_enabled()
+    second_load = False # used to prevent triggering of modal
+
     user_attendence = UserAttendence.objects.filter(movienight=movienight, user=request.user)[0]
 
     if request.method == 'POST':
@@ -707,6 +717,7 @@ def topping_add_movie_night(request, movienight_id, ):
             form = ToppingForm(movienight)
             form_brought_along = AlreadyBroughtToppingForm(movienight)
             toppingaddform = ToppingAddForm()
+            second_load = True
 
     else:
         form = ToppingForm(movienight)
@@ -716,7 +727,9 @@ def topping_add_movie_night(request, movienight_id, ):
     context = {
         'form' : form,
         'form_brought_along' : form_brought_along,
-        'toppingaddform'     : toppingaddform
+        'toppingaddform'     : toppingaddform,
+        'voting_enabled'    : voting_enabled,
+        'second_load'       : second_load
      }
     return render(request, 'userhandling/topping_add.html', context)
 
@@ -748,6 +761,10 @@ def rate_movie_night(request, movienight, user_attendence):
 
     else:
         random.shuffle(movielist)
+
+        #if voting disabled, only allow topping indication
+        if not movienight.voting_enabled():
+             return  redirect(topping_add_movie_night, movienight_id=movienight.id)
 
         formset = prefFormList(initial=[
             {'UserID'           :   request.user.id,
@@ -799,7 +816,6 @@ def ureg_movie_night(request, movienight_id):
 
     # remove user from attendence list, delete votes, delete toppings
     ua.delete()
-
     return redirect(curr_mov_nights)
 
 

@@ -128,7 +128,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Registration Step 2/2: Add Toppings.</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Registration Step {% if voting_enabled %}2/2 {% else %} 1/1 {% endif %}: Add Toppings.</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -188,6 +188,30 @@
         </div>
     </div>
 </div>
+
+
+
+
+<div class="modal fade" id="toolatevote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Voting disabled</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">The voting window has expired, you are not able to cast a vote for this movienight but are still welcome to register!
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 
 
@@ -201,6 +225,10 @@
             });
         });
 
+
+{% if not voting_enabled and not second_load %}
+$('#toolatevote').modal('show');
+ {% endif %}
 </script>
 
 

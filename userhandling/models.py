@@ -139,6 +139,16 @@ class MovieNightEvent(models.Model):
         else:
             return None, None
 
+    def user_has_voted(self, user):
+        # we allow for registered users to not have voted if they register too late
+        if self.user_has_registered(user):
+            votes, _ = self.get_user_info(user)
+            if len(votes) == 0:
+                return False
+            else:
+                return True
+        else:
+            return False
 
     def get_user_topping_list(self, user, badgestatus=None):
         _, toppings = self.get_user_info(user)
