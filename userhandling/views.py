@@ -556,6 +556,7 @@ def details_mov_nights(request, movienight_id, no_movie=False):
             winning_movie, _ = movienight.get_winning_movie()
 
             votelist, toppings = movienight.get_user_info(request.user)
+
             for movie in movielist:
                 ratingobject = votelist.filter(movie=movie)
 
@@ -810,8 +811,6 @@ def count_votes(request, movienight_id):
     winning_movie, vote_result = movienight.get_winning_movie()
 
     pairs = vote_result["pairs"]
-
-    #candidates = {k: v for k, v in paris.items()}
 
     # prettify voting dict by resolving movies
     pairs = vote_result["pairs"]

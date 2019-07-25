@@ -321,34 +321,24 @@
                         <div class="col-xl-12 col-lg-12 ">
                             <div id="accordion">
 
-                                {% for movie in movienight.MovieList.all|shuffle %}
+                                {% for movie in movienight.MovieList.all %}
 
                                 <div class="card">
                                     <div class="card-header" id="heading{{ forloop.counter0 }}">
                                         <h5 class="mb-0">
-                                            {% if forloop.counter0 == 0 %}
-                                            <button class="btn btn-link" data-toggle="collapse"
-                                                data-target="#collapse{{ forloop.counter0 }}" aria-expanded="true"
-                                                aria-controls="collapse{{ forloop.counter0 }}">
-                                                {{ movie.title }} ({{movie.year}}) {% if movie ==  winning_movie %} <a href={% url  'count_votes' movienight_id=movienight.id %}> <span class='badge badge-success'>Winner</span> </a> {% endif %}
 
-
-                                                {% else %}
                                                 <button class="btn btn-link collapsed" data-toggle="collapse"
                                                     data-target="#collapse{{ forloop.counter0 }}" aria-expanded="false"
                                                     aria-controls="collapse{{ forloop.counter0 }}">
                                                     {{ movie.title }} ({{movie.year}}) {% if movie ==  winning_movie %}  <a href={% url  'count_votes' movienight_id=movienight.id %}> <span class='badge badge-success'>Winner</span> </a> {% endif %}
-                                                    {% endif%}
+
                                                 </button>
                                         </h5>
                                     </div>
-                                    {% if forloop.counter0 == 0 %}
-                                    <div id="collapse{{ forloop.counter0 }}" class="collapse show"
-                                        aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion">
-                                        {% else %}
+
                                         <div id="collapse{{ forloop.counter0 }}" class="collapse"
                                             aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion">
-                                            {% endif%}
+
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-xl-3 col-lg-3 ">
