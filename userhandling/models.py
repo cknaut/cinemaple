@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from .utils import badgify
 import time
+import random
 
 from py3votecore.schulze_method import SchulzeMethod
 from py3votecore.condorcet import CondorcetHelper
@@ -174,8 +175,33 @@ class MovieNightEvent(models.Model):
 
         vote_result = SchulzeMethod(input_dict, ballot_notation = CondorcetHelper.BALLOT_NOTATION_GROUPING).as_dict()
 
-        winner_movie_id = vote_result["winner"]
-        winning_movie = Movie.objects.get(pk=winner_movie_id)
+        # check for tied winners
+        try:
+            # take tied movies if exist
+            winner_movies_ids = vote_result["tied_winners"]
+            tied_winners = True
+        except:
+            winner_movies_id = vote_result["winner"]
+            tied_winners = False
+
+        if tied_winners:
+             # we now randomly select one of the tied winners by using a hashed random numbre
+
+            # convert set to list
+            winner_movies_ids = list(winner_movies_ids)
+
+            # order list in order to remove ambiguity in set to list conversion
+            winner_movies_ids.sort()
+
+            num_ties = len(winner_movies_ids)
+
+            # seeding random with the movienight id ensures randomness between movienights and
+            # consistent winner for a single movienight
+            random.seed(a=self.id, version=2)
+            winning_index = random.randint(0,num_ties-1)
+            winner_movies_id = winner_movies_ids[winning_index]
+
+        winning_movie = Movie.objects.get(pk=winner_movies_id)
 
         return winning_movie, vote_result
 
