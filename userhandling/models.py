@@ -82,6 +82,9 @@ class MovieNightEvent(models.Model):
     MovieList = models.ManyToManyField(Movie, blank=True)
     MaxAttendence = models.IntegerField(blank=False, default=25)
 
+    def free_spots(self):
+        return self.MaxAttendence - self.get_num_registered()
+
     def get_topping_list(self):
         uas = UserAttendence.objects.filter(movienight=self)
         already_chosen_topings = MovienightTopping.objects.filter(user_attendence__in = uas)

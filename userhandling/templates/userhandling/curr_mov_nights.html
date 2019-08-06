@@ -169,6 +169,11 @@
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.vote_until }} </div>
                             </div>
 
+                            <div class="row mb-4 ">
+                                <div class="col-xl-3 col-lg-3 "> Free Spots: </div>
+                                <div class="col-xl-9 col-lg-9 "> {{movienight.free_spots }} </div>
+                            </div>
+
                             {% if navbar == "curr_mov_night" and movienight.is_active%}
                             <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
@@ -225,9 +230,18 @@
 
 
                                     {% else %}
-                                    <a class='btn btn-primary btn-sm'
-                                        href="{% url 'reg_movie_night' movienight_id=movienight.id %}"
-                                        role='button'>Register Now!</a>
+
+                                        {% if  movienight.free_spots > 0 %}
+
+                                        <a class='btn btn-primary btn-sm'
+                                            href="{% url 'reg_movie_night' movienight_id=movienight.id %}"
+                                            role='button'>Register Now!</a>
+
+                                        {% else %}
+
+                                            <button type="button" class="btn btn-primary btn-sm" disabled>Sorry, movienight full</button>
+
+                                        {% endif %}
 
                                     {% endif %}
 

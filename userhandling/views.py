@@ -805,6 +805,8 @@ def reg_movie_night(request, movienight_id):
 
     if movienight.user_has_registered(request.user):
         return HttpResponse("You've already registered for this movienight.")
+    elif not movienight.free_spots() > 0:
+        return HttpResponse("Movienight full.")
     else:
 
         # look for attendence object and create one if not found
