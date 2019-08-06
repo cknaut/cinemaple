@@ -51,8 +51,11 @@ def get_pref_lists(user_attendences):
 
     pref_orderings = []
     for user_attendence in user_attendences:
-        pref_ordering = get_pref_ordering(user_attendence)
-        pref_orderings.append(pref_ordering)
+
+        # check if user has voted
+        if user_attendence.has_voted():
+            pref_ordering = get_pref_ordering(user_attendence)
+            pref_orderings.append(pref_ordering)
 
     return pref_orderings
 

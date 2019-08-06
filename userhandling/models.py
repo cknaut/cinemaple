@@ -166,6 +166,7 @@ class MovieNightEvent(models.Model):
         uas = UserAttendence.objects.filter(movienight=self, registration_complete=True)
         return uas
 
+
     def get_num_voted(self):
         # return number of registered users and number of users who have voted
         uas = self.get_registered_userattend()
@@ -233,6 +234,12 @@ class UserAttendence(models.Model):
 
     def get_toppings(self):
         return self.movienighttopping_set.all()
+
+    def has_voted(self):
+        if len(self.get_votes()) > 0:
+            return True
+        else:
+            return False
 
 class VotePreference(models.Model):
     user_attendence = models.ForeignKey(UserAttendence, on_delete=models.CASCADE, blank=True)

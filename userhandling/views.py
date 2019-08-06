@@ -557,12 +557,12 @@ def details_mov_nights(request, movienight_id, no_movie=False):
 
             # Check if there has been votes cast for this movienight (avoids scenario where user registeres too late and is only user)
             num_voted_mn = movienight.get_num_voted()
-            if num_voted_mn> 0:
+            if num_voted_mn > 0:
                 winning_movie, _ = movienight.get_winning_movie()
 
 
         # if user has voted, show rating and toppings
-        user_has_voted = movienight.get_num_voted()
+        user_has_voted = movienight.user_has_voted(request.user)
         movielist = list(movienight.MovieList.all())
 
         ordered_votelist = []
