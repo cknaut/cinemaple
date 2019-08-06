@@ -265,7 +265,7 @@
 
                             <div class="row mb-4 ">
                                 <div class="col-xl-3 col-lg-3 "> Number of attendees: </div>
-                                <div class="col-xl-9 col-lg-9 ">  {{movienight.get_num_registered }}   </div>
+                                <div class="col-xl-9 col-lg-9 ">  {{movienight.get_num_registered }} ({{movienight.get_num_voted }} have voted)   </div>
                             </div>
 
 
@@ -330,8 +330,13 @@
                                                 <button class="btn btn-link collapsed" data-toggle="collapse"
                                                     data-target="#collapse{{ forloop.counter0 }}" aria-expanded="false"
                                                     aria-controls="collapse{{ forloop.counter0 }}">
-                                                    {{ movie.title }} ({{movie.year}}) {% if movie ==  winning_movie %}  <a href={% url  'count_votes' movienight_id=movienight.id %}> <span class='badge badge-success'>Winner</span> </a> {% endif %}
-
+                                                    {{ movie.title }} ({{movie.year}})
+                                                    {% if request.user.is_staff or not movienight.voting_enabled %}
+                                                        {% if movie ==  winning_movie %}
+                                                            <a href={% url  'count_votes' movienight_id=movienight.id %}>
+                                                            <span class='badge badge-success'>Winner</span> </a>
+                                                        {% endif %}
+                                                     {% endif %}
                                                 </button>
                                         </h5>
                                     </div>

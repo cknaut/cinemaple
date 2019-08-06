@@ -104,8 +104,6 @@ def new_activation_link(request, user_id):
         mg = Mailgun()
         link="http://cinemaple.com/activate/"+profile.activation_key
 
-
-
         sender_email    = "admin@cinemaple.com"
         sender_name     = "Cinemaple"
         subject         = "Your new activation link."
@@ -342,6 +340,9 @@ def add_movies_from_form(request, movienight,  mov_ID_add):
 @user_passes_test(lambda u: u.is_staff)
 def add_movie_night(request):
 
+    # if true, votingnight exists and at least one person has voted --> Don't allow for change in movies
+    voting_occured = False
+
     if request.method == 'POST': # If the form has been submitted...
 
         # CHeck if hidden field is populated with id, this is only the case if view called to change
@@ -350,6 +351,7 @@ def add_movie_night(request):
 
         if movienightid != "":
             mn = get_object_or_404(MovieNightEvent, pk=movienightid)
+            voting_occured = mn.get_num_voted() > 0
         else:
             mn = MovieNightEvent()
 
@@ -363,20 +365,23 @@ def add_movie_night(request):
             num_formfields = 10
             mov_ID_add = []
 
-            # if change mode: first delete all movies
-            if movienightid != "":
-                movielist = mn.MovieList.all()
-                movielist.delete()
+            # Don't change movie list if voting has occured.
+            if not voting_occured:
 
-            for i in range(1, num_formfields+1):
-                # Look at correct formfield
-                movie_id = form2.cleaned_data['movieID{}'.format(i)]
-                # If not empty, generate
-                if movie_id  != "":
-                    mov_ID_add.append(movie_id)
+                # if change mode: first delete all movies
+                if movienightid != "":
+                    movielist = mn.MovieList.all()
+                    movielist.delete()
 
-            # Create and save movies objects
-            add_movies_from_form(request, mn, mov_ID_add)
+                for i in range(1, num_formfields+1):
+                    # Look at correct formfield
+                    movie_id = form2.cleaned_data['movieID{}'.format(i)]
+                    # If not empty, generate
+                    if movie_id  != "":
+                        mov_ID_add.append(movie_id)
+
+                # Create and save movies objects
+                add_movies_from_form(request, mn, mov_ID_add)
 
             return redirect('/mov_night/{}'.format(mn.id))
         else:
@@ -388,10 +393,11 @@ def add_movie_night(request):
         form3 = SneakymovienightIDForm(prefix="form3")
         # TODO: This Fails.
     context = {
-        'debug' : settings.DEBUG,
-        'form1'      : form1,
-        "form2"      : form2,
-        "form3"      : form3,
+        'debug'             : settings.DEBUG,
+        'form1'             : form1,
+        "form2"             : form2,
+        "form3"             : form3,
+        'voting_occured'    : voting_occured
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
 
@@ -447,7 +453,6 @@ def get_person_by_job(data, job_desc):
             resultarray.append(entry)
 
     return resultarray
-
 
 def tmdb_get_movie_images_videos(tmdb_id):
 
@@ -550,16 +555,19 @@ def details_mov_nights(request, movienight_id, no_movie=False):
         if user_has_reg:
             toppings = movienight.get_user_topping_list(request.user, 'primary')
 
+            # Check if there has been votes cast for this movienight (avoids scenario where user registeres too late and is only user)
+            num_voted_mn = movienight.get_num_voted()
+            if num_voted_mn> 0:
+                winning_movie, _ = movienight.get_winning_movie()
+
+
+        # if user has voted, show rating and toppings
+        user_has_voted = movienight.get_num_voted()
         movielist = list(movienight.MovieList.all())
 
-        user_has_voted = movienight.user_has_voted(request.user)
-
-        # if user has registered, show rating and toppings
         ordered_votelist = []
 
         if user_has_voted:
-
-            winning_movie, _ = movienight.get_winning_movie()
 
             votelist, _ = movienight.get_user_info(request.user)
 
@@ -572,8 +580,6 @@ def details_mov_nights(request, movienight_id, no_movie=False):
                     return HttpResponse("No vote found for movie {}.".format(movie.title))
 
                 ordered_votelist.append(ratingobject[0].preference)
-
-
 
     context = {
         'movienight' : movienight,
@@ -665,6 +671,9 @@ def get_instantciated_movie_add_form(MovieNight):
 @user_passes_test(lambda u: u.is_staff)
 def change_movie_night(request, movienight_id):
     MovieNight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+    voting_occured = MovieNight.get_num_voted() > 0
+
     form1 = MoveNightForm(prefix="form1", instance = MovieNight) # An unbound for
 
     form2, movielist = get_instantciated_movie_add_form(MovieNight)
@@ -676,6 +685,7 @@ def change_movie_night(request, movienight_id):
         "form3"                 : form3,
         "movielist"            : movielist,
         "navbar"            : "mod_movie",
+        'voting_occured'    : voting_occured,
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
 

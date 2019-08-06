@@ -166,6 +166,20 @@ class MovieNightEvent(models.Model):
         uas = UserAttendence.objects.filter(movienight=self, registration_complete=True)
         return uas
 
+    def get_num_voted(self):
+        # return number of registered users and number of users who have voted
+        uas = self.get_registered_userattend()
+
+        num_voted_count = 0
+        for us in uas:
+            ua_user = us.user
+            has_voted = self.user_has_voted(ua_user)
+            if has_voted:
+                num_voted_count += 1
+        return num_voted_count
+
+
+
     # counts votes and returns current schulze winner
     def get_winning_movie(self):
 

@@ -226,10 +226,12 @@
                   {% for i in i|rjust:10 %}
                         <div class='alert alert-success alert-dismissible fade show moviealert invisible' display=none id="moviealert{{ forloop.counter }}" role='alert'>
                                       <div id="movietag_content{{ forloop.counter }}"></div>
+                                      {% if not voting_occured  %}
                                       <button type='button' value=" " id="movieclosebutton{{ forloop.counter }}" class='close movieclosebutton' data-dismiss='alert'
                                         aria-label='Close'>
                                         <span aria-hidden='true'> &times; </span>
                                       </button>
+                                      {% endif  %}
                                     </div>
                   {% endfor %}
 
@@ -247,7 +249,7 @@
       </div>
     </div>
   </div>
-
+  {% if not voting_occured  %}
   <div class="row">
 
     <!-- Pie Chart -->
@@ -297,6 +299,7 @@
         </div>
       </div>
     </div>
+  {% endif  %}
   </div>
   <!-- /.container-fluid -->
   {% endblock %}
@@ -557,6 +560,25 @@
     </div>
   </div>
 
+
+<div class="modal fade" id="votingoccured" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Voting has occured</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">At leat one person has already voted for this movienight, cannot modify movie selection. Feel free to modify the rest, though.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Fine, whatever</button>
+            </div>
+        </div>
+    </div>
+</div>
   {% endblock %}
 
 
@@ -629,6 +651,10 @@ $(document).ready(function() {
     });
 
 });
+
+{% if voting_occured  %}
+$('#votingoccured').modal('show');
+ {% endif %}
 
 </script>
   {% endblock %}
