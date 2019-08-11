@@ -63,7 +63,6 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
-
 class VotingParameters(models.Model):
     vote_disable_before = models.DurationField() # how long before the movienight the vote should e closed
     reminder_email_before = models.DurationField() # how long before the movienight the final reminder email sould be sent
@@ -71,7 +70,6 @@ class VotingParameters(models.Model):
 
     def __str__(self):
         return "Only instance of this model."
-
 
 class MovieNightEvent(models.Model):
     motto = models.CharField(max_length=200)

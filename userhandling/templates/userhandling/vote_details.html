@@ -142,7 +142,7 @@
         <div class="card-body">
           <div class="col-xl-12 col-lg-12">
 
-          <h3> Winner: <span class='badge badge-primary'> {{winning_movie.title}} </span> </h3>
+            <h3> Winner: <span class='badge badge-primary'> {{winning_movie.title}} </span> </h3>
 
 
             <h3> Strong Pairs: </h3>
@@ -168,7 +168,7 @@
               </tbody>
             </table>
 
-             <h3> Pairs: </h3>
+            <h3> Pairs: </h3>
 
             <table class='myTable'>
               <thead>
@@ -210,14 +210,14 @@
 
 {% block js %}
 <script>
-  $(document).ready(function() {
-    $('.myTable').DataTable( {
-        "paging":   false,
-        "ordering": true,
-        "info":     false,
-        "searching":     false
-    } );
-} );
+  $(document).ready(function () {
+    $('.myTable').DataTable({
+      "paging": false,
+      "ordering": true,
+      "info": false,
+      "searching": false
+    });
+  });
 </script>
 
 

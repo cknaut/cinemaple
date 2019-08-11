@@ -8,7 +8,6 @@ from .utils import badgify
 import pytz
 
 
-
 def strfdelta(tdelta, fmt):
     d = {"days": abs(tdelta.days)}
     d["hours"], rem = divmod(tdelta.seconds, 3600)
@@ -49,16 +48,17 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
         date_boston_time = date.astimezone(boston_tz)
 
         if timedelta_secs > 0:
-            return date_boston_time.strftime(fmt)  + " (" + strfdelta(timedelta, "In {days}d, {hours}hrs, {minutes}min") + ")"
+            return date_boston_time.strftime(fmt) + " (" + strfdelta(timedelta, "In {days}d, {hours}hrs, {minutes}min") + ")"
         else:
-            timedelta =  now - date
-            return date_boston_time.strftime(fmt) + " (" +  strfdelta(timedelta, "{days}d, {hours}hrs, {minutes}min ago") + ")"
+            timedelta = now - date
+            return date_boston_time.strftime(fmt) + " (" + strfdelta(timedelta, "{days}d, {hours}hrs, {minutes}min ago") + ")"
 
     class Meta:
         model = MovieNightEvent
         fields = (
             'id', 'motto', 'date', "movies", "isdraft", "movies", "date_delta", "vote_enabled", "status", "reg_users"
         )
+
 
 class UserAttendenceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -81,23 +81,10 @@ class UserAttendenceSerializer(serializers.ModelSerializer):
         return UserAttendence.user.username
 
     def get_toppings(self, UserAttendence):
-        return ' '.join([badgify(o.topping.topping, 'primary') for o in  UserAttendence.get_toppings()])
+        return ' '.join([badgify(o.topping.topping, 'primary') for o in UserAttendence.get_toppings()])
 
     class Meta:
         model = UserAttendence
         fields = (
             'id', 'user', 'toppings', 'reg_date', "registration_complete", "movienight", 'firstlastname'
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
