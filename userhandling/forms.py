@@ -311,6 +311,24 @@ class ProfileUpdateForm(ModelForm):
         for fieldname in ['username', 'first_name', 'last_name', 'email']:
             self.fields[fieldname].help_text = None
 
+
+
+    # Sending activation email
+    def send_activation_new_email(self, datas):
+
+        link = "http://www.cinemaple.com/activate/update_email/"+datas['activation_key']
+
+        sender_email = "admin@cinemaple.com"
+        sender_name = "Cinemaple"
+        subject = "Please Verify Email"
+        recipients = [datas['email']]
+        content = "Hi " + datas["first_name"] + \
+            ", please activate your email using the following link: " + link
+
+        email = EmailMessage(subject, content, sender_name +
+                             " <" + sender_email + ">", recipients)
+        email.send()
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']

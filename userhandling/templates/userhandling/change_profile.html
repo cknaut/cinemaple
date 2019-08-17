@@ -152,6 +152,11 @@
                             <form method="post">
                                 {% csrf_token %}
                                 {{ form }}
+                                {% if request.user.profile.email_buffer == '' %}
+                                active
+                                {% else %}
+                                Activation email sent to {{request.user.profile.email_buffer}}.
+                                {% endif %}
                                 <p> </p>
                             <input class="btn btn-primary odom-submit" type="submit" value="Save Changes">
 

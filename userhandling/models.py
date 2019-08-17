@@ -17,6 +17,7 @@ from .vote import get_pref_lists, prepare_voting_dict
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
+    email_buffer = models.EmailField(default='') # contains unverified email
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     activation_key = models.CharField(max_length=40, blank=True)

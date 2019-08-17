@@ -947,14 +947,27 @@ def change_profile(request):
 
             if old_email != new_email:
 
-                #Update Mailchimp
-                mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-                mc.unsubscribe(old_email)
-                mc.add_email(new_email)
+                form.save() #this updates the user settings
+                request.user.email = old_email # undo email change
+                request.user.profile.email_buffer = new_email
+                 # We update activation key
+                vh = VerificationHash()
+                request.user.profile.activation_key = vh.gen_ver_hash(request.user.username + new_email)
 
-            form.save() #this updates the user settings
-            user_saved = True
+                request.user.save()
+                request.user.profile.save()
 
+                datas = {
+                    'activation_key' : request.user.profile.activation_key,
+                    'email'          : new_email,
+                    'first_name'     : request.user.first_name,
+                }
+
+                # send activation email
+                form.send_activation_new_email(datas)
+
+            else:
+                form.save() #this updates the user settings
             context = {
                 'pw_changed': False,
                 'user_saved' : True,
@@ -968,3 +981,24 @@ def change_profile(request):
     }
     return render(request, 'userhandling/change_profile.html', context)
 
+# Activate email after email update
+# TODO Debug This
+def activate_emailupdate(request, key):
+    profile = get_object_or_404(Profile, activation_key=key)
+
+    new_email = profile.email_buffer
+    old_email = profile.user.email
+
+    # update email settings from buffer
+    profile.user.email = new_email
+
+    # reset buffer
+    profile.email_buffer = ''
+
+    profile.save()
+    profile.user.save()
+
+    #Update Mailchimp
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    mc.unsubscribe(old_email)
+    mc.add_email(new_email)
