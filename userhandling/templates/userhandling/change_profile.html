@@ -141,7 +141,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">User Preferences</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">View/Update User Information</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -149,10 +149,13 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-6">
 
-                          <a href={% url 'change_password' %}>Change Password</a>
-                          <p> </p>
-                           <a href={% url 'change_profile' %}>View/Update User Information</a>
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form }}
+                                <p> </p>
+                            <input class="btn btn-primary odom-submit" type="submit" value="Save Changes">
 
+                            </form>
 
                         </div>
 
@@ -169,44 +172,6 @@
 
 {% block modals %}
 
-<div class="modal fade" id="pwchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Password succesfully changed!</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">You can now log in using your new password.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="userchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">User information succesfully changed!</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Your profile has been updated.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 {% endblock %}
 
@@ -217,10 +182,6 @@
 {% if pw_changed %}
 $('#pwchanged').modal('show');
  {% endif %}
-
- {% if user_saved %}
-$('#userchanged').modal('show');
- {% endif %}
 </script>
 
-{% endblock %}dfgdfgdg
+{% endblock %}

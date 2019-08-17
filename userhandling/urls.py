@@ -38,6 +38,7 @@ urlpatterns = [
     path('count_votes/<str:movienight_id>', views.count_votes,  name='count_votes'),
     path('user_prefs/', views.user_prefs,  name='user_prefs'),
     path('change_password/', views.change_password,  name='change_password'),
+    path('change_profile/', views.change_profile,  name='change_profile'),
 
     #path('vote_movie_night/<str:movienight_id>', views.vote_movie_night,  name='vote_movie_night'),
 

@@ -280,3 +280,44 @@ class MyPasswordChangeForm(PasswordChangeForm):
             attrs={'placeholder': 'New password', 'class': 'form-control input-perso'})
         self.fields['new_password2'].widget = forms.PasswordInput(
             attrs={'placeholder': 'Confirm new password', 'class': 'form-control input-perso'})
+
+
+class ProfileUpdateForm(ModelForm):
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        username = self.cleaned_data['username']
+
+        # if new email entered: Make sure no user already has it
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return email
+
+        # if instanticated form is called, don't raise error if email is current email
+        user = User.objects.get(email=email)
+        thisuser = User.objects.get(username=username)
+
+        if user == thisuser:
+            return email
+
+        raise forms.ValidationError(
+            u'A user with email "%s" is already registered.' % email)
+
+    #remove helper text (thanks https://stackoverflow.com/questions/13202845/removing-help-text-from-django-usercreateform )
+    def __init__(self, *args, **kwargs):
+        super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+
+        for fieldname in ['username', 'first_name', 'last_name', 'email']:
+            self.fields[fieldname].help_text = None
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+        widgets = {
+            'username': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso', 'readonly':'readonly'}),
+            'first_name': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
+            'last_name': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
+            'email': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'})
+        }
+

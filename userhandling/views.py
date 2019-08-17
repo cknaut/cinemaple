@@ -14,7 +14,7 @@ import hashlib
 import random
 from .utils import Mailchimp, VerificationHash
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
-    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm
+    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, ProfileUpdateForm
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence
 import tmdbsimple as tmdb
 from django.http import JsonResponse
@@ -905,7 +905,8 @@ def count_votes(request, movienight_id):
 @login_required
 def user_prefs(request):
     context = {
-        'pw_changed': False
+        'pw_changed': False,
+        'user_saved' : False
     }
     return render(request, 'userhandling/user_prefs.html', context)
 
@@ -913,6 +914,8 @@ def user_prefs(request):
 @login_required
 def change_password(request):
     pw_changed = False
+    user_saved = False
+
     if request.method == 'POST':
         form = MyPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -927,5 +930,41 @@ def change_password(request):
         form = MyPasswordChangeForm(request.user)
     return render(request, 'userhandling/change_password.html', {
         'form': form,
-        'pw_changed': pw_changed
+        'pw_changed': pw_changed,
+        'user_saved' : user_saved
     })
+
+@login_required
+def change_profile(request):
+
+    if request.method == 'POST':
+        user = request.user
+        old_email = request.user.email
+
+        form = ProfileUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            new_email = form.cleaned_data['email']
+
+            if old_email != new_email:
+
+                #Update Mailchimp
+                mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+                mc.unsubscribe(old_email)
+                mc.add_email(new_email)
+
+            form.save() #this updates the user settings
+            user_saved = True
+
+            context = {
+                'pw_changed': False,
+                'user_saved' : True,
+            }
+            return render(request, 'userhandling/user_prefs.html', context)
+    else:
+        form =  ProfileUpdateForm(instance=request.user)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'userhandling/change_profile.html', context)
+
