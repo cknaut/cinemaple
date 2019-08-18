@@ -153,7 +153,7 @@
                                 {% csrf_token %}
                                 {{ form }}
                                 {% if request.user.profile.email_buffer == '' %}
-                                active
+                                 <span class="glyphicon glyphicon-ok"></span>
                                 {% else %}
                                 Activation email sent to {{request.user.profile.email_buffer}}.
                                 {% endif %}

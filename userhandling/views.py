@@ -989,7 +989,10 @@ def activate_emailupdate(request, key):
     new_email = profile.email_buffer
     old_email = profile.user.email
 
-    # update email settings from buffer
+    if new_email == old_email:
+        return HttpResponse("Email has already been activated.")
+
+    # update    email settings from buffer
     profile.user.email = new_email
 
     # reset buffer
@@ -1002,3 +1005,6 @@ def activate_emailupdate(request, key):
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
     mc.unsubscribe(old_email)
     mc.add_email(new_email)
+
+    return redirect(user_prefs)
+
