@@ -47,7 +47,7 @@ if PW_RESET_SECRET_SALT is None:
 
 def check_email(email):
     if not re.match(r".+@.+\..+", email):
-        raise ValueError('String passed is not a valid email address')
+        raise ValueError('String ' + email + ' is not a valid email address')
     return
 
 
