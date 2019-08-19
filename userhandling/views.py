@@ -950,6 +950,7 @@ def change_profile(request):
                 form.save() #this updates the user settings
                 request.user.email = old_email # undo email change
                 request.user.profile.email_buffer = new_email
+
                  # We update activation key
                 vh = VerificationHash()
                 request.user.profile.activation_key = vh.gen_ver_hash(request.user.username + new_email)
@@ -966,23 +967,36 @@ def change_profile(request):
                 # send activation email
                 form.send_activation_new_email(datas)
 
+                email_changed = True
+                user_saved = False
+
             else:
                 form.save() #this updates the user settings
+                email_changed = False
+                user_saved = True
+
+            # reneew form instance to update form content from Profile settings
+            form = ProfileUpdateForm(instance=request.user)
             context = {
-                'pw_changed': False,
-                'user_saved' : True,
+                'form': form,
+                'email_changed': email_changed,
+                'user_saved' : user_saved,
+                'email_activated' : False,
+
             }
-            return render(request, 'userhandling/user_prefs.html', context)
+            return render(request, 'userhandling/change_profile.html', context)
     else:
         form =  ProfileUpdateForm(instance=request.user)
 
     context = {
-        'form': form
+        'form': form,
+        'email_changed': False,
+        'user_saved' : False,
+        'email_activated' : False,
     }
     return render(request, 'userhandling/change_profile.html', context)
 
 # Activate email after email update
-# TODO Debug This
 def activate_emailupdate(request, key):
     profile = get_object_or_404(Profile, activation_key=key)
 
@@ -1006,5 +1020,16 @@ def activate_emailupdate(request, key):
     mc.unsubscribe(old_email)
     mc.add_email(new_email)
 
-    return redirect(user_prefs)
+    if request.user.is_authenticated:
+        form =  ProfileUpdateForm(instance=request.user)
+
+        context = {
+            'form': form,
+            'email_changed': False,
+            'user_saved' : False,
+            'email_activated' : True,
+        }
+        return render(request, 'userhandling/change_profile.html', context)
+    else:
+        return HttpResponse(new_email + " has been activated.")
 

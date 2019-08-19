@@ -152,10 +152,12 @@
                             <form method="post">
                                 {% csrf_token %}
                                 {{ form }}
+                                 <p> </p>
                                 {% if request.user.profile.email_buffer == '' %}
-                                 <span class="glyphicon glyphicon-ok"></span>
+                                <span class="badge badge-success">Email verified</span>
+
                                 {% else %}
-                                Activation email sent to {{request.user.profile.email_buffer}}.
+                                Activation link sent to <span class="badge badge-secondary" > {{request.user.profile.email_buffer}} </span>.
                                 {% endif %}
                                 <p> </p>
                             <input class="btn btn-primary odom-submit" type="submit" value="Save Changes">
@@ -177,6 +179,66 @@
 
 {% block modals %}
 
+<div class="modal fade" id="userchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">User information succesfully changed!</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Your profile has been updated.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="emailchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Activation link sent</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">We've sent an activation link to your new email address, please follow it for activation. <pr> </pr> Until activation of the new email address, your previous email address will remain active.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="emailactivated" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Email address activated</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body"> We will now use your updated email address.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 {% endblock %}
 
@@ -184,9 +246,22 @@
 {% block js %}
 
 <script>
-{% if pw_changed %}
-$('#pwchanged').modal('show');
+
+
+
+{% if email_changed %}
+$('#emailchanged').modal('show');
  {% endif %}
+
+{% if user_saved %}
+$('#userchanged').modal('show');
+ {% endif %}
+
+{% if email_activated %}
+$('#emailactivated').modal('show');
+ {% endif %}
+
+
 </script>
 
 {% endblock %}
