@@ -136,6 +136,7 @@ dmypy.json
 
 # Secret Key Data
 cinemaple/secretkeys
+cinemaple/secretkeys.txt
 
 .vscode/*
 
