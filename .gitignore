@@ -138,6 +138,9 @@ dmypy.json
 cinemaple/secretkeys
 cinemaple/secretkeys.txt
 
+# Exit on MAC
+cinemaple/exit/*
+
 .vscode/*
 
 
