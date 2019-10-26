@@ -1047,15 +1047,13 @@ def trigger_emails(request, movienight_id):
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
     mc.get_all_campaign()
 
-
-    template_id = '137409'
     reply_to = 'info@cinemaple.com'
     subject_line = 'Test Campaign'
     preview_text = 'Gotta treat fo you'
     from_name = request.user.first_name
-    html = ""
+    html = "LOLWOTT"
     title = "Test Campaign"
 
-    mc.create_campaign(template_id, reply_to, subject_line, preview_text, title, from_name, html)
+    _, _, email_html = mc.create_campaign(reply_to, subject_line, preview_text, title, from_name, html)
 
-    return HttpResponse(movienight_id)
+    return HttpResponse(email_html)

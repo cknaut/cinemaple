@@ -7,6 +7,8 @@ import json
 import requests
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
+
 
 
 
@@ -106,13 +108,11 @@ class Mailchimp(object):
         return r.status_code, r.json()
 
 
-    def create_campaign(self, template_id, reply_to, subject_line, preview_text, title, from_name, html):
+    def create_campaign(self, reply_to, subject_line, preview_text, title, from_name, html_body):
         campaigns_endpoint       = self.list_endpoint = '{api_url}/campaigns'.format(
                                     api_url = self.api_url)
 
-        tempaltes_endpoint       = self.list_endpoint = '{api_url}/templates/{tempalte_id}/default-content'.format(
-                                    api_url = self.api_url,
-                                    tempalte_id=template_id)
+
 
         data = {
                     "type": "regular",
@@ -126,7 +126,6 @@ class Mailchimp(object):
                             "title"             : title,
                             "reply_to"          : reply_to,
                             "to_name"           : "*|FNAME|*",
-                            "template_id"       : int(template_id)
                     }
                     }
         r = requests.post(campaigns_endpoint,
@@ -134,12 +133,34 @@ class Mailchimp(object):
                     data=json.dumps(data)
                     )
 
-        r_tempalte = requests.get(tempaltes_endpoint,
+        campaign_id = r.json()['id']
+
+        context = {
+            'body' : html_body
+        }
+
+        html_data = render_to_string("userhandling/emails/cinemaple_email_base.html", context)
+
+        #upload html to campaign
+
+        campaign_endpoint       = '{campaigns_endpoint}/{campaign_id}'.format(
+                                        campaigns_endpoint = campaigns_endpoint,
+                                        campaign_id = campaign_id)
+
+        campaign_content_endpoint =   '{campaign_endpoint}/content'.format(
+                                        campaign_endpoint = campaign_endpoint)
+
+        data = {
+            'html'  : html_data
+        }
+
+        # Retrieve HTML of Tempalte
+        r = requests.put(campaign_content_endpoint,
                     auth=("", MAILCHIMP_API_KEY),
-                    )
+                    data=json.dumps(data)
+        )
 
-
-        return r.status_code, r.json()
+        return r.status_code, r.json(), html_data
 
     ''''
     "settings": {
@@ -151,6 +172,8 @@ class Mailchimp(object):
                             "to_name"           : "*|FNAME|*",
                             "template_id"       : template_id
                     }
+
+    <td class="defaultText" mc:edit="body"></td>
     '''
 
     def get_member_list(self):
