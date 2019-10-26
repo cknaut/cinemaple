@@ -151,6 +151,19 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
+
+                        <div class="row">
+                                <div class="col-xl-3 col-lg-3">
+                                Mailchimp audience ID:
+                                </div>
+
+                                <div class="col-xl-9 col-lg-93">
+                                    {{mc_id}}
+                                </div>
+                        </div>
+
+
+
                         <div class="row">
                                 <div class="col-xl-3 col-lg-3">
                                 Response Status:
@@ -161,6 +174,20 @@
                                 </div>
                         </div>
 
+                        {% if statusok %}
+
+                        <div class="row">
+                                <div class="col-xl-3 col-lg-3">
+                                Mailing List Health:
+                                </div>
+
+                                <div class="col-xl-9 col-lg-93">
+                                    {{health|safe}}
+                                </div>
+                        </div>
+
+
+
                         <div class="row">
                                 <div class="col-xl-3 col-lg-3">
                                Subscribed Members ({{ subs|length }} total):
@@ -168,7 +195,9 @@
 
                                 <div class="col-xl-9 col-lg-9">
                                 {% for  email in subs %}
+                                <div class="row mt-2">
                                 {{email|safe}}
+                                </div>
                                 {% endfor %}
                                 </div>
                         </div>
@@ -180,10 +209,45 @@
 
                                 <div class="col-xl-9 col-lg-9">
                                         {% for  email in usubs %}
-                                        {{email|safe}}
+                                        <div class="row mt-2">
+                                                {{email|safe}}
+                                            </div>
                                         {% endfor %}
                                 </div>
                         </div>
+
+                        <div class="row">
+                                <div class="col-xl-3 col-lg-3">
+                               Active Users ({{ user_emails|length }}  total):
+                                </div>
+
+                                <div class="col-xl-9 col-lg-9">
+                                        {% for  email in user_emails %}
+                                        <div class="row mt-2">
+                                                {{email|safe}}
+                                            </div>
+
+                                        {% endfor %}
+                                </div>
+                        </div>
+
+
+                        <div class="row">
+                                <div class="col-xl-3 col-lg-3">
+                               Active users not in Mailchimp list ({{ users_not_in_mc|length }}  total):
+                                </div>
+
+                                <div class="col-xl-9 col-lg-9">
+                                        {% for  email in users_not_in_mc %}
+                                        <div class="row mt-2">
+                                        {{email|safe}}
+                                        </div>
+                                        {% endfor %}
+                                </div>
+                        </div>
+
+                        {% endif %}
+
 
 
 

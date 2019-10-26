@@ -77,6 +77,8 @@ class Mailchimp(object):
     def get_members_endpoint(self):
         endpoint = '{list_endpoint}/members'.format(
                                     list_endpoint=self.list_endpoint)
+
+        print(endpoint)
         return endpoint
 
     def add_email(self, email):
@@ -101,14 +103,19 @@ class Mailchimp(object):
 
 
     def get_member_list(self):
-        res = self.check_list_details()[1]
-        status = self.check_list_details()[0]
+        list_details = self.check_list_details()
+        res = list_details[1]
+        status = list_details[0]
+        mailchimp_id = self.list_id
+
+        #TODO: FInd out why new mailchimp audience doesnt work
+        # Somehow these print statements are needed
+        print(res)
+        print(status)
 
         # Check if response is ok
-        if status != 200:
-            results = ""
-
-        else:
+        results = ""
+        if status == 200:
             #retrieve list of subscribed and unsubscribed emails
             num_total = len(res['members'])
             emails_subscribed = []
@@ -126,7 +133,7 @@ class Mailchimp(object):
                     "emails_unsubscribed" : emails_unubscribed,
                 }
 
-        return status, results
+        return status, results, mailchimp_id
 
 
     def check_valid_status(self, status):
