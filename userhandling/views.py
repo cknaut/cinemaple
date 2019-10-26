@@ -12,7 +12,7 @@ import urllib
 import json
 import hashlib
 import random
-from .utils import Mailchimp, VerificationHash
+from .utils import Mailchimp, VerificationHash, badgify
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
     PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, ProfileUpdateForm
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence
@@ -1033,3 +1033,71 @@ def activate_emailupdate(request, key):
     else:
         return HttpResponse(new_email + " has been activated.")
 
+
+
+def ml_health(request):
+
+    # Get information of Mailchimp Audience
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    status, members_list, mailchimp_id = mc.get_member_list()
+
+    if status == 200:
+        statusok = True
+        print(members_list)
+        status = badgify(str(status), 'success')
+        subs = [badgify(email, 'secondary') for email in members_list['emails_subscribed']]
+        usubs = [badgify(email, 'secondary') for email in members_list['emails_unsubscribed']]
+
+        # Get emails of all users
+
+        users = User.objects.filter(is_active=True)
+        user_emails = [users[i].email for i in range(len(users))]
+        user_emails_badged = [badgify(email, 'secondary') for email in user_emails]
+
+        users_not_in_mc = []
+
+        for email in user_emails:
+            if email not in members_list['emails_subscribed'] and  email not in members_list['emails_unsubscribed']:
+                users_not_in_mc.append(email)
+
+        users_not_in_mc_badged = [badgify(email, 'secondary') for email in users_not_in_mc]
+
+        if len(users_not_in_mc_badged) != 0:
+            health = 1
+            healthprint = badgify("Unhealthy", 'danger')
+        else:
+            health = 0
+            healthprint = badgify("Healthy", 'success')
+
+        context = {
+            'status'            : status,
+            'statusok'          : statusok,
+            'mc_id'             : mailchimp_id,
+            'subs'              : subs,
+            'usubs'             : usubs,
+            'user_emails'       : user_emails_badged,
+            'users_not_in_mc'   : users_not_in_mc_badged,
+            'health'            : healthprint
+        }
+
+    else:
+        statusok = False
+        status = badgify(str(status), 'danger')
+        context = {
+            'status'            : status,
+            'statusok'          : statusok,
+            'mc_id'             : mailchimp_id,
+            'subs'              : 0,
+            'usubs'             : 0,
+            'user_emails'       : 0,
+            'users_not_in_mc'   : 0,
+            'health'            : 0
+        }
+
+    return render(request, 'userhandling/mailinglist_health.html', context)
+
+
+def trigger_emails(request, movienight_id):
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    members_list = mc.get_member_list()
+    return HttpResponse(movienight_id)

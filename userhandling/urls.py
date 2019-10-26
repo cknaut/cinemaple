@@ -40,6 +40,12 @@ urlpatterns = [
     path('user_prefs/', views.user_prefs,  name='user_prefs'),
     path('change_password/', views.change_password,  name='change_password'),
     path('change_profile/', views.change_profile,  name='change_profile'),
+    path('trigger_emails/<str:movienight_id>', views.trigger_emails,  name='trigger_emails'),
+    path('ml_health/', views.ml_health,  name='ml_health'),
+
+
+
+
 
     #path('vote_movie_night/<str:movienight_id>', views.vote_movie_night,  name='vote_movie_night'),
 
