@@ -6,6 +6,8 @@ import re
 import json
 import requests
 from django.conf import settings
+from django.contrib.auth.models import User
+
 
 
 # Wrap Bootrap Badge HTML around string
@@ -41,8 +43,6 @@ if EMAIL_VERIFICATION_SECRET_SALT is None:
 PW_RESET_SECRET_SALT = getattr(settings, "PW_RESET_SECRET_SALT", None)
 if PW_RESET_SECRET_SALT is None:
     raise NotImplementedError("PW_RESET_SECRET_SALT must be set in the settings")
-
-
 
 
 def check_email(email):
@@ -81,12 +81,16 @@ class Mailchimp(object):
         print(endpoint)
         return endpoint
 
-    def add_email(self, email):
+    def add_email(self, email, firstname, lastname):
         check_email(email)
         endpoint = self.get_members_endpoint()
         data = {
                 "email_address": email,
-                "status": "subscribed"
+                "status": "subscribed",
+                "merge_fields": {
+                        "FNAME": firstname,
+                        "LNAME": lastname
+                    }
                 }
         r = requests.post(endpoint,
                     auth=("", MAILCHIMP_API_KEY),
@@ -170,6 +174,24 @@ class Mailchimp(object):
                                 )
         return r.status_code, r.json()
 
+
+    def change_subscriber_email(self, old_email, newemail):
+        subscriber_hash     = get_subscriber_hash(old_email)
+        members_endpoint       = self.get_members_endpoint()
+        endpoint            = "{members_endpoint}/{sub_hash}".format(
+                                members_endpoint=members_endpoint,
+                                sub_hash=subscriber_hash
+                                )
+
+        data                = {
+                                "email_address": newemail,
+                            }
+        r                   = requests.put(endpoint,
+                                auth=("", MAILCHIMP_API_KEY),
+                                data=json.dumps(data)
+                                )
+        return r.status_code, r.json()
+
     def resubscribe(self, email):
         return self.change_subscription_status(email, status = 'subscribed')
 
@@ -190,3 +212,66 @@ class VerificationHash(object):
         ''' Get Hasch by combining username, salt based on user creation, and secret salt'''
         return hashlib.sha1((self.salt+username+PW_RESET_SECRET_SALT).encode('utf-8')).hexdigest()
 
+def check_ml_health():
+    '''
+    Compares listed members in the Mailchimp mailinglist (including subscribed and unsubscribed ones) to registered users
+    If not all cinemaple users are in  Mailchimp list, raise problem.
+
+    '''
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    status, members_list, mailchimp_id = mc.get_member_list()
+
+    if status == 200:
+        statusok = True
+        print(members_list)
+        status = badgify(str(status), 'success')
+        subs = [badgify(email, 'secondary') for email in members_list['emails_subscribed']]
+        usubs = [badgify(email, 'secondary') for email in members_list['emails_unsubscribed']]
+
+        # Get emails of all users
+
+        users = User.objects.filter(is_active=True)
+        user_emails = [users[i].email for i in range(len(users))]
+        user_emails_badged = [badgify(email, 'secondary') for email in user_emails]
+
+        users_not_in_mc = []
+
+        for email in user_emails:
+            if email not in members_list['emails_subscribed'] and  email not in members_list['emails_unsubscribed']:
+                users_not_in_mc.append(email)
+
+        users_not_in_mc_badged = [badgify(email, 'secondary') for email in users_not_in_mc]
+
+        if len(users_not_in_mc_badged) != 0:
+            healthy = False
+            healthprint = badgify("Unhealthy", 'danger')
+        else:
+            healthy = True
+            healthprint = badgify("Healthy", 'success')
+
+        context = {
+            'status'            : status,
+            'statusok'          : statusok,
+            'mc_id'             : mailchimp_id,
+            'subs'              : subs,
+            'usubs'             : usubs,
+            'user_emails'       : user_emails_badged,
+            'users_not_in_mc'   : users_not_in_mc_badged,
+            'health'            : healthprint
+        }
+
+    else:
+        statusok = False
+        status = badgify(str(status), 'danger')
+        context = {
+            'status'            : status,
+            'statusok'          : statusok,
+            'mc_id'             : mailchimp_id,
+            'subs'              : 0,
+            'usubs'             : 0,
+            'user_emails'       : 0,
+            'users_not_in_mc'   : 0,
+            'health'            : 0
+        }
+
+    return healthy, context
