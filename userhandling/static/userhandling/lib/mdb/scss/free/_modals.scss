@@ -18,8 +18,8 @@ body {
     border: 0;
     border-radius: $border-radius-base;
     .modal-header {
-      border-top-left-radius: $border-radius-base;
-      border-top-right-radius: $border-radius-base;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
     }
   }
   // Cascading modals

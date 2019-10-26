@@ -6,13 +6,14 @@ body {
 .register{
 
     border-radius: 20px;
-    margin-top: 3%;
-    padding: 3%;
+    margin-top: -5%;
+    padding: -10%;
 }
 .register-left{
     text-align: center;
     color: #fff;
-    margin-top: 12%;
+    margin-top: 5%;
+    padding: 0;
 }
 .register-left input{
     border: none;
@@ -22,8 +23,8 @@ body {
     background: #f8f9fa;
     font-weight: bold;
     color: #383d41;
-    margin-top: 30%;
-    margin-bottom: 3%;
+    margin-top: 25%;
+    margin-bottom: 0%;
     cursor: pointer;
 }
 .register-right{
@@ -32,7 +33,8 @@ body {
     border-bottom-left-radius: 10% 50%;
 }
 .register-left img{
-    margin-top: 15%;
+    margin-top: 40%;
+    padding: 00%;
     margin-bottom: 5%;
     width: 100%;
     -webkit-animation: mover 2s infinite  alternate;
@@ -49,7 +51,7 @@ body {
 .register-left p{
     font-weight: lighter;
     padding: 12%;
-    margin-top: -9%;
+    margin-top: 0%;
 }
 .register .register-form{
     padding: 10%;

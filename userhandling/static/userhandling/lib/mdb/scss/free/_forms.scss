@@ -19,8 +19,8 @@
     transition: $input-transition;
     outline: none;
     box-shadow: none;
-    border: none;
-    border-bottom: 1px solid $input-border-color;
+    border: 0px;
+    border-bottom: 0px solid $input-border-color;
     border-radius: 0;
     box-sizing: content-box;
     background-color: transparent;
@@ -28,7 +28,7 @@
     // Focused input style
     &:focus:not([readonly]) {
       box-shadow: 0 1px 0 0 $input-md-focus-color;
-      border-bottom: 1px solid $input-md-focus-color;
+      border-bottom: 0px solid $input-md-focus-color;
 
       // Focused label style
       +label {
@@ -271,7 +271,7 @@
       transition: all .3s;
       outline: none;
       box-shadow: none;
-      border: 1px solid #dadce0;
+      border: 0px solid #dadce0;
       border-radius: 4px;
       background-color: transparent;
       box-sizing: border-box;
@@ -504,9 +504,9 @@
 
       box-sizing: border-box;
       padding: 10px 5px;
-      border: 0;
-      border-top-left-radius: .3rem;
-      border-top-right-radius: .3rem;
+      border: 0px;
+      border-top-left-radius: 0rem;
+      border-top-right-radius: 0rem;
       background: #f5f5f5 no-repeat;
       background-image: linear-gradient(to bottom, $input-md-focus-color, $input-md-focus-color),
       linear-gradient(to bottom, $input-border-color, $input-border-color);
