@@ -14,11 +14,12 @@ body {
 }
 
 a {
-  color: #2dc997;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 a:hover, a:active, a:focus {
-  color: #2dca98;
+  color: #ffffff;
   outline: none;
   text-decoration: none;
 }

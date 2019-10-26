@@ -20,28 +20,31 @@
 
 {% block header %}
 
-
-
-<div class="container register">
+<section id="hero">
+        <div class="hero-container">          
+          <div class="container register">
                 <div class="row">
                     <div class="col-md-3 register-left">
-                        <img src={% static 'userhandling/img/camera.png' %} alt=""/>
+                        <img src={% static 'userhandling/img/logos/logo_cinemaple.png' %} alt="" width = 100%/>
                         {% block tagline %}
                         {% endblock %}
                     </div>
-                    <div class="col-md-9 register-right">
-                        <div class="tab-content" id="myTabContent">
+                    <div class="col-md-9 register-right">                        
+                        <div class="tab-content" id="myTabContent">                                
                                 {% block heading %}
                                 {% endblock %}
-                                <div class="row register-form">
+                                <div class="row register-form">                                    
                                     <div class="col-md-9">
-                                      {% block form %}
+                                    <!-- <a href="#hero"><img   src="{% static 'userhandling/img/cinemaple.png' %}" alt="" title="" height="100" /></img></a> -->
+                                    {% block form %}
                                     {% endblock %}
                                 </div>
                         </div>
                     </div>
                 </div>
 
-            </div>
+            </div>        
+        </div>
+      </section><!-- #hero -->
 
 {% endblock %}
