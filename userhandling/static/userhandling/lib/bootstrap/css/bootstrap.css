@@ -6,27 +6,28 @@
  */
 
 :root {
-    --blue: #007bff;
-    --indigo: #6610f2;
-    --purple: #6f42c1;
-    --pink: #e83e8c;
-    --red: #dc3545;
-    --orange: #fd7e14;
-    --yellow: #ffc107;
-    --green: #28a745;
-    --teal: #20c997;
-    --cyan: #17a2b8;
+    /* --blue: #007bff; */
+    /* --indigo: #6610f2; */
+    /* --purple: #6f42c1; */
+    /* --pink: #e83e8c; */
+    /* --red: #dc3545; */
+    /* --orange: #fd7e14; */
+    /* --yellow: #ffc107; */
+    /* --green: #28a745; */
+    /* --teal: #20c997; */
+    /* --cyan: #17a2b8; */
     --white: #fff;
-    --gray: #6c757d;
-    --gray-dark: #343a40;
+    --curtain-red:#af353b;
+    /* --gray: #6c757d; */
+    --gray-dark: #292b2c;
     --primary: #007bff;
-    --secondary: #6c757d;
+    --secondary: #000000;
     --success: #28a745;
     --info: #17a2b8;
-    --warning: #ffc107;
-    --danger: #dc3545;
-    --light: #f8f9fa;
-    --dark: #343a40;
+    /* --warning: #ffc107; */
+    /* --danger: #dc3545; */
+    /* --light: #f8f9fa; */
+    --dark: #000000;
     --breakpoint-xs: 0;
     --breakpoint-sm: 576px;
     --breakpoint-md: 768px;
@@ -2676,14 +2677,14 @@ fieldset:disabled a.btn {
 
 .btn-secondary {
     color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: #000000;
+    border-color: #ffffff;
 }
 
 .btn-secondary:hover {
     color: #fff;
-    background-color: #5a6268;
-    border-color: #545b62;
+    background-color: #000000;
+    border-color: #ffffff;
 }
 
 .btn-secondary:focus,
@@ -2694,16 +2695,16 @@ fieldset:disabled a.btn {
 .btn-secondary.disabled,
 .btn-secondary:disabled {
     color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: #000000;
+    border-color: #000000;
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active,
 .btn-secondary:not(:disabled):not(.disabled).active,
 .show>.btn-secondary.dropdown-toggle {
     color: #fff;
-    background-color: #545b62;
-    border-color: #4e555b;
+    background-color: #000000;
+    border-color: #000000;
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active:focus,
