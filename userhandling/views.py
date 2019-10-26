@@ -1042,6 +1042,20 @@ def ml_health(request):
 
 
 def trigger_emails(request, movienight_id):
+
+    health, context = check_ml_health()
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-    members_list = mc.get_member_list()
+    mc.get_all_campaign()
+
+
+    template_id = '137409'
+    reply_to = 'info@cinemaple.com'
+    subject_line = 'Test Campaign'
+    preview_text = 'Gotta treat fo you'
+    from_name = request.user.first_name
+    html = ""
+    title = "Test Campaign"
+
+    mc.create_campaign(template_id, reply_to, subject_line, preview_text, title, from_name, html)
+
     return HttpResponse(movienight_id)

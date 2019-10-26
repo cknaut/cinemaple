@@ -106,6 +106,53 @@ class Mailchimp(object):
         return r.status_code, r.json()
 
 
+    def create_campaign(self, template_id, reply_to, subject_line, preview_text, title, from_name, html):
+        campaigns_endpoint       = self.list_endpoint = '{api_url}/campaigns'.format(
+                                    api_url = self.api_url)
+
+        tempaltes_endpoint       = self.list_endpoint = '{api_url}/templates/{tempalte_id}/default-content'.format(
+                                    api_url = self.api_url,
+                                    tempalte_id=template_id)
+
+        data = {
+                    "type": "regular",
+                    "recipients": {
+                            "list_id": self.list_id,
+                        },
+                    "settings": {
+                            "subject_line"      : subject_line,
+                            "preview_text"      : preview_text,
+                            "from_name"         : from_name,
+                            "title"             : title,
+                            "reply_to"          : reply_to,
+                            "to_name"           : "*|FNAME|*",
+                            "template_id"       : int(template_id)
+                    }
+                    }
+        r = requests.post(campaigns_endpoint,
+                    auth=("", MAILCHIMP_API_KEY),
+                    data=json.dumps(data)
+                    )
+
+        r_tempalte = requests.get(tempaltes_endpoint,
+                    auth=("", MAILCHIMP_API_KEY),
+                    )
+
+
+        return r.status_code, r.json()
+
+    ''''
+    "settings": {
+                            "subject_line"      : subject_line,
+                            "preview_text"      : preview_text,
+                            "from_name"         : from_name,
+                            "title"             : title,
+                            "reply_to"          : reply_to,
+                            "to_name"           : "*|FNAME|*",
+                            "template_id"       : template_id
+                    }
+    '''
+
     def get_member_list(self):
         list_details = self.check_list_details()
         res = list_details[1]
@@ -198,6 +245,14 @@ class Mailchimp(object):
 
     def unsubscribe(self, email):
         return self.change_subscription_status(email, status='unsubscribed')
+
+    def get_all_campaign(self):
+        members_endpoint       = self.get_members_endpoint()
+        endpoint                = "{members_endpoint}/campaigns".format(members_endpoint=members_endpoint)
+        r                   = requests.get(endpoint)
+        return r.status_code, r.json()
+
+
 
 class VerificationHash(object):
     def __init__(self):
