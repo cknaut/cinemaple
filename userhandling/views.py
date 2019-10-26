@@ -1033,3 +1033,9 @@ def activate_emailupdate(request, key):
     else:
         return HttpResponse(new_email + " has been activated.")
 
+
+
+def trigger_emails(request, movienight_id):
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    members_list = mc.get_member_list()
+    return HttpResponse(movienight_id)

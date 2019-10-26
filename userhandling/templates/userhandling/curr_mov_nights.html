@@ -220,7 +220,10 @@
                                                 href="{% url 'ureg_movie_night' movienight_id=movienight.id %}">Unregister</a>
                                                   <a class="dropdown-item" id="#"
                                                 href="{% url 'attendence_list' movienight_id=movienight.id %}">Attendence List</a>
+
                                         </div>
+
+
 
 
 
@@ -311,6 +314,8 @@
                                                 src="{% url 'deactivate_movie_night' movienight_id=movienight.id %}">Cancel</a>
 
                                             {% endif %}
+                                            <a class="dropdown-item" id="#"
+                                            href="{% url 'trigger_emails' movienight_id=movienight.id %}">Create Emails</a>
 
 
 

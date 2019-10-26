@@ -92,6 +92,42 @@ class Mailchimp(object):
                     )
         return r.status_code, r.json()
 
+    def check_list_details(self):
+        members_endpoint       = self.get_members_endpoint()
+        r                   = requests.get(members_endpoint,
+                                auth=("", MAILCHIMP_API_KEY)
+                                )
+        return r.status_code, r.json()
+
+
+    def get_member_list(self):
+        res = self.check_list_details()[1]
+        status = self.check_list_details()[0]
+
+        # Check if response is ok
+        if status != 200:
+            results = ""
+
+        else:
+            #retrieve list of subscribed and unsubscribed emails
+            num_total = len(res['members'])
+            emails_subscribed = []
+            emails_unubscribed = []
+            for i in range(num_total):
+                email = res['members'][i]['email_address']
+                subscr_status = res['members'][i]['status']
+                if subscr_status == 'subscribed':
+                    emails_subscribed.append(email)
+                elif subscr_status == 'unsubscribed':
+                    emails_unubscribed.append(email)
+
+                results = {
+                    "emails_subscribed" : emails_subscribed,
+                    "emails_unsubscribed" : emails_unubscribed,
+                }
+
+        return status, results
+
 
     def check_valid_status(self, status):
         choices = ['subscribed','unsubscribed', 'cleaned', 'pending']
