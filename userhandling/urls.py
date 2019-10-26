@@ -41,6 +41,7 @@ urlpatterns = [
     path('change_password/', views.change_password,  name='change_password'),
     path('change_profile/', views.change_profile,  name='change_profile'),
     path('trigger_emails/<str:movienight_id>', views.trigger_emails,  name='trigger_emails'),
+    path('ml_health/', views.ml_health,  name='ml_health'),
 
 
 

@@ -12,7 +12,7 @@ import urllib
 import json
 import hashlib
 import random
-from .utils import Mailchimp, VerificationHash
+from .utils import Mailchimp, VerificationHash, badgify
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
     PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, ProfileUpdateForm
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence
@@ -1033,6 +1033,27 @@ def activate_emailupdate(request, key):
     else:
         return HttpResponse(new_email + " has been activated.")
 
+
+
+def ml_health(request):
+
+
+    # Get information of Mailchimp Audience
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    status, members_list = mc.get_member_list()
+    if status == 200:
+        status = badgify(str(status), 'success')
+        subs = [badgify(email, 'secondary') for email in members_list['emails_subscribed']]
+        usubs = [badgify(email, 'secondary') for email in members_list['emails_unsubscribed']]
+    else:
+        status = badgify(str(status), 'warning')
+
+    context = {
+        'status'    : status,
+        'subs'      : subs,
+        'usubs'     : usubs
+    }
+    return render(request, 'userhandling/mailinglist_health.html', context)
 
 
 def trigger_emails(request, movienight_id):
