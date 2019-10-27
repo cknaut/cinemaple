@@ -48,37 +48,45 @@
 {% endblock%}
 
 
-{% block header %}
-  <!--==========================
-  Header
-  ============================-->
-  <header id="header">
-    <div class="container">
+{% block header %}<header id="header">
+  <div class="container">
 
-      <div id="logo" class="pull-left">        
-        <!-- Uncomment below if you prefer to use a text logo -->
-        <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
-        <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
-      </div>
-
-      <nav id="nav-menu-container">
-        <ul class="nav-menu">          
-          <li><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>          
-          {% if request.user.is_staff %}
-          <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
-          <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
-          <li class="menu-active"><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
-          {% endif %}    
-        {% if user.is_authenticated %}
-        <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started">Logout</a> </li>
-        <li> <font color = #af353b>Welcome, {{request.user.first_name}}!</font> </li>
-        {% else %}
-        <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
-      {% endif %}
-        </ul>
-      </nav><!-- #nav-menu-container -->
+    <div id="logo" class="pull-left">
+      <!-- Uncomment below if you prefer to use a text logo -->
+      <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
+      <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
     </div>
-  </header><!-- #header -->
+
+    <nav id="nav-menu-container">
+      <ul class="nav-menu">
+        <li class="menu" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
+        <li class="menu" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
+
+        {% if request.user.is_staff %}
+        <li class="menu-has-children menu-active"><a href="">Admin Actions</a>
+          <ul>
+            <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
+            <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
+            <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
+          </ul>
+
+        {% endif %}
+      {% if user.is_authenticated %}
+      <li class="menu-has-children "><a href="">User Setting</a>
+          <ul>
+            <li><a href={% url 'change_password' %}>Change Password</a></li>
+            <li><a href={% url 'change_profile' %} >Change Profile</a></li>
+          </ul>
+      <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>
+
+
+      {% else %}
+      <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
+    {% endif %}
+      </ul>
+    </nav><!-- #nav-menu-container -->
+  </div>
+</header><!-- #header -->
 {% endblock %}
 
 

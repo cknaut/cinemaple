@@ -31,6 +31,8 @@ from rest_framework import generics
 from django.template.loader import render_to_string
 
 
+
+
 # ....
 
 
@@ -38,6 +40,14 @@ from django.template.loader import render_to_string
 def index(request):
 
     movienights = MovieNightEvent.objects.order_by('-date')[:5]
+
+    # Total Runtime of all winner movies
+    all_mn = MovieNightEvent.objects.all()
+    total_rt = 0
+    for mn in all_mn:
+         _, _, runtime =  mn.get_winning_movie()
+         total_rt += runtime
+
 
     if request.user.is_authenticated:
         return redirect("curr_mov_nights")
@@ -47,6 +57,7 @@ def index(request):
         'email': "",
         'username': "",
         'movienights' : movienights,
+        'total_rt'  : total_rt,
         'total_no_movienights' : len(MovieNightEvent.objects.all())
     }
     return render(request, 'userhandling/index.html', context)
@@ -569,6 +580,9 @@ def attendence_list(request, movienight_id):
 
     return render(request, 'userhandling/attendence_list.html', context)
 
+@login_required
+def past_mov_nights(request):
+    return render(request, 'userhandling/past_mov_nights.html')
 
 @login_required
 def details_mov_nights(request, movienight_id, no_movie=False):
@@ -594,7 +608,7 @@ def details_mov_nights(request, movienight_id, no_movie=False):
             # Check if there has been votes cast for this movienight (avoids scenario where user registeres too late and is only user)
             num_voted_mn = movienight.get_num_voted()
             if num_voted_mn > 0:
-                winning_movie, _ = movienight.get_winning_movie()
+                winning_movie, _, _ = movienight.get_winning_movie()
 
         # if user has voted, show rating and toppings
         user_has_voted = movienight.user_has_voted(request.user)
@@ -659,29 +673,71 @@ def activate_movie_night(request, movienight_id):
         }
         return render(request, 'userhandling/curr_mov_nights.html', context)
     else:
-        # movienight.isdraft = False
-        # movienight.save()
         _, context = check_ml_health()
         context['movienight_id'] = movienight_id
 
         return render(request, 'userhandling/activate_user_check.html', context)
 
+
+def gen_mn_email(request, movienight, type_email):
+    context_email = {
+        'movienight'    : movienight,
+        'user'          : request.user,
+        'type'          : type_email,
+    }
+
+    html_email = render_to_string("userhandling/emails/cinemaple_email_invite.html", context_email)
+
+    return html_email
+
+
 def preview_mn_email(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
 
-    context_email = {
-        'movienight' : movienight
-    }
-
-    html_data = render_to_string("userhandling/emails/cinemaple_email_invite.html", context_email)
-
     context_pagel = {
-        'email_html' : html_data,
-        'user'       : request.user
+        'email_html'    : gen_mn_email(request, movienight, type_email='reminder'),
+        'movienight'    : movienight,
     }
 
     return render(request, 'userhandling/check_email.html', context_pagel)
+
+
+def schedule_email(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+    html_data_reminder = gen_mn_email(request, movienight, type_email='reminder')
+    html_data_invitation = gen_mn_email(request, movienight, type_email='invitation')
+
+    time_activation = movienight.get_activation_date()
+    time_reminder = movienight.get_reminder_date()
+
+
+    # First Generate 2 Campaigns
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+
+    reply_to = 'info@cinemaple.com'
+    preview_text = 'We have a treat for you!'
+    from_name = request.user.first_name
+
+    title1 = 'INVITATION Movienight: {}'.format(movienight.motto)
+    title2 = 'REMINDER Movienight: {}'.format(movienight.motto)
+
+    subject_line1 = 'Invitation for movienight: {}'.format(movienight.motto)
+    subject_line2 = 'Reminder for movienight: {}'.format(movienight.motto)
+
+    res1 = mc.create_campaign(time_activation, reply_to, subject_line1, preview_text, title1, from_name, html_data_invitation)
+    res2 = mc.create_campaign(time_reminder, reply_to, subject_line2, preview_text, title2, from_name, html_data_reminder)
+
+    # Check if MC Statuscodes are ok
+    if res1 == 204 and res2 == 204:
+        movienight.isdraft = False
+        movienight.save()
+    else:
+        return HttpResponse("Mailchimp campaign creation unsuccessfull")
+
+    return redirect(curr_mov_nights)
+
 
 
 @user_passes_test(lambda u: u.is_staff)
@@ -939,7 +995,7 @@ def user_prefs(request):
 @login_required
 def change_password(request):
     pw_changed = False
-    user_saved = False
+
 
     if request.method == 'POST':
         form = MyPasswordChangeForm(request.user, request.POST)
@@ -947,16 +1003,17 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             pw_changed = True
+            form = MyPasswordChangeForm(request.user)
             context = {
+                'form': form,
                 'pw_changed': True
             }
-            return render(request, 'userhandling/user_prefs.html', context)
+            return render(request, 'userhandling/change_password.html', context)
     else:
         form = MyPasswordChangeForm(request.user)
     return render(request, 'userhandling/change_password.html', {
         'form': form,
         'pw_changed': pw_changed,
-        'user_saved' : user_saved
     })
 
 @login_required

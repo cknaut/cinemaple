@@ -144,21 +144,97 @@
         <!-- Earnings (Monthly) Card Example -->
         <!-- Area Chart -->
         <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Activate Movie Night - Check Email</h6>
-                </div>
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Activate Movie Night - Check Email</h6>
+                    </div>
 
 
 
-                <!-- Card Body -->
-                <div class="card-body">
+                    <!-- Card Body -->
+                    <div class="card-body">
+<p>Here, you can preview the invitation emails to be send out, as well as the timing of the email. </p>
 
-                        {{email_html | safe}}
+
+
+
+<div class="row">
+    <div class="col-xl-3 col-lg-3">
+        Movie Night Date:
+    </div>
+
+    <div class="col-xl-9 col-lg-9">
+
+            <div class="form-group">
+
+                    <input  disabled value="{{ movienight.get_pretty_mn_date }}" type="email" class="form-control" id="exampleFormControlInput1" placeholder="">
+                  </div>
+
+
+
+        </div>
+
+</div>
+
+<div class="row">
+    <div class="col-xl-3 col-lg-3">
+        Time Invitation Email:
+    </div>
+
+    <div class="col-xl-9 col-lg-9">
+            <div class="form-group">
+
+                <input  disabled value="{{ movienight.get_pretty_activation_date }}" type="email" class="form-control" id="exampleFormControlInput1" placeholder="">
+            </div>
+
+
+
+        </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-xl-3 col-lg-3">
+        Time Reminder Email:
+    </div>
+
+    <div class="col-xl-9 col-lg-9">
+            <div class="form-group">
+
+                <input  disabled value="{{ movienight.get_pretty_reminder_date }}" type="email" class="form-control" id="exampleFormControlInput1" placeholder="">
+            </div>
+
+
+
+        </div>
+
+</div>
+
+
+
+<p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+Preview Email        </a>
+
+  </p>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
+            {{email_html | safe}}
+        </div>
+  </div>
+
+
+
+<div class="d-flex justify-content-between">
+                                <a href={% url 'activate_movie_night' movienight_id=movienight.id   %} role="button" class="btn btn-secondary">Back</a>
+
+                                <a  href={% url 'schedule_email' movienight_id=movienight.id  %} role="button" class="btn btn-primary">Activate Movienight and Schedule Invitations</a>
+                              </div>
+                    </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>
 <!-- /.container-fluid -->
