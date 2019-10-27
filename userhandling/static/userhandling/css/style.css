@@ -2300,6 +2300,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   /* height:inherit; */
   /* -webkit-filter: blur(8px); */
   z-index:0;
+  background-size:500%
 }
 
 .card-image2 {

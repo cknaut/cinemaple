@@ -4,8 +4,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from .utils import badgify
+# from urllib.request import urlopen
+# from PIL import Image
 import time
 import random
+import numpy as np
+# import scipy.ndimage.gaussian_filter
 
 from py3votecore.schulze_method import SchulzeMethod
 from py3votecore.condorcet import CondorcetHelper
@@ -63,6 +67,11 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+    # def filtered_poster(self): 
+        # print("Running filter function")       
+        # return Image.open(urlopen("https://image.tmdb.org/t/p/w200"+self.posterpath))
+
 class Location(models.Model):
     name = models.CharField(max_length=200)
     street = models.CharField(max_length=200)
@@ -233,7 +242,7 @@ class MovieNightEvent(models.Model):
             winner_movies_id = winner_movies_ids[winning_index]
 
         winning_movie = Movie.objects.get(pk=winner_movies_id)
-        
+
         return winning_movie, vote_result
 
     def __str__(self):
