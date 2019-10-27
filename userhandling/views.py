@@ -662,22 +662,52 @@ def activate_movie_night(request, movienight_id):
 
         return render(request, 'userhandling/activate_user_check.html', context)
 
+
+def gen_mn_email(request, movienight):
+
+    context_email = {
+        'movienight' : movienight,
+        'user'       : request.user
+    }
+
+    html_email = render_to_string("userhandling/emails/cinemaple_email_invite.html", context_email)
+
+
+    return html_email
+
+
 def preview_mn_email(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
 
-    context_email = {
-        'movienight' : movienight
-    }
-
-    html_data = render_to_string("userhandling/emails/cinemaple_email_invite.html", context_email)
-
     context_pagel = {
-        'email_html' : html_data,
-        'user'       : request.user
+        'email_html' : gen_mn_email(request, movienight),
+        'movienight'    : movienight
     }
 
     return render(request, 'userhandling/check_email.html', context_pagel)
+
+
+def schedule_email(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+    html_data = gen_mn_email(request, movienight)
+
+
+    # First Generate Campaign
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+
+    reply_to = 'info@cinemaple.com'
+    subject_line = 'Invitation for movienight: {}'.format(movienight.motto)
+    preview_text = 'Gotta treat fo you'
+    from_name = request.user.first_name
+    html = html_data
+    title = "INVITATION Movienight: {}'.format(movienight.motto)"
+
+    mc.create_campaign(reply_to, subject_line, preview_text, title, from_name, html)
+
+    return HttpResponse("YOU fine")
+
 
 
 @user_passes_test(lambda u: u.is_staff)

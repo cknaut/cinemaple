@@ -156,6 +156,12 @@
                 <div class="card-body">
 
                         {{email_html | safe}}
+
+                        <div class="d-flex justify-content-between">
+                            <a href={% url 'activate_movie_night' movienight_id=movienight.id   %} role="button" class="btn btn-secondary">Back</a>
+
+                            <a  href={% url 'schedule_email' movienight_id=movienight.id  %} role="button" class="btn btn-primary">Create Invitation Emails</a>
+                          </div>
                 </div>
             </div>
         </div>

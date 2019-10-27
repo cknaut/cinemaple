@@ -135,13 +135,7 @@ class Mailchimp(object):
 
         campaign_id = r.json()['id']
 
-        context = {
-            'body' : html_body
-        }
-
-        html_data = render_to_string("userhandling/emails/cinemaple_email_base.html", context)
-
-        #upload html to campaign
+         #upload html to campaign
 
         campaign_endpoint       = '{campaigns_endpoint}/{campaign_id}'.format(
                                         campaigns_endpoint = campaigns_endpoint,
@@ -151,7 +145,7 @@ class Mailchimp(object):
                                         campaign_endpoint = campaign_endpoint)
 
         data = {
-            'html'  : html_data
+            'html'  : html_body
         }
 
         # Retrieve HTML of Tempalte
@@ -160,7 +154,7 @@ class Mailchimp(object):
                     data=json.dumps(data)
         )
 
-        return r.status_code, r.json(), html_data
+        return r.status_code, r.json()
 
     ''''
     "settings": {

@@ -43,6 +43,7 @@ urlpatterns = [
     path('trigger_emails/<str:movienight_id>', views.trigger_emails,  name='trigger_emails'),
     path('ml_health/', views.ml_health,  name='ml_health'),
     path('preview_mn_email/<str:movienight_id>', views.preview_mn_email,  name='preview_mn_email'),
+    path('schedule_email/<str:movienight_id>', views.schedule_email,  name='schedule_email'),
 
 
 
