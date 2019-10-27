@@ -7,6 +7,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
 <script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
+<link href="{% static 'userhandling/lib/mdb/css/mdb.lite.min.css' %}" rel="stylesheet">
+<link href="{% static 'userhandling/lib/animate/animate.css' %}" rel="stylesheet">
 
 <style>
     @font-face {
@@ -51,7 +53,7 @@
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
-          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log out?</div>
           <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started"><font color = #af353b>Logout</font></a></div>
         </div>
       </div>
@@ -85,7 +87,7 @@
           <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
           {% endif %}
         {% if user.is_authenticated %}
-        <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started">Logout</a> </li>
+        <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>
         <li> <font color = #af353b>Welcome, {{request.user.first_name}}!</font> </li>
         {% else %}
         <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
@@ -114,36 +116,36 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     {% if no_movie != 1 %}
-                    <div class="row">
+                    <div class="row2">
                         <div class="col-xl-6 col-lg-6 ">
-                            <div class="row mb-4">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> When: </div>
                                 <div class="col-xl-9 col-lg-9 ">{{movienight.date}} </div>
                             </div>
 
-                            <div class="row mb-4">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Where: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.location.street}}, {{movienight.location.zip_code}}, {{movienight.location.city}}, {{movienight.location.state}}</div>
                             </div>
 
 
-                            <div class="row mb-4 ">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> What: </div>
                                 <div class="col-xl-9 col-lg-9 "> {% autoescape off %} {{movienight.description}}{% endautoescape %} </div>
                             </div>
 
-                            <div class="row mb-4 ">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Vote until: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.vote_until }} </div>
                             </div>
 
-                            <div class="row mb-4 ">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Free Spots: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.free_spots }} </div>
                             </div>
 
                             {% if navbar == "curr_mov_night" and movienight.is_active%}
-                            <div class="row mb-4">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if user_has_reg %}
@@ -162,7 +164,7 @@
                             </div>
 
                             {% if user_has_reg %}
-                            <div class="row mb-4 ">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Toppings: </div>
                                 <div class="col-xl-9 col-lg-9 "> {% autoescape off %}  {{toppings }} {% endautoescape %}  </div>
                             </div>
@@ -170,7 +172,7 @@
 
 
 
-                            <div class="row mb-4 justify-content-center">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> User Action: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if user_has_reg %}
@@ -228,7 +230,7 @@
 
                             <hr class="sidebar-divider">
 
-                            <div class="row mb-4">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if movienight.get_status == "DRAFT" %}
@@ -244,7 +246,7 @@
                             </div>
 
 
-                            <div class="row mb-4">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Voting enabled: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if movienight.voting_enabled %}
@@ -255,13 +257,13 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-4 ">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Number of attendees: </div>
                                 <div class="col-xl-9 col-lg-9 ">  {{movienight.get_num_registered }} ({{movienight.get_num_voted }} have voted)   </div>
                             </div>
 
 
-                            <div class="row mb-4">
+                            <div class="row3">
                                 <div class="col-xl-3 col-lg-3 "> Admin Action: </div>
                                 <div class="col-xl-9 col-lg-9 ">
 
@@ -301,7 +303,7 @@
                             <hr class="sidebar-divider">
                             {% endif%}
 
-                                                    <div class="row mb-4">
+                                                    <div class="row3">
                                 <div class="col-xl-12 col-lg-12 "> Movie Selection (register to rate): </div>
                             </div>
 
@@ -309,7 +311,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-4">
+                    <div class="row3">
 
                         <div class="col-xl-12 col-lg-12 ">
                             <div id="accordion">
@@ -485,7 +487,7 @@
                     </div>
                 </div>
                 {% else %}
-                No scheduled Movie Night was found in your area. {% if request.user.is_staff %} <h1><a class = "btn btn-primary"><font color = "white">Manage Movie Nights</font></a> <a
+                No scheduled Movie Night was found in your area. {% if request.user.is_staff %} <h1><a class = "btn btn-primary" href={% url 'man_mov_nights' %}><font color = "white">Manage Movie Nights</font></a> <a
                     href={% url 'man_mov_nights' %}></a> {% endif %}</h1>
                 {% endif %}
             </div>

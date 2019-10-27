@@ -1,3 +1,35 @@
+:root {
+  /* --blue: #007bff; */
+    /* --indigo: #6610f2; */
+    /* --purple: #6f42c1; */
+    /* --pink: #e83e8c; */
+    /* --red: #dc3545; */
+    /* --orange: #fd7e14; */
+    /* --yellow: #ffc107; */
+    /* --green: #28a745; */
+    /* --teal: #20c997; */
+    /* --cyan: #17a2b8; */
+    --white: #fff;
+    --curtain-red:#af353b;
+    /* --gray: #6c757d; */
+    --gray-dark: #292b2c;
+    --primary: #007bff;
+    --secondary: #000000;
+    --success: #28a745;
+    --info: #17a2b8;
+    /* --warning: #ffc107; */
+    /* --danger: #dc3545; */
+    /* --light: #f8f9fa; */
+    --dark: #000000;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 @charset "UTF-8";
 /*!
  * Material Design for Bootstrap 4
@@ -1505,7 +1537,7 @@ button.bg-light:focus {
   -ms-flex: 1;
   flex: 1; }
 
-@font-face {
+/* @font-face {
   font-family: "Roboto";
   src: local(Roboto Thin), url("../font/roboto/Roboto-Thin.eot");
   src: url("../font/roboto/Roboto-Thin.eot?#iefix") format("embedded-opentype"), url("../font/roboto/Roboto-Thin.woff2") format("woff2"), url("../font/roboto/Roboto-Thin.woff") format("woff"), url("../font/roboto/Roboto-Thin.ttf") format("truetype");
@@ -1533,7 +1565,7 @@ button.bg-light:focus {
   font-family: "Roboto";
   src: url("../font/roboto/Roboto-Bold.eot");
   src: url("../font/roboto/Roboto-Bold.eot?#iefix") format("embedded-opentype"), url("../font/roboto/Roboto-Bold.woff2") format("woff2"), url("../font/roboto/Roboto-Bold.woff") format("woff"), url("../font/roboto/Roboto-Bold.ttf") format("truetype");
-  font-weight: 700; }
+  font-weight: 700; } */
 
 body {
   font-family: "Roboto", sans-serif;
@@ -4595,11 +4627,11 @@ table.table a.btn.btn-black {
   padding-left: 0.6em; }
 
 .badge-primary {
-  background-color: #4285f4 !important;
+  background-color: #007bff !important;
   color: #fff !important; }
 
 .badge-danger {
-  background-color: #ff3547 !important;
+  background-color: var(--curtain-red) !important;
   color: #fff !important; }
 
 .badge-warning {
@@ -4619,7 +4651,7 @@ table.table a.btn.btn-black {
   color: #fff !important; }
 
 .badge-secondary {
-  background-color: #aa66cc !important;
+  background-color: var(--gray-dark) !important;
   color: #fff !important; }
 
 .badge-dark {
