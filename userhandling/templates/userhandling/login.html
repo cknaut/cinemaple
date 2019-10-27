@@ -13,10 +13,6 @@
 <p>Please login to access information about upcoming movie nights!</p>
 {% endblock %}
 
-{% block heading %}
-<h3 class="register-heading">Log in.</h3>
-{% endblock %}
-
 {% block form %}
 <form class="login" method="POST" action="/login/">
 
@@ -31,7 +27,7 @@
 
 
 <div class="form-group">
-    <label for="exampleInputEmail1">Username:</label>
+    <label for="exampleInputEmail1"> <font color = "white">Username:</color></label>
       {{login_form.username.errors}}
       {{login_form.username}}
 </div>
@@ -49,12 +45,12 @@
 
 
   <div class="modal-footer d-flex justify-content-center">
-  <input class="btn btn-deep-orange" type="submit" value="Log in">
-   <a href="{% url 'index' %}" class="btn btn-deep-orange">Back to home.</a>
+  <input class="btn btn-deep-orange btn-sm" type="submit" value="Log in">
+   <a href="{% url 'index' %}" class="btn btn-primary btn-sm">Back to home.</a>
 </div>
   </form>
-
-<div> Not registered yet? <a href="{% url 'registration' %}" class="btn btn-deep-orange">Signup here!</a> </div>
-
-<div>  Forgot password? <a href="{% url 'password_reset_request' %}" class="btn btn-deep-orange">Reset password.</a> </div>
+<br>
+<div> Not registered yet? <a href="{% url 'registration' %}" >Signup here!</a> </div>
+<br>
+<div>  Forgot password? <a href="{% url 'password_reset_request' %}">Reset password.</a> </div>
 {% endblock %}

@@ -30,10 +30,10 @@
         <div class="icon-box">
           <i class="material-icons">email</i>
         </div>
-        <h4 class="modal-title">Check your emails!</h4>
+        <h4 class="modal-title"><font color = "black">Check your emails!</font></h4>
       </div>
       <div class="modal-body">
-        <p class="text-center">An activation link has been sent to {{ subscribe_email }}.</p>
+        <p class="text-center"><font color = "black">An activation link has been sent to {{ subscribe_email }}.</font></p>
       </div>
       <div class="modal-footer">
         <a href="{% url 'index' %}" class="btn btn-success btn-block">Back to home.</a>
@@ -46,12 +46,9 @@
 
 
 {% block tagline %}
-<h3>Welcome</h3>
-<p>Please register to recieve invitations for upcoming movie nights!</p>
-{% endblock %}
 
-{% block heading %}
-<h3 class="register-heading">Register</h3>
+<h3>Welcome</h3>
+<p>Please register to receive invitations for upcoming movie nights!</p>
 {% endblock %}
 
 {% block form %}
@@ -63,63 +60,59 @@
 
 
 <div class="form-group">
-    <label for="exampleInputEmail1">Username:</label>
+    <label for="exampleInputEmail1"><font color="white">Username:</font></label>
       {{form.username.errors}}
       {{form.username}}
 </div>
 
 
 <div class="form-group">
-    <label for="exampleInputEmail1">Email:</label>
+    <label for="exampleInputEmail1"><font color="white">Email:</font></label>
     {{form.email.errors}}
       {{form.email}}
 </div>
 
 <div class="form-group">
-    <label for="exampleInputEmail1">First name:</label>
+    <label for="exampleInputEmail1"><font color="white">First name:</font></label>
     {{form.first_name.errors}}
       {{form.first_name}}
 </div>
 
 
 <div class="form-group">
-    <label for="exampleInputEmail1">Last name:</label>
+    <label for="exampleInputEmail1"><font color="white">Last name:</font></label>
     {{form.last_name.errors}}
       {{form.last_name}}
 </div>
 
 
 <div class="form-group">
-    <label for="exampleInputEmail1">Password:</label>
+    <label for="exampleInputEmail1"><font color="white">Password:</font></label>
     {{form.password1.errors}}
       {{form.password1}}
 </div>
 
 
 <div class="form-group">
-    <label for="exampleInputEmail1">Repeat password:</label>
+    <label for="exampleInputEmail1"><font color="white">Repeat password:</font></label>
     {{form.password2.errors}}
       {{form.password2}}
 </div>
 
 
 <div class="form-group">
-    <label for="exampleInputEmail1">Captcha:</label>
+    <label for="exampleInputEmail1"><font color="white">Captcha:</font></label>
     {{form.captcha.errors}}
       {{form.captcha}}
 </div>
 
 
-
-
-
-
 <div class="modal-footer d-flex justify-content-center">
-  <input class="btn btn-deep-orange" type="submit" value="Register">
+  <input class="btn btn-primary" type="submit" value="Register">
    <a href="{% url 'index' %}" class="btn btn-deep-orange">Back to home.</a>
 </div>
 </form>
-Already registered? <a href="{% url 'login' %}" class="btn btn-deep-orange">Login here!</a>
+
 {% endblock %}
 
 

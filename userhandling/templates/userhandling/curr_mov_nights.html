@@ -1,9 +1,9 @@
-{% extends 'dashboard_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% load shuffle %}
 
 
 {% block css_imports %}
+<link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
 <script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
@@ -20,119 +20,80 @@
         src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
     }
 </style>
+<!-- <link href="{% static 'userhandling/lib/dashboard/css/sb-admin-2.min.css' %}" rel="stylesheet"> -->
+{% endblock %}
 
-
-{% endblock%}
-
-
-{% block sidebar %}
-<!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+{% block modals %}
+{% if successful_verified %}
+<div id="RegVerifyModall" class="modal fade">
+  <div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="icon-box">
+          <i class="material-icons">&#xE876;</i>
         </div>
-        <div class="sidebar-brand-text mx-3">Cinemaple</div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-
-    <li class="nav-item {% if navbar == 'curr_mov_night' %}active{% endif %}">
-        <a class="nav-link" href={% url 'curr_mov_nights' %}>
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Currrent Movie Night</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    {% if request.user.is_staff %}
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Admin
+        <h4 class="modal-title">Validation Successful!</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">You have sucessfully validated <b>{{email}}</b> and may now log in using your username <b>{{username}}</b>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'login' %}" class="btn btn-success btn-block">Login</a>
+      </div>
     </div>
+  </div>
+</div>
+{% endif %}
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href={% url 'add_movie_night' %}>
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Add Movie Nights</span></a>
-    </li>
-
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href={% url 'man_mov_nights' %}>
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Manage Movie Nights</span></a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href={% url 'ml_health' %}>
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Mailing List Healths</span></a>
-    </li>
-
-
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-    {% endif %}
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Addons
-    </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-            aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Pages</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item" href="blank.html">Blank Page</a>
-            </div>
+<div id="logoutmodal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="container">
+  <div class="col-sm">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+          <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started"><font color = #af353b>Logout</font></a></div>
         </div>
-    </li>
-
-    <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-    </li>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
     </div>
+  </div>
+</div>
+{% endblock %}
 
-</ul>
-<!-- End of Sidebar -->
+
+
+
+{% block header %}
+  <!--==========================
+  Header
+  ============================-->
+  <header id="header">
+    <div class="container">
+
+      <div id="logo" class="pull-left">        
+        <!-- Uncomment below if you prefer to use a text logo -->
+        <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
+        <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
+      </div>
+
+      <nav id="nav-menu-container">
+        <ul class="nav-menu">          
+          <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>          
+          {% if request.user.is_staff %}
+          <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
+          <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
+          <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
+          {% endif %}    
+        {% if user.is_authenticated %}
+        <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started">Logout</a> </li>
+        <li> <font color = #af353b>Welcome, {{request.user.first_name}}!</font> </li>
+        {% else %}
+        <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
+      {% endif %}
+        </ul>
+      </nav><!-- #nav-menu-container -->
+    </div>
+  </header><!-- #header -->
 {% endblock %}
 
 
@@ -144,11 +105,11 @@
 
         <!-- Earnings (Monthly) Card Example -->
         <!-- Area Chart -->
-        <div class="col-xl-12 col-lg-12">
+        <div class="col-xl-12 col-lg-12" data-spy="affix" data-offset-top="197">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">{% if no_movie != 1 %} {{movienight.motto}} {% else %} No Current Movienight Found {% endif %}</h6>
+                <h6 class="m-0 font-weight-bold text-primary">{% if no_movie != 1 %} {{movienight.motto}} {% else %} No Movie Night found  <i class="em em-crying_cat_face" aria-role="presentation" aria-label="CRYING CAT FACE"></i> {% endif %}</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -249,7 +210,7 @@
 
                                         {% else %}
 
-                                            <button type="button" class="btn btn-primary btn-sm" disabled>Sorry, movienight full</button>
+                                            <button type="button" class="btn btn-primary btn-sm" disabled>Sorry, no spot left!</button>
 
                                         {% endif %}
 
@@ -525,8 +486,8 @@
                     </div>
                 </div>
                 {% else %}
-                No active movie night found. {% if request.user.is_staff %} Manage movie nights <a
-                    href={% url 'man_mov_nights' %}>here.</a> {% endif %}
+                No scheduled Movie Night was found in your area. {% if request.user.is_staff %} <h1><a class = "btn btn-primary"><font color = "white">Manage Movie Nights</font></a> <a
+                    href={% url 'man_mov_nights' %}></a> {% endif %}</h1>
                 {% endif %}
             </div>
         </div>
@@ -534,189 +495,13 @@
     <!-- /.container-fluid -->
     {% endblock %}
 
+{% block js %}
+{% if successful_verified %}
+  <script type="text/javascript">
+      $(document).ready(function(){
+          $("#RegVerifyModall").modal('show');
+      });
+  </script>
+{% endif %}
+{% endblock %}
 
-    {% block modals %}
-    <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Do you want to permanentely delete this movie night?</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Activating the movienight will send out invitation emails and opens the poll.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-    <div class="modal fade" id="active_exists" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Cannot activate</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">There already exists an active movie night. You can deactive it and activate
-                    this movie night afterwards.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Cancelling the movie night will send out notifications to all registered users.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Dismiss</button>
-                    <a class="btn btn-primary" id="deactivatebutton" href="">Cancel movie night</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog youtube-modal-dialog" role="document">
-            <div class="modal-content">
-
-
-                <div class="modal-body youtube-modal-body">
-
-                    <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <!-- 16:9 aspect ratio -->
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
-                            allow="autoplay"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    {% endblock %}
-
-
-    {% block js %}
-
-    <script>
-        $(document).ready(function () {
-
-
-        {% if user_has_voted %}
-            {% for rating in ordered_votelist %}
-
-            $('#star{{ forloop.counter0 }}').raty({
-                starType: 'i',
-                targetType: 'number',
-                readOnly:   true,
-                score: {{ rating }},
-                number: {{ forloop.counter0 }},
-                hints: ['Hell no', 'Meh', 'Dunno', 'Yes, Please', 'F*** Yeah'],
-                number: 5,
-
-            });
-
-            {% endfor %}
-        {% endif %}
-
-
-
-            // Gets the video src from the data-src on each button
-
-            {%if activeMovieExists %}
-            $("#active_exists").modal();
-            {% endif %}
-
-
-            var $videoSrc;
-            $('.video-btn').click(function () {
-                $videoSrc = $(this).data("src");
-                $videoSrc = $videoSrc +
-                    "?autoplay=0&amp;modestbranding=1&amp;showinfo=0";
-                console.log($videoSrc);
-                $("#video").attr('src', $videoSrc);
-                $("#myModal").modal();
-            });
-
-
-            $('#deactivate_confirm').click(function () {
-                $cancelURL = $(this).attr("src");
-                $("#deactivatebutton").attr('href', $cancelURL);
-                $("#disactivatemodal").modal();
-            });
-
-            $('#activate_confirm').click(function () {
-                $activateURL = $(this).attr("src");
-                $("#activatebutton").attr('href', $activateURL);
-                $("#activatemodal").modal();
-            });
-
-            $('#delete_confirm').click(function () {
-                $deleteURL = $(this).attr("src");
-                $("#deletbutton").attr('href', $deleteURL);
-                $("#deletemodal").modal();
-            });
-
-
-
-            // stop playing the youtube video when I close the modal
-            $('#myModal').on('hide.bs.modal', function (e) {
-                // a poor man's stop video
-                $("#video").attr('src', "");
-            })
-
-            // document ready
-        });
-    </script>
-
-    {% endblock %}
