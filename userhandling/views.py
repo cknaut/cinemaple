@@ -31,6 +31,8 @@ from rest_framework import generics
 from django.template.loader import render_to_string
 
 
+
+
 # ....
 
 
@@ -655,8 +657,6 @@ def activate_movie_night(request, movienight_id):
         }
         return render(request, 'userhandling/curr_mov_nights.html', context)
     else:
-        # movienight.isdraft = False
-        # movienight.save()
         _, context = check_ml_health()
         context['movienight_id'] = movienight_id
 
@@ -664,8 +664,6 @@ def activate_movie_night(request, movienight_id):
 
 
 def gen_mn_email(request, movienight, type_email):
-
-
     context_email = {
         'movienight'    : movienight,
         'user'          : request.user,
@@ -673,7 +671,6 @@ def gen_mn_email(request, movienight, type_email):
     }
 
     html_email = render_to_string("userhandling/emails/cinemaple_email_invite.html", context_email)
-
 
     return html_email
 
@@ -696,6 +693,10 @@ def schedule_email(request, movienight_id):
     html_data_reminder = gen_mn_email(request, movienight, type_email='reminder')
     html_data_invitation = gen_mn_email(request, movienight, type_email='invitation')
 
+    time_activation = movienight.get_activation_date()
+    time_reminder = movienight.get_reminder_date()
+
+
     # First Generate 2 Campaigns
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
 
@@ -709,11 +710,17 @@ def schedule_email(request, movienight_id):
     subject_line1 = 'Invitation for movienight: {}'.format(movienight.motto)
     subject_line2 = 'Reminder for movienight: {}'.format(movienight.motto)
 
-    mc.create_campaign(reply_to, subject_line1, preview_text, title1, from_name, html_data_invitation)
-    mc.create_campaign(reply_to, subject_line2, preview_text, title2, from_name, html_data_reminder)
+    res1 = mc.create_campaign(time_activation, reply_to, subject_line1, preview_text, title1, from_name, html_data_invitation)
+    res2 = mc.create_campaign(time_reminder, reply_to, subject_line2, preview_text, title2, from_name, html_data_reminder)
 
+    # Check if MC Statuscodes are ok
+    if res1 == 204 and res2 == 204:
+        movienight.isdraft = False
+        movienight.save()
+    else:
+        return HttpResponse("Mailchimp campaign creation unsuccessfull")
 
-    return HttpResponse("YOU fine")
+    return redirect(curr_mov_nights)
 
 
 

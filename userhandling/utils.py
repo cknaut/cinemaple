@@ -8,6 +8,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 
 
@@ -107,12 +108,14 @@ class Mailchimp(object):
                                 )
         return r.status_code, r.json()
 
+    def create_campaign(self, date, reply_to, subject_line, preview_text, title, from_name, html_body):
+        '''
+        Creates Mailchimp Campaing and schedules it according to date
+        date is datetime object and roudn ded to nearest 15mins
 
-    def create_campaign(self, reply_to, subject_line, preview_text, title, from_name, html_body):
+        '''
         campaigns_endpoint       = self.list_endpoint = '{api_url}/campaigns'.format(
                                     api_url = self.api_url)
-
-
 
         data = {
                     "type": "regular",
@@ -154,7 +157,26 @@ class Mailchimp(object):
                     data=json.dumps(data)
         )
 
-        return r.status_code, r.json()
+
+        # Schedule Campaign
+        campaign_scheduled_endpoint =   '{campaign_endpoint}/actions/schedule'.format(
+                                        campaign_endpoint = campaign_endpoint)
+
+        #round_down to the next 15 mins
+
+
+        date = date.isoformat()
+
+        data = {
+            'schedule_time'  : date
+        }
+
+        r = requests.post(campaign_scheduled_endpoint,
+                    auth=("", MAILCHIMP_API_KEY),
+                    data=json.dumps(data)
+        )
+
+        return r.status_code
 
     ''''
     "settings": {

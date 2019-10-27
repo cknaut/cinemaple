@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import pytz
 from django.utils import timezone
 from .utils import badgify
 import time
@@ -10,6 +11,7 @@ import random
 from py3votecore.schulze_method import SchulzeMethod
 from py3votecore.condorcet import CondorcetHelper
 from .vote import get_pref_lists, prepare_voting_dict
+
 
 
 # We create a one-to-one map from the built-in User model to a Profile model
@@ -80,8 +82,7 @@ class Location(models.Model):
 class VotingParameters(models.Model):
     vote_disable_before = models.DurationField() # how long before the movienight the vote should e closed
     reminder_email_before = models.DurationField() # how long before the movienight the final reminder email sould be sent
-    initial_email_before = models.DurationField() # how long before the movienight the first invitation_email
-
+    initial_email_after = models.DurationField() # how long after activation of movienight should emails be send out?
     def __str__(self):
         return "Only instance of this model."
 
@@ -235,6 +236,54 @@ class MovieNightEvent(models.Model):
         winning_movie = Movie.objects.get(pk=winner_movies_id)
 
         return winning_movie, vote_result
+
+
+    def rounddate(self, dt, roundto):
+        # Need to round dates to 15 mins for Mailchimp
+
+        new_minutes = roundto*(dt.minute // roundto)
+        new_seconds = 0
+        new_microsecond = 0
+
+        newdate = dt.replace(minute=new_minutes, second=new_seconds, microsecond=new_microsecond)
+        return newdate
+
+    def get_reminder_date(self):
+        voting_parameters = VotingParameters.objects.all()
+        assert len(voting_parameters) == 1, "More than one voting parameters settings found."
+        reminder_email_before = voting_parameters[0].reminder_email_before
+        date  =  self.date - reminder_email_before
+        date_rounded = self.rounddate(date, 15)
+        return date_rounded
+
+    def get_activation_date(self):
+        voting_parameters = VotingParameters.objects.all()
+        assert len(voting_parameters) == 1, "More than one voting parameters settings found."
+        initial_email_after = voting_parameters[0].initial_email_after
+        date  =  timezone.now() + initial_email_after
+        date_rounded = self.rounddate(date, 15)
+        return date_rounded
+
+    def get_pretty_date(self, date):
+        now = timezone.now()
+        timedelta = date - now
+                # localize to boston TZ
+        boston_tz = pytz.timezone("America/New_York")
+        fmt = "%B %d, %Y, %I:%M %p %Z%z"
+        date_boston_time = date.astimezone(boston_tz)
+
+        return date_boston_time.strftime(fmt) + " ( in "  + str(timedelta) + ")"
+
+    def get_pretty_mn_date(self):
+        return self.get_pretty_date(self.date)
+
+    def get_pretty_reminder_date(self):
+        return self.get_pretty_date(self.get_reminder_date())
+
+    def get_pretty_activation_date(self):
+        return self.get_pretty_date(self.get_activation_date())
+
+
 
     def __str__(self):
         return self.motto
