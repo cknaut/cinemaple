@@ -63,6 +63,16 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+class Location(models.Model):
+    name = models.CharField(max_length=200)
+    street = models.CharField(max_length=200)
+    zip_code = models.CharField(max_length=200)
+    city = models.CharField(max_length=200)
+    state = models.CharField(max_length=200)
+    country = models.CharField(max_length=200)
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
 
 class VotingParameters(models.Model):
     vote_disable_before = models.DurationField() # how long before the movienight the vote should e closed
@@ -80,6 +90,7 @@ class MovieNightEvent(models.Model):
     isdeactivated = models.BooleanField(default=False)
     MovieList = models.ManyToManyField(Movie, blank=True)
     MaxAttendence = models.IntegerField(blank=False, default=25)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def free_spots(self):
         return self.MaxAttendence - self.get_num_registered()

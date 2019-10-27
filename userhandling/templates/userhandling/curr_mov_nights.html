@@ -70,20 +70,20 @@
   <header id="header">
     <div class="container">
 
-      <div id="logo" class="pull-left">        
+      <div id="logo" class="pull-left">
         <!-- Uncomment below if you prefer to use a text logo -->
         <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
         <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
       </div>
 
       <nav id="nav-menu-container">
-        <ul class="nav-menu">          
-          <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>          
+        <ul class="nav-menu">
+          <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
           {% if request.user.is_staff %}
           <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
           <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
           <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
-          {% endif %}    
+          {% endif %}
         {% if user.is_authenticated %}
         <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started">Logout</a> </li>
         <li> <font color = #af353b>Welcome, {{request.user.first_name}}!</font> </li>
@@ -123,7 +123,7 @@
 
                             <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-3 "> Where: </div>
-                                <div class="col-xl-9 col-lg-9 "> 57 Maple Avenue, 02139 Cambridge Massachusetts </div>
+                                <div class="col-xl-9 col-lg-9 "> {{movienight.location.street}}, {{movienight.location.zip_code}} , {{movienight.location.city}}, {{movienight.location.state}}</div>
                             </div>
 
 

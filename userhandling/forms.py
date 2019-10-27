@@ -4,7 +4,7 @@ import datetime
 from django.utils import timezone
 from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
-from .models import Profile, PasswordReset, MovieNightEvent, VotePreference, Topping
+from .models import Profile, Location,  PasswordReset, MovieNightEvent, VotePreference, Topping
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
@@ -189,21 +189,23 @@ class PasswordResetForm(forms.Form):
 class MoveNightForm(ModelForm):
     class Meta:
         model = MovieNightEvent
-        fields = ['motto', 'description', 'date', 'MaxAttendence']
+        fields = ['motto', 'description', 'date', 'location', 'MaxAttendence']
         labels = {
             'motto': _('Movie Night Motto'),
+            'location': _('Location'),
             'description': _('Description:'),
             'date': _('Date:'),
         }
+
+        location_choices = [location.name for location in Location.objects.all()]
         widgets = {
             'date': DateTimePickerInput(),  # default date-format %m/%d/%Y will be used
             'description': forms.TextInput(attrs={"id": "tinymice"}),
             'motto': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
-            'MaxAttendence': forms.NumberInput(attrs={'placeholder': '', 'class': 'form-control input-perso'})
-
+            'MaxAttendence': forms.NumberInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
+            'location': forms.Select(choices = location_choices, attrs={'placeholder': '', 'class': 'form-control input-perso'}),
 
         }
-
 
 class MovieAddForm(forms.Form):
 

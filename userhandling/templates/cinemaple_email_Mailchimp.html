@@ -1,0 +1,13 @@
+{% extends "cinemaple_email_base.html" %}
+
+
+{% block mc %}
+
+
+Don't want to receive emails from cinemaple.com anymore?<br>
+<br>
+You can <a href="*|UNSUB|*">unsubscribe from this list</a>.<br>
+<br>
+*|IF:REWARDS|* *|HTML:REWARDS|* *|END:IF|*
+
+{% endblock %}

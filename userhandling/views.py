@@ -28,6 +28,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory
 import numpy as np
 from rest_framework import generics
+from django.template.loader import render_to_string
+
 
 # ....
 
@@ -661,7 +663,20 @@ def activate_movie_night(request, movienight_id):
         return render(request, 'userhandling/activate_user_check.html', context)
 
 def preview_mn_email(request, movienight_id):
-    return render(request, 'userhandling/check_email.html')
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+
+
+    context_email = {
+        'movienight' : movienight
+    }
+
+    html_data = render_to_string("userhandling/emails/cinemaple_email_invite.html", context_email)
+
+    context_pagel = {
+        'email_html' : html_data
+    }
+
+    return render(request, 'userhandling/check_email.html', context_pagel)
 
 
 @user_passes_test(lambda u: u.is_staff)

@@ -1,0 +1,11 @@
+{% extends "cinemaple_email_Mailchimp.html" %}
+{% load static %}
+
+
+{% block body %}
+<h1> Invitation for movienight {{movienight.motto}}</h1>
+
+Hi *|FNAME|*
+
+You are cordially invited to the next movienight at {{movienight.motto}
+{% endblock %}

@@ -155,8 +155,7 @@
                 <!-- Card Body -->
                 <div class="card-body">
 
-                    LOL
-
+                        {{email_html | safe}}
                 </div>
             </div>
         </div>
@@ -168,49 +167,9 @@
 
 {% block modals %}
 
-<div class="modal fade" id="pwchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Password succesfully changed!</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">You can now log in using your new password.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="userchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">User information succesfully changed!</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Your profile has been updated.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 {% endblock %}
 
 
 {% block js %}
-
-
-{% endblock %}dfgdfgdg
+{% endblock %}
