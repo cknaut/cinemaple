@@ -653,10 +653,15 @@ def activate_movie_night(request, movienight_id):
         }
         return render(request, 'userhandling/curr_mov_nights.html', context)
     else:
-        movienight.isdraft = False
-        movienight.save()
+        # movienight.isdraft = False
+        # movienight.save()
+        _, context = check_ml_health()
+        context['movienight_id'] = movienight_id
 
-    return redirect("man_mov_nights")
+        return render(request, 'userhandling/activate_user_check.html', context)
+
+def preview_mn_email(request, movienight_id):
+    return render(request, 'userhandling/check_email.html')
 
 
 @user_passes_test(lambda u: u.is_staff)

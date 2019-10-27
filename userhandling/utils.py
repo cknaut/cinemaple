@@ -300,7 +300,6 @@ def check_ml_health():
     status, members_list, mailchimp_id = mc.get_member_list()
 
     if status == 200:
-        statusok = True
         print(members_list)
         status = badgify(str(status), 'success')
         subs = [badgify(email, 'secondary') for email in members_list['emails_subscribed']]
@@ -329,7 +328,7 @@ def check_ml_health():
 
         context = {
             'status'            : status,
-            'statusok'          : statusok,
+            'statusok'          : healthy,
             'mc_id'             : mailchimp_id,
             'subs'              : subs,
             'usubs'             : usubs,
@@ -343,7 +342,7 @@ def check_ml_health():
         status = badgify(str(status), 'danger')
         context = {
             'status'            : status,
-            'statusok'          : statusok,
+            'statusok'          : False,
             'mc_id'             : mailchimp_id,
             'subs'              : 0,
             'usubs'             : 0,

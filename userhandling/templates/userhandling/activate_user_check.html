@@ -1,0 +1,246 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% load shuffle %}
+
+
+{% block css_imports %}
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
+<script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
+
+<style>
+    @font-face {
+        font-family: "raty";
+        font-style: normal;
+        font-weight: normal;
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot' %}");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot?#iefix' %}") format("embedded-opentype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.svg#raty' %}") format("svg");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.ttf' %}") format("truetype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
+    }
+</style>
+
+
+{% endblock%}
+
+
+{% block sidebar %}
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Cinemaple</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+
+    <li class="nav-item {% if navbar == 'curr_mov_night' %}active{% endif %}">
+        <a class="nav-link" href={% url 'curr_mov_nights' %}>
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Currrent Movie Night</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    {% if request.user.is_staff %}
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Admin
+    </div>
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href={% url 'add_movie_night' %}>
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Add Movie Nights</span></a>
+    </li>
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href={% url 'man_mov_nights' %}>
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Manage Account Settings</span></a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href={% url 'ml_health' %}>
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Mailing List Healths</span></a>
+    </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    {% endif %}
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Addons
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
+            aria-controls="collapsePages">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Pages</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Login Screens:</h6>
+                <a class="collapse-item" href="login.html">Login</a>
+                <a class="collapse-item" href="register.html">Register</a>
+                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Other Pages:</h6>
+                <a class="collapse-item" href="404.html">404 Page</a>
+                <a class="collapse-item" href="blank.html">Blank Page</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span></a>
+    </li>
+
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Tables</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->
+{% endblock %}
+
+
+{% block main %}
+<div class="container-fluid">
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Activate Movie Night - Mail Recipients Check</h6>
+                </div>
+
+
+
+                <!-- Card Body -->
+                <div class="card-body">
+
+                        <p>Upon activating the movienight, you'll be sending {{ subs|length }} emails to the following emails:</p>
+
+                        <div class="col-xl-3 col-lg-">
+                            {% for  email in subs %}
+                            <div class="row">
+                                    <p> {{email|safe}} </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+
+                        <p> The state of your email list is {{health|safe}}.</p>
+
+                        {% if not statusok %} <p> This means that the following email adresses from members are not found in either the subscribed nor the unsubscribes list of the Mailinglist: </p>
+
+
+                        <div class="col-xl-3 col-lg-">
+                                {% for  email in users_not_in_mc %}
+                                <div class="row">
+                                        <p> {{email|safe}} </p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {%endif%}
+                        <div class="d-flex justify-content-between">
+                                <a href={% url 'details_mov_nights' movienight_id=movienight_id   %} role="button" class="btn btn-secondary">Back</a>
+                                <div>
+                                        <a href={% url 'ml_health' %} role="button" class="btn btn-danger">More Info</a>
+                                </div>
+                                <a  href={% url 'preview_mn_email' movienight_id=movienight_id  %} role="button" class="btn btn-primary">Continue</a>
+                              </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
+
+
+{% block modals %}
+
+<div class="modal fade" id="pwchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Password succesfully changed!</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">You can now log in using your new password.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">User information succesfully changed!</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Your profile has been updated.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block js %}
+
+
+{% endblock %}dfgdfgdg
