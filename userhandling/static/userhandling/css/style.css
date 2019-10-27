@@ -2295,12 +2295,11 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 .card-image {
   background-position: center;
-  background-size:cover;
+  background-size:1000%;
   /* filter: blur(8px); */
   /* height:inherit; */
   /* -webkit-filter: blur(8px); */
   z-index:0;
-  background-size:500%
 }
 
 .card-image2 {
