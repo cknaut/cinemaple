@@ -673,7 +673,8 @@ def preview_mn_email(request, movienight_id):
     html_data = render_to_string("userhandling/emails/cinemaple_email_invite.html", context_email)
 
     context_pagel = {
-        'email_html' : html_data
+        'email_html' : html_data,
+        'user'       : request.user
     }
 
     return render(request, 'userhandling/check_email.html', context_pagel)

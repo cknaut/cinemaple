@@ -123,7 +123,7 @@
 
                             <div class="row mb-4">
                                 <div class="col-xl-3 col-lg-3 "> Where: </div>
-                                <div class="col-xl-9 col-lg-9 "> {{movienight.location.street}}, {{movienight.location.zip_code}} , {{movienight.location.city}}, {{movienight.location.state}}</div>
+                                <div class="col-xl-9 col-lg-9 "> {{movienight.location.street}}, {{movienight.location.zip_code}}, {{movienight.location.city}}, {{movienight.location.state}}</div>
                             </div>
 
 
@@ -275,15 +275,14 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 
                                             {% if movienight.get_status == "DRAFT" %}
-                                            <a class="dropdown-item" id="activate_confirm" href="#"
-                                                src="{% url 'activate_movie_night' movienight_id=movienight.id %}">Activate</a>
+                                            <a class="dropdown-item" id="activate_confirm" href="{% url 'activate_movie_night' movienight_id=movienight.id %}"
+                                                >Activate</a>
                                             {% elif movienight.get_status == "ACTIVE" %}
                                             <a class="dropdown-item" id="deactivate_confirm" href="#"
                                                 src="{% url 'deactivate_movie_night' movienight_id=movienight.id %}">Cancel</a>
 
                                             {% endif %}
-                                            <a class="dropdown-item" id="#"
-                                            href="{% url 'trigger_emails' movienight_id=movienight.id %}">Create Emails</a>
+
 
 
 
@@ -494,6 +493,9 @@
     </div>
     <!-- /.container-fluid -->
     {% endblock %}
+
+
+
 
 {% block js %}
 {% if successful_verified %}

@@ -71,6 +71,9 @@ class Location(models.Model):
     state = models.CharField(max_length=200)
     country = models.CharField(max_length=200)
 
+    def print_address(self):
+        return '{}, {} {}, {}'.format(self.street, self.zip_code, self.city, self.state)
+
     def __str__(self):              # __unicode__ on Python 2
         return self.name
 
