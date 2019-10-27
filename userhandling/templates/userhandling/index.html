@@ -53,7 +53,7 @@
   <header id="header">
     <div class="container">
 
-      <div id="logo" class="pull-left">        
+      <div id="logo" class="pull-left">
         <!-- Uncomment below if you prefer to use a text logo -->
         <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
         <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
@@ -85,10 +85,10 @@
   <section id="hero">
     <div class="hero-container">
       <a href="#hero"><img src="{% static 'userhandling/img/cinemaple.png' %}" alt="" title="" height="100" /></img></a>
-      <h1>Movies, friends, crepes.</h1>
+      <h1>Movies, friends, crêpes.</h1>
       <br>
       <!-- <h1><a href="#hero"><img   src="{% static 'userhandling/img/mainbutton.png' %}" alt="" title="" height="100" /></img></a></h1> -->
-      <a href = "{% url 'curr_mov_nights' %}"><button type="button" class="btn btn-primary btn-lg"> <i class="em em-movie_camera" aria-role="presentation" aria-label="MOVIE CAMERA"></i> Find movie nights.</button></a>      
+      <a href = "{% url 'curr_mov_nights' %}"><button type="button" class="btn btn-primary btn-lg"> <i class="em em-movie_camera" aria-role="presentation" aria-label="MOVIE CAMERA"></i> Find movie nights.</button></a>
     </div>
   </section><!-- #hero -->
 {% endblock %}
@@ -104,7 +104,7 @@
           <div class="col-lg-6 content order-lg-1 order-2">
             <h2 class="title" style = "margin-left:-1%"><a href="#hero"><img src="{% static 'userhandling/img/cinemaple.png' %}" alt="" title="" height="60" /></img></a></h2>
             <p style = "margin-top:-3%">
-            <b> cinemaple </b> is a platform designed for organizing Movie Nights with your friends, share good times and a common passion for cinema. <i class="em em-clapper" aria-role="presentation" aria-label="CLAPPER BOARD"></i>
+            <b> Cinemaple </b> is a platform designed for organizing Movie Nights with your friends, share good times and a common passion for cinema. <i class="em em-clapper" aria-role="presentation" aria-label="CLAPPER BOARD"></i>
             </p>
 
             <div class="icon-box wow fadeInUp">
@@ -116,14 +116,14 @@
             <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
               <div class="icon"><i class="em em-100"></i></div>
               <h4 class="title"><a href="">Awesome Friends</a></h4>
-              <p class="description"> <b> cinemaple </b> allows you to create and organize Movie Nights. You can invite all your friends, and they can suggest other movies. <i class="em em-family" aria-role="presentation" aria-label="FAMILY"></i> </p>
+              <p class="description"> <b> Cinemaple </b> allows you to create and organize Movie Nights. You can invite all your friends, and they can suggest other movies. <i class="em em-family" aria-role="presentation" aria-label="FAMILY"></i> </p>
             </div>
 
             <div class="icon-box wow fadeInUp" style = "visibility: visible;" data-wow-delay="0.2s">
               <div class="icon"><i class="em em-heart_eyes_cat"></i></div>
-              <h4 class="title"><a href="">Delish' Crepes</a></h4>
-              <p class="description">As per tradition, Movie Nighters eat crepes made by a French cook <i class="em em-pancakes" aria-role="presentation" aria-label="PANCAKES"></i>. But if you're not into crepes, that's fine too: <b> cinemaple </b> allows you to bring as many toppings or other types of food to thank your hosts. </p>
-            </div>            
+              <h4 class="title"><a href="">Delish' Crepês</a></h4>
+              <p class="description">As per tradition, Movie Nighters eat crepes made by a French cook <i class="em em-pancakes" aria-role="presentation" aria-label="PANCAKES"></i>. But if you're not into crepes, that's fine too: <b> Cinemaple </b> allows you to bring as many toppings or other types of food to thank your hosts. </p>
+            </div>
 
           </div>
 
@@ -159,10 +159,10 @@
           <p class="section-description">Selection of our past Movie Nights</p>
         </div>
       </div>
-    
+
     {% for mn in movienights %}
     <!-- Card -->
-    <div class="card card-image"      
+    <div class="card card-image"
       style="background-image: url(https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}})">
       {% comment %} style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);" {% endcomment %}
       <!-- Content -->
@@ -262,7 +262,7 @@
     Register Modal
     ============================-->
           <div class="col-lg-3 cta-btn-container text-center">
-          <a href = "{% url 'registration' %}"><button type="button" class="btn btn-primary btn-lg"> Sign up now!</button></a>      
+          <a href = "{% url 'registration' %}"><button type="button" class="btn btn-primary btn-lg"> Sign up now!</button></a>
           </div>
           </div>
         </div>
@@ -291,34 +291,6 @@
             </div>
 
           </div>
-
-          <div class="col-lg-5 col-md-8">
-            <div class="form">
-              <div id="sendmessage" style = "color:#ffffff">Your message has been sent. Thank you!</div>
-              <div id="errormessage"></div>
-              <form action="" method="post" role="form" class="contactForm">
-                <div class="form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                  <div class="validation"></div>
-                </div>
-                <div class="form-group">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                  <div class="validation"></div>
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                  <div class="validation"></div>
-                </div>
-                <div class="form-group">
-                  <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                  <div class="validation"></div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg"> Send Message </button>
-                {% comment %} <div class="text-center"><button type="submit">Send Message</button></div> {% endcomment %}
-              </form>
-            </div>
-          </div>
-
         </div>
 
       </div>

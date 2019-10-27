@@ -41,6 +41,14 @@ def index(request):
 
     movienights = MovieNightEvent.objects.order_by('-date')[:5]
 
+    # Total Runtime of all winner movies
+    all_mn = MovieNightEvent.objects.all()
+    total_rt = 0
+    for mn in all_mn:
+         _, _, runtime =  mn.get_winning_movie()
+         total_rt += runtime
+
+
     if request.user.is_authenticated:
         return redirect("curr_mov_nights")
     successful_verified = False
@@ -49,6 +57,7 @@ def index(request):
         'email': "",
         'username': "",
         'movienights' : movienights,
+        'total_rt'  : total_rt,
         'total_no_movienights' : len(MovieNightEvent.objects.all())
     }
     return render(request, 'userhandling/index.html', context)
@@ -596,7 +605,7 @@ def details_mov_nights(request, movienight_id, no_movie=False):
             # Check if there has been votes cast for this movienight (avoids scenario where user registeres too late and is only user)
             num_voted_mn = movienight.get_num_voted()
             if num_voted_mn > 0:
-                winning_movie, _ = movienight.get_winning_movie()
+                winning_movie, _, _ = movienight.get_winning_movie()
 
         # if user has voted, show rating and toppings
         user_has_voted = movienight.user_has_voted(request.user)
@@ -983,7 +992,7 @@ def user_prefs(request):
 @login_required
 def change_password(request):
     pw_changed = False
-    user_saved = False
+
 
     if request.method == 'POST':
         form = MyPasswordChangeForm(request.user, request.POST)
@@ -991,16 +1000,17 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             pw_changed = True
+            form = MyPasswordChangeForm(request.user)
             context = {
+                'form': form,
                 'pw_changed': True
             }
-            return render(request, 'userhandling/user_prefs.html', context)
+            return render(request, 'userhandling/change_password.html', context)
     else:
         form = MyPasswordChangeForm(request.user)
     return render(request, 'userhandling/change_password.html', {
         'form': form,
         'pw_changed': pw_changed,
-        'user_saved' : user_saved
     })
 
 @login_required

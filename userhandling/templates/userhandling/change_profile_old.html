@@ -71,6 +71,13 @@
             <span>Manage Account Settings</span></a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link" href={% url 'ml_health' %}>
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Mailing List Healths</span></a>
+    </li>
+
+
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -141,7 +148,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">User Preferences</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">View/Update User Information</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -149,10 +156,20 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-6">
 
-                          <a href={% url 'change_password' %}>Change Password</a>
-                          <p> </p>
-                           <a href={% url 'change_profile' %}>View/Update User Information</a>
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form }}
+                                 <p> </p>
+                                {% if request.user.profile.email_buffer == '' %}
+                                <span class="badge badge-success">Email verified</span>
 
+                                {% else %}
+                                Activation link sent to <span class="badge badge-secondary" > {{request.user.profile.email_buffer}} </span>.
+                                {% endif %}
+                                <p> </p>
+                            <input class="btn btn-primary odom-submit" type="submit" value="Save Changes">
+
+                            </form>
 
                         </div>
 
@@ -168,25 +185,6 @@
 
 
 {% block modals %}
-
-<div class="modal fade" id="pwchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Password succesfully changed!</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">You can now log in using your new password.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="userchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -207,6 +205,47 @@
     </div>
 </div>
 
+<div class="modal fade" id="emailchanged" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Activation link sent</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">We've sent an activation link to your new email address, please follow it for activation. <pr> </pr> Until activation of the new email address, your previous email address will remain active.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="emailactivated" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Email address activated</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body"> We will now use your updated email address.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Cool</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 {% endblock %}
 
@@ -214,13 +253,22 @@
 {% block js %}
 
 <script>
-{% if pw_changed %}
-$('#pwchanged').modal('show');
+
+
+
+{% if email_changed %}
+$('#emailchanged').modal('show');
  {% endif %}
 
- {% if user_saved %}
+{% if user_saved %}
 $('#userchanged').modal('show');
  {% endif %}
+
+{% if email_activated %}
+$('#emailactivated').modal('show');
+ {% endif %}
+
+
 </script>
 
-{% endblock %}dfgdfgdg
+{% endblock %}

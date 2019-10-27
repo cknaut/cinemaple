@@ -63,6 +63,12 @@ class Movie(models.Model):
     on_amazon = models.BooleanField(default=False)
     amazon_link = models.TextField(blank=True)
 
+    def get_runtime_int(self):
+        runtime = self.runtime
+        runtime = runtime.replace('min', '')
+        runtime_int = int(runtime)
+        return runtime_int
+
     def __str__(self):
         return self.title
 class Location(models.Model):
@@ -234,8 +240,9 @@ class MovieNightEvent(models.Model):
             winner_movies_id = winner_movies_ids[winning_index]
 
         winning_movie = Movie.objects.get(pk=winner_movies_id)
-        
-        return winning_movie, vote_result
+
+        runtime = winning_movie.get_runtime_int()
+        return winning_movie, vote_result, runtime
 
 
     def rounddate(self, dt, roundto):

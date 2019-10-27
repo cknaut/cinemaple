@@ -125,13 +125,23 @@ aria-hidden="true">
         <ul class="nav-menu">
           <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
           {% if request.user.is_staff %}
-          <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
-          <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
-          <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
+          <li class="menu-has-children"><a href="">Admin Actions</a>
+            <ul>
+              <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
+              <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
+              <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
+            </ul>
+
           {% endif %}
         {% if user.is_authenticated %}
+        <li class="menu-has-children"><a href="">User Setting</a>
+            <ul>
+              <li><a href={% url 'change_password' %}>Change Password</a></li>
+              <li><a href={% url 'change_profile' %} >Change Profile</a></li>
+            </ul>
         <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>
-        <li> <font color = #af353b>Welcome, {{request.user.first_name}}!</font> </li>
+
+
         {% else %}
         <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
       {% endif %}

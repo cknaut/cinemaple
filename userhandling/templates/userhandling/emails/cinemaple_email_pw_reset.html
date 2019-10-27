@@ -1,0 +1,14 @@
+{% extends "cinemaple_email_transactional.html" %}
+{% load static %}
+
+
+
+{% block message %}
+
+<p> Hi  {{ firstname }}</p>
+
+
+<p>please activate your email using the following link: {{ link }}</p>
+
+
+{% endblock %}
