@@ -1,6 +1,6 @@
 // Cards
-.card {
-  box-shadow: $z-depth-1;
+.card {  
+  box-shadow: $z-depth-1;  
   border: 0;
   font-weight: 400;
   &[class*="border"] {
@@ -8,7 +8,7 @@
     box-shadow: none;
   }
   .card-body {
-    h1, h2, h3, h4, h5, h6 {
+    h1, h2, h3, h4, h5, h6 {      
       font-weight: 400;
     }
     .card-title {
@@ -19,14 +19,14 @@
         }
       }
     }
-    .card-text {
+    .card-text {      
       color: $md-card-text-color;
       font-size: $md-card-font-size;
       font-weight: 400;
     }
   }
   .md-form {
-    label {
+    label {      
       font-weight: 300;
     }
   }

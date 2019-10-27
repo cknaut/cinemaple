@@ -83,22 +83,21 @@
 {% block main %}
 <div class="container-fluid">
   <div class="row">
-
     <!-- Area Chart -->
-    <div class="col-xl-12 col-lg-12" data-spy="affix" data-offset-top="197">
+    <div class="col-xl-12 col-lg-12">
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary" id="page-top">{% if navbar == 'mod_movie' %} Modify {% else %} Add {% endif %} Movie Night</h6>
         </div>
         <!-- Card Body -->
-        <div class="card-body">
+        <div class="card-body" >
           <!-- Movienight Add Form -->
           {% bootstrap_messages %}
           <form action="/add_movie_night"  method="post" class="form">
             {% csrf_token %}
 
-            <div class="row">
+            <div class="row2">
 
               <div class="col-xl-2 col-lg-2">
                 <div class="form-group">
@@ -223,7 +222,7 @@
 
             </table>
 
-            <p> Powered by <a href="https://www.themoviedb.org/">The Movie DB</a> </p>
+            <p> Powered by <a href="https://www.themoviedb.org/"><font color = "black">The Movie DB</font></a> </p>
 
           </div>
         </div>
