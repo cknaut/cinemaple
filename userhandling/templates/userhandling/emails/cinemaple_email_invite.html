@@ -3,19 +3,27 @@
 
 
 {% block body %}
-<h1> Invitation for movienight {{movienight.motto}}</h1>
+<h1> {% if type == 'invitation' %} Invitation {% elif type == 'reminder' %} Reminder{% endif %}
+    for movienight {{movienight.motto}}</h1>
 
 <p>Hi *|FNAME|*</p>
+{% if type == 'invitation' %}
 
 <p>You are cordially invited to the next movienight at <b>{{movienight.location.print_address}}</b> at <b>{{movienight.date}}</b>.</p>
+{% elif type == 'reminder' %}
+
+
+<p>This is a reminder for the next movienight taking place at <b>{{movienight.location.print_address}}</b> at <b>{{movienight.date}}</b>.</p>
+
+{% endif %}
+
+
+
 
 <p>{{movienight.description|safe}}</p>
 
+
 <p>The {% if movienight.MovieList.all|length > 1 %} {{ movienight.MovieList.all|length }} movie contestants is{% else %} {{ movienight.MovieList.all|length }} movie contestant is{% endif %}:</p>
-
-
-
-
 
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width:100%;">
@@ -116,7 +124,7 @@
                     <tbody>
                         <tr>
                             <td align="center" valign="middle" class="mcnButtonContent" style="font-family: Arial; font-size: 16px; padding: 18px;">
-                                <a class="mcnButton " href={% url 'curr_mov_nights' %} title="More Info / Register" href="#" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">More Info / Register</a>
+                                <a class="mcnButton " title="Buy Now" href="https://www.cinemaple.com/curr_mov_nights" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">More Info / Register</a>
                             </td>
                         </tr>
                     </tbody>

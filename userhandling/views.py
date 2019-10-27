@@ -663,11 +663,13 @@ def activate_movie_night(request, movienight_id):
         return render(request, 'userhandling/activate_user_check.html', context)
 
 
-def gen_mn_email(request, movienight):
+def gen_mn_email(request, movienight, type_email):
+
 
     context_email = {
-        'movienight' : movienight,
-        'user'       : request.user
+        'movienight'    : movienight,
+        'user'          : request.user,
+        'type'          : type_email,
     }
 
     html_email = render_to_string("userhandling/emails/cinemaple_email_invite.html", context_email)
@@ -681,8 +683,8 @@ def preview_mn_email(request, movienight_id):
 
 
     context_pagel = {
-        'email_html' : gen_mn_email(request, movienight),
-        'movienight'    : movienight
+        'email_html'    : gen_mn_email(request, movienight, type_email='reminder'),
+        'movienight'    : movienight,
     }
 
     return render(request, 'userhandling/check_email.html', context_pagel)
@@ -691,20 +693,25 @@ def preview_mn_email(request, movienight_id):
 def schedule_email(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
-    html_data = gen_mn_email(request, movienight)
+    html_data_reminder = gen_mn_email(request, movienight, type_email='reminder')
+    html_data_invitation = gen_mn_email(request, movienight, type_email='invitation')
 
-
-    # First Generate Campaign
+    # First Generate 2 Campaigns
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
 
     reply_to = 'info@cinemaple.com'
-    subject_line = 'Invitation for movienight: {}'.format(movienight.motto)
-    preview_text = 'Gotta treat fo you'
+    preview_text = 'We have a treat for you!'
     from_name = request.user.first_name
-    html = html_data
-    title = "INVITATION Movienight: {}'.format(movienight.motto)"
 
-    mc.create_campaign(reply_to, subject_line, preview_text, title, from_name, html)
+    title1 = 'INVITATION Movienight: {}'.format(movienight.motto)
+    title2 = 'REMINDER Movienight: {}'.format(movienight.motto)
+
+    subject_line1 = 'Invitation for movienight: {}'.format(movienight.motto)
+    subject_line2 = 'Reminder for movienight: {}'.format(movienight.motto)
+
+    mc.create_campaign(reply_to, subject_line1, preview_text, title1, from_name, html_data_invitation)
+    mc.create_campaign(reply_to, subject_line2, preview_text, title2, from_name, html_data_reminder)
+
 
     return HttpResponse("YOU fine")
 
