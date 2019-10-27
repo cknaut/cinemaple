@@ -25,7 +25,7 @@
 </style>
 {% endblock %}
 
-{% block modals %}
+{% block moremodals %}
 
 <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
@@ -68,6 +68,26 @@ aria-hidden="true">
 </div>
 </div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog youtube-modal-dialog" role="document">
+            <div class="modal-content">
+
+
+                <div class="modal-body youtube-modal-body">
+
+                    <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <!-- 16:9 aspect ratio -->
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
+                            allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% if successful_verified %}
 <div id="RegVerifyModall" class="modal fade">
@@ -88,6 +108,7 @@ aria-hidden="true">
     </div>
   </div>
 </div>
+
 {% endif %}
 
 {% endblock %}

@@ -1,12 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'logged_in_base.html' %}
 {% load static %}
 
 
-
 {% block css_imports %}
+
+<link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
-<script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
+<script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
+<link href="{% static 'userhandling/lib/mdb/css/mdb.lite.css' %}" rel="stylesheet">
+<link href="{% static 'userhandling/lib/animate/animate.css' %}" rel="stylesheet">
 
 <style>
     @font-face {
@@ -20,47 +23,198 @@
         src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
     }
 </style>
+{% endblock %}
+
+{% block moremodals %}
+
+<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Do you want to permanentely delete this movie night?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-{% endblock%}
+<div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Activating the movienight will send out invitation emails and opens the
+                poll.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Deactivating the movienight will send out notifications to all registered
+                users.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" id="dectivatebutton" href="">Deactivate</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ConfirmVote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Once voted, your votes cannot be changed!
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <input class="btn btn-primary odom-submit" type="submit" value="Vote!">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="notenoughvotes" tabindex="-1" role="modal-notify" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+        <!--Content-->
+        <div class="modal-content text-center">
+            <!--Header-->
+            <div class="modal-header d-flex justify-content-center">
+                <p class="heading">Please rate all {{num_movs}} movies.</p>
+            </div>
+
+            <!--Body-->
+            <div class="modal-body">
+                <i class="fa fa-times fa-4x mb-3 animated bounce" style="color:#FF3547"></i>
+
+
+            </div>
+
+            <!--Footer-->
+            <div class="modal-footer flex-center">
+                <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog youtube-modal-dialog" role="document">
+        <div class="modal-content">
+
+
+            <div class="modal-body youtube-modal-body">
+
+                <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <!-- 16:9 aspect ratio -->
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
+                        allow="autoplay"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
 
 {% block header %}
-  <!--==========================
-  Header
-  ============================-->
-  <header id="header">
-    <div class="container">
+<!--==========================
+Header
+============================-->
+<header id="header">
+  <div class="container">
 
-      <div id="logo" class="pull-left">
-        <!-- Uncomment below if you prefer to use a text logo -->
-        <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
-        <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
-      </div>
-
-      <nav id="nav-menu-container">
-        <ul class="nav-menu">
-          <li><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
-          {% if request.user.is_staff %}
-          <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
-          <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
-          <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
-          {% endif %}
-        {% if user.is_authenticated %}
-        <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started">Logout</a> </li>
-        <li> <font color = #af353b>Welcome, {{request.user.first_name}}!</font> </li>
-        {% else %}
-        <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
-      {% endif %}
-        </ul>
-      </nav><!-- #nav-menu-container -->
+    <div id="logo" class="pull-left">
+      <!-- Uncomment below if you prefer to use a text logo -->
+      <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
+      <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
     </div>
-  </header><!-- #header -->
+
+    <nav id="nav-menu-container">
+      <ul class="nav-menu">
+        <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
+        <li class="menu" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
+
+        {% if request.user.is_staff %}
+        <li class="menu-has-children"><a href="">Admin Actions</a>
+          <ul>
+            <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
+            <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
+            <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
+          </ul>
+
+        {% endif %}
+      {% if user.is_authenticated %}
+      <li class="menu-has-children"><a href="">User Setting</a>
+          <ul>
+            <li><a href={% url 'change_password' %}>Change Password</a></li>
+            <li><a href={% url 'change_profile' %} >Change Profile</a></li>
+          </ul>
+      <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>
+
+
+      {% else %}
+      <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
+    {% endif %}
+      </ul>
+    </nav><!-- #nav-menu-container -->
+  </div>
+</header><!-- #header -->
 {% endblock %}
+
 
 {% block main %}
 <div class="container-fluid">
     <!-- Content Row -->
-    <div class="row3">
+    <div class="row">
 
 
 
@@ -295,145 +449,9 @@
 
 </div>
 <!-- /.container-fluid -->
-{% endblock %}
+    {% endblock %}
 
 
-{% block modals %}
-<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Do you want to permanentely delete this movie night?</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Activating the movienight will send out invitation emails and opens the
-                poll.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Deactivating the movienight will send out notifications to all registered
-                users.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" id="dectivatebutton" href="">Deactivate</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="ConfirmVote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Once voted, your votes cannot be changed!
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <input class="btn btn-primary odom-submit" type="submit" value="Vote!">
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!--Modal: modalConfirmDelete-->
-<div class="modal fade" id="notenoughvotes" tabindex="-1" role="modal-notify" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-        <!--Content-->
-        <div class="modal-content text-center">
-            <!--Header-->
-            <div class="modal-header d-flex justify-content-center">
-                <p class="heading">Please rate all {{num_movs}} movies.</p>
-            </div>
-
-            <!--Body-->
-            <div class="modal-body">
-                <i class="fa fa-times fa-4x mb-3 animated bounce" style="color:#FF3547"></i>
-
-
-            </div>
-
-            <!--Footer-->
-            <div class="modal-footer flex-center">
-                <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
-            </div>
-        </div>
-        <!--/.Content-->
-    </div>
-</div>
-
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog youtube-modal-dialog" role="document">
-        <div class="modal-content">
-
-
-            <div class="modal-body youtube-modal-body">
-
-                <button type="button" class="close youtube-modal-close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <!-- 16:9 aspect ratio -->
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
-                        allow="autoplay"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-{% endblock %}
 
 
 {% block js %}
@@ -544,6 +562,7 @@
 
         // document ready
     });
-</script>
 
+    </script>
 {% endblock %}
+

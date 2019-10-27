@@ -690,6 +690,10 @@ def gen_mn_email(request, movienight, type_email):
 
     return html_email
 
+def preview_email_invitation(request, movienight_id):
+    movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
+    email_html =  gen_mn_email(request, movienight, type_email='invitation'),
+    return HttpResponse(email_html)
 
 def preview_mn_email(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)

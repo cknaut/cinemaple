@@ -1,12 +1,15 @@
-{% extends 'dashboard_base.html' %}
+{% extends 'logged_in_base.html' %}
 {% load static %}
-{% load shuffle %}
 
 
 {% block css_imports %}
+
+<link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
-<script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
+<script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
+<link href="{% static 'userhandling/lib/mdb/css/mdb.lite.css' %}" rel="stylesheet">
+<link href="{% static 'userhandling/lib/animate/animate.css' %}" rel="stylesheet">
 
 <style>
     @font-face {
@@ -20,118 +23,53 @@
         src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
     }
 </style>
+{% endblock %}
 
 
-{% endblock%}
 
+{% block header %}
+<!--==========================
+Header
+============================-->
+<header id="header">
+  <div class="container">
 
-{% block sidebar %}
-<!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">Cinemaple</div>
-    </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-
-    <li class="nav-item {% if navbar == 'curr_mov_night' %}active{% endif %}">
-        <a class="nav-link" href={% url 'curr_mov_nights' %}>
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Currrent Movie Night</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    {% if request.user.is_staff %}
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Admin
+    <div id="logo" class="pull-left">
+      <!-- Uncomment below if you prefer to use a text logo -->
+      <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
+      <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
     </div>
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href={% url 'add_movie_night' %}>
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Add Movie Nights</span></a>
-    </li>
+    <nav id="nav-menu-container">
+      <ul class="nav-menu">
+        <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
+        <li class="menu" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href={% url 'man_mov_nights' %}>
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Manage Account Settings</span></a>
-    </li>
+        {% if request.user.is_staff %}
+        <li class="menu-has-children"><a href="">Admin Actions</a>
+          <ul>
+            <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
+            <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
+            <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
+          </ul>
 
-    <li class="nav-item">
-        <a class="nav-link" href={% url 'ml_health' %}>
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Mailing List Healths</span></a>
-    </li>
+        {% endif %}
+      {% if user.is_authenticated %}
+      <li class="menu-has-children"><a href="">User Setting</a>
+          <ul>
+            <li><a href={% url 'change_password' %}>Change Password</a></li>
+            <li><a href={% url 'change_profile' %} >Change Profile</a></li>
+          </ul>
+      <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>
 
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+      {% else %}
+      <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
     {% endif %}
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Addons
-    </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-            aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Pages</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item" href="blank.html">Blank Page</a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-    </li>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-</ul>
-<!-- End of Sidebar -->
+      </ul>
+    </nav><!-- #nav-menu-container -->
+  </div>
+</header><!-- #header -->
 {% endblock %}
 
 
@@ -215,15 +153,11 @@
 
 
 <p>
-    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-Preview Email        </a>
+    <a target="_blank"  href={% url 'preview_email_invitation' movienight_id=movienight.id  %} role="button" class="btn btn-primary">Preview Invitation Email</a>
+
 
   </p>
-  <div class="collapse" id="collapseExample">
-    <div class="card card-body">
-            {{email_html | safe}}
-        </div>
-  </div>
+
 
 
 
@@ -238,14 +172,12 @@ Preview Email        </a>
     </div>
 </div>
 <!-- /.container-fluid -->
-{% endblock %}
+    {% endblock %}
 
 
-{% block modals %}
-
-
-{% endblock %}
 
 
 {% block js %}
+
 {% endblock %}
+
