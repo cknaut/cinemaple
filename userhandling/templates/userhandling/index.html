@@ -4,6 +4,7 @@
 
 {% block css_imports %}
 <link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
 {% endblock %}
 
 {% block modals %}
@@ -156,15 +157,19 @@
       <div class="container wow fadeIn">
         <div class="section-header">
           <h3 class="section-title">Movie Nights</h3>
-          <p class="section-description">Selection of our past Movie Nights</p>
+          <p class="section-description">Selection of our past Movie Nights </p>
+          <div class="col-lg-3 col-6 text-center">
+          <span data-toggle="counter-up"> {{total_no_movienights}}  </span>
+          <p>Movies watched</p>
+          </div>
         </div>
       </div>
+    </section><!-- #facts -->
     
     {% for mn in movienights %}
     <!-- Card -->
-    <div class="card card-image"      
-      style="background-image: url(https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}})">
-      {% comment %} style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);" {% endcomment %}
+    <div class = "overlay">
+    <div class="card card-image" style="background-image: url(https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}})">
       <!-- Content -->
       <div class="rgba-black-strong py-5 px-4" style = "padding-bottom:0" style = "padding-top:0">
         <div class="row3 d-flex justify-content-center">
@@ -175,7 +180,7 @@
               aria-multiselectable="true">
 
               <!-- Accordion card -->
-              <div class="card-scroll mb-4">
+              <div class="card-scroll2 mb-4">
 
                 <!-- Card header -->
                 <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading30">
@@ -183,7 +188,7 @@
                     aria-controls="collapse30" href = "collapse30">
                     <i class="fas fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
                     <h4 class="text-uppercase white-text mb-0 py-3 mt-1">
-                      MOVIE NIGHT #{{ total_no_movienights|add:forloop.counter0 }} {{ mn.motto}} - {{ mn.get_winning_movie|first }}
+                      <font color = "#292b2c">MOVIE NIGHT #{{ total_no_movienights|add:forloop.counter0 }}</font> {{ mn.motto}} 
                     </h4>
                   </a>
                 </div>
@@ -192,62 +197,82 @@
                 <div id="collapse" class="collapse show" role="tabpanel" aria-labelledby="heading30"
                   data-parent="#accordionEx5">
                   <div class="card-body rgba-black-light white-text z-depth-1">
-                    <p class="p-md-4 mb-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                      terry richardson ad squid. 3 wolf moon officia aute,
-                      non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch
-                      3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
-                      shoreditch et.</p>
+                  <div class = "row3">                  
+                  <div class="col-md-4 col-xl-4">
+                     <p class="p-md-4 mb-0"> {{mn.motto}}</p>                    
+                    <p class="p-md-4 mb-0"> {{ mn.get_winning_movie|first }}, directed by {{mn.get_winning_movie.0.director}}, won this battle ! <i class="em em-muscle" aria-role="presentation" aria-label="FLEXED BICEPS"></i></p>   
+                  </div>
+                  <div class="col-md-4 col-xl-4" style = "margin-top:-4.1%">
+                    {% comment %} <p class="p-md-4 mb-0"> {{mn.description|safe}}</p>                     {% endcomment %}
+                  </div>
+                  <div class="col-md-4 col-xl-4">
+                    <img src = "https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}}"/>
+                  </div>
+                  </div>
                   </div>
                 </div>
               </div>
               <!-- Accordion card -->
             </div>
             <!--/.Accordion wrapper-->
-
+          </div>
           </div>
         </div>
       </div>
       <!-- Content -->
     </div>
     <!-- Card -->
+
+    {% comment %} <div class="wrapper">
+    <div class="hover" style = "background-image: url(https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}})"></div>
+      <div class="rgba-black-strong py-5 px-4" style = "padding-bottom:0" style = "padding-top:0">
+        <div class="row3 d-flex justify-content-center">
+          <div class="col-md-10 col-xl-8">
+
+            <!--Accordion wrapper-->
+            <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
+              aria-multiselectable="true">
+
+              <!-- Accordion card -->
+              <div class="card-scroll2 mb-4">
+
+                <!-- Card header -->
+                <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading30">
+                  <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
+                    aria-controls="collapse30" href = "collapse30">
+                    <i class="fas fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
+                    <h4 class="text-uppercase white-text mb-0 py-3 mt-1">
+                      <font color = "#292b2c">MOVIE NIGHT #{{ total_no_movienights|add:forloop.counter0 }}</font> {{ mn.motto}} 
+                    </h4>
+                  </a>
+                </div>
+
+                <!-- Card body -->
+                <div id="collapse" class="collapse show" role="tabpanel" aria-labelledby="heading30"
+                  data-parent="#accordionEx5">
+                  <div class="card-body rgba-black-light white-text z-depth-1">
+                  <div class = "row3">                  
+                  <div class="col-md-4 col-xl-4">
+                    <p class="p-md-4 mb-0"> {{mn.motto}}</p>                    
+                    <p class="p-md-4 mb-0"> {{ mn.get_winning_movie|first }}, directed by {{mn.get_winning_movie.0.director}}, won this battle ! <i class="em em-muscle" aria-role="presentation" aria-label="FLEXED BICEPS"></i></p>   
+                  </div>
+                  <div class="col-md-4 col-xl-4" style = "margin-top:-4.1%">
+                    <p class="p-md-4 mb-0"> {{mn.description|safe}}</p>                    
+                  </div>
+                  <div class="col-md-4 col-xl-4">
+                    <img src = "https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}}"/>
+                  </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Accordion card -->
+            </div>
+    </div> {% endcomment %}
+
+
     {% endfor %}
     </section><!-- #services -->
-
-    {% comment %} <!--==========================
-      Facts Section
-    ============================-->
-    <section id="facts">
-      <div class="container wow fadeIn">
-        <div class="section-header">
-          <h3 class="section-title">Facts</h3>
-          <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
-        </div>
-        <div class="row counters">
-
-  				<div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">232</span>
-            <p>Eaten Crepes</p>
-  				</div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">15</span>
-            <p>Polled Movies</p>
-  				</div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">36,000</span>
-            <p>Seconds of Movies Watched</p>
-  				</div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">0</span>
-            <p>Ragrets</p>
-  				</div>
-
-  			</div>
-
-      </div>
-    </section><!-- #facts --> {% endcomment %}
 
     <!--==========================
     Call To Action Section
