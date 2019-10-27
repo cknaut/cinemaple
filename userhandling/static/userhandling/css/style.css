@@ -45,12 +45,12 @@ body {
 }
 
 a {
-  color: #ffffff;
+  color: var(--curtain-red);
   font-weight: 600;
 }
 
 a:hover, a:active, a:focus {
-  color: #ffffff;
+  color:var(--curtain-red);
   outline: none;
   text-decoration: none;
 }
@@ -780,9 +780,9 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* Call To Action Section
 --------------------------------*/
 #call-to-action {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/call-to-action-bg.jpg) fixed center center;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/cine.png) fixed center center;
   background-size: cover;
-  padding: 80px 0;
+  padding: 10px 0;
 }
 
 #call-to-action .cta-title {
@@ -799,7 +799,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   #call-to-action .cta-btn-container {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
   }
 }
 
@@ -1893,9 +1893,9 @@ body.mobile-nav-active #mobile-nav-toggle {
   }
   .col-lg-3 {
       -webkit-box-flex: 0;
-      -ms-flex: 0 0 25%;
-      flex: 0 0 25%;
-      max-width: 25%
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%
   }
   .col-lg-4 {
       -webkit-box-flex: 0;
@@ -1929,9 +1929,9 @@ body.mobile-nav-active #mobile-nav-toggle {
   }
   .col-lg-9 {
       -webkit-box-flex: 0;
-      -ms-flex: 0 0 75%;
-      flex: 0 0 75%;
-      max-width: 75%
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%
   }
   .col-lg-10 {
       -webkit-box-flex: 0;
@@ -2286,6 +2286,13 @@ body.mobile-nav-active #mobile-nav-toggle {
   border-radius: .35rem
 }
 
+.card-image {
+  background-position: center;
+  background-size:cover;
+  filter: blur(0px);
+  /* -webkit-filter: blur(8px); */
+}
+
 .card-scroll{
   position: relative;
   display: -webkit-box;
@@ -2300,7 +2307,8 @@ body.mobile-nav-active #mobile-nav-toggle {
   background-color: rgb(255, 255, 255, 0.5);
   background-clip: border-box;
   border: 1px solid #e3e6f0;
-  border-radius: .35rem
+  border-radius: .35rem;
+  filter: blur(0px) !important
 }
 
 .card>hr {

@@ -63,8 +63,7 @@
         <ul class="nav-menu">
           <li class="menu-active"><a href="#hero">Home</a></li>
           <li><a href="#about">About Cinemaple</a></li>
-          <li><a href="#movienights">Movienights</a></li>
-          <li><a href="#call-to-action">Sign Up</a></li>
+          <li><a href="#movienights">Movie Nights</a></li>
           <li><a href="#sendmessage">Contact Us</a></li>
         {% if user.is_authenticated %}
         <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:yellow" class="btn-get-started">Logout</a> </li>
@@ -98,33 +97,33 @@
 {% block main %}
   <main id="main">
 
-    <section id="about">
+    <section id="about" style = "padding-top:0">
       <div class="container">
         <div class="row about-container">
 
           <div class="col-lg-6 content order-lg-1 order-2">
-            <h2 class="title">cinemaple</h2>
-            <p>
-              cinemaple was created to  
+            <h2 class="title" style = "margin-left:-1%"><a href="#hero"><img src="{% static 'userhandling/img/cinemaple.png' %}" alt="" title="" height="60" /></img></a></h2>
+            <p style = "margin-top:-3%">
+            <b> cinemaple </b> is a platform designed for organizing Movie Nights with your friends, share good times and a common passion for cinema. <i class="em em-clapper" aria-role="presentation" aria-label="CLAPPER BOARD"></i>
             </p>
 
             <div class="icon-box wow fadeInUp">
               <div class="icon"><i class="em em-bar_chart" aria-role="presentation" aria-label="BAR CHART"></i></div>
-              <h4 class="title"><a href="">Poll Based Movie Selection</a></h4>
-              <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-            </div>
-
-            <div class="icon-box wow fadeInUp" style = "visibility: visible;" data-wow-delay="0.2s">
-              <div class="icon"><i class="em em-heart_eyes_cat"></i></div>
-              <h4 class="title"><a href="">Delish' Crepes</a></h4>
-              <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <h4 class="title"><a href="">Poll-Based Movie Selection</a></h4>
+              <p class="description">Our algorithms maximize global happiness! <i class="em em-rainbow" aria-role="presentation" aria-label="RAINBOW"></i> </p>
             </div>
 
             <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
               <div class="icon"><i class="em em-100"></i></div>
               <h4 class="title"><a href="">Awesome Friends</a></h4>
-              <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+              <p class="description"> <b> cinemaple </b> allows you to create and organize Movie Nights. You can invite all your friends, and they can suggest other movies. <i class="em em-family" aria-role="presentation" aria-label="FAMILY"></i> </p>
             </div>
+
+            <div class="icon-box wow fadeInUp" style = "visibility: visible;" data-wow-delay="0.2s">
+              <div class="icon"><i class="em em-heart_eyes_cat"></i></div>
+              <h4 class="title"><a href="">Delish' Crepes</a></h4>
+              <p class="description">As per tradition, Movie Nighters eat crepes made by a French cook <i class="em em-pancakes" aria-role="presentation" aria-label="PANCAKES"></i>. But if you're not into crepes, that's fine too: <b> cinemaple </b> allows you to bring as many toppings or other types of food to thank your hosts. </p>
+            </div>            
 
           </div>
 
@@ -149,55 +148,70 @@
       </div>
     </header-vid> {% endcomment %}
 
-    <!-- Card -->
-<div class="card card-image"
-  style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);">
 
-  <!-- Content -->
-  <div class="rgba-black-strong py-5 px-4">
-    <div class="row d-flex justify-content-center">
-      <div class="col-md-10 col-xl-8">
-
-        <!--Accordion wrapper-->
-        <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
-          aria-multiselectable="true">
-
-          <!-- Accordion card -->
-          <div class="card-scroll mb-4">
-
-            <!-- Card header -->
-            <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading30">
-              <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
-                aria-controls="collapse30" href = "collapse30">
-                <i class="fas fa-cloud fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
-                <h4 class="text-uppercase white-text mb-0 py-3 mt-1">
-                  Item #1
-                </h4>
-              </a>
-            </div>
-
-            <!-- Card body -->
-            <div id="collapse" class="collapse show" role="tabpanel" aria-labelledby="heading30"
-              data-parent="#accordionEx5">
-              <div class="card-body rgba-black-light white-text z-depth-1">
-                <p class="p-md-4 mb-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                  terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch
-                  3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
-                  shoreditch et.</p>
-              </div>
-            </div>
-          </div>
-          <!-- Accordion card -->
+    <!--==========================
+      Movie Nights Section
+    ============================-->
+    <section id="movienights">
+      <div class="container wow fadeIn">
+        <div class="section-header">
+          <h3 class="section-title">Movie Nights</h3>
+          <p class="section-description">Selection of our past Movie Nights</p>
         </div>
-        <!--/.Accordion wrapper-->
-
       </div>
+    
+    {% for mn in movienights %}
+    <!-- Card -->
+    <div class="card card-image"      
+      style="background-image: url(https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}})">
+      {% comment %} style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);" {% endcomment %}
+      <!-- Content -->
+      <div class="rgba-black-strong py-5 px-4" style = "padding-bottom:0" style = "padding-top:0">
+        <div class="row3 d-flex justify-content-center">
+          <div class="col-md-10 col-xl-8">
+
+            <!--Accordion wrapper-->
+            <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
+              aria-multiselectable="true">
+
+              <!-- Accordion card -->
+              <div class="card-scroll mb-4">
+
+                <!-- Card header -->
+                <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading30">
+                  <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
+                    aria-controls="collapse30" href = "collapse30">
+                    <i class="fas fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
+                    <h4 class="text-uppercase white-text mb-0 py-3 mt-1">
+                      MOVIE NIGHT #{{ total_no_movienights|add:forloop.counter0 }} {{ mn.motto}} - {{ mn.get_winning_movie|first }}
+                    </h4>
+                  </a>
+                </div>
+
+                <!-- Card body -->
+                <div id="collapse" class="collapse show" role="tabpanel" aria-labelledby="heading30"
+                  data-parent="#accordionEx5">
+                  <div class="card-body rgba-black-light white-text z-depth-1">
+                    <p class="p-md-4 mb-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
+                      terry richardson ad squid. 3 wolf moon officia aute,
+                      non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch
+                      3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
+                      shoreditch et.</p>
+                  </div>
+                </div>
+              </div>
+              <!-- Accordion card -->
+            </div>
+            <!--/.Accordion wrapper-->
+
+          </div>
+        </div>
+      </div>
+      <!-- Content -->
     </div>
-  </div>
-  <!-- Content -->
-</div>
-<!-- Card -->
+    <!-- Card -->
+    {% endfor %}
+    </section><!-- #services -->
 
     {% comment %} <!--==========================
       Facts Section
@@ -236,71 +250,51 @@
     </section><!-- #facts --> {% endcomment %}
 
     <!--==========================
-      Movie Nights Section
-    ============================-->
-    <section id="movienights">
-      <div class="container wow fadeIn">
-        <div class="section-header">
-          <h3 class="section-title">Movie Nights</h3>
-          <p class="section-description">Please find a selection of the past movie nights LOL.</p>
-        </div>
-      </div>
-
-    </section><!-- #services -->
-
-    <!--==========================
     Call To Action Section
     ============================-->
     <section id="call-to-action">
       <div class="container wow fadeIn">
-        <div class="row">
+        <div class="row3">
           <div class="col-lg-9 text-center text-lg-left">
-            <h3 class="cta-title">Subscribe Now</h3>
-            <p class="cta-text"> Subscribe to CINEMAPLE and receive notifications on movie nights organized in your area. Bla bla bla</p>
+            <h3 class="cta-title" style = "text-align:center">Subscribe Now</h3>
+            <p class="cta-text" style = "text-align:center"> Subscribe to cinemaple and receive information about Movie Nights organized in your area.</p>
       <!--==========================
     Register Modal
     ============================-->
           <div class="col-lg-3 cta-btn-container text-center">
-            <a class="cta-btn align-middle" href="#" data-toggle="modal" data-target="#modalRegisterForm">Sign Up Now!</a>
+          <a href = "{% url 'registration' %}"><button type="button" class="btn btn-primary btn-lg"> Sign up now!</button></a>      
           </div>
-
-
           </div>
-
         </div>
 
       </div>
-    </section><!-- #call-to-action -->
-
-      <!-- Uncomment below if you wan to use dynamic maps -->
-      {% comment %} <iframe src="https://maps.google.com/maps?q=57%20maple%20avenue%2C%20Cambridge&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe> {% endcomment %}
-
       <div class="container wow fadeInUp mt-5">
-        <div class="row justify-content-center">
+        <div class="row3 justify-content-center">
 
-          <div class="col-lg-3 col-md-4">
+          <div class="col-lg-3 col-md-4" style = "max-width:25%">
 
             <div class="info">
               <div>
-                <i class="fa fa-map-marker"></i>
-                <p>Cambridge, MA 02139</p>
+                <i class="fa fa-map-marker" style = "color:#ffffff"></i>
+                <p style = "color:#ffffff">Cambridge, MA 02139</p>
               </div>
 
               <div>
-                <i class="fa fa-envelope"></i>
-                <p>admin@cinemaple.com</p>
+                <i class="fa fa-envelope"style = "color:#ffffff"></i>
+                <p style = "color:#ffffff">admin@cinemaple.com</p>
               </div>
             </div>
 
             <div class="social-links">
-               <a href="https://github.com/cknaut/cinemaple" class="github"><i class="fa fa-github"></i></a>
+               <a href="https://github.com/cknaut/cinemaple" class="github"><img src="{% static 'userhandling/img/giticon.png' %}" alt="" title="" height="30" style = "margin-left:-3%"/></a>
+               <p style = "color:#ffffff"><b>cinemaple</b> is fully open source and available on GitHub.</p>
             </div>
 
           </div>
 
           <div class="col-lg-5 col-md-8">
             <div class="form">
-              <div id="sendmessage">Your message has been sent. Thank you!</div>
+              <div id="sendmessage" style = "color:#ffffff">Your message has been sent. Thank you!</div>
               <div id="errormessage"></div>
               <form action="" method="post" role="form" class="contactForm">
                 <div class="form-group">
@@ -319,7 +313,8 @@
                   <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
                   <div class="validation"></div>
                 </div>
-                <div class="text-center"><button type="submit">Send Message</button></div>
+                <button type="submit" class="btn btn-primary btn-lg"> Send Message </button>
+                {% comment %} <div class="text-center"><button type="submit">Send Message</button></div> {% endcomment %}
               </form>
             </div>
           </div>
@@ -328,6 +323,7 @@
 
       </div>
     </section><!-- #contact -->
+    </section><!-- #call-to-action -->
 
   </main>
 {% endblock %}

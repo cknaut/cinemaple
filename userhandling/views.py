@@ -39,13 +39,17 @@ from django.template.loader import render_to_string
 # Render Index Page, manage register
 def index(request):
 
+    movienights = MovieNightEvent.objects.order_by('-date')[:5]
+
     if request.user.is_authenticated:
         return redirect("curr_mov_nights")
     successful_verified = False
     context = {
         'successful_verified': successful_verified,
         'email': "",
-        'username': ""
+        'username': "",
+        'movienights' : movienights,
+        'total_no_movienights' : len(MovieNightEvent.objects.all())
     }
     return render(request, 'userhandling/index.html', context)
 

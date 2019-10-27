@@ -234,7 +234,7 @@ class MovieNightEvent(models.Model):
             winner_movies_id = winner_movies_ids[winning_index]
 
         winning_movie = Movie.objects.get(pk=winner_movies_id)
-
+        
         return winning_movie, vote_result
 
 
