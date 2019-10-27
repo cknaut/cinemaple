@@ -34,7 +34,7 @@
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
-          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log out?</div>
           <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started">Logout</a></div>
         </div>
       </div>
@@ -134,7 +134,72 @@
       </div>
     </section><!-- #about -->
 
-    <!--==========================
+    {% comment %} <header-vid>
+      <div class="overlay"></div>
+      <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+        <source src="https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4" type="video/mp4">
+      </video>
+      <div class="container h-100">
+        <div class="d-flex h-100 text-center align-items-center">
+          <div class="w-100 text-white">
+            <h1 class="display-3">Video Header</h1>
+            <p class="lead mb-0">With HTML5 Video and Bootstrap 4</p>
+          </div>
+        </div>
+      </div>
+    </header-vid> {% endcomment %}
+
+    <!-- Card -->
+<div class="card card-image"
+  style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);">
+
+  <!-- Content -->
+  <div class="rgba-black-strong py-5 px-4">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-10 col-xl-8">
+
+        <!--Accordion wrapper-->
+        <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
+          aria-multiselectable="true">
+
+          <!-- Accordion card -->
+          <div class="card-scroll mb-4">
+
+            <!-- Card header -->
+            <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading30">
+              <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
+                aria-controls="collapse30" href = "collapse30">
+                <i class="fas fa-cloud fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
+                <h4 class="text-uppercase white-text mb-0 py-3 mt-1">
+                  Item #1
+                </h4>
+              </a>
+            </div>
+
+            <!-- Card body -->
+            <div id="collapse" class="collapse show" role="tabpanel" aria-labelledby="heading30"
+              data-parent="#accordionEx5">
+              <div class="card-body rgba-black-light white-text z-depth-1">
+                <p class="p-md-4 mb-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
+                  terry richardson ad squid. 3 wolf moon officia aute,
+                  non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch
+                  3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
+                  shoreditch et.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Accordion card -->
+        </div>
+        <!--/.Accordion wrapper-->
+
+      </div>
+    </div>
+  </div>
+  <!-- Content -->
+</div>
+<!-- Card -->
+
+    {% comment %} <!--==========================
       Facts Section
     ============================-->
     <section id="facts">
@@ -168,7 +233,7 @@
   			</div>
 
       </div>
-    </section><!-- #facts -->
+    </section><!-- #facts --> {% endcomment %}
 
     <!--==========================
       Movie Nights Section
@@ -208,7 +273,7 @@
     </section><!-- #call-to-action -->
 
       <!-- Uncomment below if you wan to use dynamic maps -->
-      <iframe src="https://maps.google.com/maps?q=57%20maple%20avenue%2C%20Cambridge&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+      {% comment %} <iframe src="https://maps.google.com/maps?q=57%20maple%20avenue%2C%20Cambridge&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe> {% endcomment %}
 
       <div class="container wow fadeInUp mt-5">
         <div class="row justify-content-center">
@@ -218,7 +283,7 @@
             <div class="info">
               <div>
                 <i class="fa fa-map-marker"></i>
-                <p>57 Maple Avenue<br>Cambridge, MA 02139</p>
+                <p>Cambridge, MA 02139</p>
               </div>
 
               <div>
@@ -299,6 +364,14 @@
 {% endblock %}
 
 {% block js %}
+<script>
+$(document).ready(function(){
+  $(".fas").click(function(){
+    $(".collapse").collapse('toggle');
+  });
+});
+</script>
+
 {% if successful_verified %}
   <script type="text/javascript">
       $(document).ready(function(){

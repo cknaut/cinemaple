@@ -15,7 +15,7 @@
 <link rel="stylesheet" type="text/css"
   href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 <link href="{% static 'userhandling/lib/animate/animate.css' %}" rel="stylesheet">
-<link href="{% static 'userhandling/lib/mdb/css/mdb.lite.min.css' %}" rel="stylesheet">
+<link href="{% static 'userhandling/lib/mdb/css/mdb.lite.css' %}" rel="stylesheet">
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"
   type="text/css" media="all" rel="stylesheet">
@@ -120,7 +120,7 @@
                   </div>
 
                   <div class="form-group">
-                  <label for="exampleInputEmail1">Maximal Attendence:</label>
+                  <label for="exampleInputEmail1">Maximal Attendance:</label>
                   {{form1.MaxAttendence.errors}}
                   {{form1.MaxAttendence}}
                 </div>
@@ -186,7 +186,7 @@
     </div>
   </div>
   {% if not voting_occured  %}
-  <div class="row">
+  <div class="row2">
 
     <!-- Pie Chart -->
     <div class="col-xl-12 col-lg-12">
@@ -197,10 +197,10 @@
         </div>
         <!-- Card Body -->
         <div class="card-body">
-          <div class="form-group">
+          {% comment %} <div class="form-group">
             <label class="control-label" for="">Search to add movies:</label>
             <div id="moviealerts"></div>
-          </div>
+          </div> {% endcomment %}
 
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -210,13 +210,13 @@
               aria-describedby="inputGroup-sizing-default">
           </div>
 
-          <div class="input-group mb-3">
+         <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text" id="inputGroup-sizing-default">Year</span>
             </div>
             <input type="text" id="queryyear" class="form-control" aria-label="Default"
               aria-describedby="inputGroup-sizing-default">
-          </div>
+          </div> 
           <div>
 
 
@@ -275,15 +275,15 @@
 
           <div class="container">
             <!--Grid row-->
-            <div class="row">
+            <div class="row2">
 
               <div class="col-lg-4">
-                <div class="row justify-content-center">
+                <div class="row3 justify-content-center">
                   <div id="movieModalPoster"></div>
 
                 </div>
-                <div class="row"></div>
-                <div class="row justify-content-center">
+                <div class="row3"></div>
+                <div class="row3 justify-content-center">
                   <div id="trailerbutton"></div>
 
                 </div>
@@ -293,7 +293,7 @@
 
               <div class="col-lg-8">
                 <!--Grid column-->
-                <div class="row">
+                <div class="row3">
                   <div class="col-lg-2">
                     <p class="font-weight-bold">Year:</p>
                   </div>
@@ -306,7 +306,7 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row3">
                   <div class="col-lg-2">
                     <p class="font-weight-bold">Country:</p>
                   </div>
@@ -319,7 +319,7 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row3">
                   <div class="col-lg-2">
                     <p class="font-weight-bold">Director:</p>
                   </div>
@@ -332,7 +332,7 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row3">
                   <div class="col-lg-2">
                     <p class="font-weight-bold">Producer:</p>
                   </div>
@@ -347,7 +347,7 @@
 
 
 
-                <div class="row">
+                <div class="row3">
                   <div class="col-lg-2">
                     <p class="font-weight-bold">Actors:</p>
                   </div>
@@ -360,7 +360,7 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row3">
                   <div class="col-lg-2">
                     <p class="font-weight-bold">Runtime:</p>
                   </div>
@@ -373,7 +373,7 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row3">
                   <div class="col-lg-2">
                     <p class="font-weight-bold">Plot:</p>
                   </div>
@@ -395,7 +395,7 @@
 
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary btn-sm addbutton" id="moviemodaladdbutton">Add</button>
         </div>
       </div>
@@ -448,7 +448,7 @@
 
         <!--Footer-->
         <div class="modal-footer flex-center">
-          <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">Alright, alright...</a>
+          <a type="button" class="btn  btn-primary" data-dismiss="modal">Alright, alright...</a>
         </div>
       </div>
       <!--/.Content-->
@@ -476,7 +476,7 @@
 
         <!--Footer-->
         <div class="moda<img  src='{% static 'userhandling/img/NAicon.svg' %}' >l-footer flex-center">
-          <a type="button" class="btn  btn-success waves-effect" data-dismiss="modal">Nice!</a>
+          <a type="button" class="btn  btn-primary" data-dismiss="modal">Nice!</a>
         </div>
       </div>
       <!--/.Content-->
@@ -521,7 +521,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">At leat one person has already voted for this movienight, cannot modify movie selection. Feel free to modify the rest, though.
+            <div class="modal-body">At least one person has already voted for this Movie Night. Movie selection cannot be further modified.
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" type="button" data-dismiss="modal">Fine, whatever</button>

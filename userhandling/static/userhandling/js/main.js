@@ -1,4 +1,6 @@
 jQuery(document).ready(function ($) {
+  $('.collapse').collapse()
+  $('.collapse show').collapse("show")
 
   // Header fixed and Back to top button
   $(window).scroll(function () {
