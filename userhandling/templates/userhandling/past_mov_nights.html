@@ -63,10 +63,9 @@
     <nav id="nav-menu-container">
       <ul class="nav-menu">
         <li class="menu" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
-        <li class="menu" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
-
+        <li class="menu-active" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
         {% if request.user.is_staff %}
-        <li class="menu-has-children menu-active"><a href="">Admin Actions</a>
+        <li class="menu-has-children"><a href="">Admin Actions</a>
           <ul>
             <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
             <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
@@ -100,7 +99,7 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary" id="page-top">Manage Movie Nights</h6>
+          <h6 class="m-0 font-weight-bold text-primary" id="page-top">Past Movie Nights</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -109,12 +108,10 @@
             <table id="movienight_table" class="display" style="width:100%">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Motto</th>
                   <th>Date</th>
-                  <th>Registered Users</th>
-                  <th>Status</th>
-                  <th>Voting enabled?</th>
+                  <th>Participants</th>
+                  <th>Winning Movie</th>
                   <th>Link</th>
                 </tr>
               </thead>
@@ -157,9 +154,7 @@
           return json["results"];
         }
       },
-      "columns": [{
-          "data": "id"
-        },
+      "columns": [
         {
           "data": "motto"
         }, {
@@ -169,10 +164,7 @@
           "data": "reg_users"
         },
         {
-          "data": "status"
-        },
-        {
-          "data": "vote_enabled"
+          "data": "winning_movie"
         },
         {}
       ],
@@ -181,35 +173,9 @@
           "data": "id",
           "render": function (data, type, row, meta) {
             return "<a class='btn btn-primary btn-sm' href='mov_night/" + data +
-              "' role='button'>Manage</a>";
+              "' role='button'>More Info</a>";
           }
         },
-        {
-          "targets": -3,
-          "data": "status",
-          "render": function (data, type, row, meta) {
-            if (data == "DRAFT") {
-              return "<span class='badge badge-secondary'>Draft</span>";
-            } else if (data == "ACTIVE") {
-              return "<span class='badge badge-success'>Active</span>";
-            } else if (data == "PAST") {
-              return "<span class='badge badge-primary'>In past</span>";
-            } else if (data == "DEAC") {
-              return "<span class='badge badge-danger'>Cancelled</span>";
-            }
-          }
-        },
-        {
-          "targets": -2,
-          "data": "vote_enabled",
-          "render": function (data, type, row, meta) {
-            if (data) {
-              return "<span class='badge badge-success'>Enabled</span>";
-            } else {
-              return "<span class='badge badge-danger'> Disabled</span>";
-            }
-          }
-        }
       ]
     });
   });

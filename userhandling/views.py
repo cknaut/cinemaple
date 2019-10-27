@@ -580,6 +580,9 @@ def attendence_list(request, movienight_id):
 
     return render(request, 'userhandling/attendence_list.html', context)
 
+@login_required
+def past_mov_nights(request):
+    return render(request, 'userhandling/past_mov_nights.html')
 
 @login_required
 def details_mov_nights(request, movienight_id, no_movie=False):

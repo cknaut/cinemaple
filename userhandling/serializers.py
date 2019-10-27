@@ -23,6 +23,7 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
     vote_enabled = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
     reg_users = serializers.SerializerMethodField()
+    winning_movie = serializers.SerializerMethodField()
 
     def get_reg_users(self, MovieNight):
         return MovieNight.get_num_registered()
@@ -35,6 +36,10 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
 
     def get_vote_enabled(self, MovieNight):
         return MovieNight.voting_enabled()
+
+    def get_winning_movie(self, MovieNight):
+        winning_movie, _, _ = MovieNight.get_winning_movie()
+        return '{} ({})'.format(winning_movie.title, winning_movie.year)
 
     def get_date_delta(self, MovieNight):
         date = MovieNight.date
@@ -56,7 +61,7 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieNightEvent
         fields = (
-            'id', 'motto', 'date', "movies", "isdraft", "movies", "date_delta", "vote_enabled", "status", "reg_users"
+            'id', 'motto', 'date', "movies", "isdraft", "movies", "date_delta", "vote_enabled", "status", "reg_users", 'winning_movie'
         )
 
 

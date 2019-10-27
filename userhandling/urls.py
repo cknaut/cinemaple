@@ -24,6 +24,7 @@ urlpatterns = [
     path('search_movie',  views.search_movie,  name='search_movie'),
     path('curr_mov_nights',  views.curr_mov_nights,  name='curr_mov_nights'),
     path('man_mov_nights',  views.man_mov_nights,  name='man_mov_nights'),
+    path('past_mov_nights',  views.past_mov_nights,  name='past_mov_nights'),
     path('dashboard',  views.dashboard,  name='dashboard'),
     path('mov_night/<str:movienight_id>', views.details_mov_nights,  name='details_mov_nights'),
     path('delete_mov_night/<str:movienight_id>', views.delete_mov_night,  name='delete_mov_night'),
