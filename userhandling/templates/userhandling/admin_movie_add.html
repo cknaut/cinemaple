@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends 'logged_in_base.html' %}
+
 {% load static %}
 
 {# Load the tag library #}
@@ -36,7 +37,6 @@
     max_height: 400,
     plugins: "emoticons",
     toolbar: 'emoticons | formatselect | bold italic strikethrough forecolor backcolor permanentpen formatpainter | link image media pageembed | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat | addcomment',
-
     setup: function (editor) {
       editor.on('change', function () {
         editor.save();

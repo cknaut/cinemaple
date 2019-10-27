@@ -1,8 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'logged_in_base.html' %}
 {% load static %}
 
 
 {% block css_imports %}
+
 <link  href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
 <script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}"></script>
@@ -22,7 +23,6 @@
         src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
     }
 </style>
-<!-- <link href="{% static 'userhandling/lib/dashboard/css/sb-admin-2.min.css' %}" rel="stylesheet"> -->
 {% endblock %}
 
 {% block modals %}
@@ -90,19 +90,6 @@ aria-hidden="true">
 </div>
 {% endif %}
 
-<div id="logoutmodal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="container">
-  <div class="col-sm">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
-          <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log out?</div>
-          <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started"><font color = #af353b>Logout</font></a></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
 
 
@@ -539,13 +526,17 @@ Header
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
-                {% else %}
+
+            </div>
+            {% else %}
                 No scheduled Movie Night was found in your area. {% if request.user.is_staff %} <h1><a class = "btn btn-primary" href={% url 'man_mov_nights' %}><font color = "white">Manage Movie Nights</font></a> <a
                     href={% url 'man_mov_nights' %}></a> {% endif %}</h1>
-                {% endif %}
-            </div>
+
+                    {% endif %}
         </div>
     </div>
     <!-- /.container-fluid -->
@@ -602,19 +593,11 @@ Header
                 $("#disactivatemodal").modal();
             });
 
-            $('#activate_confirm').click(function () {
-                $activateURL = $(this).attr("src");
-                $("#activatebutton").attr('href', $activateURL);
-                $("#activatemodal").modal();
-            });
-
             $('#delete_confirm').click(function () {
                 $deleteURL = $(this).attr("src");
                 $("#deletbutton").attr('href', $deleteURL);
                 $("#deletemodal").modal();
             });
-
-
 
             // stop playing the youtube video when I close the modal
             $('#myModal').on('hide.bs.modal', function (e) {
@@ -634,26 +617,3 @@ Header
 {% endif %}
 {% endblock %}
 
-
-{% block footer %}
-<footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="copyright">
-        &copy; Copyright <strong>Regna</strong>. All Rights Reserved
-      </div>
-      <div class="credits">
-
-        <div class="social-links">
-            <p style = "color:#ffffff"><b>Cinemaple</b> is fully open source and available on GitHub:</p>
-            <a href="https://github.com/cknaut/cinemaple" class="github"><img src="{% static 'userhandling/img/giticon.png' %}" alt="" title="" height="30" style = "margin-left:-3%"/></a>
-        </div>
-      </div>
-    </div>
-  </footer><!-- #footer -->
-{% endblock %}

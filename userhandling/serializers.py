@@ -38,8 +38,11 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
         return MovieNight.voting_enabled()
 
     def get_winning_movie(self, MovieNight):
-        winning_movie, _, _ = MovieNight.get_winning_movie()
-        return '{} ({})'.format(winning_movie.title, winning_movie.year)
+        try:
+            winning_movie, _, _ = MovieNight.get_winning_movie()
+            return '{} ({})'.format(winning_movie.title, winning_movie.year)
+        except:
+            return "?"
 
     def get_date_delta(self, MovieNight):
         date = MovieNight.date

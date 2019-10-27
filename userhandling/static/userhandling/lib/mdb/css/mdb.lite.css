@@ -2719,10 +2719,10 @@ table.table a.btn.btn-default {
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15); }
 
 .btn-secondary {
-  background-color: #aa66cc !important;
+  background-color: var(--gray-dark) !important;
   color: #fff; }
   .btn-secondary:hover {
-    background-color: #b579d2;
+    background-color: var(--light-dark);
     color: #fff; }
   .btn-secondary:focus, .btn-secondary.focus {
     -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
