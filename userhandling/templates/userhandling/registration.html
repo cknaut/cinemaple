@@ -44,74 +44,86 @@
 
 {% endblock %}
 
+{% block header %}
 
-{% block tagline %}
-
-<h3>Welcome</h3>
-<p>Please register to receive invitations for upcoming movie nights!</p>
-{% endblock %}
-
-{% block form %}
-<form action="/registration/" method="post">
+<section id="hero" style="height:160vh">
+        <div class="hero-container" >          
+          <div class="container register">
+                <div class="row" style="margin-top:-30%">
+                    <div class="col-md-3 register-left" style="margin-top:15%">
+                        <img src={% static 'userhandling/img/logos/logo_cinemaple.png' %} alt="" width = 100%/>
+                        <h3>Welcome</h3>
+                        <p>Please register to receive invitations for upcoming movie nights!</p>
+                    </div>
+                    <div class="col-md-9 register-right">      
+                        <div class="tab-content" id="myTabContent">                                
+                                {% block heading %}
+                                {% endblock %}
+                                <div class="row register-form">                                    
+                                    <div class="col-md-9">
+                                    <form action="/registration/" method="post">
 {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><font color="white">Username:</font></label>
+                                          {{form.username.errors}}
+                                          {{form.username}}
+                                    </div>
 
 
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><font color="white">Email:</font></label>
+                                        {{form.email.errors}}
+                                          {{form.email}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><font color="white">First name:</font></label>
+                                        {{form.first_name.errors}}
+                                          {{form.first_name}}
+                                    </div>
 
 
-
-<div class="form-group">
-    <label for="exampleInputEmail1"><font color="white">Username:</font></label>
-      {{form.username.errors}}
-      {{form.username}}
-</div>
-
-
-<div class="form-group">
-    <label for="exampleInputEmail1"><font color="white">Email:</font></label>
-    {{form.email.errors}}
-      {{form.email}}
-</div>
-
-<div class="form-group">
-    <label for="exampleInputEmail1"><font color="white">First name:</font></label>
-    {{form.first_name.errors}}
-      {{form.first_name}}
-</div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><font color="white">Last name:</font></label>
+                                        {{form.last_name.errors}}
+                                          {{form.last_name}}
+                                    </div>
 
 
-<div class="form-group">
-    <label for="exampleInputEmail1"><font color="white">Last name:</font></label>
-    {{form.last_name.errors}}
-      {{form.last_name}}
-</div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><font color="white">Password:</font></label>
+                                        {{form.password1.errors}}
+                                          {{form.password1}}
+                                    </div>
 
 
-<div class="form-group">
-    <label for="exampleInputEmail1"><font color="white">Password:</font></label>
-    {{form.password1.errors}}
-      {{form.password1}}
-</div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><font color="white">Repeat password:</font></label>
+                                        {{form.password2.errors}}
+                                          {{form.password2}}
+                                    </div>
 
 
-<div class="form-group">
-    <label for="exampleInputEmail1"><font color="white">Repeat password:</font></label>
-    {{form.password2.errors}}
-      {{form.password2}}
-</div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1"><font color="white">Captcha:</font></label>
+                                        {{form.captcha.errors}}
+                                          {{form.captcha}}
+                                    </div>
 
 
-<div class="form-group">
-    <label for="exampleInputEmail1"><font color="white">Captcha:</font></label>
-    {{form.captcha.errors}}
-      {{form.captcha}}
-</div>
+                                    <div class="modal-footer d-flex justify-content-center">
+                                      <input class="btn btn-primary" type="submit" value="Register">
+                                      <a href="{% url 'index' %}" class="btn btn-deep-orange">Back to home.</a>
+                                    </div>
+                                    </form>
+                                </div>
+                        </div>
+                    </div>
+                </div>
 
-
-<div class="modal-footer d-flex justify-content-center">
-  <input class="btn btn-primary" type="submit" value="Register">
-   <a href="{% url 'index' %}" class="btn btn-deep-orange">Back to home.</a>
-</div>
-</form>
+            </div>        
+        </div>
+      </section><!-- #hero -->
 
 {% endblock %}
 

@@ -70,7 +70,7 @@
           <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
           {% endif %}    
         {% if user.is_authenticated %}
-        <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started">Logout</a> </li>
+        <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started">Logout</a> </li>
         <li> <font color = #af353b>Welcome, {{request.user.first_name}}!</font> </li>
         {% else %}
         <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
@@ -236,6 +236,20 @@
 
 
   {% block modals %}
+  <div id="logoutmodal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="container">
+    <div class="col-sm">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+            <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log out?</div>
+            <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started"><font color = #af353b>Logout</font></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--Central Modal Small -->
   <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
