@@ -45,12 +45,12 @@ body {
 }
 
 a {
-  color: #ffffff;
+  color: var(--curtain-red);
   font-weight: 600;
 }
 
 a:hover, a:active, a:focus {
-  color: #ffffff;
+  color:var(--curtain-red);
   outline: none;
   text-decoration: none;
 }
@@ -2286,6 +2286,13 @@ body.mobile-nav-active #mobile-nav-toggle {
   border-radius: .35rem
 }
 
+.card-image {
+  background-position: center;
+  background-size:cover;
+  filter: blur(0px);
+  /* -webkit-filter: blur(8px); */
+}
+
 .card-scroll{
   position: relative;
   display: -webkit-box;
@@ -2300,7 +2307,8 @@ body.mobile-nav-active #mobile-nav-toggle {
   background-color: rgb(255, 255, 255, 0.5);
   background-clip: border-box;
   border: 1px solid #e3e6f0;
-  border-radius: .35rem
+  border-radius: .35rem;
+  filter: blur(0px) !important
 }
 
 .card>hr {

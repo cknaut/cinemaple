@@ -148,6 +148,7 @@
       </div>
     </header-vid> {% endcomment %}
 
+
     <!--==========================
       Movie Nights Section
     ============================-->
@@ -158,13 +159,15 @@
           <p class="section-description">Selection of our past Movie Nights</p>
         </div>
       </div>
+    
+    {% for mn in movienights %}
     <!-- Card -->
-    <div class="card card-image"
-      style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);">
-
+    <div class="card card-image"      
+      style="background-image: url(https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}})">
+      {% comment %} style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);" {% endcomment %}
       <!-- Content -->
-      <div class="rgba-black-strong py-5 px-4">
-        <div class="row d-flex justify-content-center">
+      <div class="rgba-black-strong py-5 px-4" style = "padding-bottom:0" style = "padding-top:0">
+        <div class="row3 d-flex justify-content-center">
           <div class="col-md-10 col-xl-8">
 
             <!--Accordion wrapper-->
@@ -178,9 +181,9 @@
                 <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading30">
                   <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
                     aria-controls="collapse30" href = "collapse30">
-                    <i class="fas fa-cloud fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
+                    <i class="fas fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
                     <h4 class="text-uppercase white-text mb-0 py-3 mt-1">
-                      Item #1
+                      MOVIE NIGHT #{{ total_no_movienights|add:forloop.counter0 }} {{ mn.motto}} - {{ mn.get_winning_movie|first }}
                     </h4>
                   </a>
                 </div>
@@ -207,6 +210,7 @@
       <!-- Content -->
     </div>
     <!-- Card -->
+    {% endfor %}
     </section><!-- #services -->
 
     {% comment %} <!--==========================
