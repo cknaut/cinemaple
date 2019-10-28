@@ -39,12 +39,22 @@ from django.template.loader import render_to_string
 # Render Index Page, manage register
 def index(request):
 
-    movienights = MovieNightEvent.objects.order_by('-date')[:5]
 
-    # Total Runtime of all winner movies
-    all_mn = MovieNightEvent.objects.all()
+    movienights = MovieNightEvent.objects.all()
+
+    past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
+    mn_in_past = MovieNightEvent.objects.filter(id__in=past_mn_id)
+    
+    show_last = 5
+    movienights_render = mn_in_past.order_by('-date')[:show_last]
+
+    num_mn_past = len(movienights_render)
+    start_counter = num_mn_past - show_last
+
+
+    # Total Runtime of all winner movies in past
     total_rt = 0
-    for mn in all_mn:
+    for mn in mn_in_past:
          _, _, runtime =  mn.get_winning_movie()
          total_rt += runtime
 
@@ -56,9 +66,11 @@ def index(request):
         'successful_verified': successful_verified,
         'email': "",
         'username': "",
-        'movienights' : movienights,
+        'movienights' : movienights_render,
         'total_rt'  : total_rt,
-        'total_no_movienights' : len(MovieNightEvent.objects.all())
+        'num_mn_past' : num_mn_past,
+        'mn_start_counter'      : start_counter,
+        'num_show'              : show_last
     }
     return render(request, 'userhandling/index.html', context)
 

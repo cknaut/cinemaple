@@ -157,7 +157,7 @@
       <div class="container wow fadeIn">
         <div class="section-header">
           <h3 class="section-title">Movie Nights</h3>
-          <p class="section-description">Selection of our past Movie Nights </p>
+          <p class="section-description">Check out our {{num_show}} of our past Movie Nights ({{num_mn_past}} in total)</p>
           <div class="col-lg-3 col-6 text-center">
           <span data-toggle="counter-up"> {{total_rt}}  </span>
           <p>Minutes of movies watched</p>
@@ -166,6 +166,8 @@
       </div>
 
     </section><!-- #facts -->
+
+    
     
     {% for mn in movienights %}
     <!-- Card -->
@@ -176,6 +178,10 @@
         <div class="row3 d-flex justify-content-center">
           <div class="col-md-10 col-xl-8">
 
+
+
+
+
             <!--Accordion wrapper-->
             <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
               aria-multiselectable="true">
@@ -184,94 +190,104 @@
               <div class="card-scroll2 mb-4">
 
                 <!-- Card header -->
-                <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading30">
+                <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading{{forloop.counter0}}">
                   <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
-                    aria-controls="collapse30" href = "collapse30">
-                    <i class="fas fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
+                    aria-controls="collapse{{forloop.counter0}}" href = "collapse{{forloop.counter0}}">
+                    <i class="fas trigg{{forloop.counter0}} fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
                     <h4 class="text-uppercase white-text mb-0 py-3 mt-1">
-                      <font color = "#292b2c">MOVIE NIGHT #{{ total_no_movienights|add:forloop.counter0 }}</font> {{ mn.motto}} 
+                      <font color = "#292b2c">MOVIE NIGHT #{{ mn_start_counter|add:forloop.counter0 }}</font> {{ mn.motto}} 
                     </h4>
                   </a>
                 </div>
 
                 <!-- Card body -->
-                <div id="collapse" class="collapse show" role="tabpanel" aria-labelledby="heading30"
+                <div id="collapse{{forloop.counter0}}" class="collapse show" role="tabpanel" aria-labelledby="heading{{forloop.counter0}}"
                   data-parent="#accordionEx5">
                   <div class="card-body rgba-black-light white-text z-depth-1">
-                  <div class = "row3">                  
-                  <div class="col-md-4 col-xl-4">
-                     <p class="p-md-4 mb-0"> {{mn.motto}}</p>                    
-                    <p class="p-md-4 mb-0"> {{ mn.get_winning_movie|first }}, directed by {{mn.get_winning_movie.0.director}}, won this battle ! <i class="em em-muscle" aria-role="presentation" aria-label="FLEXED BICEPS"></i></p>   
-                  </div>
-                  <div class="col-md-4 col-xl-4" style = "margin-top:-4.1%">
-                    {% comment %} <p class="p-md-4 mb-0"> {{mn.description|safe}}</p>                     {% endcomment %}
-                  </div>
-                  <div class="col-md-4 col-xl-4">
-                    <img src = "https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}}"/>
-                  </div>
-                  </div>
+                  <div class = "row3">  
+                      <div class="col-md-4 col-xl-4">
+                          <div class = "row3"> 
+
+                              <div class="col-md-3 col-xl-36">
+                                    <b> Motto:</b>
+                                </div>
+
+                                <div class="col-md-6 col-xl-6">
+                                    {{mn.motto}}
+                                </div>
+
+                            </div>
+
+                            <div class = "row3"> 
+                            <div class="col-md-3 col-xl-36">
+                                <b> Date:</b>
+                            </div>
+
+                            <div class="col-md-6 col-xl-6">30
+                                {{mn.date}}
+                            </div>
+
+                        </div>
+
+                            
+
+                            <div class = "row3"> 
+
+                                <div class="col-md-3 col-xl-3">
+                                    <b>  Winning Movie:</b>
+                                     
+                                  </div>
+  
+                                  <div class="col-md-6 col-xl-6">
+
+                                      {{mn.get_winning_movie.0}} ({{mn.get_winning_movie.0.year}}), by {{mn.get_winning_movie.0.director}}
+                                  
+                                    </div>
+  
+                              </div>
+
+                              <div class = "row3"> 
+                                
+                                  <div class="col-md-3 col-xl-3">
+                                      <b>  Plot:</b>
+                                  </div>
+  
+                                  <div class="col-md-6 col-xl-6">
+
+                                       {{mn.get_winning_movie.0.plot}}
+                                  
+                                  
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-7 col-xl-7">
+
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="{{mn.get_winning_movie.0.trailerlink}}?autoplay=0&amp;modestbranding=1&amp;showinfo=0" allowfullscreen></iframe>
+                                  </div>
+                           
+                                
+
+                            </div>
+                        </div>
                   </div>
                 </div>
               </div>
               <!-- Accordion card -->
             </div>
             <!--/.Accordion wrapper-->
+          
+          
           </div>
           </div>
         </div>
       </div>
       <!-- Content -->
     </div>
-    <!-- Card -->
+    <!-- Card 
 
-    {% comment %} <div class="wrapper">
-    <div class="hover" style = "background-image: url(https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}})"></div>
-      <div class="rgba-black-strong py-5 px-4" style = "padding-bottom:0" style = "padding-top:0">
-        <div class="row3 d-flex justify-content-center">
-          <div class="col-md-10 col-xl-8">
-
-            <!--Accordion wrapper-->
-            <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
-              aria-multiselectable="true">
-
-              <!-- Accordion card -->
-              <div class="card-scroll2 mb-4">
-
-                <!-- Card header -->
-                <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading30">
-                  <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
-                    aria-controls="collapse30" href = "collapse30">
-                    <i class="fas fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
-                    <h4 class="text-uppercase white-text mb-0 py-3 mt-1">
-                      <font color = "#292b2c">MOVIE NIGHT #{{ total_no_movienights|add:forloop.counter0 }}</font> {{ mn.motto}} 
-                    </h4>
-                  </a>
-                </div>
-
-                <!-- Card body -->
-                <div id="collapse" class="collapse show" role="tabpanel" aria-labelledby="heading30"
-                  data-parent="#accordionEx5">
-                  <div class="card-body rgba-black-light white-text z-depth-1">
-                  <div class = "row3">                  
-                  <div class="col-md-4 col-xl-4">
-                    <p class="p-md-4 mb-0"> {{mn.motto}}</p>                    
-                    <p class="p-md-4 mb-0"> {{ mn.get_winning_movie|first }}, directed by {{mn.get_winning_movie.0.director}}, won this battle ! <i class="em em-muscle" aria-role="presentation" aria-label="FLEXED BICEPS"></i></p>   
-                  </div>
-                  <div class="col-md-4 col-xl-4" style = "margin-top:-4.1%">
-                    <p class="p-md-4 mb-0"> {{mn.description|safe}}</p>                    
-                  </div>
-                  <div class="col-md-4 col-xl-4">
-                    <img src = "https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}}"/>
-                  </div>
-                  </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Accordion card -->
-            </div>
-    </div> {% endcomment %}
-
-
+ 
     {% endfor %}
     </section><!-- #services -->
 
@@ -359,14 +375,19 @@
 
 {% block js %}
 <script>
-$(document).ready(function(){
-  $(".fas").click(function(){
-    $(".collapse").collapse('toggle');
-  });
-});
-</script>
 
+{% for mn in movienights %}
+    $(document).ready(function(){
+      $(".trigg{{forloop.counter0}}").click(function(){
+        $("#collapse{{forloop.counter0}}").collapse('toggle');
+      });
+    });
+    {% endfor %}
+    </script>
+    
 {% if successful_verified %}
+
+
   <script type="text/javascript">
       $(document).ready(function(){
           $("#RegVerifyModall").modal('show');

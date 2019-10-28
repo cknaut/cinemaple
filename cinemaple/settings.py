@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'tinymce',
     'rest_framework',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [
