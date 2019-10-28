@@ -154,17 +154,22 @@
       Movie Nights Section
     ============================-->
     <section id="movienights">
-      <div class="container wow fadeIn">
+      <div class="container wow fadeIn" style = "visibility:visible; animation-name:fadeIn;">
         <div class="section-header">
           <h3 class="section-title">Movie Nights</h3>
-          <p class="section-description">Check out our {{num_show}} of our past Movie Nights ({{num_mn_past}} in total)</p>
-          <div class="col-lg-3 col-6 text-center">
-          <span data-toggle="counter-up"> {{total_rt}}  </span>
-          <p>Minutes of movies watched</p>
+          <p class="section-description">Check out this selection of {{num_show}} of our past Movie Nights ({{num_mn_past}} in total)</p>
+        </div>
+        <div class="row counters" style = "padding-top:0">
+          <div class="col-sm-6 text-center">
+          <span data-toggle="counter-up" style = "font-size:3rem; color:#af353b"> {{total_rt}}  </span>
+          <p>Minutes of movies watched</p>            
+           </div>
+          <div class="col-sm-6 text-center">
+          <span data-toggle = "counter-up" style ="font-size:3rem; color:#af353b;"> {{num_mn_past}} </span>
+          <p>Total number of Movie Nights</p>
           </div>
         </div>
       </div>
-
     </section><!-- #facts -->
 
     
