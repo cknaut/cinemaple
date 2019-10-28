@@ -10,7 +10,6 @@ django-cors-headers==3.0.0
 django-filter==2.1.0
 django-heroku==0.3.1
 django-mailgun==0.9.1
-django-mathfilters==0.4.0
 django-model-utils==3.1.2
 django-nose==1.4.6
 django-recaptcha==2.0.2
