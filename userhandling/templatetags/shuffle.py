@@ -9,3 +9,7 @@ def shuffle(arg):
     aux = list(arg)[:]
     random.shuffle(aux)
     return aux
+
+@register.filter(name='subtract')
+def subtract(value, arg):
+    return value - arg
