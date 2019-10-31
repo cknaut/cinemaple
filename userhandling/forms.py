@@ -197,15 +197,15 @@ class MoveNightForm(ModelForm):
             'date': _('Date:'),
         }
 
-        location_choices = [location.name for location in Location.objects.all()]
-        widgets = {
-            'date': DateTimePickerInput(),  # default date-format %m/%d/%Y will be used
-            'description': forms.TextInput(attrs={"id": "tinymice"}),
-            'motto': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
-            'MaxAttendence': forms.NumberInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
-            'location': forms.Select(choices = location_choices, attrs={'placeholder': '', 'class': 'form-control input-perso'}),
+        # location_choices = [location.name for location in Location.objects.all()]
+        # widgets = {
+        #     'date': DateTimePickerInput(),  # default date-format %m/%d/%Y will be used
+        #     'description': forms.TextInput(attrs={"id": "tinymice"}),
+        #     'motto': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
+        #     'MaxAttendence': forms.NumberInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
+        #     'location': forms.Select(choices = location_choices, attrs={'placeholder': '', 'class': 'form-control input-perso'}),
 
-        }
+        # }
 
 class MovieAddForm(forms.Form):
 

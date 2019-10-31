@@ -45,4 +45,4 @@ class UserAttendenceAdmin(admin.ModelAdmin):
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-     readonly_fields = ('id',)
+     readonly_fields = ('id','loc_id')

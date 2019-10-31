@@ -10,6 +10,8 @@ from .utils import badgify
 import time
 import random
 import numpy as np
+import uuid
+
 # import scipy.ndimage.gaussian_filter
 
 from py3votecore.schulze_method import SchulzeMethod
@@ -87,6 +89,7 @@ class Location(models.Model):
     city = models.CharField(max_length=200)
     state = models.CharField(max_length=200)
     country = models.CharField(max_length=200)
+    loc_id = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def print_address(self):
         return '{}, {} {}, {}'.format(self.street, self.zip_code, self.city, self.state)
