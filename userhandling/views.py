@@ -48,7 +48,7 @@ def index(request):
     show_last = 5
     movienights_render = mn_in_past.order_by('-date')[:show_last]
 
-    num_mn_past = len(movienights_render)
+    num_mn_past = len(mn_in_past)
     start_counter = num_mn_past - show_last
 
 
