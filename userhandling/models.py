@@ -10,12 +10,29 @@ from .utils import badgify
 import time
 import random
 import numpy as np
+import uuid
+
 # import scipy.ndimage.gaussian_filter
 
 from py3votecore.schulze_method import SchulzeMethod
 from py3votecore.condorcet import CondorcetHelper
 from .vote import get_pref_lists, prepare_voting_dict
 
+
+class Location(models.Model):
+    name = models.CharField(max_length=200)
+    street = models.CharField(max_length=200)
+    zip_code = models.CharField(max_length=200)
+    city = models.CharField(max_length=200)
+    state = models.CharField(max_length=200)
+    country = models.CharField(max_length=200)
+    loc_id = models.UUIDField(default=uuid.uuid4, editable=False)
+
+    def print_address(self):
+        return '{}, {} {}, {}'.format(self.street, self.zip_code, self.city, self.state)
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
 
 
 # We create a one-to-one map from the built-in User model to a Profile model
@@ -24,7 +41,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     email_buffer = models.EmailField(default='') # contains unverified email
-    location = models.CharField(max_length=30, blank=True)
+    location = models.ManyToManyField(Location) # Links user to locations he or she can access
     birth_date = models.DateField(null=True, blank=True)
     activation_key = models.CharField(max_length=40, blank=True)
     key_expires = models.DateTimeField(null=True, blank=True)
@@ -80,19 +97,6 @@ class Movie(models.Model):
         # print("Running filter function")       
         # return Image.open(urlopen("https://image.tmdb.org/t/p/w200"+self.posterpath))
 
-class Location(models.Model):
-    name = models.CharField(max_length=200)
-    street = models.CharField(max_length=200)
-    zip_code = models.CharField(max_length=200)
-    city = models.CharField(max_length=200)
-    state = models.CharField(max_length=200)
-    country = models.CharField(max_length=200)
-
-    def print_address(self):
-        return '{}, {} {}, {}'.format(self.street, self.zip_code, self.city, self.state)
-
-    def __str__(self):              # __unicode__ on Python 2
-        return self.name
 
 class VotingParameters(models.Model):
     vote_disable_before = models.DurationField() # how long before the movienight the vote should e closed
