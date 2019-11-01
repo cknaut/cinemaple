@@ -15,7 +15,7 @@ import random
 from .utils import Mailchimp, VerificationHash, badgify, check_ml_health
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
     PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, ProfileUpdateForm
-from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence
+from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence, Location
 import tmdbsimple as tmdb
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -23,9 +23,10 @@ from django.views.generic.edit import CreateView
 import requests
 from django.core import serializers
 from rest_framework import viewsets
-from .serializers import MovieNightEventSerializer, UserAttendenceSerializer
+from .serializers import MovieNightEventSerializer, UserAttendenceSerializer, ProfileSerializer
 from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory
+from rest_framework.permissions import IsAdminUser
 import numpy as np
 from rest_framework import generics
 from django.template.loader import render_to_string
@@ -769,11 +770,12 @@ def deactivate_movie_night(request, movienight_id):
 
 
 class UserAttendenceList(generics.ListAPIView):
+   
     serializer_class = UserAttendenceSerializer
 
     def get_queryset(self):
         """
-        This view should return a list of all the purchases
+        This view should return a list of all the movienights
         for the currently authenticated user.
         """
         movienight_id = self.kwargs['movienight_id']
@@ -783,8 +785,26 @@ class UserAttendenceList(generics.ListAPIView):
         return UserAttendence.objects.filter(movienight=movienight)
 
 
+class ProfileList(generics.ListAPIView):
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        location_id = self.kwargs['location_id']
+
+        location = get_object_or_404(Location, pk=location_id)
+
+        return Profile.objects.filter(location=location)
+
+
 class MovieNightEventViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser]
     queryset = MovieNightEvent.objects.all().order_by('-date')
+    serializer_class = MovieNightEventSerializer
+
+class PastMovieNightEventViewSet(viewsets.ModelViewSet):
+
+    past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
+    queryset = MovieNightEvent.objects.filter(id__in=past_mn_id)
     serializer_class = MovieNightEventSerializer
 
 
@@ -1155,3 +1175,16 @@ def trigger_emails(request, movienight_id):
     _, _, email_html = mc.create_campaign(reply_to, subject_line, preview_text, title, from_name, html)
 
     return HttpResponse(email_html)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def show_loc_users(request):
+
+    locations = request.user.profile.location_set.all()
+
+    context = {
+        'location'      : locations
+    }
+
+    return render(request, 'userhandling/loc_user_list.html', context)
+
