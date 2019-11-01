@@ -149,7 +149,7 @@
   $(document).ready(function () {
     var table = $('#movienight_table').DataTable({
       "ajax": {
-        "url": "/api/movienights/?format=json",
+        "url": "/api/movienights_past/?format=json",
         "dataSrc": function (json) {
           return json["results"];
         }

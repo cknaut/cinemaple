@@ -1180,10 +1180,10 @@ def trigger_emails(request, movienight_id):
 @user_passes_test(lambda u: u.is_staff)
 def show_loc_users(request):
 
-    locations = request.user.profile.location_set.all()
+    locations = request.user.profile.location.all()
 
     context = {
-        'location'      : locations
+        'locations'      : locations
     }
 
     return render(request, 'userhandling/loc_user_list.html', context)

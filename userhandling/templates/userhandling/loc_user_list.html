@@ -81,22 +81,30 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary" id="page-top">{{movienight.motto}}: Attendence List</h6>
+          <h6 class="m-0 font-weight-bold text-primary" id="page-top">{{request.user.first_name}} {{request.user.last_name}}: User Overview</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body">
           <div class="col-xl-12 col-lg-12"style = "margin-top:-0.5%">
 
-            <table id="movienight_table" class="display" style="width:100%" >
+
+            {% for location in locations %}
+            
+
+            <p> Authorized users for <b> {{location}}  </b></p>
+            <table id="loc_user_table{{forloop.counter}}" class="display" style="width:100%" >
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Toppings</th>
-                  <th>Registration Date</th>
-                  <th>Reg. complete?</th>
+                  <th>Invitor</th>
+                  <th>Invitation Key</th>
+                  <th>Join Date</th>
                 </tr>
               </thead>
             </table>
+          
+           
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -113,10 +121,12 @@
 
 {% block js %}
 <script>
+
+{% for location in locations %}
   $(document).ready(function () {
-    var table = $('#movienight_table').DataTable({
+    var table = $('#loc_user_table{{forloop.counter}}').DataTable({
       "ajax": {
-        "url": "/api/attendence_list/{{movienight.id}}?format=json",
+        "url": "/api/loc_prof_list/{{location.id}}?format=json",
         "dataSrc": function (json) {
           return json["results"];
         }
@@ -125,16 +135,16 @@
           "data": "firstlastname"
         },
         {
-          "data": "toppings"
+          "data": "is_invitor"
         }, {
-          "data": "reg_date"
+          "data": "invitation_key"
         },
         {
-          "data": "registration_complete"
+          "data": "join_date"
         }
       ],
       "columnDefs": [{
-        "targets": -1,
+        "targets": -3,
         "data": "registration_complete",
         "render": function (data, type, row, meta) {
           if (data) {
@@ -147,8 +157,8 @@
 
     });
   });
+  {% endfor %}
 </script>
-
 
 <script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
 {% endblock %}
