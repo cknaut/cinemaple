@@ -620,12 +620,14 @@ body.mobile-nav-active #mobile-nav-toggle {
 #about .about-container .background {
   min-height: 300px;
   background: url(../img/pulp-fiction.jpeg) center top no-repeat;
+  /* background-color: #cecece; */
   background-size: cover;
   margin-bottom: 10px;
+  z-index:1;
 }
 
 #about .about-container .content {
-  background: #fff;
+  /* background-color: #cecece */
 }
 
 #about .about-container .title {
@@ -649,7 +651,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #about .about-container .icon-box {
-  background: #fff;
+  background: #cecece;
   background-size: cover;
   padding: 0 0 30px 0;
 }
@@ -1086,6 +1088,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   padding: 30px 0;
   color: #fff;
   font-size: 14px;
+  box-shadow: 0 50vh 0 50vh #343b40;
 }
 
 #footer .copyright {
@@ -1113,7 +1116,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .row {
-  padding-top: 10%;
+  padding-top: 7%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

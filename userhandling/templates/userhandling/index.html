@@ -96,29 +96,29 @@
 {% block main %}
   <main id="main">
 
-    <section id="about" style = "padding-top:0; padding-bottom: 50px">
-      <div class="container">
+    <section id="about" style = "padding-top:0; padding-bottom: 50px; background-color: #cecece; background: #cecece">
+      <div class="container" style ="background-color: #cecece; background: #cecece">
         <div class="row about-container">
 
-          <div class="col-lg-6 content order-lg-1 order-2">
+          <div class="col-lg-6 content order-lg-1 order-2; background: #cecece" >
             <h2 class="title" style = "margin-left:-1%"><a href="#hero"><img src="{% static 'userhandling/img/cinemaple.png' %}" alt="" title="" height="60" /></img></a></h2>
-            <p style = "margin-top:-3%">
+            <p style = "margin-top:-3%" >
             <b> Cinemaple </b> is a platform designed for organizing Movie Nights with your friends, share good times and a common passion for cinema. <i class="em em-clapper" aria-role="presentation" aria-label="CLAPPER BOARD"></i>
             </p>
 
-            <div class="icon-box wow fadeInUp">
+            <div class="icon-box wow fadeInUp" style ="background-color: #cecece">
               <div class="icon"><i class="em em-bar_chart" aria-role="presentation" aria-label="BAR CHART"></i></div>
               <h4 class="title"><a href="">Poll-Based Movie Selection</a></h4>
               <p class="description">Our algorithms maximize global happiness! <i class="em em-rainbow" aria-role="presentation" aria-label="RAINBOW"></i> </p>
             </div>
 
-            <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+            <div class="icon-box wow fadeInUp" data-wow-delay="0.4s" style ="background-color: #cecece">
               <div class="icon"><i class="em em-100"></i></div>
               <h4 class="title"><a href="">Awesome Friends</a></h4>
               <p class="description"> <b> Cinemaple </b> allows you to create and organize Movie Nights. You can invite all your friends, and they can suggest other movies. <i class="em em-family" aria-role="presentation" aria-label="FAMILY"></i> </p>
             </div>
 
-            <div class="icon-box wow fadeInUp" style = "visibility: visible;" data-wow-delay="0.2s">
+            <div class="icon-box wow fadeInUp" style = "visibility: visible;background-color: #cecece" data-wow-delay="0.2s">
               <div class="icon"><i class="em em-heart_eyes_cat"></i></div>
               <h4 class="title"><a href="">Delish' Crêpes</a></h4>
               <p class="description">As per tradition, Movie Nighters eat crêpes made by a French cook <i class="em em-pancakes" aria-role="presentation" aria-label="PANCAKES"></i>. But if you're not into crêpes, that's fine too: <b> Cinemaple </b> allows you to bring as many toppings or other types of food to thank your hosts. </p>
@@ -146,14 +146,14 @@
         <h3 class="section-title" style="margin-top: -2%;z-index: 1;position: relative;color: white;">Movie Nights</h3>
           <p class="section-description" style = "color:white">Check out this selection of {{num_show}} of our past Movie Nights ({{num_mn_past}} in total)</p>
         </div>
-        <div class="row counters" style = "margin-top: -13%;">
+        <div class="row counters" style = "margin-top: -11%;">
           <div class="col-sm-6 text-center">
-          <span data-toggle="counter-up" style = "font-size:3rem; color:white"> {{total_rt}}  </span>
+          <span data-toggle="counter-up" style = "font-size:3rem; color:gold"> {{total_rt}}  </span>
           <p style = "color:white;">Minutes of movies watched</p>            
            </div>
           <div class="col-sm-6 text-center">
-          <span data-toggle = "counter-up" style ="font-size:3rem; color:white;"> {{num_mn_past}} </span>
-          <p style = "color:white;">Total number of Movie Nights</p>
+          <span data-toggle = "counter-up" style ="font-size:3rem; color:gold;"> {{num_mn_past}} </span>
+          <p style = "color:white;">Movie Nights</p>
           </div>
         </div>
       </div>
@@ -358,7 +358,7 @@
            </div>
     <div class="container">
       <div class="copyright">
-        &copy; Copyright <strong>cinemaple</strong>. All Rights Reserved
+        &copy; Copyright <strong>Cinemaple</strong>. All Rights Reserved
       </div>
       <div class="credits">
         Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
