@@ -1155,3 +1155,40 @@ def trigger_emails(request, movienight_id):
     _, _, email_html = mc.create_campaign(reply_to, subject_line, preview_text, title, from_name, html)
 
     return HttpResponse(email_html)
+
+def faq(request):
+
+
+    movienights = MovieNightEvent.objects.all()
+
+    past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
+    mn_in_past = MovieNightEvent.objects.filter(id__in=past_mn_id)
+    
+    show_last = 5
+    movienights_render = mn_in_past.order_by('-date')[:show_last]
+
+    num_mn_past = len(mn_in_past)
+    start_counter = num_mn_past - show_last
+
+
+    # Total Runtime of all winner movies in past
+    total_rt = 0
+    for mn in mn_in_past:
+         _, _, runtime =  mn.get_winning_movie()
+         total_rt += runtime
+
+
+    # if request.user.is_authenticated:
+    #     return redirect("curr_mov_nights")
+    successful_verified = False
+    context = {
+        'successful_verified': successful_verified,
+        'email': "",
+        'username': "",
+        'movienights' : movienights_render,
+        'total_rt'  : total_rt,
+        'num_mn_past' : num_mn_past,
+        'mn_start_counter'      : start_counter,
+        'num_show'              : show_last
+    }
+    return render(request, 'userhandling/faq.html', context)

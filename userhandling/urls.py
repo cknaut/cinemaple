@@ -46,7 +46,7 @@ urlpatterns = [
     path('preview_mn_email/<str:movienight_id>', views.preview_mn_email,  name='preview_mn_email'),
     path('schedule_email/<str:movienight_id>', views.schedule_email,  name='schedule_email'),
     path('preview_email_invitation/<str:movienight_id>', views.preview_email_invitation,  name='preview_email_invitation'),
-
+    path('faq', views.faq,  name='faq'),
 
 
 
