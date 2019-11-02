@@ -300,7 +300,7 @@ header-vid .overlay {
 
 @media (max-width: 768px) {
   #hero h1 {
-    font-size: 50px;
+    /* font-size: 50px; */
     line-height: 36px;
   }
 }

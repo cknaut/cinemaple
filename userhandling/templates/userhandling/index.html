@@ -55,7 +55,7 @@
     <div class="container">
 
       <div id="logo" class="pull-left">
-        <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
+        <a href="{% url 'index' %}"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
       </div>
 
       <nav id="nav-menu-container">
@@ -96,7 +96,7 @@
 {% block main %}
   <main id="main">
 
-    <section id="about" style = "padding-top:0">
+    <section id="about" style = "padding-top:0; padding-bottom: 50px">
       <div class="container">
         <div class="row about-container">
 
@@ -132,39 +132,28 @@
       </div>
     </section><!-- #about -->
 
-    {% comment %} <header-vid>
-      <div class="overlay"></div>
-      <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
-        <source src="https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4" type="video/mp4">
-      </video>
-      <div class="container h-100">
-        <div class="d-flex h-100 text-center align-items-center">
-          <div class="w-100 text-white">
-            <h1 class="display-3">Video Header</h1>
-            <p class="lead mb-0">With HTML5 Video and Bootstrap 4</p>
-          </div>
-        </div>
-      </div>
-    </header-vid> {% endcomment %}
-
-
     <!--==========================
       Movie Nights Section
     ============================-->
-    <section id="movienights">
+    <section id="movienights" style = "padding-top:10px; background-color:#af353b">
       <div class="container wow fadeIn" style = "visibility:visible; animation-name:fadeIn;">
         <div class="section-header">
-          <h3 class="section-title">Movie Nights</h3>
-          <p class="section-description">Check out this selection of {{num_show}} of our past Movie Nights ({{num_mn_past}} in total)</p>
+        <div class = "row3; padding:0">
+          <div class="col-lg-3 col-md-4" style = "max-width:100%; text-align:center;z-index:0;padding-bottom:18px">
+        <a href= "{% url 'curr_mov_nights' %}" class="logo_button"><img src="{% static 'userhandling/img/mainbutton.png' %}" alt="" title="" height="100"/></a>
+          </div>
         </div>
-        <div class="row counters" style = "padding-top:0">
+        <h3 class="section-title" style="margin-top: -2%;z-index: 1;position: relative;color: white;">Movie Nights</h3>
+          <p class="section-description" style = "color:white">Check out this selection of {{num_show}} of our past Movie Nights ({{num_mn_past}} in total)</p>
+        </div>
+        <div class="row counters" style = "margin-top: -13%;">
           <div class="col-sm-6 text-center">
-          <span data-toggle="counter-up" style = "font-size:3rem; color:#af353b"> {{total_rt}}  </span>
-          <p>Minutes of movies watched</p>            
+          <span data-toggle="counter-up" style = "font-size:3rem; color:white"> {{total_rt}}  </span>
+          <p style = "color:white;">Minutes of movies watched</p>            
            </div>
           <div class="col-sm-6 text-center">
-          <span data-toggle = "counter-up" style ="font-size:3rem; color:#af353b;"> {{num_mn_past}} </span>
-          <p>Total number of Movie Nights</p>
+          <span data-toggle = "counter-up" style ="font-size:3rem; color:white;"> {{num_mn_past}} </span>
+          <p style = "color:white;">Total number of Movie Nights</p>
           </div>
         </div>
       </div>
@@ -208,7 +197,7 @@
                   data-parent="#accordionEx5">
                   <div class="card-body rgba-black-light white-text z-depth-1">
                   <div class = "row3">  
-                      <div class="col-md-4 col-xl-4">
+                      <div class="col-md-4 col-xl-4" style = "margin-bottom:1.5%">
                           <div class = "row3"> 
 
                               <div class="col-md-3 col-xl-36">
@@ -322,7 +311,7 @@
       <div class="container wow fadeInUp mt-5">
         <div class="row3 justify-content-center">
 
-          <div class="col-lg-3 col-md-4" style = "max-width:25%">
+          <div class="col-lg-3 col-md-4" style = "max-width:80%; text-align:center">
 
             <div class="info">
               <div>
@@ -334,11 +323,13 @@
                 <i class="fa fa-envelope"style = "color:#ffffff"></i>
                 <p style = "color:#ffffff">admin@cinemaple.com</p>
               </div>
-            </div>
+              <div>
+                <a href="https://github.com/cknaut/cinemaple" class="github"><img src="{% static 'userhandling/img/giticon.png' %}" alt="" title="" height="30"/></a>
+                <p style = "color:#ffffff"><b>Cinemaple</b> is fully open source and available on GitHub.</p>
+              </div>
 
-            <div class="social-links">
-               <a href="https://github.com/cknaut/cinemaple" class="github"><img src="{% static 'userhandling/img/giticon.png' %}" alt="" title="" height="30" style = "margin-left:-3%"/></a>
-               <p style = "color:#ffffff"><b>Cinemaple</b> is fully open source and available on GitHub.</p>
+            </div>           
+  
             </div>
 
           </div>
@@ -367,15 +358,9 @@
            </div>
     <div class="container">
       <div class="copyright">
-        &copy; Copyright <strong>Regna</strong>. All Rights Reserved
+        &copy; Copyright <strong>cinemaple</strong>. All Rights Reserved
       </div>
       <div class="credits">
-        <!--
-          All the links in the footer should remain intact.
-          You can delete the links only if you purchased the pro version.
-          Licensing information: https://bootstrapmade.com/license/
-          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Regna
-        -->
         Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
