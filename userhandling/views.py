@@ -59,8 +59,8 @@ def index(request):
          total_rt += runtime
 
 
-    if request.user.is_authenticated:
-        return redirect("curr_mov_nights")
+    # if request.user.is_authenticated:
+    #     return redirect("curr_mov_nights")
     successful_verified = False
     context = {
         'successful_verified': successful_verified,

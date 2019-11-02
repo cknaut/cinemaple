@@ -34,7 +34,7 @@
   <div class="col-sm">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
-          <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+          <div class="modal-header"><h4 style = "color:#af353b">Logout <i class="fa fa-lock"></i></h4></div>
           <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log out?</div>
           <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started">Logout</a></div>
         </div>
@@ -65,8 +65,8 @@
           <li><a href="#movienights">Movie Nights</a></li>
           <li><a href="#call-to-action">Contact Us</a></li>
         {% if user.is_authenticated %}
-        <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:yellow" class="btn-get-started">Logout</a> </li>
-        <li> Welcome, {{request.user.first_name}}! </li>
+        <li>  <a href="" data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started">Logout</a> </li>
+        <li style = "color:#af353b"> Welcome, {{request.user.first_name}}! </li>
         {% else %}
         <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
       {% endif %}
