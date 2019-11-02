@@ -3363,3 +3363,7 @@ textarea.form-control.is-invalid {
 img {
   vertical-align: bottom;
 }
+
+.errorlist{
+  color:white;
+}

@@ -48,7 +48,7 @@
 
 <section id="hero">
         <div class="hero-container">          
-          <div class="container register">
+          <div class="container register" style = "margin-top:0">
                 <div class="row" style="margin-top:-20%">
                     <div class="col-md-3 register-left" style="margin-top:15%">
                         <img src={% static 'userhandling/img/logos/logo_cinemaple.png' %} alt="" width = 100%/>
@@ -109,7 +109,13 @@
                                         {{form.captcha.errors}}
                                           {{form.captcha}}
                                     </div>
+                                  
+                                    <div class="form-group">
+                                    {{ form.i_agree }}                                        
+                                    <label for="exampleInputEmail1"><font color="white">"I have read and agreed to the Cinemaple's Privacy Policy."</font></label>                                        
+                                    </div>
 
+                                    <div>
 
                                     <div class="modal-footer d-flex justify-content-center">
                                       <input class="btn btn-primary" type="submit" value="Register">

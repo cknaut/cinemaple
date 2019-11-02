@@ -30,6 +30,7 @@ class RegistrationForm(forms.Form):
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control input-perso'}))
     password2 = forms.CharField(label="", max_length=50, min_length=6,
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password', 'class': 'form-control input-perso'}))
+    i_agree = forms.BooleanField()
 
     if not settings.DEBUG:
         captcha = ReCaptchaField(label="", widget=ReCaptchaV2Checkbox(
@@ -58,9 +59,13 @@ class RegistrationForm(forms.Form):
         cleaned_data = super().clean()
         password1 = cleaned_data.get('password1')
         password2 = cleaned_data.get('password2')
+        i_agree = cleaned_data.get('i_agree')
 
         if password1 and password1 != password2:
             raise forms.ValidationError("Passwords don't match.")
+
+        if i_agree == False:
+            raise forms.ValidationError("You must read and agree to cinemaple's Privacy Policy.")
 
         return cleaned_data
 
