@@ -117,7 +117,7 @@ aria-hidden="true">
 <div class="container-fluid">
 
     <!-- Content Row -->
-    <div class="row3">
+    <div class="row4">
 
         <!-- Earnings (Monthly) Card Example -->
         <!-- Area Chart -->
@@ -132,34 +132,34 @@ aria-hidden="true">
                     {% if no_movie != 1 %}
                     <div class="row2">
                         <div class="col-xl-6 col-lg-6 ">
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3"> When: </div>
                                 <div class="col-xl-9 col-lg-9 ">{{movienight.date}} </div>
                             </div>
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Where: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.location.street}}, {{movienight.location.zip_code}}, {{movienight.location.city}}, {{movienight.location.state}}</div>
                             </div>
 
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> What: </div>
                                 <div class="col-xl-9 col-lg-9 "> {% autoescape off %} {{movienight.description}}{% endautoescape %} </div>
                             </div>
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Vote until: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.vote_until }} </div>
                             </div>
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Free Spots: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.free_spots }} </div>
                             </div>
 
                             {% if navbar == "curr_mov_night" and movienight.is_active%}
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if user_has_reg %}
@@ -178,7 +178,7 @@ aria-hidden="true">
                             </div>
 
                             {% if user_has_reg %}
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Toppings: </div>
                                 <div class="col-xl-9 col-lg-9 "> {% autoescape off %}  {{toppings }} {% endautoescape %}  </div>
                             </div>
@@ -186,7 +186,7 @@ aria-hidden="true">
 
 
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> User Action: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if user_has_reg %}
@@ -244,7 +244,7 @@ aria-hidden="true">
 
                             <hr class="sidebar-divider">
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if movienight.get_status == "DRAFT" %}
@@ -260,7 +260,7 @@ aria-hidden="true">
                             </div>
 
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Voting enabled: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if movienight.voting_enabled %}
@@ -271,13 +271,13 @@ aria-hidden="true">
                                 </div>
                             </div>
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Number of attendees: </div>
                                 <div class="col-xl-9 col-lg-9 ">  {{movienight.get_num_registered }} ({{movienight.get_num_voted }} have voted)   </div>
                             </div>
 
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Admin Action: </div>
                                 <div class="col-xl-9 col-lg-9 ">
 
@@ -317,7 +317,7 @@ aria-hidden="true">
                             <hr class="sidebar-divider">
                             {% endif%}
 
-                                                    <div class="row3">
+                                                    <div class="row4">
                                 <div class="col-xl-12 col-lg-12 "> Movie Selection (register to rate): </div>
                             </div>
 
@@ -325,7 +325,7 @@ aria-hidden="true">
                         </div>
                     </div>
 
-                    <div class="row3">
+                    <div class="row4">
 
                         <div class="col-xl-12 col-lg-12 ">
                             <div id="accordion">
@@ -354,10 +354,10 @@ aria-hidden="true">
                                             aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion">
 
                                             <div class="card-body">
-                                                <div class="row3">
+                                                <div class="row4">
                                                     <div class="col-xl-3 col-lg-3 ">
 
-                                                        <div class="row3 justify-content-center mb-2">
+                                                        <div class="row4 justify-content-center mb-2">
 
 
                                                             <img src="https://image.tmdb.org/t/p/w200{{movie.posterpath}}"
@@ -365,8 +365,8 @@ aria-hidden="true">
 
 
                                                         </div>
-                                                        <div class="row3"></div>
-                                                        <div class="row3 justify-content-center">
+                                                        <div class="row4"></div>
+                                                        <div class="row4 justify-content-center">
                                                             <div id="trailerbutton"></div>
                                                             {% if movie.trailerlink == "" %}
                                                             <button type='button' class='btn btn-primary disabled'>No
@@ -388,7 +388,7 @@ aria-hidden="true">
                                                     <div class="col-xl-9 col-lg-9 ">
                                                         <!--Grid column-->
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Country:</p>
                                                             </div>
@@ -401,7 +401,7 @@ aria-hidden="true">
                                                             </div>
                                                         </div>
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Director:</p>
                                                             </div>
@@ -414,7 +414,7 @@ aria-hidden="true">
                                                             </div>
                                                         </div>
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Producer:</p>
                                                             </div>
@@ -429,7 +429,7 @@ aria-hidden="true">
 
 
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Actors:</p>
                                                             </div>
@@ -442,7 +442,7 @@ aria-hidden="true">
                                                             </div>
                                                         </div>
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Runtime:</p>
                                                             </div>
@@ -455,7 +455,7 @@ aria-hidden="true">
                                                             </div>
                                                         </div>
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Plot:</p>
                                                             </div>
@@ -469,7 +469,7 @@ aria-hidden="true">
                                                         </div>
 
                                                          {% if user_has_voted %}
-                                                         <div class="row3">
+                                                         <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Your rating:</p>
                                                             </div>
