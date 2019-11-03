@@ -3706,7 +3706,7 @@
       $(this._scrollElement).on(Event$8.SCROLL, function (event) {
         return _this._process(event);
       });
-      this.refresh();
+      // this.refresh();
 
       this._process();
     } // Getters
