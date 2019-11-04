@@ -112,14 +112,13 @@
                                   
                                     <div class="form-group">
                                     {{ form.i_agree }}                                        
-                                    <label for="exampleInputEmail1"><font color="white">"I have read and agreed to the Cinemaple's Privacy Policy."</font></label>                                        
-                                    </div>
-
+                                    <label for="exampleInputEmail1"><font color="white">I have read and agreed to Cinemaple's                                              
+                                    <a href="https://www.iubenda.com/privacy-policy/51526038" class="iubenda-white iubenda-embed" title="Privacy Policy">Privacy Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script></font></label>                                        </div>
                                     <div>
 
                                     <div class="modal-footer d-flex justify-content-center">
                                       <input class="btn btn-primary" type="submit" value="Register">
-                                      <a href="{% url 'index' %}" class="btn btn-deep-orange" style = "color:white">Back to home <i class="em em-house" aria-role="presentation" aria-label="HOUSE BUILDING"></i></a>
+                                      <a href="{% url 'index' %}" class="btn btn-deep-orange" style = "color:white">Back to home </a>
                                     </div>
                                     </form>
                                 </div>
@@ -137,4 +136,3 @@
 {% block js %}
 
 {% endblock %}
-

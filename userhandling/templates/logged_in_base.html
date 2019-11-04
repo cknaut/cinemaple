@@ -30,48 +30,84 @@
 
 
 
-{% block header %}<!--==========================
-  Header
-  ============================-->
-  <header id="header">
-    <div class="container">
+{% block header %}
+<!--==========================
+Header
+============================-->
+<header id="header-login">
+  <div class="container">
+    </div>
+</header><!-- #header -->
 
-      <div id="logo" class="pull-left">
-        <!-- Uncomment below if you prefer to use a text logo -->
-        <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
-        <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
-      </div>
+<header id="header">
+  <div class="container">
 
-      <nav id="nav-menu-container">
-        <ul class="nav-menu">
+    <div id="logo" class="pull-left">
+      <!-- Uncomment below if you prefer to use a text logo -->
+      <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
+      <a href={% url 'index'%}><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
+    </div>
+
+    <nav id="nav-menu-container">
+      <ul class="nav-menu">
+        {% if navbar == "faq"%}
+          <li class="menu-active" ><a href={% url 'faq' %}>FAQ</a></li>
+          {% else %}
+          <li class="menu" ><a href={% url 'faq' %}>FAQ</a></li>
+        {% endif %}        
+        {% if navbar == "curr_mov_night"%}
           <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
+          {% else %}
+          <li class="menu" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
+        {% endif %}
+        {% if navbar == "past_mov_nights"%}
+          <li class="menu-active" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
+          {% else %}
           <li class="menu" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
+        {% endif %}                
 
-          {% if request.user.is_staff %}
+        {% if request.user.is_staff %}
+          {% if navbar == "admin"%}  
+        <li class="menu-has-children menu-active"><a href="">Admin Actions</a>
+          <ul>
+            <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
+            <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
+            <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
+          </ul>
+          {% else %}
           <li class="menu-has-children"><a href="">Admin Actions</a>
-            <ul>
-              <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
-              <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
-              <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
-            </ul>
-
+          <ul>
+            <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
+            <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
+            <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
+          </ul>
           {% endif %}
-        {% if user.is_authenticated %}
+        {% endif %}
+
+      {% if user.is_authenticated %}
+        {% if navbar == "user" %}
+        <li class="menu-has-children menu-active"><a href="">User Setting</a>
+            <ul>
+              <li><a href={% url 'change_password' %}>Change Password</a></li>
+              <li><a href={% url 'change_profile' %} >Change Profile</a></li>
+            </ul>
+        <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>        
+        {% else %}
         <li class="menu-has-children"><a href="">User Setting</a>
             <ul>
               <li><a href={% url 'change_password' %}>Change Password</a></li>
               <li><a href={% url 'change_profile' %} >Change Profile</a></li>
             </ul>
         <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>
+        {% endif %}
 
-
-        {% else %}
-        <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
-      {% endif %}
-        </ul>
-      </nav><!-- #nav-menu-container -->
-    </div>
-  </header><!-- #header -->
+      {% else %}
+      <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
+    {% endif %}
+      </ul>
+    </nav><!-- #nav-menu-container -->
+  </div>
+</header><!-- #header -->
 {% endblock %}
 
 

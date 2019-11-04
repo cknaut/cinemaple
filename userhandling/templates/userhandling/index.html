@@ -167,7 +167,7 @@
     <div class="card card-image" style="background-image: url(https://image.tmdb.org/t/p/w200{{mn.get_winning_movie.0.posterpath}})">
       <!-- Content -->
       <div class="rgba-black-strong py-5 px-4" style = "padding-bottom:0" style = "padding-top:0">
-        <div class="row3 d-flex justify-content-center">
+        <div class="row4 d-flex justify-content-center">
           <div class="col-md-10 col-xl-8">
 
 
@@ -196,9 +196,9 @@
                 <div id="collapse{{forloop.counter0}}" class="collapse show" role="tabpanel" aria-labelledby="heading{{forloop.counter0}}"
                   data-parent="#accordionEx5">
                   <div class="card-body rgba-black-light white-text z-depth-1">
-                  <div class = "row3">  
+                  <div class = "row4">  
                       <div class="col-md-4 col-xl-4" style = "margin-bottom:1.5%">
-                          <div class = "row3"> 
+                          <div class = "row4"> 
 
                               <div class="col-md-3 col-xl-36">
                                     <b> Motto:</b>
@@ -210,7 +210,7 @@
 
                             </div>
 
-                            <div class = "row3"> 
+                            <div class = "row4"> 
                             <div class="col-md-3 col-xl-36">
                                 <b> Date:</b>
                             </div>
@@ -223,7 +223,7 @@
 
                             
 
-                            <div class = "row3"> 
+                            <div class = "row4"> 
 
                                 <div class="col-md-3 col-xl-3">
                                     <b>  Winning Movie:</b>
@@ -238,7 +238,7 @@
   
                               </div>
 
-                              <div class = "row3"> 
+                              <div class = "row4"> 
                                 
                                   <div class="col-md-3 col-xl-3">
                                       <b>  Plot:</b>
@@ -294,7 +294,7 @@
     ============================-->
     <section id="call-to-action">
       <div class="container wow fadeIn">
-        <div class="row3">
+        <div class="row3" style = "margin-top:3%">
           <div class="col-lg-9 text-center text-lg-left">
             <h3 class="cta-title" style = "text-align:center">Subscribe Now</h3>
             <p class="cta-text" style = "text-align:center"> Subscribe to cinemaple and receive information about Movie Nights organized in your area.</p>
@@ -343,33 +343,9 @@
 {% endblock %}
 
 
-{% block footer %}
-  <!--==========================
-    Footer
-  ============================-->
-  <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-
-      </div>
-    </div>
-      <div class="container">
-      <a href="https://www.iubenda.com/privacy-policy/51526038" class="iubenda-white iubenda-embed" title="Privacy Policy ">Privacy Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
-           </div>
-    <div class="container">
-      <div class="copyright">
-        &copy; Copyright <strong>Cinemaple</strong>. All Rights Reserved
-      </div>
-      <div class="credits">
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
-  </footer><!-- #footer -->
-{% endblock %}
-
 {% block js %}
-<script>
 
+<script>
 {% for mn in movienights %}
     $(document).ready(function(){
       $(".trigg{{forloop.counter0}}").click(function(){
@@ -387,6 +363,13 @@
           $("#RegVerifyModall").modal('show');
       });
   </script>
+
+  <script type="text/javascript">
+      $(window).on('unload', function() {
+        $(window).scrollTop(0,0);
+      });
+  </script>
+
 {% endif %}
 {% endblock %}
 

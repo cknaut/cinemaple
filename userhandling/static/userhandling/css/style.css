@@ -96,7 +96,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
   .back-to-top {
-    bottom: 15px;
+    bottom: 15px;`
   }
 }
 
@@ -114,6 +114,18 @@ h1, h2, h3, h4, h5, h6 {
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
+#header-login {
+  padding: 30px 0;
+  height: 92px;
+  /* position: fixed; */
+  left: 0;
+  top: 0;
+  right: 0;
+  transition: all 0.5s;
+  z-index: 997;
+  background: rgb(42, 43, 44);
+}
+
 #header {
   padding: 30px 0;
   height: 92px;
@@ -123,6 +135,7 @@ h1, h2, h3, h4, h5, h6 {
   right: 0;
   transition: all 0.5s;
   z-index: 997;
+  /* background: rgba(52, 59, 64, 0.9); */
 }
 
 #header #logo {
@@ -204,7 +217,7 @@ header-vid .container {
 
 header-vid .overlay {
   /* position: absolute; */
-  top: 0;
+  top: 0;`
   left: 0;
   height: 50vh;
   width: cover;
@@ -1138,6 +1151,17 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .row3 {
+  padding-top: 1.5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -.75rem;
+  margin-left: -.75rem
+}
+
+.row4 {
   padding-top: 3%;
   display: -webkit-box;
   display: -ms-flexbox;
