@@ -36,7 +36,7 @@
         <p class="text-center"><font color = "black">An activation link has been sent to {{ subscribe_email }}.</font></p>
       </div>
       <div class="modal-footer">
-        <a href="{% url 'index' %}" class="btn btn-success btn-block">Back to home.</a>
+        <a href="{% url 'index' %}" class="btn btn-success btn-block">Back to home <i class="em em-arrow_lower_right" aria-role="presentation" aria-label="SOUTH EAST ARROW"></i> <i class="em em-house" aria-label="HOUSE BUILDING"></i> </a>
       </div>
     </div>
   </div>
@@ -46,10 +46,10 @@
 
 {% block header %}
 
-<section id="hero" style="height:160vh">
-        <div class="hero-container" >          
-          <div class="container register">
-                <div class="row" style="margin-top:-30%">
+<section id="hero">
+        <div class="hero-container">          
+          <div class="container register" style = "margin-top:0">
+                <div class="row" style="margin-top:-20%">
                     <div class="col-md-3 register-left" style="margin-top:15%">
                         <img src={% static 'userhandling/img/logos/logo_cinemaple.png' %} alt="" width = 100%/>
                         <h3>Welcome</h3>
@@ -109,11 +109,16 @@
                                         {{form.captcha.errors}}
                                           {{form.captcha}}
                                     </div>
-
+                                  
+                                    <div class="form-group">
+                                    {{ form.i_agree }}                                        
+                                    <label for="exampleInputEmail1"><font color="white">I have read and agreed to Cinemaple's                                              
+                                        <a href="{% url 'priv_pol' %}" target="_blank" >Privacy Policy</a>  </div>
+                                    <div>
 
                                     <div class="modal-footer d-flex justify-content-center">
                                       <input class="btn btn-primary" type="submit" value="Register">
-                                      <a href="{% url 'index' %}" class="btn btn-deep-orange">Back to home.</a>
+                                      <a href="{% url 'index' %}" class="btn btn-deep-orange" style = "color:white">Back to home </a>
                                     </div>
                                     </form>
                                 </div>
@@ -131,4 +136,3 @@
 {% block js %}
 
 {% endblock %}
-

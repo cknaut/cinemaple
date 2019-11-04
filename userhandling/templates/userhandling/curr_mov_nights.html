@@ -113,60 +113,11 @@ aria-hidden="true">
 
 {% endblock %}
 
-
-
-
-{% block header %}
-<!--==========================
-Header
-============================-->
-<header id="header">
-  <div class="container">
-
-    <div id="logo" class="pull-left">
-      <!-- Uncomment below if you prefer to use a text logo -->
-      <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
-      <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
-    </div>
-
-    <nav id="nav-menu-container">
-      <ul class="nav-menu">
-        <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
-        <li class="menu" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
-
-        {% if request.user.is_staff %}
-        <li class="menu-has-children"><a href="">Admin Actions</a>
-          <ul>
-            <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
-            <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
-            <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
-          </ul>
-
-        {% endif %}
-      {% if user.is_authenticated %}
-      <li class="menu-has-children"><a href="">User Setting</a>
-          <ul>
-            <li><a href={% url 'change_password' %}>Change Password</a></li>
-            <li><a href={% url 'change_profile' %} >Change Profile</a></li>
-          </ul>
-      <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>
-
-
-      {% else %}
-      <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
-    {% endif %}
-      </ul>
-    </nav><!-- #nav-menu-container -->
-  </div>
-</header><!-- #header -->
-{% endblock %}
-
-
 {% block main %}
 <div class="container-fluid">
 
     <!-- Content Row -->
-    <div class="row">
+    <div class="row3">
 
         <!-- Earnings (Monthly) Card Example -->
         <!-- Area Chart -->
@@ -181,34 +132,34 @@ Header
                     {% if no_movie != 1 %}
                     <div class="row2">
                         <div class="col-xl-6 col-lg-6 ">
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3"> When: </div>
                                 <div class="col-xl-9 col-lg-9 ">{{movienight.date}} </div>
                             </div>
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Where: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.location.street}}, {{movienight.location.zip_code}}, {{movienight.location.city}}, {{movienight.location.state}}</div>
                             </div>
 
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> What: </div>
                                 <div class="col-xl-9 col-lg-9 "> {% autoescape off %} {{movienight.description}}{% endautoescape %} </div>
                             </div>
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Vote until: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.vote_until }} </div>
                             </div>
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Free Spots: </div>
                                 <div class="col-xl-9 col-lg-9 "> {{movienight.free_spots }} </div>
                             </div>
 
                             {% if navbar == "curr_mov_night" and movienight.is_active%}
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if user_has_reg %}
@@ -227,7 +178,7 @@ Header
                             </div>
 
                             {% if user_has_reg %}
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Toppings: </div>
                                 <div class="col-xl-9 col-lg-9 "> {% autoescape off %}  {{toppings }} {% endautoescape %}  </div>
                             </div>
@@ -235,7 +186,7 @@ Header
 
 
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> User Action: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if user_has_reg %}
@@ -293,7 +244,7 @@ Header
 
                             <hr class="sidebar-divider">
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Status: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if movienight.get_status == "DRAFT" %}
@@ -309,7 +260,7 @@ Header
                             </div>
 
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Voting enabled: </div>
                                 <div class="col-xl-9 col-lg-9 ">
                                     {% if movienight.voting_enabled %}
@@ -320,13 +271,13 @@ Header
                                 </div>
                             </div>
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Number of attendees: </div>
                                 <div class="col-xl-9 col-lg-9 ">  {{movienight.get_num_registered }} ({{movienight.get_num_voted }} have voted)   </div>
                             </div>
 
 
-                            <div class="row3">
+                            <div class="row4">
                                 <div class="col-xl-3 col-lg-3 "> Admin Action: </div>
                                 <div class="col-xl-9 col-lg-9 ">
 
@@ -366,7 +317,7 @@ Header
                             <hr class="sidebar-divider">
                             {% endif%}
 
-                                                    <div class="row3">
+                                                    <div class="row4">
                                 <div class="col-xl-12 col-lg-12 "> Movie Selection (register to rate): </div>
                             </div>
 
@@ -374,7 +325,7 @@ Header
                         </div>
                     </div>
 
-                    <div class="row3">
+                    <div class="row4">
 
                         <div class="col-xl-12 col-lg-12 ">
                             <div id="accordion">
@@ -403,10 +354,10 @@ Header
                                             aria-labelledby="heading{{ forloop.counter0 }}" data-parent="#accordion">
 
                                             <div class="card-body">
-                                                <div class="row3">
+                                                <div class="row4">
                                                     <div class="col-xl-3 col-lg-3 ">
 
-                                                        <div class="row3 justify-content-center mb-2">
+                                                        <div class="row4 justify-content-center mb-2">
 
 
                                                             <img src="https://image.tmdb.org/t/p/w200{{movie.posterpath}}"
@@ -414,8 +365,8 @@ Header
 
 
                                                         </div>
-                                                        <div class="row3"></div>
-                                                        <div class="row3 justify-content-center">
+                                                        <div class="row4"></div>
+                                                        <div class="row4 justify-content-center">
                                                             <div id="trailerbutton"></div>
                                                             {% if movie.trailerlink == "" %}
                                                             <button type='button' class='btn btn-primary disabled'>No
@@ -437,7 +388,7 @@ Header
                                                     <div class="col-xl-9 col-lg-9 ">
                                                         <!--Grid column-->
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Country:</p>
                                                             </div>
@@ -450,7 +401,7 @@ Header
                                                             </div>
                                                         </div>
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Director:</p>
                                                             </div>
@@ -463,7 +414,7 @@ Header
                                                             </div>
                                                         </div>
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Producer:</p>
                                                             </div>
@@ -478,7 +429,7 @@ Header
 
 
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Actors:</p>
                                                             </div>
@@ -491,7 +442,7 @@ Header
                                                             </div>
                                                         </div>
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Runtime:</p>
                                                             </div>
@@ -504,7 +455,7 @@ Header
                                                             </div>
                                                         </div>
 
-                                                        <div class="row3">
+                                                        <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Plot:</p>
                                                             </div>
@@ -518,7 +469,7 @@ Header
                                                         </div>
 
                                                          {% if user_has_voted %}
-                                                         <div class="row3">
+                                                         <div class="row4">
                                                             <div class="col-lg-3">
                                                                 <p class="font-weight-bold">Your rating:</p>
                                                             </div>

@@ -49,7 +49,7 @@ def index(request):
     show_last = 5
     movienights_render = mn_in_past.order_by('-date')[:show_last]
 
-    num_mn_past = len(movienights_render)
+    num_mn_past = len(mn_in_past)
     start_counter = num_mn_past - show_last
 
 
@@ -60,8 +60,8 @@ def index(request):
          total_rt += runtime
 
 
-    if request.user.is_authenticated:
-        return redirect("curr_mov_nights")
+    # if request.user.is_authenticated:
+    #     return redirect("curr_mov_nights")
     successful_verified = False
     context = {
         'successful_verified': successful_verified,
@@ -441,6 +441,7 @@ def add_movie_night(request):
         'form1': form1,
         "form2": form2,
         "form3": form3,
+        'navbar':'admin',
         'voting_occured': voting_occured
     }
     return render(request, 'userhandling/admin_movie_add.html', context)
@@ -581,7 +582,10 @@ def dashboard(request):
 
 @user_passes_test(lambda u: u.is_staff)
 def man_mov_nights(request):
-    return render(request, 'userhandling/admin_movie_night_manage.html')
+    context = {
+        'navbar' : 'admin'
+    }
+    return render(request, 'userhandling/admin_movie_night_manage.html', context)
 
 
 def attendence_list(request, movienight_id):
@@ -595,7 +599,10 @@ def attendence_list(request, movienight_id):
 
 @login_required
 def past_mov_nights(request):
-    return render(request, 'userhandling/past_mov_nights.html')
+    context = {
+        'navbar' : 'past_mov_nights'
+    }
+    return render(request, 'userhandling/past_mov_nights.html', context)
 
 @login_required
 def details_mov_nights(request, movienight_id, no_movie=False):
@@ -1042,7 +1049,8 @@ def change_password(request):
             form = MyPasswordChangeForm(request.user)
             context = {
                 'form': form,
-                'pw_changed': True
+                'pw_changed': True,
+                'navbar' : 'user'
             }
             return render(request, 'userhandling/change_password.html', context)
     else:
@@ -1050,6 +1058,7 @@ def change_password(request):
     return render(request, 'userhandling/change_password.html', {
         'form': form,
         'pw_changed': pw_changed,
+        'navbar': 'user'
     })
 
 @login_required
@@ -1100,7 +1109,7 @@ def change_profile(request):
                 'email_changed': email_changed,
                 'user_saved' : user_saved,
                 'email_activated' : False,
-
+                'navbar' : 'user'
             }
             return render(request, 'userhandling/change_profile.html', context)
     else:
@@ -1111,6 +1120,7 @@ def change_profile(request):
         'email_changed': False,
         'user_saved' : False,
         'email_activated' : False,
+        'navbar' : 'user'
     }
     return render(request, 'userhandling/change_profile.html', context)
 
@@ -1155,7 +1165,7 @@ def activate_emailupdate(request, key):
 def ml_health(request):
 
     _, context = check_ml_health()
-
+    context['navbar'] = 'admin'
     return render(request, 'userhandling/mailinglist_health.html', context)
 
 
@@ -1187,4 +1197,15 @@ def show_loc_users(request):
     }
 
     return render(request, 'userhandling/loc_user_list.html', context)
+
+
+def faq(request):
+
+    context = {        
+        'navbar'              : "faq"
+    }
+    return render(request, 'userhandling/faq.html', context)
+
+def priv_pol(request):
+    return render(request, 'userhandling/priv_pol.html')
 
