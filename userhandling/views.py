@@ -1172,3 +1172,6 @@ def faq(request):
         'navbar'              : "faq"
     }
     return render(request, 'userhandling/faq.html', context)
+
+def priv_pol(request):
+    return render(request, 'userhandling/priv_pol.html')

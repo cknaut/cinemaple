@@ -47,6 +47,7 @@ urlpatterns = [
     path('schedule_email/<str:movienight_id>', views.schedule_email,  name='schedule_email'),
     path('preview_email_invitation/<str:movienight_id>', views.preview_email_invitation,  name='preview_email_invitation'),
     path('faq', views.faq,  name='faq'),
+    path('priv_pol', views.priv_pol,  name='priv_pol'),
 
 
 
