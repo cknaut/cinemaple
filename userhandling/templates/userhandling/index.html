@@ -323,13 +323,9 @@
               <div>
                 <i class="fa fa-envelope"style = "color:#ffffff"></i>
                 <p style = "color:#ffffff">&#099;&#111;&#110;&#116;&#097;&#099;&#116;&#064;&#099;&#105;&#110;&#101;&#109;&#097;&#112;&#108;&#101;&#046;&#099;&#111;&#109;</p>
-                <a href="{% url 'priv_pol' %}" target="_blank" >Load me</a>
-
+               
               </div>
-              <div>
-                <a href="https://github.com/cknaut/cinemaple" class="github"><img src="{% static 'userhandling/img/giticon.png' %}" alt="" title="" height="30"/></a>
-                <p style = "color:#ffffff"><b>Cinemaple</b> is fully open source and available on GitHub.</p>
-              </div>
+            
 
             </div>           
   
@@ -343,6 +339,33 @@
     </section><!-- #call-to-action -->
 
   </main>
+{% endblock %}
+
+{% block footer %}
+<footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+      </div>
+      <div class="credits">
+
+
+
+        <div class="social-links">
+            <p style = "color:#ffffff"><b>Cinemaple</b> is fully open source (Apache License 2.0.) and available on GitHub: <a href="https://github.com/cknaut/cinemaple" class="github"><img src="{% static 'userhandling/img/giticon.png' %}" alt="" title="" height="30" style = "margin-left:0%"/></a></p>
+            
+        </div>
+
+        <a href="{% url 'priv_pol' %}" target="_blank" >Privacy Policy</a>
+
+      </div>
+    </div>
+  </footer><!-- #footer -->
 {% endblock %}
 
 
