@@ -68,6 +68,35 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
         )
 
 
+
+class ProfileSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    join_date = serializers.SerializerMethodField()
+    is_invitor = serializers.SerializerMethodField()
+    invitation_key = serializers.SerializerMethodField()
+    firstlastname = serializers.SerializerMethodField()
+
+    def get_firstlastname(self, Profile):
+        return Profile.user.first_name + " " + Profile.user.last_name
+
+    def get_invitation_key(self, Profile):
+        return Profile.invitation_key
+
+    def get_is_invitor(self, Profile):
+        return Profile.is_invitor 
+
+    def get_join_date(self, Profile):
+        return Profile.user.date_joined 
+
+    class Meta:
+        model = UserAttendence
+        fields = (
+            'id', 'firstlastname', 'is_invitor', "invitation_key", 'join_date'
+        )
+
+
+
+
 class UserAttendenceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.SerializerMethodField()

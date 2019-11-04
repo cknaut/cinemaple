@@ -43,6 +43,8 @@ class Profile(models.Model):
     email_buffer = models.EmailField(default='') # contains unverified email
     location = models.ManyToManyField(Location) # Links user to locations he or she can access
     birth_date = models.DateField(null=True, blank=True)
+    is_invitor = models.BooleanField(default=False)
+    invitation_key = models.CharField(max_length=40, blank=True)
     activation_key = models.CharField(max_length=40, blank=True)
     key_expires = models.DateTimeField(null=True, blank=True)
     def __str__(self):
