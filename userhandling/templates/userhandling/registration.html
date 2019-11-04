@@ -46,10 +46,10 @@
 
 {% block header %}
 
-<section id="hero">
+<section id="hero" style = "height:140vh; position:absolute;">
         <div class="hero-container">          
           <div class="container register" style = "margin-top:0">
-                <div class="row" style="margin-top:-20%">
+                <div class="row4">
                     <div class="col-md-3 register-left" style="margin-top:15%">
                         <img src={% static 'userhandling/img/logos/logo_cinemaple.png' %} alt="" width = 100%/>
                         <h3>Welcome</h3>
@@ -59,7 +59,7 @@
                         <div class="tab-content" id="myTabContent">                                
                                 {% block heading %}
                                 {% endblock %}
-                                <div class="row register-form">                                    
+                                <div class="row4 register-form">                                    
                                     <div class="col-md-9">
                                     <form action="/registration/" method="post">
 {% csrf_token %}
@@ -113,7 +113,7 @@
                                     <div class="form-group">
                                     {{ form.i_agree }}                                        
                                     <label for="exampleInputEmail1"><font color="white">I have read and agreed to Cinemaple's                                              
-                                        <a href="{% url 'priv_pol' %}" target="_blank" >Privacy Policy</a>  </div>
+                                        <a href="{% url 'priv_pol' %}" target="_blank" >Privacy Policy.</a>  </div>
                                     <div>
 
                                     <div class="modal-footer d-flex justify-content-center">
