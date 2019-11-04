@@ -6,6 +6,8 @@ from rest_framework import routers
 from . import views
 router = routers.DefaultRouter()
 router.register(r'movienights', views.MovieNightEventViewSet)
+router.register(r'movienights_past', views.PastMovieNightEventViewSet)
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -37,6 +39,7 @@ urlpatterns = [
     path('topping_add_movie_night/<str:movienight_id>', views.topping_add_movie_night,  name='topping_add_movie_night'),
     path('attendence_list/<str:movienight_id>', views.attendence_list,  name='attendence_list'),
     path('api/attendence_list/<str:movienight_id>', views.UserAttendenceList.as_view()),
+    path('api/loc_prof_list/<str:location_id>', views.ProfileList.as_view()),
     path('count_votes/<str:movienight_id>', views.count_votes,  name='count_votes'),
     path('user_prefs/', views.user_prefs,  name='user_prefs'),
     path('change_password/', views.change_password,  name='change_password'),
@@ -46,7 +49,10 @@ urlpatterns = [
     path('preview_mn_email/<str:movienight_id>', views.preview_mn_email,  name='preview_mn_email'),
     path('schedule_email/<str:movienight_id>', views.schedule_email,  name='schedule_email'),
     path('preview_email_invitation/<str:movienight_id>', views.preview_email_invitation,  name='preview_email_invitation'),
+    path('loc_users/', views.show_loc_users),
     path('faq', views.faq,  name='faq'),
+    path('priv_pol', views.priv_pol,  name='priv_pol'),
+
 
 
 
