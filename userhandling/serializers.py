@@ -1,4 +1,4 @@
-from .models import MovieNightEvent, Movie, UserAttendence
+from .models import MovieNightEvent, Movie, UserAttendence, LocationPermission
 from rest_framework import serializers
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -95,7 +95,39 @@ class ProfileSerializer(serializers.ModelSerializer):
         )
 
 
+class LocationPermissionSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    location = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+    firstlastname = serializers.SerializerMethodField()
+    role = serializers.SerializerMethodField()
+    invitation_key = serializers.SerializerMethodField()
+    join_date = serializers.SerializerMethodField()
 
+
+    def get_location(self, LocationPermission):
+        return LocationPermission.location.name
+
+    def get_username(self, LocationPermission):
+        return LocationPermission.user.username
+
+    def get_firstlastname(self, LocationPermission):
+        return LocationPermission.user.first_name + " " + LocationPermission.user.last_name
+
+    def get_role(self, LocationPermission):
+        return LocationPermission.get_role_display() 
+
+    def get_invitation_key(self, LocationPermission):
+        return LocationPermission.get_invite_code() 
+
+    def get_join_date(self, LocationPermission):
+        return LocationPermission.user.date_joined 
+
+    class Meta:
+        model = LocationPermission
+        fields = (
+            'id', 'location', 'username', "firstlastname", 'role', 'invitation_key', 'join_date'
+        )
 
 class UserAttendenceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

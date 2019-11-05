@@ -23,7 +23,7 @@ from django.views.generic.edit import CreateView
 import requests
 from django.core import serializers
 from rest_framework import viewsets
-from .serializers import MovieNightEventSerializer, UserAttendenceSerializer, ProfileSerializer
+from .serializers import MovieNightEventSerializer, UserAttendenceSerializer, ProfileSerializer, LocationPermissionSerializer
 from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory
 from rest_framework.permissions import IsAdminUser
@@ -793,14 +793,21 @@ class UserAttendenceList(generics.ListAPIView):
 
 
 class ProfileList(generics.ListAPIView):
-    serializer_class = ProfileSerializer
+    serializer_class = LocationPermissionSerializer
+
+
 
     def get_queryset(self):
-        location_id = self.kwargs['location_id']
 
-        location = get_object_or_404(Location, pk=location_id)
+        user = self.request.user
 
-        return Profile.objects.filter(location=location)
+        managed_users = user.profile.get_managed_users()
+
+        #get all location permissions of managed users
+        managed_loc_permissions = [i.profile.get_location_permissions() for i in managed_users]
+        qs =  [item for sublist in managed_loc_permissions for item in sublist]  #Flatten list
+
+        return qs
 
 
 class MovieNightEventViewSet(viewsets.ModelViewSet):
@@ -1168,7 +1175,6 @@ def ml_health(request):
     context['navbar'] = 'admin'
     return render(request, 'userhandling/mailinglist_health.html', context)
 
-
 def trigger_emails(request, movienight_id):
 
     health, context = check_ml_health()
@@ -1189,16 +1195,12 @@ def trigger_emails(request, movienight_id):
 
 @user_passes_test(lambda u: u.is_staff)
 def show_loc_users(request):
-
-    locations = request.user.profile.location.all()
-
     context = {
-        'locations'      : locations
+    'navbar' : 'admin'
     }
-
     return render(request, 'userhandling/loc_user_list.html', context)
 
-
+@login_required
 def faq(request):
 
     context = {        

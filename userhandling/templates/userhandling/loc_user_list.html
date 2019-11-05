@@ -27,51 +27,6 @@
 
 {% endblock %}
 
-
-{% block header %}<!--==========================
-  Header
-  ============================-->
-  <header id="header">
-    <div class="container">
-
-      <div id="logo" class="pull-left">
-        <!-- Uncomment below if you prefer to use a text logo -->
-        <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
-        <a href="#hero"><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
-      </div>
-
-      <nav id="nav-menu-container">
-        <ul class="nav-menu">
-
-          <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
-          <li class="menu" ><a href={% url 'past_mov_nights' %}>Past Movie Night</a></li>
-          {% if request.user.is_staff %}
-          <li class="menu-has-children"><a href="">Admin Actions</a>
-            <ul>
-              <li><a href={% url 'add_movie_night' %}>Add Movie Night</a></li>
-              <li><a href={% url 'man_mov_nights' %}>Manage Movie Nights</a></li>
-              <li><a href={% url 'ml_health' %}>Mailing List Healths</a></li>
-            </ul>
-
-          {% endif %}
-        {% if user.is_authenticated %}
-        <li class="menu-has-children"><a href="">User Setting</a>
-            <ul>
-              <li><a href={% url 'change_password' %}>Change Password</a></li>
-              <li><a href={% url 'change_profile' %} >Change Profile</a></li>
-            </ul>
-        <li>  <a href={% url 'logout'%} data-toggle="modal" data-target="#logoutmodal" style="font-weight:bold; color:#af353b" class="btn-get-started"  >Logout</a> </li>
-
-
-        {% else %}
-        <li>  <a href="{% url 'login' %}" style="font-weight:bold; color:#af353b" class="btn-get-started">Login</a> </li>
-      {% endif %}
-        </ul>
-      </nav><!-- #nav-menu-container -->
-    </div>
-  </header><!-- #header -->
-{% endblock %}
-
 {% block main %}
 <div class="container-fluid">
   <div class="row">
@@ -81,22 +36,23 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary" id="page-top">{{request.user.first_name}} {{request.user.last_name}}: User Overview</h6>
+          <h6 class="m-0 font-weight-bold text-primary" id="page-top">Manage Users</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body">
           <div class="col-xl-12 col-lg-12"style = "margin-top:-0.5%">
 
 
-            {% for location in locations %}
+          
             
 
-            <p> Authorized users for <b> {{location}}  </b></p>
-            <table id="loc_user_table{{forloop.counter}}" class="display" style="width:100%" >
+            <table id="loc_user_table" class="display" style="width:100%" >
               <thead>
                 <tr>
+                  <th>Location</th>
+                  <th>Username</th>
                   <th>Name</th>
-                  <th>Invitor</th>
+                  <th>Role</th>
                   <th>Invitation Key</th>
                   <th>Join Date</th>
                 </tr>
@@ -104,7 +60,7 @@
             </table>
           
            
-            {% endfor %}
+ 
           </div>
         </div>
       </div>
@@ -122,20 +78,26 @@
 {% block js %}
 <script>
 
-{% for location in locations %}
+
   $(document).ready(function () {
-    var table = $('#loc_user_table{{forloop.counter}}').DataTable({
+    var table = $('#loc_user_table').DataTable({
       "ajax": {
-        "url": "/api/loc_prof_list/{{location.id}}?format=json",
+        "url": "/api/loc_prof_list/?format=json",
         "dataSrc": function (json) {
           return json["results"];
         }
       },
-      "columns": [ {
+      "columns": [{
+          "data": "location"
+        },
+         {
+          "data": "username"
+        },
+        {
           "data": "firstlastname"
         },
         {
-          "data": "is_invitor"
+          "data": "role"
         }, {
           "data": "invitation_key"
         },
@@ -145,19 +107,15 @@
       ],
       "columnDefs": [{
         "targets": -3,
-        "data": "registration_complete",
+        "data": "role",
         "render": function (data, type, row, meta) {
-          if (data) {
-            return "<span class='badge badge-success'>Yes</span>"
-          } else {
-            return "<span class='badge badge-danger'>No</span>"
-          }
+            return "<span class='badge badge-info'>" + data + "</span>"
         }
       }],
 
     });
   });
-  {% endfor %}
+
 </script>
 
 <script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>

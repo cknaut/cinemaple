@@ -26,7 +26,6 @@ class Location(models.Model):
     city = models.CharField(max_length=200)
     state = models.CharField(max_length=200)
     country = models.CharField(max_length=200)
-    loc_id = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def print_address(self):
         return '{}, {} {}, {}'.format(self.street, self.zip_code, self.city, self.state)
@@ -35,18 +34,72 @@ class Location(models.Model):
         return self.name
 
 
+class LocationPermission(models.Model):
+    ROLE_CHOICES = [
+    ('HO', 'Host'),
+    ('AM', 'Ambassador'),
+    ('GU', 'Guest'),
+    ]
+    
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+
+    # ALl users get an activation code, so you'll have to manually check if user can invite using get_invite_code
+    #NEVER DIRECTLY RETRIEVE THIS ALWAYS USE get_invite_code()
+    invitation_code = models.UUIDField(default=uuid.uuid4, editable=False)
+
+    def get_invite_code(self):
+        if self.can_invite:
+            return self.invitation_code
+        else:
+            return ""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    role = models.CharField(
+        max_length=2,
+        choices=ROLE_CHOICES,
+        default='GU',
+    )
+
+    def can_invite(self):
+        # Hosts and Amb. can invite
+        return self.role in ('HO', 'AM')
+
+    def is_host(self):
+        return self.role in ('HO')
+
+
+
+    def __str__(self):              # __unicode__ on Python 2
+        return "{} / {} / {}".format(self.user.username, self.location, self.role) 
+
+
 # We create a one-to-one map from the built-in User model to a Profile model
 # From https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     email_buffer = models.EmailField(default='') # contains unverified email
-    location = models.ManyToManyField(Location) # Links user to locations he or she can access
     birth_date = models.DateField(null=True, blank=True)
-    is_invitor = models.BooleanField(default=False)
-    invitation_key = models.CharField(max_length=40, blank=True)
     activation_key = models.CharField(max_length=40, blank=True)
     key_expires = models.DateTimeField(null=True, blank=True)
+
+    def get_location_permissions(self):
+        return self.user.locationpermission_set.all()
+
+    def get_hosting_location_perms(self):
+        # Return Location Permissions of locations where user can invite
+        loc_permissions = self.user.locationpermission_set.filter(role='HO')
+        return loc_permissions
+
+    def get_managed_users(self):
+        # Get set of all users which are associated to a location for which 
+        hosting_locations_perms = self.get_hosting_location_perms()
+        man_users =  [i.user for i in hosting_locations_perms]
+        return man_users
+
+
+
     def __str__(self):
         return self.user.username
 
@@ -59,6 +112,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+
 
 class PasswordReset(models.Model):
     username = models.CharField(max_length=30, blank=True)
