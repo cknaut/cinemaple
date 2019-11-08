@@ -4,7 +4,7 @@ import datetime
 from django.utils import timezone
 from django.forms.utils import ErrorList
 from django.contrib.auth.models import User
-from .models import Profile, Location,  PasswordReset, MovieNightEvent, VotePreference, Topping
+from .models import Profile, Location,  PasswordReset, MovieNightEvent, VotePreference, Topping, LocationPermission
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
@@ -32,6 +32,9 @@ class RegistrationForm(forms.Form):
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password', 'class': 'form-control input-perso'}))
     i_agree = forms.BooleanField()
 
+    invitation_code = forms.CharField(label="", widget=forms.TextInput(
+        attrs={'placeholder': 'Invitation Code', 'class': 'form-control input-perso'}), max_length=100)
+
     if not settings.DEBUG:
         captcha = ReCaptchaField(label="", widget=ReCaptchaV2Checkbox(
             attrs={'data-theme': 'light', 'data-size': 'normal'}))
@@ -54,18 +57,29 @@ class RegistrationForm(forms.Form):
         raise forms.ValidationError(
             u'A user with email "%s" is already registered.' % email)
 
+    def clean_i_agree(self):
+        i_agree = self.cleaned_data.get('i_agree')
+        if i_agree == False:
+            raise forms.ValidationError("You must read and agree to Cinemaple's Privacy Policy.")
+
+    def clean_invitation_code(self):
+        invitation_code = self.cleaned_data.get('invitation_code')
+        
+        #Look for Location Permission Object
+        try:
+            loc_p = LocationPermission.objects.get(invitation_code=invitation_code)
+            return invitation_code
+        except:
+            raise forms.ValidationError("Invalide Invitation Code")
+
     # Override clean method to check password match
     def clean(self):
         cleaned_data = super().clean()
         password1 = cleaned_data.get('password1')
         password2 = cleaned_data.get('password2')
-        i_agree = cleaned_data.get('i_agree')
-
+    
         if password1 and password1 != password2:
             raise forms.ValidationError("Passwords don't match.")
-
-        if i_agree == False:
-            raise forms.ValidationError("You must read and agree to cinemaple's Privacy Policy.")
 
         return cleaned_data
 
@@ -78,6 +92,9 @@ class RegistrationForm(forms.Form):
                                      last_name=datas['last_name'])
         u.is_active = False
 
+
+        invitation_code = self.cleaned_data.get('invitation_code')
+
         # Saving auto-creates profile
         u.save()
 
@@ -85,6 +102,18 @@ class RegistrationForm(forms.Form):
         u.profile.key_expires = datetime.datetime.strftime(
             datetime.datetime.now() + datetime.timedelta(days=2), "%Y-%m-%d %H:%M:%S")
         u.profile.save()
+
+
+        location = LocationPermission.objects.get(invitation_code=datas["invitation_code"]).location()
+
+        lp = LocationPermission.objects.create(
+            location = location,
+            user = u
+        )
+
+        lp.save()
+
+
         return u
 
     # Sending activation email
