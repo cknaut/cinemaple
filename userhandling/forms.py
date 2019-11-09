@@ -68,9 +68,13 @@ class RegistrationForm(forms.Form):
         #Look for Location Permission Object
         try:
             loc_p = LocationPermission.objects.get(invitation_code=invitation_code)
-            return invitation_code
+            if loc_p.can_invite():
+                return invitation_code
+            else:
+                raise forms.ValidationError("Invalid Invitation Code")
+
         except:
-            raise forms.ValidationError("Invalide Invitation Code")
+            raise forms.ValidationError("Invalid Invitation Code")
 
     # Override clean method to check password match
     def clean(self):
@@ -92,9 +96,6 @@ class RegistrationForm(forms.Form):
                                      last_name=datas['last_name'])
         u.is_active = False
 
-
-        invitation_code = self.cleaned_data.get('invitation_code')
-
         # Saving auto-creates profile
         u.save()
 
@@ -104,15 +105,28 @@ class RegistrationForm(forms.Form):
         u.profile.save()
 
 
-        location = LocationPermission.objects.get(invitation_code=datas["invitation_code"]).location()
+        location = LocationPermission.objects.get(invitation_code=datas["invitation_code"]).location
+        invitor = LocationPermission.objects.get(invitation_code=datas["invitation_code"]).user
 
         lp = LocationPermission.objects.create(
             location = location,
-            user = u
+            user = u, 
+            invitor = invitor,
         )
 
         lp.save()
 
+        #Notify Invitor about signup
+        sender_email = "info@cinemaple.com"
+        sender_name = "Cinemaple"
+        subject = "Cinemaple User Signup with Your Link"
+        recipients = [invitor.email]
+        content = "Hi " + invitor.first_name + \
+            ", {} {} has signed up on Cinemaple.com using your invitation link. If you know this person, no action is requried. If not, please let us know by responding to this email.".format(u.first_name, u.last_name)
+
+        email = EmailMessage(subject, content, sender_name +
+                             " <" + sender_email + ">", recipients)
+        email.send()
 
         return u
 
@@ -121,7 +135,7 @@ class RegistrationForm(forms.Form):
 
         link = "http://www.cinemaple.com/activate/"+datas['activation_key']
 
-        sender_email = "admin@cinemaple.com"
+        sender_email = "info@cinemaple.com"
         sender_name = "Cinemaple"
         subject = "Please Verify Email"
         recipients = [datas['email']]
@@ -190,7 +204,7 @@ class PasswordResetRequestForm(forms.Form):
 
             link = "http://www.cinemaple.com/reset/"+reset_key
 
-            sender_email = "admin@cinemaple.com"
+            sender_email = "info@cinemaple.com"
             sender_name = "Cinemaple"
             subject = "Password Reset Link"
             recipients = [email]
@@ -354,7 +368,7 @@ class ProfileUpdateForm(ModelForm):
 
         link = "http://www.cinemaple.com/activate/update_email/"+datas['activation_key']
 
-        sender_email = "admin@cinemaple.com"
+        sender_email = "info@cinemaple.com"
         sender_name = "Cinemaple"
         subject = "Please Verify Email"
         recipients = [datas['email']]

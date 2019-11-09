@@ -53,7 +53,9 @@ class LocationPermission(models.Model):
         else:
             return ""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
+    invitor = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='%(class)s_invitor')
+
 
     role = models.CharField(
         max_length=2,

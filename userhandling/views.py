@@ -171,6 +171,7 @@ def registration(request):
             datas['password1'] = registration_form.cleaned_data['password1']
             datas['first_name'] = registration_form.cleaned_data['first_name']
             datas['last_name'] = registration_form.cleaned_data['last_name']
+            datas['invitation_code'] = registration_form.cleaned_data['invitation_code']
 
             # TODO: Check if user alredy exists
 
