@@ -561,10 +561,10 @@ function prep_movalerts(){
 $(document).ready(function() {
   prep_movalerts();
 
-  $(".movieclosebutton").unbind('click').click(function() {
-        var id = $(this).attr('value');
-        movie_counter = movie_counter - 1
-        remove_and_reorder_movies(id)
+  $(".movieclosebutton").unbind('click').click(function() {        
+        {% comment %} var id = $(this).attr('value'); {% endcomment %}
+        {% comment %} movie_counter = movie_counter - 1 {% endcomment %}
+        {% comment %} remove_and_reorder_movies(id) {% endcomment %}
     });
 
 });
