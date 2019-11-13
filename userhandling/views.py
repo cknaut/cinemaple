@@ -968,7 +968,8 @@ def rate_movie_night(request, movienight, user_attendence):
         'formset': formset,
         'movielist_formset': movielist_formset,
         'looper': looper,
-        'num_movs': len(movielist)
+        'num_movs': len(movielist),
+        'navbar':'curr_mov_night'
     }
     return render(request, 'userhandling/movienight_vote.html', context)
 
