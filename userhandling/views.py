@@ -154,6 +154,44 @@ def new_activation_link(request, user_id):
 
     return redirect('index')
 
+def new_activation_link_mc(request, user_id):
+    form = RegistrationForm()
+    datas = {}
+    user = User.objects.get(id=user_id)
+    if user is not None and not user.is_active:
+
+        # We generate a random activation key
+        vh = VerificationHash()
+        datas['activation_key'] = vh.gen_ver_hash(datas['username'])
+
+        # Update profile with new activation key and expiry data.
+        profile = Profile.objects.get(user=user)
+        profile.activation_key = datas['activation_key']
+        profile.key_expires = datetime.datetime.strftime(
+            datetime.datetime.now() + datetime.timedelta(days=2), "%Y-%m-%d %H:%M:%S")
+        profile.save()
+
+        link = "http://cinemaple.com/activate/"+profile.activation_key
+
+        html_data_activation = gen_activation_email(request, link, type_email='activate')
+
+        time_now = timezone.now()
+
+        # First Generate 1 Campaign email
+        mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+
+        reply_to = 'info@cinemaple.com'
+        preview_text = 'We have sent your activation code!'
+        from_name = 'Cinemaple'
+
+        title = 'Cinemaple activation code'
+
+        subject_line = 'Your Cinemaple activation code is waiting for you.'
+
+        res = mc.create_campaign(time_now, reply_to, subject_line, preview_text, title, from_name, html_data_invitation)
+
+    return redirect(index)
+
 
 def registration(request):
     registration_form = RegistrationForm()
@@ -711,6 +749,17 @@ def gen_mn_email(request, movienight, type_email):
 
     return html_email
 
+def gen_activation_email(request, link, type_email):
+    context_email = {
+        'user'          : request.user,
+        'type'          : type_email,
+        'link'          : link,
+    }
+
+    html_email = render_to_string("userhandling/emails/cinemaple_email_activate.html", context_email)
+
+    return html_email    
+
 def preview_email_invitation(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
     email_html =  gen_mn_email(request, movienight, type_email='invitation'),
@@ -745,11 +794,11 @@ def schedule_email(request, movienight_id):
     preview_text = 'We have a treat for you!'
     from_name = request.user.first_name
 
-    title1 = 'INVITATION Movienight: {}'.format(movienight.motto)
-    title2 = 'REMINDER Movienight: {}'.format(movienight.motto)
+    title1 = 'INVITATION Movie Night: {}'.format(movienight.motto)
+    title2 = 'REMINDER Movie Night: {}'.format(movienight.motto)
 
-    subject_line1 = 'Invitation for movienight: {}'.format(movienight.motto)
-    subject_line2 = 'Reminder for movienight: {}'.format(movienight.motto)
+    subject_line1 = 'Invitation for Movie Night: {}'.format(movienight.motto)
+    subject_line2 = 'Reminder for Movie Night: {}'.format(movienight.motto)
 
     res1 = mc.create_campaign(time_activation, reply_to, subject_line1, preview_text, title1, from_name, html_data_invitation)
     res2 = mc.create_campaign(time_reminder, reply_to, subject_line2, preview_text, title2, from_name, html_data_reminder)
@@ -759,9 +808,11 @@ def schedule_email(request, movienight_id):
         movienight.isdraft = False
         movienight.save()
     else:
-        return HttpResponse("Mailchimp campaign creation unsuccessfull")
+        return HttpResponse("Mailchimp campaign creation unsuccessful.")
 
     return redirect(curr_mov_nights)
+
+
 
 
 
