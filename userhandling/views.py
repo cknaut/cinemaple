@@ -15,7 +15,7 @@ import random
 from .utils import Mailchimp, VerificationHash, badgify, check_ml_health
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
     PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, ProfileUpdateForm
-from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence, Location
+from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence, Location, LocationPermission
 import tmdbsimple as tmdb
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -850,16 +850,9 @@ class ProfileList(generics.ListAPIView):
 
 
     def get_queryset(self):
+        # Only show all users that are associated to locations where user is host
+        return self.request.user.profile.get_managed_loc_perms()
 
-        user = self.request.user
-
-        managed_users = user.profile.get_managed_users()
-
-        #get all location permissions of managed users
-        managed_loc_permissions = [i.profile.get_location_permissions() for i in managed_users]
-        qs =  [item for sublist in managed_loc_permissions for item in sublist]  #Flatten list
-
-        return qs
 
 
 class MovieNightEventViewSet(viewsets.ModelViewSet):

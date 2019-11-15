@@ -87,19 +87,26 @@ class Profile(models.Model):
     key_expires = models.DateTimeField(null=True, blank=True)
 
     def get_location_permissions(self):
-        return self.user.locationpermission_set.all()
+        return self.user.locperms.all()
 
     def get_hosting_location_perms(self):
         # Return Location Permissions of locations where user can invite
-        loc_permissions = self.user.locationpermission_set.filter(role='HO')
+        loc_permissions = self.user.locperms.filter(role='HO')
         return loc_permissions
 
+    def get_hosted_locations(self):
+        # Returns list of locations for which user has Host status
+        return [i.location for i in self.get_hosting_location_perms()]
+
+    def get_managed_loc_perms(self):
+        # get location permissions for locations for which user is host
+        return LocationPermission.objects.filter(location__in=self.get_hosted_locations())
+
+    
     def get_managed_users(self):
         # Get set of all users which are associated to a location for which 
-        hosting_locations_perms = self.get_hosting_location_perms()
-        man_users =  [i.user for i in hosting_locations_perms]
+        man_users =  [i.user for i in self.get_managed_loc_perms()]
         return man_users
-
 
     def is_host(self):
         # True if host for at least one locations, will be used to unlock all hidden urls
