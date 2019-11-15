@@ -1175,6 +1175,7 @@ def change_profile(request):
     else:
         form =  ProfileUpdateForm(instance=request.user)
 
+
     context = {
         'form': form,
         'email_changed': False,

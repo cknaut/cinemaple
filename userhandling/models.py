@@ -53,8 +53,8 @@ class LocationPermission(models.Model):
         else:
             return ""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
-    invitor = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='%(class)s_invitor')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='locperms')
+    inviter = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='invitor')
 
 
     role = models.CharField(
@@ -99,6 +99,14 @@ class Profile(models.Model):
         hosting_locations_perms = self.get_hosting_location_perms()
         man_users =  [i.user for i in hosting_locations_perms]
         return man_users
+
+
+    def is_host(self):
+        # True if host for at least one locations, will be used to unlock all hidden urls
+        if len(self.get_hosting_location_perms()) > 0:
+            return True
+        else:
+            return False
 
 
 
