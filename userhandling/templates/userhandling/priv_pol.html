@@ -1,4 +1,65 @@
 
+              
+              {% extends 'base.html' %}
+              {% load static %}
+              
+        
+              
+              
+            
+              {% block header %}
+              <!--==========================
+              Header
+              ============================-->
+              <header id="header-login">
+                <div class="container">
+                  </div>
+              </header><!-- #header -->
+              
+              <header id="header">
+                <div class="container">
+              
+                  <div id="logo" class="pull-left">
+                    <!-- Uncomment below if you prefer to use a text logo -->
+                    <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
+                    <a href={% url 'index'%}><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
+                  </div>
+              
+                  <nav id="nav-menu-container">
+                    <ul class="nav-menu">
+                               
+              
+                      
+              
+                    
+                    </ul>
+                  </nav><!-- #nav-menu-container -->
+                </div>
+              </header><!-- #header -->
+              {% endblock %}
+              
+              
+              {% block main %}
+
+              <div class="container-fluid">
+
+                <!-- Content Row -->
+                <div class="row4">
+            
+                    <!-- Earnings (Monthly) Card Example -->
+                    <!-- Area Chart -->
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            
+                            <!-- Card Body -->
+                            <div class="card-body">
+            
+                                <div class="row4 justify-content-md-center" >
+                                    <div class="col-xl-7 col-lg-7">
+            
+                            
+        
 
               <h1>Privacy Policy</h1>
 
@@ -8,8 +69,12 @@
               
               <p>In order to better provide you with products and services offered on our Site, Cinemaple may collect personally identifiable information, such as your:</p>
               
-              <p> -   First and Last Name </p>
-              <p> -   E-mail Address </p>
+ 
+              <ul>
+                <li>First and Last Name</li>
+                <li>E-mail Address</li>
+                <li>Username</li>
+              </ul>
               
               <p>We do not collect any personal information about you unless you voluntarily provide it to us. However, you may be required to provide certain personal information to us when you elect to use certain products or services available on the Site. These may include: (a) registering for an account on our Site; (b) entering a sweepstakes or contest sponsored by us or one of our partners; (c) signing up for special offers from selected third parties; (d) sending us an email message; (e) submitting your credit card or other payment information when ordering and purchasing products and services on our Site. To wit, we will use your information for, but not limited to, communicating with you in relation to services and/or products you have requested from us. We also may gather additional personal or non-personal information in the future.</p>
               
@@ -51,7 +116,11 @@
               
               <p>Cinemaple secures your personal information from unauthorized access, use, or disclosure. Cinemaple uses the following methods for this purpose:</p>
               
-              <p> -   SSL Protocol </p>
+          
+              <ul>
+                <li>SSL Protocol</li>
+              </ul>
+              
           
               <p>When personal information (such as a credit card number) is transmitted to other websites, it is protected through the use of encryption, such as the Secure Sockets Layer (SSL) protocol.</p>
               
@@ -92,4 +161,56 @@
               <hr />
               
               <p>Effective as of November 03, 2019</p>
+            
+            
+            
+                                    </div>
+            
+                                </div>
+            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            
+              {% endblock %}
+              
+              
+              
+              
+              {% block js %}
+              
+              {% endblock %}
+              
+              
+              
+              {% block footer %}
+              <footer id="footer">
+                  <div class="footer-top">
+                    <div class="container">
+              
+                    </div>
+                  </div>
+              
+                  <div class="container">
+                    <div class="copyright">
+                    </div>
+                    <div class="credits">
+              
+              
+              
+                      <div class="social-links">
+                          <p style = "color:#ffffff"><b>Cinemaple</b> is fully open source (Apache License 2.0.) and available on GitHub: <a href="https://github.com/cknaut/cinemaple" class="github"><img src="{% static 'userhandling/img/giticon.png' %}" alt="" title="" height="30" style = "margin-left:0%"/></a></p>
+                          
+                      </div>
+              
+                      <a href="{% url 'priv_pol' %}" target="_blank" >Privacy Policy</a>
+              
+                    </div>
+                  </div>
+                </footer><!-- #footer -->
+              {% endblock %}
               
