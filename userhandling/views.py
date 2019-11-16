@@ -14,7 +14,7 @@ import hashlib
 import random
 from .utils import Mailchimp, VerificationHash, badgify, check_ml_health
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
-    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, ProfileUpdateForm
+    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, PermissionsChangeForm, ProfileUpdateForm
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence, Location, LocationPermission
 import tmdbsimple as tmdb
 from django.http import JsonResponse
@@ -25,7 +25,7 @@ from django.core import serializers
 from rest_framework import viewsets
 from .serializers import MovieNightEventSerializer, UserAttendenceSerializer, ProfileSerializer, LocationPermissionSerializer
 from django.contrib.auth.decorators import user_passes_test
-from django.forms import formset_factory
+from django.forms import formset_factory, modelformset_factory
 from rest_framework.permissions import IsAdminUser
 import numpy as np
 from rest_framework import generics
@@ -1258,3 +1258,31 @@ def faq(request):
 def priv_pol(request):
     return render(request, 'userhandling/priv_pol.html')
 
+@login_required
+def manage_user(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+
+
+    #Verify permission
+    if not user in request.user.profile.get_managed_users():
+        return HttpResponse("You have insufficient permissions to modify this users's status")
+
+
+    # get all user perms of user
+    location_permissions = user.profile.get_loc_perms_of_host(request.user)
+
+    prefFormList =  formset_factory(PermissionsChangeForm, extra=0)
+
+    formset = prefFormList(initial=[
+            {'location':   locperm.location.name,
+             'role':   locperm.role,
+             'id'   : locperm.id
+            } for locperm in location_permissions
+        ])
+
+    context = {        
+        'navbar'              : "admin",
+        'user'                : user,
+        'formset'              : formset,
+    }
+    return render(request, 'userhandling/man_user.html', context)

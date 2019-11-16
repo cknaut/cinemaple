@@ -52,6 +52,8 @@ urlpatterns = [
     path('loc_users/', views.show_loc_users, name='loc_users'),
     path('faq', views.faq,  name='faq'),
     path('priv_pol', views.priv_pol,  name='priv_pol'),
+    path('man_user/<str:user_id>', views.manage_user,  name='manage_user'),
+
 
 
 

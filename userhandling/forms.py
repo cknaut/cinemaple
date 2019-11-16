@@ -290,7 +290,7 @@ class ToppingForm(forms.Form):
         self.fields['toppings'] = forms.MultipleChoiceField(
             choices=[(o.id, str(o.topping)) for o in available_topings],
             widget=(forms.CheckboxSelectMultiple(
-                attrs={"class": "listnobullets"})),
+                attrs={"style": "list-style: none;"})),
             label='Select topping to bring:'
         )
 
@@ -389,3 +389,19 @@ class ProfileUpdateForm(ModelForm):
             'email': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'})
         }
 
+ROLE_CHOICES = [
+('HO', 'Host'),
+('AM', 'Ambassador'),
+('GU', 'Guest'),
+('RW', 'Revoked Access'),
+]
+class PermissionsChangeForm(ModelForm):
+    class Meta:
+        model = LocationPermission
+        fields = ['location', 'role', 'inviter', 'id']
+        widgets = {
+            'location': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso', 'readonly':'readonly'}),
+            'role':  forms.Select(choices = ROLE_CHOICES, attrs={'placeholder': '', 'class': 'form-control input-perso'}),
+            'inviter': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso', 'readonly':'readonly'}),
+            'id': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'})
+        }

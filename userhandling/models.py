@@ -39,6 +39,7 @@ class LocationPermission(models.Model):
     ('HO', 'Host'),
     ('AM', 'Ambassador'),
     ('GU', 'Guest'),
+    ('RW', 'Revoked Access'),
     ]
     
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
@@ -46,6 +47,7 @@ class LocationPermission(models.Model):
     # ALl users get an activation code, so you'll have to manually check if user can invite using get_invite_code
     #NEVER DIRECTLY RETRIEVE THIS ALWAYS USE get_invite_code()
     invitation_code = models.UUIDField(default=uuid.uuid4, editable=False)
+    
 
     def get_invite_code(self):
         if self.can_invite:
@@ -70,8 +72,6 @@ class LocationPermission(models.Model):
     def is_host(self):
         return self.role in ('HO')
 
-
-
     def __str__(self):              # __unicode__ on Python 2
         return "{} / {} / {}".format(self.user.username, self.location, self.role) 
 
@@ -86,8 +86,21 @@ class Profile(models.Model):
     activation_key = models.CharField(max_length=40, blank=True)
     key_expires = models.DateTimeField(null=True, blank=True)
 
+
+    
+
     def get_location_permissions(self):
         return self.user.locperms.all()
+
+
+    def get_loc_perms_of_host(self, hostuser):
+        # given a host, return all user permissions of user for which host is host
+        assert hostuser.profile.is_host(), "User must be host"
+
+        host_locs = hostuser.profile.get_hosted_locations()
+        self_locperms = self.get_location_permissions()
+
+        return self_locperms.filter(location__in=host_locs)
 
     def get_hosting_location_perms(self):
         # Return Location Permissions of locations where user can invite
@@ -104,7 +117,7 @@ class Profile(models.Model):
 
     
     def get_managed_users(self):
-        # Get set of all users which are associated to a location for which 
+        # Get set of all users which are associated to a location for which user is host
         man_users =  [i.user for i in self.get_managed_loc_perms()]
         return man_users
 

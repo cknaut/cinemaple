@@ -1,0 +1,122 @@
+{% extends 'logged_in_base.html' %}
+{% load static %}
+{% load shuffle %}
+
+
+{% block css_imports %}
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
+<script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
+<link href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.js"></script>
+<link rel="stylesheet" type="text/css"
+  href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+<link href="{% static 'userhandling/lib/animate/animate.css' %}" rel="stylesheet">
+<link href="{% static 'userhandling/lib/mdb/css/mdb.lite.css' %}" rel="stylesheet">
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"
+  type="text/css" media="all" rel="stylesheet">
+<link href="/static/bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js">
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js">
+</script>
+<script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script>
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=pqiihwpzf32ctpl7kn59g5ivcztnma4qormn1elar66gqrw4">
+</script>
+
+<style>
+    @font-face {
+        font-family: "raty";
+        font-style: normal;
+        font-weight: normal;
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot' %}");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot?#iefix' %}") format("embedded-opentype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.svg#raty' %}") format("svg");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.ttf' %}") format("truetype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
+    }
+</style>
+
+
+{% endblock%}
+
+{% block main %}
+<div class="container-fluid">
+
+    <!-- Content Row -->
+    <div class="row4">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Manage User</h6>
+                </div>
+                <!-- Card Body -->
+
+
+                
+                <div class="card-body">
+                        <h3>User Info</h3>
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-3">
+                                <b> User:  </b>
+                            </div>  
+
+                            <div class="col-xl-6 col-lg-6">
+                                    <span class="badge badge-primary"> {{user.username }} </span>
+                        </div>  
+                </div>
+
+                <div class="row">
+                        <div class="col-xl-3 col-lg-3">
+                                <b>Name:</b>
+                            </div>  
+
+                            <div class="col-xl-6 col-lg-6">
+                                    <span class="badge badge-primary"> {{user.first_name  }} {{user.last_name  }} </span>
+                        </div>  
+                </div>
+
+                <hr>
+                <h3>Update Permissions</h3>
+                <form method="post">
+                        {{ formset.management_form }}
+                        <table>
+                            {% for form in formset %}
+                            {{ form }}
+                        
+                            {% endfor %}
+                        </table>
+                    </form>
+              
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}
+
+
+{% block modals %}
+
+
+
+{% endblock %}
+
+
+{% block js %}
+
+
+{% endblock %}
