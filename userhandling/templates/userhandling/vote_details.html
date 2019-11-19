@@ -1,16 +1,22 @@
 {% extends 'logged_in_base.html' %}
 {% load static %}
-
-{# Load the tag library #}
-{% load bootstrap3 %}
+{% load shuffle %}
 
 
 {% block css_imports %}
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
+<script type="text/javascript" src="{% static 'userhandling/lib/starrating/jquery.raty.js' %}" <></script>
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/starrating/jquery.raty.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'userhandling/css/youtubemodal.css' %}">
 <link href="{% static 'userhandling/css/val_succ_modal.css' %}" rel="stylesheet">
 <script type="text/javascript"
   src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.js"></script>
+<link rel="stylesheet" type="text/css"
+  href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+<link href="{% static 'userhandling/lib/animate/animate.css' %}" rel="stylesheet">
+<link href="{% static 'userhandling/lib/mdb/css/mdb.lite.css' %}" rel="stylesheet">
 
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"
@@ -18,52 +24,59 @@
 <link href="/static/bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js">
 </script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js">
+</script>
+<script type="text/javascript" src="/static/bootstrap_datepicker_plus/js/datepicker-widget.js"></script>
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=pqiihwpzf32ctpl7kn59g5ivcztnma4qormn1elar66gqrw4">
+</script>
+
+<style>
+    @font-face {
+        font-family: "raty";
+        font-style: normal;
+        font-weight: normal;
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot' %}");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.eot?#iefix' %}") format("embedded-opentype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.svg#raty' %}") format("svg");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.ttf' %}") format("truetype");
+        src: url("{% static 'userhandling/lib/starrating/fonts/raty.woff' %}") format("woff");
+    }
+</style>
 
 
-
-
-{% endblock %}
+{% endblock%}
 
 {% block main %}
 <div class="container-fluid">
-  <div class="row4">
 
-    <!-- Area Chart -->
-    <div class="col-xl-12 col-lg-12" data-spy="affix" data-offset-top="197">
-      <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary" id="page-top">Voting Details</h6>
-        </div>
-        <!-- Card Body -->
-        <div class="card-body">
-          <div class="col-xl-12 col-lg-12">
+    <!-- Content Row -->
+    <div class="row4">
 
-            <h3> Winner: <span class='badge badge-primary'> {{winning_movie.title}} </span> </h3>
+        <!-- Earnings (Monthly) Card Example -->
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Voting Result Details</h6>
+                </div>
+                <!-- Card Body -->
 
 
-            <h3> Strong Pairs: </h3>
+                
+                <div class="card-body">
+              
 
-            <table class='myTable'>
-              <thead>
-                <tr>
-                  <th>
-                    Movie A wins over Movie B
-                  </th>
-                  <th>
-                    # times
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for key, value in strong_pairs_dict_movies %}
-                <tr>
-                  <td> {{ key }}: </td>
-                  <td> {{ value }} </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+                
+ 
+                  <h3> Winner: <span class='badge badge-primary'> {{winning_movie.title}} </span> </h3>
+
+                  <p>This Winner has been obtained using the  <a href="https://en.wikipedia.org/wiki/Schulze_method">Schulze method</a>. This voting mechanism ensures that the winning movie would win every one-to-one vote against each other movie. This method uses preference rankings to determin the winner, which makes the interpretation of the voting results less straightforward comapred to simple majority voting.
+                    On this page, you can find intermediate results of the voting mechanism, namely  <b> Pairs</b> and <b> Strong Pairs</b> of votes:</p>
+                    <p><b> Pairs</b> show the number of time voters prefer a movie A to movie B.</p>
+                    <p><b> Strong Pairs</b> show the strength of the strongest path between two movies, as defined <a href="https://en.wikipedia.org/wiki/Schulze_method">here</a> </p>
+            
 
             <h3> Pairs: </h3>
 
@@ -88,21 +101,43 @@
               </tbody>
             </table>
 
+            <h3> Strong Pairs: </h3>
 
-          </div>
+            <table class='myTable'>
+              <thead>
+                <tr>
+                  <th>
+                    Movie Pair
+                  </th>
+                  <th>
+                   Strength of strongest path
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for key, value in strong_pairs_dict_movies %}
+                <tr>
+                  <td> {{ key }}: </td>
+                  <td> {{ value }} </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+              
+
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!-- /.container-fluid -->
 {% endblock %}
 
 
-{% block modals %}
+{% block moremodals %}
 
 {% endblock %}
-
 
 
 {% block js %}

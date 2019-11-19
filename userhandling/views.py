@@ -1058,7 +1058,7 @@ def ureg_movie_night(request, movienight_id):
 def count_votes(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
-    winning_movie, vote_result = movienight.get_winning_movie()
+    winning_movie, vote_result, _ = movienight.get_winning_movie()
 
     pairs = vote_result["pairs"]
 

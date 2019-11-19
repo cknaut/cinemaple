@@ -205,6 +205,11 @@ aria-hidden="true">
                                                   <a class="dropdown-item" id="#"
                                                 href="{% url 'attendence_list' movienight_id=movienight.id %}">Attendence List</a>
 
+                                                {% if request.user.is_staff or not movienight.voting_enabled %}
+                                                <a class="dropdown-item" id="#"
+                                                href="{% url  'count_votes' movienight_id=movienight.id %}">Voting Details</a>
+                                                {% endif %}
+
                                         </div>
 
 
@@ -342,7 +347,6 @@ aria-hidden="true">
                                                     {{ movie.title }} ({{movie.year}})
                                                     {% if request.user.is_staff or not movienight.voting_enabled %}
                                                         {% if movie ==  winning_movie %}
-                                                            <a href={% url  'count_votes' movienight_id=movienight.id %}>
                                                             <span class='badge badge-success'>Winner</span> </a>
                                                         {% endif %}
                                                      {% endif %}
