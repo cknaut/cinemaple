@@ -30,6 +30,7 @@ from rest_framework.permissions import IsAdminUser
 import numpy as np
 from rest_framework import generics
 from django.template.loader import render_to_string
+import uuid
 
 
 
@@ -1271,18 +1272,88 @@ def manage_user(request, user_id):
     # get all user perms of user
     location_permissions = user.profile.get_loc_perms_of_host(request.user)
 
-    prefFormList =  formset_factory(PermissionsChangeForm, extra=0)
+    context = {        
+        'navbar'              : "admin",
+        'user'                : user,
+        'inv_code_changed'                : False,
+        'location_permissions'              : location_permissions,
+    }
+    return render(request, 'userhandling/man_user.html', context)
 
-    formset = prefFormList(initial=[
-            {'location':   locperm.location.name,
-             'role':   locperm.role,
-             'id'   : locperm.id
-            } for locperm in location_permissions
-        ])
+def gen_new_invitation_key(request, user_id, locperm_id):
+
+    user = get_object_or_404(User, pk=user_id)
+    locperm = get_object_or_404(LocationPermission, pk=locperm_id)
+    
+    # get all user perms of user
+    location_permissions = user.profile.get_loc_perms_of_host(request.user)
+
+
+    #Verify permission
+    if not user in request.user.profile.get_managed_users():
+        return HttpResponse("You have insufficient permissions to modify this users's status")
+
+    # Generate new invtitation code
+
+    new_invitation_code = uuid.uuid4()
+    locperm.invitation_code = new_invitation_code
+    locperm.save()
 
     context = {        
         'navbar'              : "admin",
         'user'                : user,
-        'formset'              : formset,
+        'change_loc'                        : locperm.location,
+        "change_inv_key"                    : new_invitation_code,
+        'inv_code_changed'                : True,
+        'location_permissions'              : location_permissions,
     }
     return render(request, 'userhandling/man_user.html', context)
+
+
+
+
+def change_role(request, user_id, locperm_id):
+    user = get_object_or_404(User, pk=user_id)
+    locperm = get_object_or_404(LocationPermission, pk=locperm_id)
+
+
+    #Verify permission
+    if not user in request.user.profile.get_managed_users():
+        return HttpResponse("You have insufficient permissions to modify this users's status")
+
+
+    if request.method == 'POST':
+        form = PermissionsChangeForm(request.POST, instance=locperm)
+        if form.is_valid():
+            new_role = form.cleaned_data['role']
+            form.save() #this updates the user settings
+            location_permissions = user.profile.get_loc_perms_of_host(request.user)
+
+            context = {        
+                'navbar'              : "admin",
+                'user'                : user,
+                'change_loc'                        : locperm.location,
+                'change_perm'                        : locperm.get_role_display,
+                'inv_code_changed'                : False,
+                'permission_changed'                : True,
+                'location_permissions'              : location_permissions,
+            }
+            return render(request, 'userhandling/man_user.html', context)
+                    
+    else:
+        form =  PermissionsChangeForm(instance=locperm)
+
+
+    context = {        
+        'navbar'              : "admin",
+        'user'                : user,
+        'locperm'             : locperm,
+        'form'                : form
+    }
+
+    return render(request, 'userhandling/change_perms.html', context)
+
+
+
+    
+

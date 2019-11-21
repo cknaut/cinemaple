@@ -398,10 +398,7 @@ ROLE_CHOICES = [
 class PermissionsChangeForm(ModelForm):
     class Meta:
         model = LocationPermission
-        fields = ['location', 'role', 'inviter', 'id']
+        fields = ['role']
         widgets = {
-            'location': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso', 'readonly':'readonly'}),
             'role':  forms.Select(choices = ROLE_CHOICES, attrs={'placeholder': '', 'class': 'form-control input-perso'}),
-            'inviter': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso', 'readonly':'readonly'}),
-            'id': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'})
         }

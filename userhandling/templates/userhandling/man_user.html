@@ -66,7 +66,12 @@
 
                 
                 <div class="card-body">
+
+                        <div class="row4 justify-content-md-center" >
+                                <div class="col-xl-7 col-lg-7">
                         <h3>User Info</h3>
+
+                      
                     <div class="row">
                         <div class="col-xl-3 col-lg-3">
                                 <b> User:  </b>
@@ -88,18 +93,78 @@
                 </div>
 
                 <hr>
-                <h3>Update Permissions</h3>
-                <form method="post">
-                        {{ formset.management_form }}
-                        <table>
-                            {% for form in formset %}
-                            {{ form }}
-                        
-                            {% endfor %}
-                        </table>
-                    </form>
-              
+                <h3>Update Location Permissions</h3>
 
+                {%for loc_perm in location_permissions %}
+                            
+                <div class="accordion" id="accordionlocations">
+                    <div class="card">
+                      <div class="card-header" id="heading{{ forloop.counter }}">
+                        <h2 class="mb-0">
+                          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseOne">
+                            {{loc_perm.location }}
+                          </button>
+                        </h2>
+                      </div>
+                  
+                      <div id="collapse{{ forloop.counter }}" class="collapse show" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionlocations">
+                        <div class="card-body">
+                                <div class="row4">
+                                        <div class="col-xl-3 col-lg-3">
+                                                <b> Location:  </b>
+                                            </div>  
+
+                                            <div class="col-xl-6 col-lg-6">
+                                                    <span class="badge badge-primary"> {{loc_perm.location }} </span>
+                                        </div>  
+                                </div>
+
+                                <div class="row4">
+                                        <div class="col-xl-3 col-lg-3">
+                                                <b>Role:</b>
+                                            </div>  
+
+                                            <div class="col-xl-6 col-lg-6">
+                                                    <span class="badge badge-primary"> {{loc_perm.get_role_display  }} </span> <a class="btn btn-secondary btn-sm" href="{% url 'change_role' user_id=user.id locperm_id=loc_perm.id %}" role="button">Change Role</a>
+                                        </div>  
+                                </div>
+
+                                <div class="row4">
+                                        <div class="col-xl-3 col-lg-3">
+                                                <b>Inviter:  </b>
+                                            </div>  
+
+                                            <div class="col-xl-6 col-lg-6">
+                                                    <span class="badge badge-primary">{{loc_perm.inviter.first_name }} {{loc_perm.inviter.last_name}} </span>
+                                        </div>  
+                                </div>
+
+                                <div class="row4">
+                                    <div class="col-xl-3 col-lg-3">
+                                            <b>Invitation Code:  </b>
+                                        </div>  
+
+                                        <div class="col-xl-6 col-lg-6">
+                                                    <span class="badge badge-secondary">      {{loc_perm.invitation_code }} </span>   <a class="btn btn-secondary btn-sm" href="{% url 'gen_new_invitation_key' user_id=user.id locperm_id=loc_perm.id %}" role="button">Generate New Code</a>
+                                    </div>  
+                            </div>
+
+
+
+                                
+                           
+                            </div>
+
+                      </div>
+                    </div>
+                  </div>
+                
+
+
+                {% endfor %}
+               
+            </div>
+        </div>
                 </div>
             </div>
         </div>
@@ -109,7 +174,47 @@
 {% endblock %}
 
 
-{% block modals %}
+{% block moremodals %}
+
+<div class="modal fade" id="inv_code_changed" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Invitation Code Generated</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body"> The new invitation code for user  <span class="badge badge-primary"> {{user.username }} </span> and location  <span class="badge badge-primary"> {{change_loc}}  </span> is <span class="badge badge-secondary">  {{change_inv_key}} </span>. Please note that the old invitation key is no longer valid.
+            </div>
+            <div class="modal-footer">
+            
+                    <a class="btn btn-primary"   id="inchangechangemodalclose" href="{% url 'manage_user' user_id=user.id %}" role="button">Cool</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="perm_changed_code_changed"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Role Changed</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">You have successfully changed the role of <span class="badge badge-primary"> {{user.username }} </span> for location  <span class="badge badge-primary"> {{change_loc}}  </span> to  <span class="badge badge-primary"> {{change_perm}}</span>.            </div>
+            <div class="modal-footer">
+    
+                    <a id="permchangemodalclose" class="btn btn-primary" href="{% url 'manage_user' user_id=user.id %}" role="button">Cool</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -117,6 +222,31 @@
 
 
 {% block js %}
+
+<script>
+
+
+        {% if inv_code_changed %}
+        $('#inv_code_changed').modal('show');
+
+       
+$('#inv_code_changed').on('hidden.bs.modal', function () {
+            document.getElementById('inchangechangemodalclose').click();})
+        
+         {% endif %}
+         
+
+
+{% if permission_changed %}
+$('#perm_changed_code_changed').modal('show');
+
+$('#perm_changed_code_changed').on('hidden.bs.modal', function () {
+            document.getElementById('permchangemodalclose').click();})
+ {% endif %}
+
+</script>
+
+
 
 
 {% endblock %}

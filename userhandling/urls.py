@@ -53,6 +53,12 @@ urlpatterns = [
     path('faq', views.faq,  name='faq'),
     path('priv_pol', views.priv_pol,  name='priv_pol'),
     path('man_user/<str:user_id>', views.manage_user,  name='manage_user'),
+    path('gen_new_invitation_key/<str:user_id>/<str:locperm_id>', views.gen_new_invitation_key,  name='gen_new_invitation_key'),
+    path('change_role/<str:user_id>/<str:locperm_id>', views.change_role,  name='change_role'),
+
+
+
+
 
 
 

@@ -46,7 +46,7 @@ class LocationPermission(models.Model):
 
     # ALl users get an activation code, so you'll have to manually check if user can invite using get_invite_code
     #NEVER DIRECTLY RETRIEVE THIS ALWAYS USE get_invite_code()
-    invitation_code = models.UUIDField(default=uuid.uuid4, editable=False)
+    invitation_code = models.UUIDField(default=uuid.uuid4, editable=True)
     
 
     def get_invite_code(self):

@@ -55,6 +55,7 @@
                   <th>Role</th>
                   <th>Invitation Key</th>
                   <th>Join Date</th>
+                  <th>Link</th>
                 </tr>
               </thead>
             </table>
@@ -103,15 +104,26 @@
         },
         {
           "data": "join_date"
+        },
+        {
+          "data": "user_id"
         }
       ],
       "columnDefs": [{
         "targets": -3,
         "data": "role",
         "render": function (data, type, row, meta) {
-            return "<span class='badge badge-info'>" + data + "</span>"
+            return "<span class='badge badge-secondary'>" + data + "</span>"
         }
-      }],
+      },
+       {
+          "targets": -1,
+          "data": "id",
+          "render": function (data, type, row, meta) {
+            return "<a class='btn btn-primary btn-sm' href='/man_user/" + data +
+              "' role='button'>Manage User</a>";
+          }
+        }],
 
     });
   });

@@ -103,6 +103,8 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
     invitation_key = serializers.SerializerMethodField()
     join_date = serializers.SerializerMethodField()
+    user_id = serializers.SerializerMethodField()
+
 
 
     def get_location(self, LocationPermission):
@@ -123,10 +125,13 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
     def get_join_date(self, LocationPermission):
         return LocationPermission.user.date_joined 
 
+    def get_user_id(self, LocationPermission):
+        return LocationPermission.user.id 
+
     class Meta:
         model = LocationPermission
         fields = (
-            'id', 'location', 'username', "firstlastname", 'role', 'invitation_key', 'join_date'
+            'id', 'location', 'username', "firstlastname", 'role', 'invitation_key', 'join_date', 'user_id'
         )
 
 class UserAttendenceSerializer(serializers.ModelSerializer):
