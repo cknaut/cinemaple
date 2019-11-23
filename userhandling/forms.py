@@ -122,11 +122,21 @@ class RegistrationForm(forms.Form):
         sender_name = "Cinemaple"
         subject = "Cinemaple User Signup with Your Link"
         recipients = [invitor.email]
-        content = "Hi " + invitor.first_name + \
-            ", {} {} has signed up on Cinemaple.com using your invitation link. If you know this person, no action is requried. If not, please let us know by responding to this email.".format(u.first_name, u.last_name)
+        # content = "Hi " + invitor.first_name + \
+        #     ", {} {} has signed up on Cinemaple.com using your invitation link. If you know this person, no action is required. If not, please let us know by responding to this email.".format(u.first_name, u.last_name)
 
-        email = EmailMessage(subject, content, sender_name +
-                             " <" + sender_email + ">", recipients)
+        context_email = {
+                'invitor'    : invitor,
+                'u'          : u
+        }
+        content = render_to_string("userhandling/emails/cinemaple_email_invite_guest.html", context_email)
+
+        email = EmailMultiAlternatives(
+            subject, '', sender_name + " <" + sender_email + ">", recipients)
+        email.attach_alternative(content, "text/html")
+
+        # email = EmailMessage(subject, content, sender_name +
+                            #  " <" + sender_email + ">", recipients)
         email.send()
 
         return u
@@ -134,7 +144,7 @@ class RegistrationForm(forms.Form):
     # Sending activation email
     def send_activation_email(self, datas):
 
-        link = "http://www.cinemaple.com/activate/"+datas['activation_key']
+        link = "http://www.cinemaple.com/activate/" + datas['activation_key']
 
         sender_email = "info@cinemaple.com"
         sender_name = "Cinemaple"

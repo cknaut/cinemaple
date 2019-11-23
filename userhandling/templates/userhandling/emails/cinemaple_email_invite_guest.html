@@ -1,0 +1,13 @@
+{% extends "cinemaple_email_transactional.html" %}
+{% load static %}
+
+
+
+{% block message %}
+
+<p> Hello  {{ invitor.first_name  }},</p>
+
+
+<p> {{ u.first_name }} {{u.last_name}} has signed up on Cinemaple.com using your invitation link. If you know this person, no action is required. If not, please let us know by responding to this email. </p>
+
+{% endblock %}
