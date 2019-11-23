@@ -34,9 +34,12 @@
   <div class="col-sm">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
-          <div class="modal-header"><h4 style = "color:#af353b">Logout <i class="fa fa-lock"></i></h4></div>
+          <div class="modal-header" style = "margin:auto"><h4 style = "color:#af353b">Logout <i class="fa fa-lock"></i></h4></div>
           <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log out?</div>
-          <div class="modal-footer"><a href={% url 'logout' %} class="btn-get-started">Logout</a></div>
+          <div class="modal-footer"> 
+            <a class="btn-get-started" data-dismiss="modal" style = "margin:auto"><font color = #af353b>Close</font></a> 
+            <a href={% url 'logout' %} class="btn-get-started" style = "margin:auto"><font color = #af353b>Logout</font></a>
+          </div> 
         </div>
       </div>
     </div>
