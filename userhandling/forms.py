@@ -8,9 +8,10 @@ from .models import Profile, Location,  PasswordReset, MovieNightEvent, VotePref
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.conf import settings
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from .utils import VerificationHash
 from django.forms import ModelForm, formset_factory
+from django.template.loader import render_to_string
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django.utils.translation import gettext_lazy as _
 
@@ -202,20 +203,26 @@ class PasswordResetRequestForm(forms.Form):
             pr = PasswordReset(username=username, reset_key=reset_key)
             pr.save()
 
-            link = "http://www.cinemaple.com/reset/"+reset_key
+            link = "http://www.cinemaple.com/reset/" + reset_key
 
             sender_email = "info@cinemaple.com"
             sender_name = "Cinemaple"
             subject = "Password Reset Link"
             recipients = [email]
-            content = "Hi " + user.first_name + \
-                ", please reset your password using the following link: " + link
+            context_email = {
+                'firstname'    : user.first_name,
+                'link'          : link
+                }
+            content = render_to_string("userhandling/emails/cinemaple_email_pw_reset.html", context_email)
 
-            email_send = EmailMessage(
-                subject, content, sender_name + " <" + sender_email + ">", recipients)
+            # content = "Hi " + user.first_name + \
+                # ", please reset your password using the following link: " + link
+
+            email_send = EmailMultiAlternatives(
+                subject, '', sender_name + " <" + sender_email + ">", recipients)
+            email_send.attach_alternative(content, "text/html")
             email_send.send()
-        return email
-
+        return email   
 
 class PasswordResetForm(forms.Form):
     password1 = forms.CharField(label="", max_length=50, min_length=6,

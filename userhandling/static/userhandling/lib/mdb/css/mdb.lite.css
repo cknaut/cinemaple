@@ -2434,8 +2434,8 @@ table.table a.btn.btn-primary {
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15); }
 
 .btn-danger {
-  background-color: #ff3547 !important;
-  color: #fff; }
+  background-color: #af353b !important;
+  color: rgb(255, 255, 255); }
   .btn-danger:hover {
     background-color: #ff4f5e;
     color: #fff; }
@@ -2443,11 +2443,11 @@ table.table a.btn.btn-primary {
     -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15); }
   .btn-danger:focus, .btn-danger:active, .btn-danger.active {
-    background-color: #ce0012; }
+    background-color: #af353b; }
   .btn-danger.dropdown-toggle {
-    background-color: #ff3547 !important; }
+    background-color: #af353b !important; }
     .btn-danger.dropdown-toggle:hover, .btn-danger.dropdown-toggle:focus {
-      background-color: #ff4f5e !important; }
+      background-color: #af353b !important; }
   .btn-danger:not([disabled]):not(.disabled):active, .btn-danger:not([disabled]):not(.disabled).active,
   .show > .btn-danger.dropdown-toggle {
     -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);

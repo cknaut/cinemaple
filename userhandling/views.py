@@ -155,45 +155,6 @@ def new_activation_link(request, user_id):
 
     return redirect('index')
 
-def new_activation_link_mc(request, user_id):
-    form = RegistrationForm()
-    datas = {}
-    user = User.objects.get(id=user_id)
-    if user is not None and not user.is_active:
-
-        # We generate a random activation key
-        vh = VerificationHash()
-        datas['activation_key'] = vh.gen_ver_hash(datas['username'])
-
-        # Update profile with new activation key and expiry data.
-        profile = Profile.objects.get(user=user)
-        profile.activation_key = datas['activation_key']
-        profile.key_expires = datetime.datetime.strftime(
-            datetime.datetime.now() + datetime.timedelta(days=2), "%Y-%m-%d %H:%M:%S")
-        profile.save()
-
-        link = "http://cinemaple.com/activate/"+profile.activation_key
-
-        html_data_activation = gen_activation_email(request, link, type_email='activate')
-
-        time_now = timezone.now()
-
-        # First Generate 1 Campaign email
-        mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-
-        reply_to = 'info@cinemaple.com'
-        preview_text = 'We have sent your activation code!'
-        from_name = 'Cinemaple'
-
-        title = 'Cinemaple activation code'
-
-        subject_line = 'Your Cinemaple activation code is waiting for you.'
-
-        res = mc.create_campaign(time_now, reply_to, subject_line, preview_text, title, from_name, html_data_invitation)
-
-    return redirect(index)
-
-
 def registration(request):
     registration_form = RegistrationForm()
 
