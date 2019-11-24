@@ -101,7 +101,19 @@ def activation(request, key):
             mc.add_email(profile.user.email, profile.user.first_name, profile.user.last_name)
 
             #Todo: send welcome email
-            ####
+            sender_email = "info@cinemaple.com"
+            sender_name = "Cinemaple"
+            subject = "Welcome to Cinemaple!"
+            recipients = [profile.user.email]
+
+            context_email = {
+                'firstname'    : profile.user.first_name
+            }
+            content = render_to_string("userhandling/emails/cinemaple_email_welcome.html", context_email)
+            
+            email = EmailMultiAlternatives(
+                subject, '', sender_name + " <" + sender_email + ">", recipients)
+            email.attach_alternative(content, "text/html")            
 
             # Todo: Add more fields to Mailchimp.
 

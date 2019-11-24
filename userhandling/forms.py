@@ -387,7 +387,7 @@ class ProfileUpdateForm(ModelForm):
 
         sender_email = "info@cinemaple.com"
         sender_name = "Cinemaple"
-        subject = "Please Verify Email"
+        subject = "Email Verification"
         recipients = [datas['email']]
         context_email = {
                 'firstname'    : datas["first_name"],

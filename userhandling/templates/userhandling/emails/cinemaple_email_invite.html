@@ -5,8 +5,9 @@
 {% block body %}
 <h1> {% if type == 'invitation' %} Invitation to{% elif type == 'reminder' %} Reminder:{% endif %}
      Movie Night {{movienight.motto}}</h1>
-
+<b>
 <p>Hello *|FNAME|*,</p>
+</b>
 {% if type == 'invitation' %}
 
 <p>You are cordially invited to the next Movie Night at <b>{{movienight.location.print_address}}</b> at <b>{{movienight.date}}</b></p>
