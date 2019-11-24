@@ -127,7 +127,7 @@
                             </form>
 
                             <hr/>
-                            <h3>Location Permissions: </h3>
+                            <h3>Location Permissions/Invite your friends to Cinemaple: </h3>
 
                             {%for loc_perm in request.user.locperms.all %}
                             
@@ -173,15 +173,29 @@
                                                     </div>  
                                             </div>
 
+                                            {% if loc_perm.can_invite %}
+                                            <div class="row3">
+                                                    <div class="col-xl-3 col-lg-3">
+                                                            <b>Invitation link:  </b>
+                                                        </div>  
+
+                                                        <div class="col-xl-6 col-lg-6">
+                                                                <span class="badge badge-primary">{{loc_perm.get_invite_code}} </span>
+                                                    </div>  
+                                            </div>
+                                            {% else %}
+                                            <div class="row3">
+                                                <div class="col-xl-6 col-lg-6">
+                                                    Only Hosts and Ambassadors can invite Guests to this location.
+                                                </div>  
+                                            </div>                                            
+                                            {% endif %}
                                        
                                         </div>
 
                                   </div>
                                 </div>
-                              </div>
-                            
-
-
+                              </div>                    
                             {% endfor %}
 
 
