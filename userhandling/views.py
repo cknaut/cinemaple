@@ -100,6 +100,9 @@ def activation(request, key):
             mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
             mc.add_email(profile.user.email, profile.user.first_name, profile.user.last_name)
 
+            #Todo: send welcome email
+            ####
+
             # Todo: Add more fields to Mailchimp.
 
             movienights = MovieNightEvent.objects.order_by('-date')[:5]
@@ -119,7 +122,7 @@ def activation(request, key):
 
 
 def new_activation_link(request, user_id):
-    form = RegistrationForm()
+    form = ProfileUpdateForm()
     datas = {}
     user = User.objects.get(id=user_id)
     if user is not None and not user.is_active:
@@ -135,23 +138,33 @@ def new_activation_link(request, user_id):
             datetime.datetime.now() + datetime.timedelta(days=2), "%Y-%m-%d %H:%M:%S")
         profile.save()
 
-        # Resend verification email.
-        mg = Mailgun()
-        link = "http://cinemaple.com/activate/"+profile.activation_key
+        if request.method == 'POST':
+            form = ProfileUpdateForm(request.POST)
+        if form.is_valid():
+            datas = {} 
+            datas['first_name'] = profile.user.first_name
+            datas['email'] = profile.email_buffer
 
-        sender_email = "admin@cinemaple.com"
-        sender_name = "Cinemaple"
-        subject = "Your new activation link."
-        recipients = [user.email]
-        content = "Please activate your email using the following link: " + link
+            reset_email = form.send_activation_new_email()
+            successful_submit = True
 
-        # Send message and retrieve status and return JSON object.
-        status_code, r_json = mg.send_email(
-            sender_email, sender_name, subject, recipients, content)
+        # # Resend verification email.
+        # mg = Mailgun()
+        # link = "http://cinemaple.com/activate/" + profile.activation_key
 
-        assert status_code == 200, "Send of new key failed"
-        request.session['new_link'] = True  # Display: new link sent
-        return HttpResponse("Activation link expired. You have resent an activation link for {}.".format(user.email))
+        # sender_email = "admin@cinemaple.com"
+        # sender_name = "Cinemaple"
+        # subject = "Your new activation link."
+        # recipients = [user.email]
+        # content = "Please activate your email using the following link: " + link
+
+        # # Send message and retrieve status and return JSON object.
+        # status_code, r_json = mg.send_email(
+        #     sender_email, sender_name, subject, recipients, content)
+
+        # assert status_code == 200, "Send of new key failed"
+        # request.session['new_link'] = True  # Display: new link sent
+        # return HttpResponse("Activation link expired. You have resent an activation link for {}.".format(user.email))
 
     return redirect('index')
 
@@ -173,7 +186,7 @@ def registration(request):
             datas['last_name'] = registration_form.cleaned_data['last_name']
             datas['invitation_code'] = registration_form.cleaned_data['invitation_code']
 
-            # TODO: Check if user alredy exists
+            # TODO: Check if user already exists
 
             # We generate a random activation key
             vh = VerificationHash()
