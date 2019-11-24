@@ -1,7 +1,24 @@
 {% extends "cinemaple_email_base.html" %}
 
+{% block preview_text %}
+<!--*|IF:MC_PREVIEW_TEXT|*-->
+<!--[if !gte mso 9]><!----><span class="mcnPreviewText" style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">*|MC_PREVIEW_TEXT|*</span><!--<![endif]-->
+<!--*|END:IF|*-->
+{% endblock %}
 
-{% block mc %}
+
+
+
+{% block footer %}
+
+<em>Copyright © *|CURRENT_YEAR|* *|LIST:COMPANY|*, All rights reserved.</em><br>
+*|IFNOT:ARCHIVE_PAGE|* *|LIST:DESCRIPTION|*<br>
+<br>
+<strong>Our mailing address is:</strong><br>
+*|HTML:LIST_ADDRESS_HTML|* *|END:IF|*<br>
+<br>
+
+
 
 
 Don't want to receive emails from cinemaple.com anymore?<br>
