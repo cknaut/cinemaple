@@ -69,10 +69,10 @@
 
                         <div class="row4 justify-content-md-center" >
                                 <div class="col-xl-7 col-lg-7">
-                        <h3>User Info</h3>
+                        <h3>User Information</h3>
 
                       
-                    <div class="row">
+                    <div class="row4">
                         <div class="col-xl-3 col-lg-3">
                                 <b> User:  </b>
                             </div>  
@@ -82,7 +82,7 @@
                         </div>  
                 </div>
 
-                <div class="row">
+                <div class="row4">
                         <div class="col-xl-3 col-lg-3">
                                 <b>Name:</b>
                             </div>  
@@ -190,7 +190,7 @@
             </div>
             <div class="modal-footer">
             
-                    <a class="btn btn-primary"   id="inchangechangemodalclose" href="{% url 'manage_user' user_id=user.id %}" role="button">Cool</a>
+                    <a class="btn btn-primary"   id="inchangechangemodalclose" href="{% url 'manage_user' user_id=user.id %}" role="button">Ok</a>
             </div>
         </div>
     </div>
@@ -210,7 +210,7 @@
             <div class="modal-body">You have successfully changed the role of <span class="badge badge-primary"> {{user.username }} </span> for location  <span class="badge badge-primary"> {{change_loc}}  </span> to  <span class="badge badge-primary"> {{change_perm}}</span>.            </div>
             <div class="modal-footer">
     
-                    <a id="permchangemodalclose" class="btn btn-primary" href="{% url 'manage_user' user_id=user.id %}" role="button">Cool</a>
+                    <a id="permchangemodalclose" class="btn btn-primary" href="{% url 'manage_user' user_id=user.id %}" role="button">Ok</a>
             </div>
         </div>
     </div>
