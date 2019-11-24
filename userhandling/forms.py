@@ -112,7 +112,7 @@ class RegistrationForm(forms.Form):
         lp = LocationPermission.objects.create(
             location = location,
             user = u, 
-            invitor = invitor,
+            inviter = invitor,
         )
 
         lp.save()
@@ -127,7 +127,8 @@ class RegistrationForm(forms.Form):
 
         context_email = {
                 'invitor'    : invitor,
-                'u'          : u
+                'u'          : u,
+                'location'   : location
         }
         content = render_to_string("userhandling/emails/cinemaple_email_invite_guest.html", context_email)
 

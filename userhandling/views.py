@@ -1286,9 +1286,19 @@ def change_role(request, user_id, locperm_id):
     if request.method == 'POST':
         form = PermissionsChangeForm(request.POST, instance=locperm)
         if form.is_valid():
+            user_could_invite = locperm.can_invite()
+
             new_role = form.cleaned_data['role']
             form.save() #this updates the user settings
             location_permissions = user.profile.get_loc_perms_of_host(request.user)
+
+            user_can_invite = locperm.can_invite()
+
+            # #add invitation code if user changed from could invite to could not invite
+            # if not user_could_invite and user_can_invite:
+            #     new_invitation_code = uuid.uuid4()
+            #     locperm.invitation_code = new_invitation_code
+            #     locperm.save()
 
             context = {        
                 'navbar'              : "admin",
