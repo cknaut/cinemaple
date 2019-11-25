@@ -4,16 +4,15 @@
 
 
 {% block message %}
-<b>
+
 <p> Hello  {{ invitor.first_name  }},</p>
-</b>
+
 
 <p> The following user has signed using your Cinemaple invitation link: </p>
-<p<b>Name:</p>>   {{ u.first_name }} {{u.last_name}} </p>
-<p><b>Email:</p>>   {{ u.email }} </p>
+<p<b>Name:</b>  {{ u.first_name }} {{u.last_name}} </p>
+<p><b>Email:</b>  {{ u.email }} </p>
 
-
-If you know this person and are happy to invite them to Movie Nights at location {{ location }}, no action is required. If you are not not, please click on the following button: </p>
+<p> If you know this person and are happy to invite them to Movie Nights at location {{ location }}, no action is required. If you are not not, please click on the following button: </p>
 
 
 
@@ -21,11 +20,11 @@ If you know this person and are happy to invite them to Movie Nights at location
         <tbody class="mcnButtonBlockOuter">
             <tr>
                 <td style="padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top" align="center" class="mcnButtonBlockInner">
-                    <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: separate !important;border-radius: 4px;background-color: #0069D9;">
+                    <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: separate !important;border-radius: 4px;background-color: rgba(217, 33, 0, 0.822);">
                         <tbody>
                             <tr>
                                 <td align="center" valign="middle" class="mcnButtonContent" style="font-family: Arial; font-size: 16px; padding: 18px;">
-                                    <a class="mcnButton " title="Buy Now" href="https://www.cinemaple.com/curr_mov_nights" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">More Info / Register</a>
+                                    <a class="mcnButton " title="Buy Now" href="https://www.cinemaple.com/curr_mov_nights" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">Revoke User Access</a>
                                 </td>
                             </tr>
                         </tbody>

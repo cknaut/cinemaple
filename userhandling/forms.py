@@ -33,8 +33,7 @@ class RegistrationForm(forms.Form):
                                 widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password', 'class': 'form-control input-perso'}))
     i_agree = forms.BooleanField()
 
-    invitation_code = forms.CharField(label="", widget=forms.TextInput(
-        attrs={'placeholder': 'Invitation Code', 'class': 'form-control input-perso'}), max_length=100)
+    invitation_code = forms.CharField(label="", widget=forms.HiddenInput(), max_length=100)
 
     if not settings.DEBUG:
         captcha = ReCaptchaField(label="", widget=ReCaptchaV2Checkbox(
@@ -75,7 +74,7 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError("Invalid Invitation Code")
 
         except:
-            raise forms.ValidationError("Invalid Invitation Code")
+            raise forms.ValidationError("Invalid Invitation Code")  
 
     # Override clean method to check password match
     def clean(self):

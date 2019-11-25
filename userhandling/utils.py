@@ -76,6 +76,9 @@ class Mailchimp(object):
                                     api_url = self.api_url,
                                     list_id=self.list_id
                         )
+        self.segment_endpoint = '{list_endpoint}/segments'.format(
+                                    list_endpoint = self.list_endpoint,
+                        )
 
     def get_members_endpoint(self):
         endpoint = '{list_endpoint}/members'.format(
@@ -107,6 +110,67 @@ class Mailchimp(object):
                                 auth=("", MAILCHIMP_API_KEY)
                                 )
         return r.status_code, r.json()
+
+
+    def search_tag(self, tag):
+        # Looks up alrady defined tags and returns tag_id if it exists
+
+        r = requests.get(self.segment_endpoint, auth=("", MAILCHIMP_API_KEY))
+        res = r.json()
+
+        tag_dicts = res["segments"]
+
+        num_tags = len(tag_dicts)
+
+        for i in range(num_tags):
+            if tag_dicts[i]["name"] == tag:
+                return True, tag_dicts[i]["id"]
+
+        return False, ""
+
+    def create_tag(self, tag):
+
+        # Create Tag
+        data = {
+                "name": tag,
+                "static_segment": [],
+                }
+
+        r = requests.post(self.segment_endpoint,
+                    auth=("", MAILCHIMP_API_KEY),
+                    data=json.dumps(data)
+                    )
+
+        res = r.json()
+        return res["id"]
+
+    def create_or_retrieve_tag(self, tag):
+        # Returns ID of existing or newly created tag
+        tag_exists, tag_id = self.search_tag(tag)
+
+        if not tag_exists:
+            tag_id = self.create_tag(tag)
+
+        return tag_id
+
+
+    def add_tag_to_user(self, tag, email):
+
+        tag_id = self.create_or_retrieve_tag(tag)
+
+        data = {
+                "email_address": email
+                }
+
+        endpoint = "{}/{}/members".format(self.segment_endpoint, tag_id)
+
+        r = requests.post(endpoint,
+                    auth=("", MAILCHIMP_API_KEY),
+                    data=json.dumps(data)
+                    )
+
+        return r.status_code, r.json()
+
 
     def create_campaign(self, date, reply_to, subject_line, preview_text, title, from_name, html_body):
         '''

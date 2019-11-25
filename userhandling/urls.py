@@ -14,7 +14,7 @@ urlpatterns = [
     path('activate/<str:key>', views.activation,  name='activation'),
     path('activate/update_email/<str:key>', views.activate_emailupdate,  name='activate_emailupdate'),
     path('reset/<str:reset_key>', views.password_reset,  name='password_reset'),
-    path('registration/', views.registration,  name='registration'),
+    path('registration/<str:inv_code>', views.registration,  name='registration'),
     path('login/', views.my_login,  name='login'),
     path('logout/', auth_views.LogoutView.as_view(),  name='logout'),
     path('password_reset_request/', views.password_reset_request,  name='password_reset_request'),
@@ -55,6 +55,7 @@ urlpatterns = [
     path('man_user/<str:user_id>', views.manage_user,  name='manage_user'),
     path('gen_new_invitation_key/<str:user_id>/<str:locperm_id>', views.gen_new_invitation_key,  name='gen_new_invitation_key'),
     path('change_role/<str:user_id>/<str:locperm_id>', views.change_role,  name='change_role'),
+
 
 
 

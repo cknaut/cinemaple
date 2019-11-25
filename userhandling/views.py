@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 import urllib
 import json
 import hashlib
@@ -40,7 +40,6 @@ import uuid
 
 # Render Index Page, manage register
 def index(request):
-
 
     movienights = MovieNightEvent.objects.all()
 
@@ -84,6 +83,7 @@ def activation(request, key):
     activation_expired = False
     already_active = False
     profile = get_object_or_404(Profile, activation_key=key)
+
     if profile.user.is_active == False:
         if timezone.now() > profile.key_expires:
             activation_expired = True  # Display: offer the user to send a new activation link
@@ -99,6 +99,7 @@ def activation(request, key):
             # Subscribe to Mailchimp list.
             mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
             mc.add_email(profile.user.email, profile.user.first_name, profile.user.last_name)
+            mc.add_tag("LOL")
 
             #Todo: send welcome email
             sender_email = "info@cinemaple.com"
@@ -180,8 +181,25 @@ def new_activation_link(request, user_id):
 
     return redirect('index')
 
-def registration(request):
-    registration_form = RegistrationForm()
+def registration(request, inv_code):
+
+
+    # valicate invitation cod
+    try:
+        loc_p = LocationPermission.objects.get(invitation_code=inv_code)
+        if loc_p.can_invite():
+            code_valid = True
+        else:
+            code_valid = False
+    except:
+        code_valid = False
+
+    if not code_valid:
+        return HttpResponse("Invalid invitation link.")
+
+    
+    # instanciated form with invitation code passed in URL
+    registration_form = RegistrationForm({'invitation_code': inv_code})
 
     # Has a registration succesfully been submitted?
     successful_reg_submit = False
@@ -212,8 +230,9 @@ def registration(request):
 
     context = {
         'form': registration_form,
-        'successful_submit': successful_reg_submit,
-        'subscribe_email':  str(subscribe_email),
+        'successful_submit'     : successful_reg_submit,
+        'subscribe_email'       :  str(subscribe_email),
+        'invitation_code'       : inv_code
     }
     return render(request, 'userhandling/registration.html', context)
 
