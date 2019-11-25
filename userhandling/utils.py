@@ -81,6 +81,7 @@ class Mailchimp(object):
                         )
 
     def get_members_endpoint(self):
+
         endpoint = '{list_endpoint}/members'.format(
                                     list_endpoint=self.list_endpoint)
 
@@ -105,9 +106,13 @@ class Mailchimp(object):
         return r.status_code, r.json()
 
     def check_list_details(self):
+        data = {
+            "count" : "1000"
+        }
         members_endpoint       = self.get_members_endpoint()
         r                   = requests.get(members_endpoint,
-                                auth=("", MAILCHIMP_API_KEY)
+                                auth=("", MAILCHIMP_API_KEY),
+                                params=data
                                 )
         return r.status_code, r.json()
 
@@ -253,6 +258,7 @@ class Mailchimp(object):
                             "template_id"       : template_id
                     }
 
+                                data=json.dumps(data)
     <td class="defaultText" mc:edit="body"></td>
     '''
 

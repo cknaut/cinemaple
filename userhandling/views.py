@@ -99,7 +99,14 @@ def activation(request, key):
             # Subscribe to Mailchimp list.
             mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
             mc.add_email(profile.user.email, profile.user.first_name, profile.user.last_name)
-            mc.add_tag("LOL")
+            
+            # Add tag to contact, this will define if correct emails will be send.
+            loc_id_tag = profile.get_location_permissions()
+            location_ids = [i.id for i in loc_id_tag]
+            location_tags = ["locpermid_{}".format(i) for i in location_ids]
+
+            for tag in location_tags:
+                mc.add_tag_to_user(tag, profile.user.email)
 
             #Todo: send welcome email
             sender_email = "info@cinemaple.com"
@@ -199,7 +206,7 @@ def registration(request, inv_code):
 
     
     # instanciated form with invitation code passed in URL
-    registration_form = RegistrationForm({'invitation_code': inv_code})
+    registration_form = RegistrationForm(initial={'invitation_code': inv_code})
 
     # Has a registration succesfully been submitted?
     successful_reg_submit = False
