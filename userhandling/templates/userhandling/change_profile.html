@@ -184,7 +184,7 @@
                                                             <div class="row">
                                                                 <div class="col-xl-4 col-lg-4" style = "text-align:center">          
                                                                     <i class="em em-email" aria-role="presentation" aria-label="ENVELOPE" style = "font-size:26px"></i>                    
-                                                                    {% send_email "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}." object_or_url "Share via email" %}                                                                                                                               
+                                                                    {% send_email "Cinemaple Invitation Code"  "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}." "Share via email" %}                                                                                                                               
                                                                 </div>                                                                                                  
                                                                 <div class="col-xl-4 col-lg-4" style = "text-align:center">                                                                         
                                                                     <img src="{% static 'userhandling/img/logos/logo_facebook.png' %}" alt="" title="" height="40">                                                
@@ -200,10 +200,10 @@
                                                                     <img src="{% static 'userhandling/img/logos/logo_twitter.jpg' %}" alt="" title="" height="40">                                                
                                                                     {% post_to_twitter "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}."%}
                                                                 </div>
-                                                                <div class="col-xl-4 col-lg-4" style = "text-align:center">     
+                                                                {% comment %} <div class="col-xl-4 col-lg-4" style = "text-align:center">     
                                                                     <img src="{% static 'userhandling/img/logos/logo_linkedin.png' %}" alt="" title="" height="40">                                                                                                                                                                                                           
-                                                                    {% post_to_linkedin "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}" "Post to LinkedIn" %}                                                                    
-                                                                </div>                                                                
+                                                                    {% post_to_linkedin "messaging" "Post to LinkedIn" %}                                                                    
+                                                                </div>                                                                 {% endcomment %}
                                                                 <div class="col-xl-4 col-lg-4" style = "text-align:center">                                                                         
                                                                     <img src="{% static 'userhandling/img/logos/logo_reddit.png' %}" alt="" title="" height="40">                                                                                                                                                                                                           
                                                                     {% post_to_reddit "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}." %}                                                                    
