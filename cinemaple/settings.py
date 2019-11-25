@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'tinymce',
     'rest_framework',
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
@@ -101,7 +102,9 @@ ROOT_URLCONF = 'cinemaple.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [' ', 
+        os.path.join(BASE_DIR, 'userhandling/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
