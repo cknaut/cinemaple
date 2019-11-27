@@ -50,6 +50,14 @@ class LocationPermission(models.Model):
     invitation_code = models.UUIDField(null=True, editable=True)
     
 
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='locperms')
+    inviter = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='invitor')
+
+
+    def is_active(self):
+        return self.user.is_active
+
     def get_invitation_link(self):
         return "https://www.cinemaple.com/registration/" + str(self.invitation_code)
 
@@ -58,9 +66,6 @@ class LocationPermission(models.Model):
             return self.invitation_code
         else:
             return ""
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='locperms')
-    inviter = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='invitor')
 
 
     role = models.CharField(

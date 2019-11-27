@@ -130,9 +130,10 @@ class RegistrationForm(forms.Form):
         subject = "Cinemaple User Signup with Your Link"
         recipients = [invitor.email]
         context_email = {
-                'invitor'    : invitor,
-                'u'          : u,
-                'location'   : location
+                'invitor'           : invitor,
+                'u'                 : u,
+                'location'          : location,
+                'rev_access_hash'   : revoke_access_hash
         }
         content = render_to_string("userhandling/emails/cinemaple_email_invite_guest.html", context_email)
 

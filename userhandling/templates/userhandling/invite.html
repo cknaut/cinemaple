@@ -51,7 +51,8 @@
                     </button>
                     Here are your personalized invitation links. Feel free to share the links freely amongs friends. 
   Once a user has signed up using your invitation link, you will recieve and email notification with the user information. It is your responsibility to make sure you know the user and are comfortable with inviting the user to Movie Nights. In case you're not, you'll be given the opportunity to immediately revoke the users's acces in the email. Alternatively, you can use the buttons in the table below.
-</div>             
+</div>     
+
 
 {% for locperm in locperms %}
 
@@ -267,7 +268,7 @@ $(document).ready(function(){
                     <div class="row">                                                                                                                    
                         <div class="col-xl-4 col-lg-4" style = "text-align:center">                        
                             <img src="{% static 'userhandling/img/logos/logo_twitter.jpg' %}" alt="" title="" height="40">                                                
-                            {% post_to_twitter "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}."%}
+                            {% post_to_twitter "Join me on Cinemaple with this invitation code: {{locperm.get_invitation_link}}."%}
                         </div>
                         {% comment %} <div class="col-xl-4 col-lg-4" style = "text-align:center">     
                             <img src="{% static 'userhandling/img/logos/logo_linkedin.png' %}" alt="" title="" height="40">                                                                                                                                                                                                           

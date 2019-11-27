@@ -1,0 +1,117 @@
+
+              
+              {% extends 'base.html' %}
+              {% load static %}
+              
+        
+              
+              
+            
+              {% block header %}
+              <!--==========================
+              Header
+              ============================-->
+              <header id="header-login">
+                <div class="container">
+                  </div>
+              </header><!-- #header -->
+              
+              <header id="header">
+                <div class="container">
+              
+                  <div id="logo" class="pull-left">
+                    <!-- Uncomment below if you prefer to use a text logo -->
+                    <!-- <h1><a href="#hero">Cinemaple</a></h1> -->
+                    <a href={% url 'index'%}><img   src="{% static 'userhandling/img/logos/logo_cinemaple.png' %}" alt="" title="" height="40" /></img></a>
+                  </div>
+              
+                  <nav id="nav-menu-container">
+                    <ul class="nav-menu">
+                               
+              
+                      
+              
+                    
+                    </ul>
+                  </nav><!-- #nav-menu-container -->
+                </div>
+              </header><!-- #header -->
+              {% endblock %}
+              
+              
+              {% block main %}
+
+              <div class="container-fluid">
+                  <div class="row3">
+                
+                    <!-- Area Chart -->
+                    <div class="col-xl-12 col-lg-12" data-spy="affix" data-offset-top="197">
+                      <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                          <h6 class="m-0 font-weight-bold text-primary" id="page-top">Access Revoking Successfull</h6>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                          <div class="col-xl-12 col-lg-12"style = "margin-top:-0.5%">
+                
+                
+                          
+                            
+                
+                            
+                              <p> </p>You have successfully revoked access of user <span class="badge badge-secondary">{{locperm.user}}</span>  with email address  <span class="badge badge-secondary">{{locperm.user.email}}</span> . The user cannot sign up for Movie Nights anymore and will not recieve invitations for future Movie Nights.</p>
+                              <a href="{% url 'index' %}" class="btn btn-primary" role="button">Back to Home</a>
+
+                          
+                           
+                 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.container-fluid -->
+
+
+
+
+    
+              {% endblock %}
+              
+              
+              
+              
+              {% block js %}
+              
+              {% endblock %}
+              
+              
+              
+              {% block footer %}
+     
+<footer id="footer">
+  <div class="footer-top">
+    <div class="container">
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="copyright">
+    </div>
+    <div class="credits">
+
+
+      <div class="social-links">
+          <p style = "color:#ffffff"><b>Cinemaple</b> is fully open source (Apache License 2.0.) and available on GitHub: <a href="https://github.com/cknaut/cinemaple" class="github"><img src="{% static 'userhandling/img/giticon.png' %}" alt="" title="" height="30" style = "margin-left:0%"/></a></p>
+          <p style = "color:#ffffff"><b>Cinemaple</b> is powered by <a href = "https://www.themoviedb.org/?language=en-US" target="_blank" style = "color:#af353b">TMDB</a> and <a href = "https://bootstrapmade.com/regna-bootstrap-onepage-template/" target = "_blank" style = "color:#af353b">REGNA</a></p>
+          <a href="{% url 'priv_pol' %}" target="_blank" style = "color:#af353b">Privacy Policy</a>
+      </div>        
+
+    </div>
+  </div>
+</footer><!-- #footer -->
+              {% endblock %}
+              

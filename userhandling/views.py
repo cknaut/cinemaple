@@ -41,6 +41,8 @@ import uuid
 # Render Index Page, manage register
 def index(request):
 
+
+    
     movienights = MovieNightEvent.objects.all()
 
     past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
@@ -107,6 +109,9 @@ def activation(request, key):
 
             for tag in location_tags:
                 mc.add_tag_to_user(tag, profile.user.email)
+
+
+    
 
             #Todo: send welcome email
             sender_email = "info@cinemaple.com"
@@ -887,7 +892,14 @@ class ProfileList(generics.ListAPIView):
 
     def get_queryset(self):
         # Only show all users that are associated to locations where user is host
-        return self.request.user.profile.get_managed_loc_perms()
+        managed_locperm = self.request.user.profile.get_managed_loc_perms()
+
+        active_ids = [locperm.id for locperm in managed_locperm if locperm.is_active()]
+        active_locperms = managed_locperm.filter(id__in=active_ids)
+
+
+
+        return active_locperms
 
 class ProfileListInvite(generics.ListAPIView):
     # This one is called from the invitation view
@@ -896,7 +908,14 @@ class ProfileListInvite(generics.ListAPIView):
 
     def get_queryset(self):
         # Show Users which have been invited by active user
-        return self.request.user.profile.get_intivees_locperms()
+
+        managed_locperm = self.request.user.profile.get_intivees_locperms()
+
+        # Filter out inactive locperms
+        active_ids = [locperm.id for locperm in managed_locperm if locperm.is_active()]
+        active_locperms = managed_locperm.filter(id__in=active_ids)
+
+        return active_locperms
 
 
 
@@ -1450,4 +1469,19 @@ def invite(request):
 def toggle_access_invite(request, rev_access_hash):
     toggle_access_from_hash(rev_access_hash)
     return redirect("invite")
+
+# Revoke access from Email
+def revoke_access_from_email(request, rev_access_hash):
+    locperm = get_object_or_404(LocationPermission, rev_access_hash=rev_access_hash)
+
+    locperm.revoked_access = True
+    locperm.save()
+
+    context = {
+    'navbar' : 'invite',
+    'locperm' : locperm,
+    }
+    return render(request, 'userhandling/revoked_from_email.html', context)
+
+
 
