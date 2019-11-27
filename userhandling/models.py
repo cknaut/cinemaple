@@ -50,6 +50,9 @@ class LocationPermission(models.Model):
     invitation_code = models.UUIDField(null=True, editable=True)
     
 
+    def get_invitation_link(self):
+        return "https://www.cinemaple.com/registration/" + str(self.invitation_code)
+
     def get_invite_code(self):
         if self.can_invite():
             return self.invitation_code

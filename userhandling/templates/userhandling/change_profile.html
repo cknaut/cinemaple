@@ -126,7 +126,7 @@
                             </form>
 
                             <hr/>
-                            <h3>Location Permissions/Invite your friends to Cinemaple: </h3>
+                            <h3>Location Permissions: </h3>
 
                             {%for loc_perm in request.user.locperms.all %}
                             
@@ -171,78 +171,7 @@
                                                                 <span class="badge badge-primary">{{loc_perm.inviter.first_name }} {{loc_perm.inviter.last_name}} </span>
                                                     </div>  
                                             </div>
-
-                                            {% if loc_perm.can_invite %}
-                                            {% comment %} Modal is defined within loop because its text depends on the location permission {% endcomment %}
-                                            <div id="socialmediamodal{{forloop.counter0}}" class="modal bs-example-modal-sm fade" tabindex="-1" role="dialog" aria-hidden="true">
-                                            <div class="container">
-                                                <div class="col-sm">
-                                                    <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header" style = "margin:auto" style = "color:#af353b"><h4>Share your activation key</h4></div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col-xl-4 col-lg-4" style = "text-align:center">          
-                                                                    <i class="em em-email" aria-role="presentation" aria-label="ENVELOPE" style = "font-size:26px"></i>                    
-                                                                    {% send_email "Cinemaple Invitation Code"  "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}." "Share via email" %}                                                                                                                               
-                                                                </div>                                                                                                  
-                                                                <div class="col-xl-4 col-lg-4" style = "text-align:center">                                                                         
-                                                                    <img src="{% static 'userhandling/img/logos/logo_facebook.png' %}" alt="" title="" height="40">                                                
-                                                                    {% post_to_facebook "{{loc_perm.get_invite_code}}" "Post to Facebook" %}                      
-                                                                </div>                                                                                                                                                                                                                                                     
-                                                                <div class="col-xl-4 col-lg-4" style = "text-align:center">
-                                                                    <img src="{% static 'userhandling/img/logos/logo_telegram.jpeg' %}" alt="" title="" height="40">
-                                                                    {% post_to_telegram "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}." %}                                                                  
-                                                                </div>
-                                                            </div>             
-                                                            <div class="row">                                                                                                                    
-                                                                <div class="col-xl-4 col-lg-4" style = "text-align:center">                        
-                                                                    <img src="{% static 'userhandling/img/logos/logo_twitter.jpg' %}" alt="" title="" height="40">                                                
-                                                                    {% post_to_twitter "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}."%}
-                                                                </div>
-                                                                {% comment %} <div class="col-xl-4 col-lg-4" style = "text-align:center">     
-                                                                    <img src="{% static 'userhandling/img/logos/logo_linkedin.png' %}" alt="" title="" height="40">                                                                                                                                                                                                           
-                                                                    {% post_to_linkedin "messaging" "Post to LinkedIn" %}                                                                    
-                                                                </div>                                                                 {% endcomment %}
-                                                                <div class="col-xl-4 col-lg-4" style = "text-align:center">                                                                         
-                                                                    <img src="{% static 'userhandling/img/logos/logo_reddit.png' %}" alt="" title="" height="40">                                                                                                                                                                                                           
-                                                                    {% post_to_reddit "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}." %}                                                                    
-                                                                </div>                                                                          
-                                                            </div>
-                                                        </div>                                                    
-                                                        <div class="modal-footer"> 
-                                                        <a class="btn-get-started" data-dismiss="modal" style = "margin:auto"><font color = #af353b>Close</font></a> 
-                                                        </div>            
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row3">
-                                                    <div class="col-xl-3 col-lg-3">
-                                                            <b>Invitation link:  </b>
-                                                        </div>  
-                                                        <div class="col-xl-6 col-lg-6">      
-                                                        <span class="badge badge-primary"> {{loc_perm.get_invite_code}} </span>                                                  
-                                                            </div>                                                                            
-                                            </div>                                            
-                                            <div class="row3">                                                                        
-                                                <div class = "col-xl-12" "col-lg-12" style = "text-align:center; margin-top:0">                                        
-                                                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#socialmediamodal{{forloop.counter0}}" style="font-weight:bold" class="btn-get-started btn-lg">Share on social media</button> 
-                                                </div>
-                                            </div>
-                                            {% else %}
-                                            <div class="row3">
-                                                <div class="col-xl-6 col-lg-6">
-                                                    Only Hosts and Ambassadors can invite Guests to this location.
-                                                </div>  
-                                            </div>                                            
-                                            {% endif %}
-                                       
-                                        </div>
-                                        
+                              
 
                                   
                                 </div>
