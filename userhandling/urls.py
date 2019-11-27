@@ -55,6 +55,7 @@ urlpatterns = [
     path('man_user/<str:user_id>', views.manage_user,  name='manage_user'),
     path('gen_new_invitation_key/<str:user_id>/<str:locperm_id>', views.gen_new_invitation_key,  name='gen_new_invitation_key'),
     path('change_role/<str:user_id>/<str:locperm_id>', views.change_role,  name='change_role'),
+    path('revoke_access_admin/<str:rev_access_hash>', views.revoke_access_admin,  name='revoke_access_admin'),
 
 
 

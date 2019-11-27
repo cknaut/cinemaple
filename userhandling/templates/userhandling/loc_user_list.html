@@ -55,6 +55,7 @@
                   <th>Role</th>
                   <th>Invitation Key</th>
                   <th>Join Date</th>
+                  <th>Has Access</th>
                   <th>Link</th>
                 </tr>
               </thead>
@@ -107,6 +108,9 @@
           "data": "join_date"
         },
         {
+          "data"  : "has_access"
+        },
+        {
           "data": "user_id"
         }
       ],
@@ -124,8 +128,19 @@
             return "<a class='btn btn-primary btn-sm' href='/man_user/" + data +
               "' role='button'>Manage User</a>";
           }
+        },
+        {
+          "targets": -2,
+          "data": "id",
+          "render": function (data, type, row, meta) {
+            if (data) {
+              return "<span class='badge badge-success'>Yes</span>";
+            } else if (!data) {
+            return "<span class='badge badge-danger'>No</span>";
+            }
+            
+          }
         }],
-
     });
   });
 
