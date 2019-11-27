@@ -60,7 +60,9 @@
                             
                 
                             
-                              <p> </p>You have successfully revoked access of user <span class="badge badge-secondary">{{locperm.user}}</span>  with email address  <span class="badge badge-secondary">{{locperm.user.email}}</span> . The user cannot sign up for Movie Nights anymore and will not recieve invitations for future Movie Nights.</p>
+                              <p> </p>You have successfully revoked access of user <span class="badge badge-secondary">{{locperm.user}}</span>  with email address  <span class="badge badge-secondary">{{locperm.user.email}}</span> .
+                               The user cannot sign up for Movie Nights anymore and will not recieve invitations for future Movie Nights. You can change the user's access anytime in the <a href="{% url 'invite' %}">Invitation Center</a>.
+                              </p>
                               <a href="{% url 'index' %}" class="btn btn-primary" role="button">Back to Home</a>
 
                           
