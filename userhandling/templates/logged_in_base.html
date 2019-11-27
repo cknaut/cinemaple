@@ -53,6 +53,14 @@ Header
 
     <nav id="nav-menu-container">
       <ul class="nav-menu">
+
+        {% if request.user.profile.is_inviter %}
+          {% if navbar == "invite"%}
+          <li class="menu-active" ><a href={% url 'invite' %}>Invite</a></li>
+          {% else %}
+          <li class="menu" ><a href={% url 'invite' %}>Invite</a></li>
+          {% endif %}
+        {% endif %}
         {% if navbar == "faq"%}
           <li class="menu-active" ><a href={% url 'faq' %}>FAQ</a></li>
           {% else %}

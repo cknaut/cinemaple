@@ -104,8 +104,13 @@ class Profile(models.Model):
         return self_locperms.filter(location__in=host_locs)
 
     def get_hosting_location_perms(self):
-        # Return Location Permissions of locations where user can invite
+        # Return Location Permissions of locations where user is host
         loc_permissions = self.user.locperms.filter(role='HO')
+        return loc_permissions
+
+    def get_invitable_location_perms(self):
+        # Return Location Permissions of locations where user can invite
+        loc_permissions = self.user.locperms.filter(role__in=['HO', 'AM'])
         return loc_permissions
 
     def get_hosted_locations(self):
@@ -122,6 +127,11 @@ class Profile(models.Model):
         man_users =  [i.user for i in self.get_managed_loc_perms()]
         return man_users
 
+    def get_intivees_locperms(self):
+        # Return locationPermissions of users which have been invited by this profile's user
+        invitees = LocationPermission.objects.filter(inviter=self.user)
+        return invitees
+
     def is_host(self):
         # True if host for at least one locations, will be used to unlock all hidden urls
         if len(self.get_hosting_location_perms()) > 0:
@@ -129,6 +139,12 @@ class Profile(models.Model):
         else:
             return False
 
+    def is_inviter(self):
+        # True if can invite for at least one locations, will be used to unlock all hidden urls
+        if len(self.get_invitable_location_perms()) > 0:
+            return True
+        else:
+            return False
 
 
     def __str__(self):

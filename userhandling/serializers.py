@@ -137,6 +137,57 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
             'id', 'location', 'username', "firstlastname", 'role', 'invitation_key', 'join_date', 'user_id', 'has_access'
         )
 
+
+
+class RestrictedLocationPermissionSerializer(serializers.ModelSerializer):
+    # This is called by Ambassadors and does not return invitation keys
+    id = serializers.IntegerField(read_only=True)
+    location = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+    firstlastname = serializers.SerializerMethodField()
+    role = serializers.SerializerMethodField()
+    join_date = serializers.SerializerMethodField()
+    user_id = serializers.SerializerMethodField()
+    has_access = serializers.SerializerMethodField()
+    revoke_access_hash = serializers.SerializerMethodField()
+
+
+    def get_revoke_access_hash(self, LocationPermission):
+
+        if LocationPermission.can_invite():
+            return "<button type='button' class='btn btn-secondary btn-sm' data-toggle='modal' data-target='#no_change_modal'>N/A</button>"
+        elif not LocationPermission.revoked_access:
+            return "<a class='btn btn-danger btn-sm' href='/toggle_access_invite/" + LocationPermission.rev_access_hash + "' role='button'>Revoke Access</a>"
+        else:
+            return "<a class='btn btn-success btn-sm' href='/toggle_access_invite/" + LocationPermission.rev_access_hash + "' role='button'>Grant Access</a>"
+
+    def get_has_access(self, LocationPermission):
+        return (LocationPermission.revoked_access == False)
+
+    def get_location(self, LocationPermission):
+        return LocationPermission.location.name
+
+    def get_username(self, LocationPermission):
+        return LocationPermission.user.username
+
+    def get_firstlastname(self, LocationPermission):
+        return LocationPermission.user.first_name + " " + LocationPermission.user.last_name
+
+    def get_role(self, LocationPermission):
+        return LocationPermission.get_role_display() 
+
+    def get_join_date(self, LocationPermission):
+        return LocationPermission.user.date_joined 
+
+    def get_user_id(self, LocationPermission):
+        return LocationPermission.user.id 
+
+    class Meta:
+        model = LocationPermission
+        fields = (
+            'revoke_access_hash', 'id', 'location', 'username', "firstlastname", 'role', 'join_date', 'user_id', 'has_access'
+        )
+
 class UserAttendenceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.SerializerMethodField()

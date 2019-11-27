@@ -23,7 +23,7 @@ from django.views.generic.edit import CreateView
 import requests
 from django.core import serializers
 from rest_framework import viewsets
-from .serializers import MovieNightEventSerializer, UserAttendenceSerializer, ProfileSerializer, LocationPermissionSerializer
+from .serializers import MovieNightEventSerializer, UserAttendenceSerializer, ProfileSerializer, LocationPermissionSerializer, RestrictedLocationPermissionSerializer
 from django.contrib.auth.decorators import user_passes_test
 from django.forms import formset_factory, modelformset_factory
 from rest_framework.permissions import IsAdminUser
@@ -123,15 +123,37 @@ def activation(request, key):
                 subject, '', sender_name + " <" + sender_email + ">", recipients)
             email.attach_alternative(content, "text/html")            
 
-            # Todo: Add more fields to Mailchimp.
+            # Todo: Avoid Multiplocation of index routine
+            movienights = MovieNightEvent.objects.all()
+            past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
+            mn_in_past = MovieNightEvent.objects.filter(id__in=past_mn_id)
+            
+            show_last = 5
+            movienights_render = mn_in_past.order_by('-date')[:show_last]
 
-            movienights = MovieNightEvent.objects.order_by('-date')[:5]
+            num_mn_past = len(mn_in_past)
+            start_counter = num_mn_past - show_last
+
+
+            # Total Runtime of all winner movies in past
+            total_rt = 0
+            for mn in mn_in_past:
+                _, _, runtime =  mn.get_winning_movie()
+                total_rt += runtime
+
+
+            # if request.user.is_authenticated:
+            #     return redirect("curr_mov_nights")
             successful_verified = True
             context = {
-                'movienights': movienights,
                 'successful_verified': successful_verified,
-                'email': profile.user.email,
-                'username': profile.user.username
+                'email': sender_email,
+                'username': profile.user,
+                'movienights' : movienights_render,
+                'total_rt'  : total_rt,
+                'num_mn_past' : num_mn_past,
+                'mn_start_counter'      : start_counter,
+                'num_show'              : show_last
             }
             return render(request, 'userhandling/index.html', context)
 
@@ -858,6 +880,7 @@ class UserAttendenceList(generics.ListAPIView):
 
 
 class ProfileList(generics.ListAPIView):
+    # This one is called from the manage user view for hosts
     serializer_class = LocationPermissionSerializer
 
 
@@ -865,6 +888,15 @@ class ProfileList(generics.ListAPIView):
     def get_queryset(self):
         # Only show all users that are associated to locations where user is host
         return self.request.user.profile.get_managed_loc_perms()
+
+class ProfileListInvite(generics.ListAPIView):
+    # This one is called from the invitation view
+    serializer_class = RestrictedLocationPermissionSerializer
+
+
+    def get_queryset(self):
+        # Show Users which have been invited by active user
+        return self.request.user.profile.get_intivees_locperms()
 
 
 
@@ -1376,22 +1408,19 @@ def change_role(request, user_id, locperm_id):
     return render(request, 'userhandling/change_perms.html', context)
 
 
-def revoke_access_from_hash(rev_access_hash):
+def toggle_access_from_hash(rev_access_hash):
+    # Change user access from Treu to False or from False to True 
     locperm = get_object_or_404(LocationPermission, rev_access_hash=rev_access_hash)
 
-    #revoce access
-    locperm.revoked_access = True
+    locperm.revoked_access = not locperm.revoked_access
     locperm.save()
 
-def grant_access_from_hash(rev_access_hash):
-    locperm = get_object_or_404(LocationPermission, rev_access_hash=rev_access_hash)
+    return 0
 
-    #revoce access
-    locperm.revoked_access = False
-    locperm.save()
-
-def revoke_access_admin(request, rev_access_hash):
-    revoke_access_from_hash(rev_access_hash)
+# Called from manage user page accessible for hosts)
+@user_passes_test(lambda u: u.profile.is_host)
+def toggle_access_admin(request, rev_access_hash):
+    toggle_access_from_hash(rev_access_hash)
     locperm = get_object_or_404(LocationPermission, rev_access_hash=rev_access_hash)
     user = locperm.user
 
@@ -1406,18 +1435,16 @@ def revoke_access_admin(request, rev_access_hash):
     }
     return render(request, 'userhandling/man_user.html', context)
 
-def grant_access_admin(request, rev_access_hash):
-    grant_access_from_hash(rev_access_hash)
-    locperm = get_object_or_404(LocationPermission, rev_access_hash=rev_access_hash)
-    user = locperm.user
-
-     # get all user perms of user
-    location_permissions = user.profile.get_loc_perms_of_host(request.user)
-
-    context = {        
-        'navbar'              : "admin",
-        'user'                : user,
-        'inv_code_changed'                : False,
-        'location_permissions'              : location_permissions,
+@user_passes_test(lambda u: u.profile.is_inviter)
+def invite(request):
+    context = {
+    'navbar' : 'invite'
     }
-    return render(request, 'userhandling/man_user.html', context)
+    return render(request, 'userhandling/invite.html', context)
+
+# Called from Invite paged
+@user_passes_test(lambda u: u.profile.is_inviter)
+def toggle_access_invite(request, rev_access_hash):
+    toggle_access_from_hash(rev_access_hash)
+    return redirect("invite")
+

@@ -40,6 +40,7 @@ urlpatterns = [
     path('attendence_list/<str:movienight_id>', views.attendence_list,  name='attendence_list'),
     path('api/attendence_list/<str:movienight_id>', views.UserAttendenceList.as_view()),
     path('api/loc_prof_list/', views.ProfileList.as_view()),
+    path('api/invite_list/', views.ProfileListInvite.as_view()),
     path('count_votes/<str:movienight_id>', views.count_votes,  name='count_votes'),
     path('user_prefs/', views.user_prefs,  name='user_prefs'),
     path('change_password/', views.change_password,  name='change_password'),
@@ -55,8 +56,10 @@ urlpatterns = [
     path('man_user/<str:user_id>', views.manage_user,  name='manage_user'),
     path('gen_new_invitation_key/<str:user_id>/<str:locperm_id>', views.gen_new_invitation_key,  name='gen_new_invitation_key'),
     path('change_role/<str:user_id>/<str:locperm_id>', views.change_role,  name='change_role'),
-    path('revoke_access_admin/<str:rev_access_hash>', views.revoke_access_admin,  name='revoke_access_admin'),
-    path('grant_access_admin/<str:rev_access_hash>', views.grant_access_admin,  name='grant_access_admin'),
+    path('toggle_access_admin/<str:rev_access_hash>', views.toggle_access_admin,  name='toggle_access_admin'),
+    path('toggle_access_invite/<str:rev_access_hash>', views.toggle_access_invite,  name='toggle_access_invite'),
+    path('invite/', views.invite,  name='invite'),
+
 
 
 

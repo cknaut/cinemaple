@@ -157,7 +157,7 @@
                                                             </div>
                     
                                                             <div class="col-xl-5 col-lg-5">
-                                                                    <a class="btn btn-success btn-sm" href="{% url  'grant_access_admin' rev_access_hash=loc_perm.rev_access_hash %}" role="button">Grant Access</a>
+                                                                    <a class="btn btn-success btn-sm" href="{% url  'toggle_access_admin' rev_access_hash=loc_perm.rev_access_hash %}" role="button">Grant Access</a>
                                                                 </div>                                              
                                             {% else %}
                                             <div class="col-xl-6 col-lg-6">
@@ -165,7 +165,7 @@
                                         </div>
                                         <div class="col-xl-5 col-lg-5">
                                             <div class="col-xl-5 col-lg-5">
-                                                <a class="btn btn-danger btn-sm" href="{% url  'revoke_access_admin' rev_access_hash=loc_perm.rev_access_hash %}" role="button">Revoke Access</a>
+                                                <a class="btn btn-danger btn-sm" href="{% url  'toggle_access_admin' rev_access_hash=loc_perm.rev_access_hash %}" role="button">Revoke Access</a>
                                             </div>
                                             </div>  
 
