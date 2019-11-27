@@ -56,6 +56,8 @@ urlpatterns = [
     path('gen_new_invitation_key/<str:user_id>/<str:locperm_id>', views.gen_new_invitation_key,  name='gen_new_invitation_key'),
     path('change_role/<str:user_id>/<str:locperm_id>', views.change_role,  name='change_role'),
     path('revoke_access_admin/<str:rev_access_hash>', views.revoke_access_admin,  name='revoke_access_admin'),
+    path('grant_access_admin/<str:rev_access_hash>', views.grant_access_admin,  name='grant_access_admin'),
+
 
 
 
