@@ -42,9 +42,57 @@
         <div class="card-body">
           <div class="col-xl-12 col-lg-12"style = "margin-top:-0.5%">
 
+              <h3> Your Invitation Link Users</h3>
+              <div class="alert alert-danger" role="alert"> 
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    Here are your personalized invitation links. Feel free to share the links freely amongs friends. 
+  Once a user has signed up using your invitation link, you will recieve and email notification with the user information. It is your responsibility to make sure you know the user and are comfortable with inviting the user to Movie Nights. In case you're not, you'll be given the opportunity to immediately revoke the users's acces in the email. Alternatively, you can use the buttons in the table below.
+</div>             
+
+{% for locperm in locperms %}
+
+<div class="row4">
+  
+<p>Invitation Link for <span class="badge badge-secondary">{{user.first_name}}  {{user.last_name}} </span> and  <span class="badge badge-secondary">{{locperm.location}} </span>:</p>
+  
+  
+</div>
+
+<div class="row4">
+
+
+    <div class="col-xl-7 col-lg-7">
+<div class="input-group">
+    <input type="text" class="form-control" id='invlink{{ forloop.counter }}' value="https://www.cinemaple.com{% url 'registration' inv_code=locperm.get_invite_code %}" aria-label="Invitation link for location {{locperm.location}}" >
+  </div>
+
+</div>
+
+
+<div class="col-xl-1 col-lg-1">
+    <button type="button"  id='copybutton{{ forloop.counter }}'  data-toggle="tooltip" title="Copy to clipboard" onclick='copyclipboard{{ forloop.counter }}()' class="btn btn-primary btn-sm"><i class="material-icons">file_copy</i>
+    </button>
+
+      </div>
+
+
+<div class="col-xl-1 col-lg-1">
+    <button type="button" class="btn btn-primary btn-sm"><i class="material-icons">share</i>
+
+      </div>
+    
+
+
+  </div>
+
+{% endfor %}
+
+<hr>
 
           
-            <h3> Your Invited Users</h3>
+            <h3> Users Signed Up With Your Invitation Links</h3>
 
             <table id="loc_user_table" class="display" style="width:100%" >
               <thead>
@@ -79,6 +127,9 @@
 {% block js %}
 <script>
 
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
 
   $(document).ready(function () {
     var table = $('#loc_user_table').DataTable({
@@ -132,6 +183,33 @@
     });
   });
 
+  
+
+  {% for locperm in locperms %}
+
+  function copyclipboard{{ forloop.counter }}() {
+  /* Get the text field */
+  var copyText = document.getElementById("invlink{{ forloop.counter }}");
+  var copybutton = document.getElementById("copybutton{{ forloop.counter }}");
+
+  /* Select the text field */
+  
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  
+  $(copybutton).tooltip('hide')
+          .attr('data-original-title', "Copied")
+          .tooltip('fixTitle')
+          .tooltip('show');
+
+
+}
+
+  {% endfor %}
 </script>
 
 <script type="text/javascript" src="{% static 'userhandling/lib/mdb/js/mdb.min.js' %}"></script>
@@ -158,3 +236,7 @@
 </div>
 
 {% endblock %}
+
+
+
+

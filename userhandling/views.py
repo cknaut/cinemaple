@@ -1437,8 +1437,11 @@ def toggle_access_admin(request, rev_access_hash):
 
 @user_passes_test(lambda u: u.profile.is_inviter)
 def invite(request):
+
+    locperms = request.user.profile.get_invitable_location_perms()
     context = {
-    'navbar' : 'invite'
+    'navbar' : 'invite',
+    'locperms' : locperms,
     }
     return render(request, 'userhandling/invite.html', context)
 
