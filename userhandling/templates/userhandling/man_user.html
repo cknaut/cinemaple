@@ -124,10 +124,58 @@
                                                 <b>Role:</b>
                                             </div>  
 
-                                            <div class="col-xl-6 col-lg-6">
-                                                    <span class="badge badge-primary"> {{loc_perm.get_role_display  }} </span> <a class="btn btn-secondary btn-sm" href="{% url 'change_role' user_id=user.id locperm_id=loc_perm.id %}" role="button">Change Role</a>
-                                        </div>  
+                                            <div class="col-xl-9 col-lg-9">
+                                                    <div class="row">
+                                                            <div class="col-xl-6 col-lg-6">
+                                                 
+                                                        <span class="badge badge-primary"> {{loc_perm.get_role_display  }} </span> 
+                                                        
+                                                    </div>
+                                                    <div class="col-xl-5 col-lg-5">
+                                                        <a class="btn btn-secondary btn-sm" href="{% url 'change_role' user_id=user.id locperm_id=loc_perm.id %}" role="button">Change Role</a>
+                                                    </div>  
+                                                    </div>  
+                                                    </div>  
+
                                 </div>
+
+                                <div class="row4">
+                                    <div class="col-xl-3 col-lg-3">
+                                            <b>Has Access:</b>
+                                        </div>  
+
+                                        
+
+                                                
+                                        <div class="col-xl-9 col-lg-9">
+                                                <div class="row">
+
+                                                        {% if loc_perm.revoked_access %}
+
+                                                        <div class="col-xl-6 col-lg-6">
+                                                                <span class='badge badge-danger'>No</span>
+                                                            </div>
+                    
+                                                            <div class="col-xl-5 col-lg-5">
+                                                                    <a class="btn btn-success btn-sm" href="#" role="button">Grant Access</a>
+                                                                </div>                                              
+                                            {% else %}
+                                            <div class="col-xl-6 col-lg-6">
+                                            <span class='badge badge-success'>Yes</span>
+                                        </div>
+                                        <div class="col-xl-5 col-lg-5">
+                                                <a class="btn btn-danger btn-sm" href="#" role="button">Revoke Access</a>
+                                            </div>  
+
+                                            
+
+                                            {%endif %}
+
+
+                                        </div> 
+                                        
+                                    </div>  
+                            </div>
 
                                 <div class="row4">
                                         <div class="col-xl-3 col-lg-3">
@@ -139,15 +187,28 @@
                                         </div>  
                                 </div>
 
+
+                                {% if loc_perm.can_invite %}
+
+
                                 <div class="row4">
                                     <div class="col-xl-3 col-lg-3">
                                             <b>Invitation Code:  </b>
                                         </div>  
 
-                                        <div class="col-xl-6 col-lg-6">
-                                                    <span class="badge badge-secondary">      {{loc_perm.invitation_code }} </span>   <a class="btn btn-secondary btn-sm" href="{% url 'gen_new_invitation_key' user_id=user.id locperm_id=loc_perm.id %}" role="button">Generate New Code</a>
+                                        <div class="col-xl-9 col-lg-9">
+                                                <div class="row">
+                                                <div class="col-xl-6 col-lg-6">
+                                                    <span class="badge badge-secondary">      {{loc_perm.invitation_code }} </span>   
+                                                </div>  
+                                                    <div class="col-xl-5 col-lg-5   ">
+                                                            <a class="btn btn-secondary btn-sm" href="{% url 'gen_new_invitation_key' user_id=user.id locperm_id=loc_perm.id %}" role="button">Generate New Code</a>
+                                                    </div> 
+                                                </div>  
                                     </div>  
+
                             </div>
+                            {%endif %}
 
 
 

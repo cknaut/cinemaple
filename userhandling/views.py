@@ -103,7 +103,7 @@ def activation(request, key):
             # Add tag to contact, this will define if correct emails will be send.
             loc_id_tag = profile.get_location_permissions()
             location_ids = [i.id for i in loc_id_tag]
-            location_tags = ["locpermid_{}".format(i) for i in location_ids]
+            location_tags = ["{}{}".format(settings.MC_PREFIC_LOCPERMID, i) for i in location_ids]
 
             for tag in location_tags:
                 mc.add_tag_to_user(tag, profile.user.email)
@@ -1376,6 +1376,26 @@ def change_role(request, user_id, locperm_id):
     return render(request, 'userhandling/change_perms.html', context)
 
 
+def revoke_access_from_hash(request, rev_access_hash):
+    locperm = get_object_or_404(LocationPermission, rev_access_hash=rev_access_hash)
 
-    
+    #revoce access
+    locperm.revoked_access = True
+    locperm.save()
+
+def revoke_access_admin(request, rev_access_hash):
+    revoke_access_from_hash(rev_access_hash)
+
+     # get all user perms of user
+    location_permissions = user.profile.get_loc_perms_of_host(request.user)
+
+    context = {        
+        'navbar'              : "admin",
+        'user'                : user,
+        'inv_code_changed'                : False,
+        'location_permissions'              : location_permissions,
+    }
+    return render(request, 'userhandling/man_user.html', context)
+
+
 

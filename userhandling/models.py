@@ -42,8 +42,8 @@ class LocationPermission(models.Model):
     ]
     
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    revoced_access = models.BooleanField(default=False)
-    rev_access_hash = models.BooleanField(default=False)
+    revoked_access = models.BooleanField(default=False)
+    rev_access_hash = models.CharField(max_length=40, blank=True)
 
     # ALl users get an activation code, so you'll have to manually check if user can invite using get_invite_code
     #NEVER DIRECTLY RETRIEVE THIS ALWAYS USE get_invite_code()
@@ -88,7 +88,7 @@ class Profile(models.Model):
     key_expires = models.DateTimeField(null=True, blank=True)
 
 
-    
+
 
     def get_location_permissions(self):
         return self.user.locperms.all()

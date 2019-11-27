@@ -104,8 +104,11 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
     invitation_key = serializers.SerializerMethodField()
     join_date = serializers.SerializerMethodField()
     user_id = serializers.SerializerMethodField()
+    has_access = serializers.SerializerMethodField()
 
 
+    def get_has_access(self, LocationPermission):
+        return (LocationPermission.revoked_access == False)
 
     def get_location(self, LocationPermission):
         return LocationPermission.location.name
@@ -131,7 +134,7 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocationPermission
         fields = (
-            'id', 'location', 'username', "firstlastname", 'role', 'invitation_key', 'join_date', 'user_id'
+            'id', 'location', 'username', "firstlastname", 'role', 'invitation_key', 'join_date', 'user_id', 'has_access'
         )
 
 class UserAttendenceSerializer(serializers.ModelSerializer):

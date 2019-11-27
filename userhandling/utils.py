@@ -48,6 +48,12 @@ if PW_RESET_SECRET_SALT is None:
     raise NotImplementedError("PW_RESET_SECRET_SALT must be set in the settings")
 
 
+
+REV_USER_ACCESS_SECRET_SALT = getattr(settings, "REV_USER_ACCESS_SECRET_SALT", None)
+if REV_USER_ACCESS_SECRET_SALT is None:
+    raise NotImplementedError("REV_USER_ACCESS_SECRET_SALT must be set in the settings")
+
+
 def check_email(email):
     if not re.match(r".+@.+\..+", email):
         raise ValueError('String ' + email + ' is not a valid email address')
@@ -106,6 +112,8 @@ class Mailchimp(object):
         return r.status_code, r.json()
 
     def check_list_details(self):
+
+        # TODO: Make sure that we will never retrieve more than 1000 users.
         data = {
             "count" : "1000"
         }
@@ -375,6 +383,10 @@ class VerificationHash(object):
     def gen_pw_hash(self, username):
         ''' Get Hasch by combining username, salt based on user creation, and secret salt'''
         return hashlib.sha1((self.salt+username+PW_RESET_SECRET_SALT).encode('utf-8')).hexdigest()
+
+    def gen_rev_access_hash(self, loc_perm_id):
+        ''' Get Hasch by combining username, salt based on user creation, and secret salt'''
+        return hashlib.sha1((self.salt+str(loc_perm_id)+PW_RESET_SECRET_SALT).encode('utf-8')).hexdigest()
 
 def check_ml_health():
     '''

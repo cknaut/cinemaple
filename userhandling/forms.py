@@ -108,12 +108,20 @@ class RegistrationForm(forms.Form):
         location = LocationPermission.objects.get(invitation_code=datas["invitation_code"]).location
         invitor = LocationPermission.objects.get(invitation_code=datas["invitation_code"]).user
 
+
+
         lp = LocationPermission.objects.create(
             location = location,
             user = u, 
             inviter = invitor,
         )
 
+        lp.save()
+
+        # Add revoke access hash by feeding LocationPermission id as seed
+        vh = VerificationHash()
+        revoke_access_hash = vh.gen_rev_access_hash(lp.id)
+        lp.rev_access_hash = revoke_access_hash
         lp.save()
 
         #Notify Invitor about signup
