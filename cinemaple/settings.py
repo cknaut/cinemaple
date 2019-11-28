@@ -219,6 +219,8 @@ REST_FRAMEWORK = {
 #Prefixes for Mailchimp Tags
 
 MC_PREFIX_LOCPERMID  = "locpermid_"
+MC_PREFIX_HASACCESSID  = "hasaccessid_"
+
 
 
 

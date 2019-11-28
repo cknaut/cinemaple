@@ -105,10 +105,17 @@ def activation(request, key):
             # Add tag to contact, this will define if correct emails will be send.
             loc_id_tag = profile.get_location_permissions()
             location_ids = [i.location.id for i in loc_id_tag]
-            location_tags = ["{}{}".format(settings.MC_PREFIX_LOCPERMID, i) for i in location_ids]
 
-            for tag in location_tags:
-                mc.add_tag_to_user(tag, profile.user.email)
+            # ties user to location and will never be altered
+            location_tags = ["{}{}".format(settings.MC_PREFIX_LOCPERMID, i) for i in location_ids]
+            
+            # specifies user access. Is present only if user has access.
+            has_access_tags = ["{}{}".format(settings.MC_PREFIX_HASACCESSID, i) for i in location_ids]
+
+
+            for location_tag, has_access_tags in zip(location_tags,has_access_tags):
+                mc.add_tag_to_user(location_tag, profile.user.email)
+                mc.add_tag_to_user(has_access_tags, profile.user.email)
 
 
     
@@ -1431,13 +1438,13 @@ def toggle_access_from_hash(rev_access_hash):
 
     #Update MC tag used to exclude revoked access users from mailings
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-    loc_id_tagg = "{}{}".format(settings.MC_PREFIX_LOCPERMID, locperm.location.id) 
+    has_access_tag = "{}{}".format(settings.MC_PREFIX_HASACCESSID, locperm.location.id) 
 
     if not old_status:
         # if toggled from no revokec access to revoked access
-        mc.untag(loc_id_tagg, locperm.user.profile.user.email)
+        mc.untag(has_access_tag, locperm.user.profile.user.email)
     else:
-        mc.add_tag_to_user(loc_id_tagg, locperm.user.profile.user.email)
+        mc.add_tag_to_user(has_access_tag, locperm.user.profile.user.email)
     return 0
 
 # Called from manage user page accessible for hosts)
@@ -1485,8 +1492,8 @@ def revoke_access_from_email(request, rev_access_hash):
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
 
     # if toggled from no revokec access to revoked access
-    loc_id_tagg = "{}{}".format(settings.MC_PREFIX_LOCPERMID, locperm.location.id) 
-    mc.untag(loc_id_tagg, locperm.user.profile.user.email)
+    has_access_tag = "{}{}".format(settings.MC_PREFIX_HASACCESSID, locperm.location.id) 
+    mc.untag(has_access_tag, locperm.user.profile.user.email)
 
     context = {
     'navbar' : 'invite',

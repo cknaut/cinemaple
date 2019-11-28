@@ -225,7 +225,7 @@ class Mailchimp(object):
                                     api_url = self.api_url)
 
         # Retrieve ids of location tag
-        location_tag = "{}{}".format(settings.MC_PREFIX_LOCPERMID, location_id) 
+        location_tag = "{}{}".format(settings.MC_PREFIX_HASACCESSID, location_id) 
         location_tag_id = self.create_or_retrieve_tag(location_tag)
 
         data = {
@@ -436,9 +436,9 @@ def check_ml_health(location_id):
 
     '''
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-    location_tag = "{}{}".format(settings.MC_PREFIX_LOCPERMID, location_id) 
+    location_tag = "{}{}".format(settings.MC_PREFIX_HASACCESSID, location_id) 
     location_tag_id = mc.create_or_retrieve_tag(location_tag)
-    location = md.Location.objects.filter(pk=location_id)
+    location = Location.objects.filter(pk=location_id)
  
 
     status, members_list, mailchimp_id = mc.get_member_list(location_tag_id)
@@ -491,11 +491,12 @@ def check_ml_health(location_id):
             'statusok'          : healthy,
             'mc_id'             : mailchimp_id,
             "emails_revoked"    : emails_revoked,
+            "num_revoked"       : len(emails_revoked),
             'subs'              : subs,
             'usubs'             : usubs,
             'user_emails'       : user_emails_badged,
             'users_not_in_mc'   : users_not_in_mc_badged,
-            'health'            : healthprint
+            'health'            : healthprint,
         }
 
     else:

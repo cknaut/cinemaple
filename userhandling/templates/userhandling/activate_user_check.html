@@ -158,7 +158,7 @@ aria-hidden="true">
                                 {% endfor %}
                             </div>
 
-                            
+                            {% if num_revoked > 0 %}
                             <div class="row4">
                                 <div class="col-xl-5 col-lg-5">
                               The following users ({{ emails_revoked|length }}  total) have revoked access for location <span class="badge badge-secondary">{{location}}</span>:
@@ -172,8 +172,12 @@ aria-hidden="true">
                                         {% endfor %}
                                 </div>
                         </div>
-                        
-                        {%endif%}                            
+
+
+                       
+                        {% endif %} 
+                
+                        {% endif %}                            
 
                         <div class="d-flex justify-content-between">
                                 <a href={% url 'details_mov_nights' movienight_id=movienight_id   %} role="button" class="btn btn-secondary">Back</a>
