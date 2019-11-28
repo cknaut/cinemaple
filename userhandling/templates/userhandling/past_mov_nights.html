@@ -71,6 +71,8 @@
                   <th>Date</th>
                   <th>Participants</th>
                   <th>Winning Movie</th>
+                  <th>Raw Date</th>
+
                   <th>Link</th>
                 </tr>
               </thead>
@@ -100,13 +102,17 @@
         {
           "data": "motto"
         }, {
-          "data": "date_delta"
+          "data": "date",
+          "orderData": 4, 
         },
         {
           "data": "reg_users"
         },
         {
           "data": "winning_movie"
+        },
+        {
+          "data": "rawdate"
         },
         {}
       ],
@@ -118,6 +124,11 @@
               "' role='button'>More Info</a>";
           }
         },
+        {
+        "targets": [ -2 ],
+        "visible": false,
+        "searchable": false
+    }
       ]
     });
   });

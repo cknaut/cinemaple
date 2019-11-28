@@ -74,6 +74,7 @@
                   <th>Registered Users</th>
                   <th>Status</th>
                   <th>Voting enabled?</th>
+                  <th>Date</th>
                   <th>Link</th>
                 </tr>
               </thead>
@@ -107,7 +108,9 @@
         {
           "data": "motto"
         }, {
-          "data": "date_delta"
+          "data": "date_delta",
+          "orderData": 6, 
+
         },
         {
           "data": "reg_users"
@@ -118,9 +121,16 @@
         {
           "data": "vote_enabled"
         },
+        {
+          "data": "rawdate"
+        },
         {}
       ],
-      "columnDefs": [{
+      
+      "columnDefs": [
+      
+      
+      {
           "targets": -1,
           "data": "id",
           "render": function (data, type, row, meta) {
@@ -129,7 +139,7 @@
           }
         },
         {
-          "targets": -3,
+          "targets": -4,
           "data": "status",
           "render": function (data, type, row, meta) {
             if (data == "DRAFT") {
@@ -144,7 +154,7 @@
           }
         },
         {
-          "targets": -2,
+          "targets": -3,
           "data": "vote_enabled",
           "render": function (data, type, row, meta) {
             if (data) {
@@ -153,7 +163,12 @@
               return "<span class='badge badge-danger'> Disabled</span>";
             }
           }
-        }
+        },
+        {
+        "targets": [ -2 ],
+        "visible": false,
+        "searchable": false
+    }
       ]
     });
   });
