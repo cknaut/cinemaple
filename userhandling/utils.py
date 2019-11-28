@@ -9,8 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.utils import timezone
-
-
+import userhandling.models as md
 
 
 # Wrap Bootrap Badge HTML around string
@@ -111,17 +110,28 @@ class Mailchimp(object):
                     )
         return r.status_code, r.json()
 
-    def check_list_details(self):
+    def check_list_details(self, tag_id):
 
         # TODO: Make sure that we will never retrieve more than 1000 users.
         data = {
             "count" : "1000"
         }
-        members_endpoint       = self.get_members_endpoint()
-        r                   = requests.get(members_endpoint,
-                                auth=("", MAILCHIMP_API_KEY),
-                                params=data
-                                )
+
+        if tag_id==None:
+            endpoint       = self.get_members_endpoint()
+        else:
+            segment_endpoint = self.segment_endpoint
+            endpoint = "{segment_endpoint}/{tag_id}/members".format(
+                segment_endpoint=segment_endpoint,
+                tag_id = tag_id
+            )
+
+        r                   = requests.get(endpoint,
+                                    auth=("", MAILCHIMP_API_KEY),
+                                    params=data
+                                    )
+
+                                
         return r.status_code, r.json()
 
 
@@ -299,8 +309,10 @@ class Mailchimp(object):
     <td class="defaultText" mc:edit="body"></td>
     '''
 
-    def get_member_list(self):
-        list_details = self.check_list_details()
+    def get_member_list(self, tag_id=None):
+
+        
+        list_details = self.check_list_details(tag_id)
         res = list_details[1]
         status = list_details[0]
         mailchimp_id = self.list_id
@@ -417,24 +429,37 @@ class VerificationHash(object):
         ''' Get Hasch by combining username, salt based on user creation, and secret salt'''
         return hashlib.sha1((self.salt+str(loc_perm_id)+PW_RESET_SECRET_SALT).encode('utf-8')).hexdigest()
 
-def check_ml_health():
+def check_ml_health(location_id):
     '''
     Compares listed members in the Mailchimp mailinglist (including subscribed and unsubscribed ones) to registered users
     If not all cinemaple users are in  Mailchimp list, raise problem.
 
     '''
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-    status, members_list, mailchimp_id = mc.get_member_list()
+    location_tag = "{}{}".format(settings.MC_PREFIX_LOCPERMID, location_id) 
+    location_tag_id = mc.create_or_retrieve_tag(location_tag)
+    location = md.Location.objects.filter(pk=location_id)
+ 
+
+    status, members_list, mailchimp_id = mc.get_member_list(location_tag_id)
 
     if status == 200:
         print(members_list)
         status = badgify(str(status), 'success')
-        subs = [badgify(email, 'secondary') for email in members_list['emails_subscribed']]
-        usubs = [badgify(email, 'secondary') for email in members_list['emails_unsubscribed']]
+        if members_list=="":
+            subs = []
+            usubs = []
+        else:
+            subs = [badgify(email, 'secondary') for email in members_list['emails_subscribed']]
+            usubs = [badgify(email, 'secondary') for email in members_list['emails_unsubscribed']]
 
-        # Get emails of all users
-
+        # Get emails of associated to id
         users = User.objects.filter(is_active=True)
+
+        # search users that are associated with location:
+        user_of_loc_with_id = [user.id for user in users if location[0] in user.profile.get_all_locations()]
+        users = User.objects.filter(id__in=user_of_loc_with_id)
+
         user_emails = [users[i].email for i in range(len(users))]
         user_emails_badged = [badgify(email, 'secondary') for email in user_emails]
 
@@ -446,6 +471,13 @@ def check_ml_health():
 
         users_not_in_mc_badged = [badgify(email, 'secondary') for email in users_not_in_mc]
 
+        # users with revoked access
+        
+        user_revoked_id = [user.id for user in users if user.profile.has_revoked(location)]
+        users_revoked =  User.objects.filter(id__in=user_revoked_id)
+        emails_revoked = [badgify(user.email, 'secondary') for user in users_revoked]
+
+
         if len(users_not_in_mc_badged) != 0:
             healthy = False
             healthprint = badgify("Unhealthy", 'danger')
@@ -455,8 +487,10 @@ def check_ml_health():
 
         context = {
             'status'            : status,
+            'location'          : location[0],
             'statusok'          : healthy,
             'mc_id'             : mailchimp_id,
+            "emails_revoked"    : emails_revoked,
             'subs'              : subs,
             'usubs'             : usubs,
             'user_emails'       : user_emails_badged,

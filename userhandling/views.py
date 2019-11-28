@@ -405,7 +405,12 @@ def password_reset(request, reset_key):
 @login_required
 def curr_mov_nights(request):
 
-    movienights = MovieNightEvent.objects.order_by('-date')
+    # TODO: Update this with new multi host access management
+    has_revoked = request.user.profile.has_at_least_one_revk()
+    if not has_revoked:
+        movienights = MovieNightEvent.objects.order_by('-date')
+    else:
+        return details_mov_nights(request, None, True)
 
     # Horribly inefficiently retrieve active movie night.
     movienight_return = None
@@ -772,7 +777,7 @@ def activate_movie_night(request, movienight_id):
         }
         return render(request, 'userhandling/curr_mov_nights.html', context)
     else:
-        _, context = check_ml_health()
+        _, context = check_ml_health(movienight.location.id)
         context['movienight_id'] = movienight_id
 
         return render(request, 'userhandling/activate_user_check.html', context)
@@ -1285,27 +1290,13 @@ def activate_emailupdate(request, key):
 @user_passes_test(lambda u: u.is_staff)
 def ml_health(request):
 
-    _, context = check_ml_health()
+    locperms_managed = request.user.profile.get_hosting_location_perms()
+
+    for locperm in locperms_managed:
+        _, context = check_ml_health(locperm.location.id)
+        
     context['navbar'] = 'admin'
     return render(request, 'userhandling/mailinglist_health.html', context)
-
-def trigger_emails(request, movienight_id):
-
-    health, context = check_ml_health()
-    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-    mc.get_all_campaign()
-
-    reply_to = 'info@cinemaple.com'
-    subject_line = 'Test Campaign'
-    preview_text = 'Gotta treat fo you'
-    from_name = request.user.first_name
-    html = "LOLWOTT"
-    title = "Test Campaign"
-
-    _, _, email_html = mc.create_campaign(reply_to, subject_line, preview_text, title, from_name, html)
-
-    return HttpResponse(email_html)
-
 
 @user_passes_test(lambda u: u.is_staff)
 def show_loc_users(request):
@@ -1447,7 +1438,6 @@ def toggle_access_from_hash(rev_access_hash):
         mc.untag(loc_id_tagg, locperm.user.profile.user.email)
     else:
         mc.add_tag_to_user(loc_id_tagg, locperm.user.profile.user.email)
-
     return 0
 
 # Called from manage user page accessible for hosts)

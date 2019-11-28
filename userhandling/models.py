@@ -101,6 +101,27 @@ class Profile(models.Model):
     def get_location_permissions(self):
         return self.user.locperms.all()
 
+    def has_revoked(self, location):
+        locperms = self.get_location_permissions()
+        locperms_location = locperms.filter(location__in=location)
+        has_revoked = False
+        for locperm in locperms_location:
+            if locperm.revoked_access:
+                has_revoked = True
+                return has_revoked
+        
+        return has_revoked
+
+    def has_at_least_one_revk(self):
+    # returns true if at least one locperm has revoked access
+        locperms = self.get_location_permissions()
+        has_revoked = False
+        for locperm in locperms:
+            if locperm.revoked_access:
+                has_revoked = True
+                return has_revoked
+        
+        return has_revoked
 
     def get_loc_perms_of_host(self, hostuser):
         # given a host, return all user permissions of user for which host is host
@@ -124,6 +145,10 @@ class Profile(models.Model):
     def get_hosted_locations(self):
         # Returns list of locations for which user has Host status
         return [i.location for i in self.get_hosting_location_perms()]
+
+    def get_all_locations(self):
+        # Returns list of locations for which user has any location permission
+        return [i.location for i in self.get_location_permissions()]
 
     def get_managed_loc_perms(self):
         # get location permissions for locations for which user is host

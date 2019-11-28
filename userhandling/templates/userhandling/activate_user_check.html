@@ -133,7 +133,8 @@ aria-hidden="true">
                 <!-- Card Body -->
                 <div class="card-body">
 
-                        <p>Upon activating the movienight, you'll be sending {{ subs|length }} emails to the following emails:</p>
+                        <p>Upon activating the movienight, you'll be sending {{ subs|length }} emails to the following emails associated to location <span class="badge badge-secondary">{{location}}</span>
+                            :</p>
 
                         <div class="col-xl-3 col-lg-">
                             {% for  email in subs %}
@@ -143,7 +144,7 @@ aria-hidden="true">
                             {% endfor %}
                         </div>
 
-
+                        
                         <p> The state of your email list is {{health|safe}}.</p>
 
                         {% if not statusok %} <p> This means that the following email adresses from members are not found in either the subscribed nor the unsubscribes list of the Mailinglist: </p>
@@ -156,7 +157,24 @@ aria-hidden="true">
                                 </div>
                                 {% endfor %}
                             </div>
-                        {%endif%}
+
+                            
+                            <div class="row4">
+                                <div class="col-xl-5 col-lg-5">
+                              The following users ({{ emails_revoked|length }}  total) have revoked access for location <span class="badge badge-secondary">{{location}}</span>:
+                                </div>
+    
+                                <div class="col-xl-7 col-lg-7">
+                                        {% for  email in emails_revoked %}
+                                        <div class="row1">
+                                        {{email|safe}}
+                                        </div>
+                                        {% endfor %}
+                                </div>
+                        </div>
+                        
+                        {%endif%}                            
+
                         <div class="d-flex justify-content-between">
                                 <a href={% url 'details_mov_nights' movienight_id=movienight_id   %} role="button" class="btn btn-secondary">Back</a>
                                 <div>
