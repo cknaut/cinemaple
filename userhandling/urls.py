@@ -58,6 +58,7 @@ urlpatterns = [
     path('toggle_access_admin/<str:rev_access_hash>', views.toggle_access_admin,  name='toggle_access_admin'),
     path('toggle_access_invite/<str:rev_access_hash>', views.toggle_access_invite,  name='toggle_access_invite'),
     path('invite/', views.invite,  name='invite'),
+    path('view_invited/', views.view_invited,  name='view_invited'),
     path('rev_acc/<str:rev_access_hash>', views.revoke_access_from_email,  name='revoke_access_from_email'),
 
 

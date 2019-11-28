@@ -56,10 +56,15 @@ Header
 
         {% if request.user.profile.is_inviter %}
           {% if navbar == "invite"%}
-          <li class="menu-active" ><a href={% url 'invite' %}>Invite</a></li>
+          <li class="menu-has-children menu-active" ><a href="">Invite</a>
+
           {% else %}
-          <li class="menu" ><a href={% url 'invite' %}>Invite</a></li>
-          {% endif %}
+          <li class="menu-has-children" ><a href="">Invite</a>
+            {% endif %}
+            <ul>
+              <li><a href={% url 'invite' %}>Invitation Links</a></li>
+              <li><a href={% url 'view_invited' %}>Invited Users</a></li>
+            </ul>
         {% endif %}
         {% if navbar == "faq"%}
           <li class="menu-active" ><a href={% url 'faq' %}>FAQ</a></li>

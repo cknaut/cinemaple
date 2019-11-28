@@ -1479,7 +1479,7 @@ def invite(request):
 @user_passes_test(lambda u: u.profile.is_inviter)
 def toggle_access_invite(request, rev_access_hash):
     toggle_access_from_hash(rev_access_hash)
-    return redirect("invite")
+    return redirect("view_invited")
 
 # Revoke access from Email
 def revoke_access_from_email(request, rev_access_hash):
@@ -1503,3 +1503,10 @@ def revoke_access_from_email(request, rev_access_hash):
 
 
 
+def view_invited(request):
+    locperms = request.user.profile.get_invitable_location_perms()
+    context = {
+    'navbar' : 'invite',
+    'locperms' : locperms,
+    }
+    return render(request, 'userhandling/view_invited.html', context)
