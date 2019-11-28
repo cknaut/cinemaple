@@ -152,7 +152,7 @@ def activation(request, key):
             successful_verified = True
             context = {
                 'successful_verified': successful_verified,
-                'email': sender_email,
+                'email': profile.user.email,
                 'username': profile.user,
                 'movienights' : movienights_render,
                 'total_rt'  : total_rt,
@@ -827,6 +827,9 @@ def schedule_email(request, movienight_id):
     time_reminder = movienight.get_reminder_date()
 
 
+    # Location ID nedded to address correct users
+    loc_id = movienight.location.id
+    
     # First Generate 2 Campaigns
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
 
@@ -840,8 +843,8 @@ def schedule_email(request, movienight_id):
     subject_line1 = 'Invitation for Movie Night: {}'.format(movienight.motto)
     subject_line2 = 'Reminder for Movie Night: {}'.format(movienight.motto)
 
-    res1 = mc.create_campaign(time_activation, reply_to, subject_line1, preview_text, title1, from_name, html_data_invitation)
-    res2 = mc.create_campaign(time_reminder, reply_to, subject_line2, preview_text, title2, from_name, html_data_reminder)
+    res1 = mc.create_campaign(time_activation, reply_to, subject_line1, preview_text, title1, from_name, html_data_invitation, loc_id)
+    res2 = mc.create_campaign(time_reminder, reply_to, subject_line2, preview_text, title2, from_name, html_data_reminder, loc_id)
 
     # Check if MC Statuscodes are ok
     if res1 == 204 and res2 == 204:
@@ -1437,14 +1440,13 @@ def toggle_access_from_hash(rev_access_hash):
 
     #Update MC tag used to exclude revoked access users from mailings
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-    rev_access_tag = "{}{}".format(settings.MC_PREFIX_REVOKE_ACCESS, locperm.location.id) 
-
+    loc_id_tagg = "{}{}".format(settings.MC_PREFIX_LOCPERMID, locperm.location.id) 
 
     if not old_status:
         # if toggled from no revokec access to revoked access
-        mc.add_tag_to_user(rev_access_tag, locperm.user.profile.user.email)
+        mc.untag(loc_id_tagg, locperm.user.profile.user.email)
     else:
-        mc.untag(rev_access_tag, locperm.user.profile.user.email)
+        mc.add_tag_to_user(loc_id_tagg, locperm.user.profile.user.email)
 
     return 0
 
@@ -1493,8 +1495,8 @@ def revoke_access_from_email(request, rev_access_hash):
     mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
 
     # if toggled from no revokec access to revoked access
-    rev_access_tag = "{}{}".format(settings.MC_PREFIX_REVOKE_ACCESS, locperm.location.id) 
-    mc.add_tag_to_user(rev_access_tag, locperm.user.profile.user.email)
+    loc_id_tagg = "{}{}".format(settings.MC_PREFIX_LOCPERMID, locperm.location.id) 
+    mc.untag(loc_id_tagg, locperm.user.profile.user.email)
 
     context = {
     'navbar' : 'invite',

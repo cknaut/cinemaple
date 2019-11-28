@@ -205,9 +205,7 @@ class Mailchimp(object):
         return r.status_code
 
 
-
-
-    def create_campaign(self, date, reply_to, subject_line, preview_text, title, from_name, html_body):
+    def create_campaign(self, date, reply_to, subject_line, preview_text, title, from_name, html_body, location_id):
         '''
         Creates Mailchimp Campaing and schedules it according to date
         date is datetime object and roudn ded to nearest 15mins
@@ -216,10 +214,18 @@ class Mailchimp(object):
         campaigns_endpoint       = self.list_endpoint = '{api_url}/campaigns'.format(
                                     api_url = self.api_url)
 
+        # Retrieve ids of location tag
+        location_tag = "{}{}".format(settings.MC_PREFIX_LOCPERMID, location_id) 
+        location_tag_id = self.create_or_retrieve_tag(location_tag)
+
         data = {
                     "type": "regular",
                     "recipients": {
                             "list_id": self.list_id,
+                            "segment_opts":{
+                                "saved_segment_id": location_tag_id
+                        
+                            }
                         },
                     "settings": {
                             "subject_line"      : subject_line,
@@ -229,6 +235,7 @@ class Mailchimp(object):
                             "reply_to"          : reply_to,
                             "to_name"           : "*|FNAME|*",
                     }
+                    
                     }
         r = requests.post(campaigns_endpoint,
                     auth=("", MAILCHIMP_API_KEY),
