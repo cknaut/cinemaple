@@ -86,6 +86,21 @@
                                 </div>
                         </div>
 
+                        
+
+                        
+                        <div class="row4">
+                            <div class="col-xl-3 col-lg-3">
+                            Location:
+                            </div>
+
+                            <div class="col-xl-9 col-lg-93">
+                                {{location}}
+                            </div>
+                    </div>
+
+                    {% comment %}
+
                         <div class="row4">
                                 <div class="col-xl-3 col-lg-3">
                                 Mailing List Health:
@@ -95,7 +110,7 @@
                                     {{health|safe}}
                                 </div>
                         </div>
-
+                        {% endcomment %}
 
 
                         <div class="row4">
@@ -157,7 +172,26 @@
                         </div>
 
 
+                        <div class="row4">
+                            <div class="col-xl-3 col-lg-3">
+                           Users with revockd access ({{ emails_revoked|length }}  total):
+                            </div>
 
+                            <div class="col-xl-9 col-lg-9">
+                                    {% for  email in emails_revoked %}
+                                    <div class="row1">
+                                    {{email|safe}}
+                                    </div>
+                                    {% endfor %}
+                            </div>
+                    </div>
+
+                    
+
+
+
+
+                        
 
 
 
