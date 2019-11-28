@@ -128,7 +128,11 @@ class Mailchimp(object):
     def search_tag(self, tag):
         # Looks up alrady defined tags and returns tag_id if it exists
 
-        r = requests.get(self.segment_endpoint, auth=("", MAILCHIMP_API_KEY))
+        data = {
+            "count" : "1000"
+        }
+
+        r = requests.get(self.segment_endpoint, auth=("", MAILCHIMP_API_KEY), params=data)
         res = r.json()
 
         tag_dicts = res["segments"]
@@ -183,6 +187,24 @@ class Mailchimp(object):
                     )
 
         return r.status_code, r.json()
+
+    def untag(self, tag, email):
+        tag_id = self.create_or_retrieve_tag(tag)
+
+        subscriber_hash     = get_subscriber_hash(email)
+        list_endpoint       = self.list_endpoint
+        endpoint            = "{list_endpoint}/segments/{tag_id}/members/{sub_hash}".format(
+                                list_endpoint=list_endpoint,
+                                tag_id=tag_id,
+                                sub_hash=subscriber_hash
+                                )
+
+        r = requests.delete(endpoint,
+                    auth=("", MAILCHIMP_API_KEY))
+
+        return r.status_code
+
+
 
 
     def create_campaign(self, date, reply_to, subject_line, preview_text, title, from_name, html_body):

@@ -104,8 +104,8 @@ def activation(request, key):
             
             # Add tag to contact, this will define if correct emails will be send.
             loc_id_tag = profile.get_location_permissions()
-            location_ids = [i.id for i in loc_id_tag]
-            location_tags = ["{}{}".format(settings.MC_PREFIC_LOCPERMID, i) for i in location_ids]
+            location_ids = [i.location.id for i in loc_id_tag]
+            location_tags = ["{}{}".format(settings.MC_PREFIX_LOCPERMID, i) for i in location_ids]
 
             for tag in location_tags:
                 mc.add_tag_to_user(tag, profile.user.email)
@@ -1431,8 +1431,20 @@ def toggle_access_from_hash(rev_access_hash):
     # Change user access from Treu to False or from False to True 
     locperm = get_object_or_404(LocationPermission, rev_access_hash=rev_access_hash)
 
-    locperm.revoked_access = not locperm.revoked_access
+    old_status = locperm.revoked_access
+    locperm.revoked_access = not old_status
     locperm.save()
+
+    #Update MC tag used to exclude revoked access users from mailings
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    rev_access_tag = "{}{}".format(settings.MC_PREFIX_REVOKE_ACCESS, locperm.location.id) 
+
+
+    if not old_status:
+        # if toggled from no revokec access to revoked access
+        mc.add_tag_to_user(rev_access_tag, locperm.user.profile.user.email)
+    else:
+        mc.untag(rev_access_tag, locperm.user.profile.user.email)
 
     return 0
 
@@ -1476,6 +1488,13 @@ def revoke_access_from_email(request, rev_access_hash):
 
     locperm.revoked_access = True
     locperm.save()
+
+     #Update MC tag used to exclude revoked access users from mailings
+    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+
+    # if toggled from no revokec access to revoked access
+    rev_access_tag = "{}{}".format(settings.MC_PREFIX_REVOKE_ACCESS, locperm.location.id) 
+    mc.add_tag_to_user(rev_access_tag, locperm.user.profile.user.email)
 
     context = {
     'navbar' : 'invite',
