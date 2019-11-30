@@ -117,7 +117,7 @@ aria-hidden="true">
 <div class="container-fluid">
 
     <!-- Content Row -->
-    <div class="row">
+    <div class="row3">
 
         <!-- Earnings (Monthly) Card Example -->
         <!-- Area Chart -->
@@ -133,21 +133,21 @@ aria-hidden="true">
                 <!-- Card Body -->
                 <div class="card-body">
 
-                        <p>Upon activating the movienight, you'll be sending {{ subs|length }} emails to the following emails associated to location <span class="badge badge-secondary">{{location}}</span>
+                        <p>Upon activation of the Movie Night, you will be sending {{ subs|length }} emails to the following emails associated to location <span class="badge badge-secondary">{{location}}</span>
                             :</p>
 
                         <div class="col-xl-3 col-lg-">
                             {% for  email in subs %}
-                            <div class="row3">
+                            <div class="row4" style = "margin-bottom:-5%">
                                     <p> {{email|safe}} </p>
                             </div>
                             {% endfor %}
                         </div>
 
                         
-                        <p> The state of your email list is {{health|safe}}.</p>
+                        <p> The state of your email list is {{health|safe}}.
 
-                        {% if not statusok %} <p> This means that the following email adresses from members are not found in either the subscribed nor the unsubscribes list of the Mailinglist: </p>
+                        {% if not statusok %} This means that the following email addresses from members are not found in either the subscribed nor the unsubscribed list of the mailing list:</p>
 
 
                         <div class="col-xl-3 col-lg-">
@@ -159,14 +159,14 @@ aria-hidden="true">
                             </div>
 
                             {% if num_revoked > 0 %}
-                            <div class="row4">
+                            <div class="row3">
                                 <div class="col-xl-5 col-lg-5">
-                              The following users ({{ emails_revoked|length }}  total) have revoked access for location <span class="badge badge-secondary">{{location}}</span>:
+                              The following users ({{ emails_revoked|length }}  total) have revoked access from location <span class="badge badge-secondary">{{location}}</span>:
                                 </div>
     
                                 <div class="col-xl-7 col-lg-7">
                                         {% for  email in emails_revoked %}
-                                        <div class="row1">
+                                        <div class="row3">
                                         {{email|safe}}
                                         </div>
                                         {% endfor %}
