@@ -131,6 +131,50 @@
             </div>
             <!--/.Accordion wrapper-->
 
+             <!--Accordion wrapper-->
+             <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
+             aria-multiselectable="true">
+
+             <!-- Accordion card -->
+             <div class="card-scroll2 mb-4">
+
+               <!-- Card header -->
+               <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading2">
+                 <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
+                   aria-controls="collapse6" href = "collapse6">
+                   <i class="fas trigg6 fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
+                   <h4 class="text-uppercase trigg6 white-text mb-0 py-3 mt-1">
+                     <font color = "#292b2c"> What's with the crêpes?
+                   </h4>
+                 </a>
+               </div>
+
+               <!-- Card body -->
+               <div id="collapse6" class="collapse show" role="tabpanel" aria-labelledby="heading2"
+                 data-parent="#accordionEx5">
+                 <div class="card-body rgba-black-light white-text z-depth-1">
+                    <div class = "row4">  
+                        <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%; text-align:center">  
+                          <img src="{% static 'userhandling/img/crepes.gif' %}" height = "250">
+                          <p> You know you want this</p>
+                        </div>
+                        <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%">
+                            Traditionally, Cinemaple Movie Nights start out with a crêpes feast. While the Hosts are in charge of diligently preparing the crêpes, Guests are asked to provide toppings and indicate which topings they'll bring during the Movie Nights registration.
+                            These toppings can range from sweet classics like chocolate chips to salty delights like goat cheese. </p>                        </div>
+                  </div>
+
+
+
+               
+                        </div>
+               </div>
+             </div>
+             <!-- Accordion card -->
+           </div>
+           <!--/.Accordion wrapper-->    
+
+
+
             <!--Accordion wrapper-->
             <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
               aria-multiselectable="true">
@@ -157,10 +201,10 @@
                         <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%">
                           <p> Cinemaple is a userfriendly solution for organizing, sharing, and attending Movie Nights.</p>
                           <p> Users who want to organize their own Movie Nights are Hosts of a Location. There can be several Hosts per Location. Hosts can send invitation links to their friends, who then register are Cinemaple's Users. They are linked to the Location of the Host who invited them. </p>
-                          <p> The Host of a Location can organize a Movie Night at his/her Location. A Movie Night consists in a theme, a short description, and a selection of movies. The Guests are invited to the Movie Night and get to vote for their favorite movie(s). Guests respond to the Host invitation.</p>
+                          <p> The Host of a Location can organize a Movie Night at his/her Location. A Movie Night consists in a theme, a short description, and a selection of movies. The Guests are invited to the Movie Night and get to vote for their favorite movie(s). 
+                            Guests will be notified about upcoming movie nights per email and will be directed to the <a href="{% url 'curr_mov_nights' %}">Current Movie Night</a>   page, where they can register for the movienight. </p> During the signup, the Guest can vote for the selected users, and indicate which toppings he/she brings for the crêpes.
                           <p> </p>
-                          <p> A word on the voting system: </p>
-                          <p> Once a movie has been selected, the Guests gather at the Host's location and share good times while watching the chosen movie, simple as that! </p>
+                          <p>Finally, a voting mechanism (see below) selects the winning movie, the Guests gather at the Host's location and share good times while watching the chosen movie, simple as that! </p>
                         </div>                        
                         <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%; text-align:center">  
                           <img src="{% static 'userhandling/img/cinemaple_orga.png' %}" height = "500">
@@ -171,7 +215,44 @@
               </div>
               <!-- Accordion card -->
             </div>
-            <!--/.Accordion wrapper-->      
+            <!--/.Accordion wrapper-->     
+            
+            
+             <!--Accordion wrapper-->
+             <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
+             aria-multiselectable="true">
+
+             <!-- Accordion card -->
+             <div class="card-scroll2 mb-4">
+
+               <!-- Card header -->
+               <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading3">
+                 <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
+                   aria-controls="collapse7" href = "collapse7">
+                   <i class="fas trigg7 fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
+                   <h4 class="text-uppercase trigg7 white-text mb-0 py-3 mt-1">
+                     <font color = "#292b2c"> How does the movie voting work?
+                   </h4>
+                 </a>
+               </div>
+
+               <!-- Card body -->
+               <div id="collapse7" class="collapse show" role="tabpanel" aria-labelledby="heading3"
+                 data-parent="#accordionEx5">
+                 <div class="card-body rgba-black-light white-text z-depth-1">
+                 <div class = "row4">  
+                      
+                       <div class="col-md-12 col-xl-12" style = "margin-bottom:1.5%">
+                         <p> TBD </p>
+                       </div>                        
+                 </div>
+               </div>
+             </div>
+             <!-- Accordion card -->
+           </div>
+           <!--/.Accordion wrapper-->  
+
+
 
             <!--Accordion wrapper-->
             <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
@@ -398,7 +479,23 @@
         $("#collapse5").collapse('toggle');
       });
     });
-    </script>        
+    </script>   
+    
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".trigg6").click(function(){
+          $("#collapse6").collapse('toggle');
+        });
+      });
+      </script>   
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".trigg7").click(function(){
+      $("#collapse7").collapse('toggle');
+    });
+  });
+  </script>   
 
 {% endblock %}
 
