@@ -86,14 +86,15 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1"><font color="white">First name:</font></label>
+                                        <label for="exampleInputEmail1"><font color="white">First name: <i class="material-icons" data-toggle="tooltip" data-placement="top" title="Please use real names so our Hosts can identify you.">info</i>  </font> 
+                                        </label>
                                         {{form.first_name.errors}}
                                           {{form.first_name}}
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1"><font color="white">Last name:</font></label>
+                                        <label for="exampleInputEmail1"><font color="white">Last name: <i class="material-icons" data-toggle="tooltip" data-placement="top" title="Please use real names so our Hosts can identify you.">info</i> </font></label>
                                         {{form.last_name.errors}}
                                           {{form.last_name}}
                                     </div>
@@ -143,5 +144,11 @@
 
 
 {% block js %}
+
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 
 {% endblock %}

@@ -135,46 +135,7 @@
              <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
              aria-multiselectable="true">
 
-             <!-- Accordion card -->
-             <div class="card-scroll2 mb-4">
-
-               <!-- Card header -->
-               <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading2">
-                 <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
-                   aria-controls="collapse6" href = "collapse6">
-                   <i class="fas trigg6 fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
-                   <h4 class="text-uppercase trigg6 white-text mb-0 py-3 mt-1">
-                     <font color = "#292b2c"> What's with the crêpes?
-                   </h4>
-                 </a>
-               </div>
-
-               <!-- Card body -->
-               <div id="collapse6" class="collapse show" role="tabpanel" aria-labelledby="heading2"
-                 data-parent="#accordionEx5">
-                 <div class="card-body rgba-black-light white-text z-depth-1">
-                    <div class = "row4">  
-                        <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%; text-align:center">  
-                          <img src="{% static 'userhandling/img/crepes.gif' %}" height = "250">
-                          <p> You know you want this</p>
-                        </div>
-                        <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%">
-                            Traditionally, Cinemaple Movie Nights start out with a crêpes feast. While the Hosts are in charge of diligently preparing the crêpes, Guests are asked to provide toppings and indicate which topings they'll bring during the Movie Nights registration.
-                            These toppings can range from sweet classics like chocolate chips to salty delights like goat cheese. </p>                        </div>
-                  </div>
-
-
-
-               
-                        </div>
-               </div>
-             </div>
-             <!-- Accordion card -->
-           </div>
-           <!--/.Accordion wrapper-->    
-
-
-
+            
             <!--Accordion wrapper-->
             <div class="accordion md-accordion accordion-5" id="accordionEx5" role="tablist"
               aria-multiselectable="true">
@@ -200,7 +161,7 @@
                   <div class = "row4">  
                         <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%">
                           <p> Cinemaple is a userfriendly solution for organizing, sharing, and attending Movie Nights.</p>
-                          <p> Users who want to organize their own Movie Nights are Hosts of a Location. There can be several Hosts per Location. Hosts can send invitation links to their friends, who then register are Cinemaple's Users. They are linked to the Location of the Host who invited them. </p>
+                          <p> Users who want to organize their own Movie Nights are Hosts of a Location. There can be several Hosts per Location. Hosts can send invitation links to their friends, who then register as Guests of a Location. Hosts can also delegate invitation rights to Guests, which are called Ambassadors.  </p>
                           <p> The Host of a Location can organize a Movie Night at his/her Location. A Movie Night consists in a theme, a short description, and a selection of movies. The Guests are invited to the Movie Night and get to vote for their favorite movie(s). 
                             Guests will be notified about upcoming movie nights per email and will be directed to the <a href="{% url 'curr_mov_nights' %}">Current Movie Night</a>   page, where they can register for the movienight. </p> During the signup, the Guest can vote for the selected users, and indicate which toppings he/she brings for the crêpes.
                           <p> </p>
@@ -216,6 +177,44 @@
               <!-- Accordion card -->
             </div>
             <!--/.Accordion wrapper-->     
+
+            <!-- Accordion card -->
+            <div class="card-scroll2 mb-4">
+
+                <!-- Card header -->
+                <div class="card-header-scroll p-0 z-depth-1" role="tab" id="heading2">
+                  <a data-toggle="collapse" data-parent="#accordionEx5" aria-expanded="true"
+                    aria-controls="collapse6" href = "collapse6">
+                    <i class="fas trigg6 fa-arrow-circle-down fa-2x p-3 mr-4 float-left black-text" aria-hidden="true"></i>
+                    <h4 class="text-uppercase trigg6 white-text mb-0 py-3 mt-1">
+                      <font color = "#292b2c"> What's with the crêpes?
+                    </h4>
+                  </a>
+                </div>
+ 
+                <!-- Card body -->
+                <div id="collapse6" class="collapse show" role="tabpanel" aria-labelledby="heading2"
+                  data-parent="#accordionEx5">
+                  <div class="card-body rgba-black-light white-text z-depth-1">
+                     <div class = "row4">  
+                         <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%; text-align:center">  
+                           <img src="{% static 'userhandling/img/crepes.gif' %}" height = "250">
+                           <p> You know you want this</p>
+                         </div>
+                         <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%">
+                             Traditionally, Cinemaple Movie Nights start out with a crêpes feast. While the Hosts are in charge of diligently preparing the crêpes, Guests are asked to provide toppings and indicate which topings they'll bring during the Movie Nights registration.
+                             These toppings can range from sweet classics like chocolate chips to salty delights like goat cheese. </p>                        </div>
+                   </div>
+ 
+ 
+ 
+                
+                         </div>
+                </div>
+              </div>
+              <!-- Accordion card -->
+            </div>
+            <!--/.Accordion wrapper-->    
             
             
              <!--Accordion wrapper-->
@@ -243,8 +242,9 @@
                  <div class = "row4">  
                       
                        <div class="col-md-12 col-xl-12" style = "margin-bottom:1.5%">
-                         <p> TBD </p>
-                       </div>                        
+                         <p>  We know that picking a movie that will please everyone can be tough as nails. We have thus outsourced this task to a robust, preference-ranking based voting mechanism. For each movie night, Guest are presented with a choice of movies. Upon registration, Guests will be asked to rate every movie, which will create a ranking of movies. 
+                           Then, a preference-ranking based voting mechanism is employed to find the winning movie. This voting mechanism ensure that the winning movie would win every one-to-one vote against every other movie. This way we hope to extract a winner which maximizes consensus during the Movie Night.
+                            For the voting-method nerds out here, we employ the <a href="https://en.wikipedia.org/wiki/Schulze_method">Schulze method</a>, which is a <a href="https://blog.open-agora.com/en/condorcet-voting-method/">Condorcet-type</a> method and we provide access the the intermediate results of the voting mechanism for full transparency.                      </div>                        
                  </div>
                </div>
              </div>
@@ -282,9 +282,11 @@
                           <p> Figure: inviting friends to Cinemaple.</p>
                         </div>
                         <div class="col-md-6 col-xl-6" style = "margin-bottom:1.5%">
-                          <p> For now, the only way to access Cinemaple is via an invitation key from another user. </p>
+                          <p> For now, the only way to access Cinemaple is via an invitation link from another user. </p>
                           <p> There are two types of users that can invite other users on Cinemaple: Hosts and Ambassadors. Hosts are the main administrators of a physical location. Typically, they are the tenant of a place in real life. They can organize Movie Nights and invite people. They can also delegate their invitation power to Ambassadors, who can then invite Guests to the Host's location.</p>
-                          <p> Other users can be linked to a location as Guests (which means they can be invited to Movie Nights at a given location) by receiving an activation code from a Host or Ambassador. </p>
+                          <p> Other users can be linked to a location as Guests (which means they can be invited to Movie Nights at a given location) by receiving an activation link from a Host or Ambassador. </p>
+
+                          <p>To see your status and associated location, see <a href="{% url 'change_profile' %}#locperm">User Info</a>. </p> 
                         </div>                        
                   </div>
                 </div>
@@ -433,7 +435,10 @@
   </script>
 {% endif %}
 
-  <script type="text/javascript">
+
+
+<script type="text/javascript">
+
     $(document).ready(function(){
       $(".trigg0").click(function(){
         $("#collapse0").collapse('toggle');
