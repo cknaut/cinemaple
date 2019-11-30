@@ -17,7 +17,7 @@
   href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 <link href="{% static 'userhandling/lib/mdb/css/mdb.lite.css' %}" rel="stylesheet">
 
-<link rel="stylesheet" type="text/css" href= "font-awesome.css" />
+<link rel="stylesheet" type="text/css" href= "{% static 'userhandling/lib/font-awesome/css/font-awesome.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'userhandling/lib/jssocials-1.4.0/jssocials.css' %}" />
 <link rel="stylesheet" type="text/css" href= "{% static 'userhandling/lib/jssocials-1.4.0/jssocials-theme-flat.css' %}"/>
 
@@ -46,7 +46,7 @@
           <h6 class="m-0 font-weight-bold text-primary" id="page-top">Your Invitation Links</h6>
         </div>
 
-<div id="share"></div>
+
         <!-- Card Body -->
         <div class="card-body">
           <div class="col-xl-12 col-lg-12"style = "margin-top:-0.5%">
@@ -55,14 +55,14 @@
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                    Here are your personalized invitation links. Feel free to share the links freely amongs friends. 
-  Once a user has signed up using your invitation link, you will recieve and email notification with the user information.  <b>It is your responsibility to make sure you know the user and that you are comfortable with inviting the user to Movie Nights. </b> In case you're not, you'll be given the opportunity to immediately revoke the users's acces in the email. Alternatively, you can use the buttons in the table <a href="{% url 'view_invited' %}">here</a>.
+                    Below, you can find your personalized invitation links. Feel free to share the links freely among your friends. 
+  Once a user has signed up using your invitation link, you will receive an email notification with the user information. <b>It is your responsibility to make sure you know the user and that you are comfortable with inviting the user to Movie Nights. </b> In case you are not, you will be given the opportunity to immediately revoke the users's acces in the notification email. Alternatively, you can use the buttons in the table <a href="{% url 'view_invited' %}">here</a>.
 </div>     
 
 
 {% for locperm in locperms %}
 
-<div class="row4">
+<div class="row3" style = "margin-bottom:-2%">
   
 <p>Invitation Link for <span class="badge badge-secondary">{{user.first_name}}  {{user.last_name}} </span> and  <span class="badge badge-secondary">{{locperm.location}} </span>:</p>
   
@@ -70,33 +70,32 @@
 </div>
 
 <div class="row4">
+    <div class="col-xl-7 col-lg-7" style = "margin-top:0">
+          <td class="align-middle">
+      <div class="input-group">
+      <input type="text" class="form-control" id='invlink{{ forloop.counter }}' value="{{locperm.get_invitation_link}}" aria-label="Invitation link for location {{locperm.location}}" >
+      </div>
+      </td>
+    </div>
 
 
-    <div class="col-xl-7 col-lg-7">
-<div class="input-group">
-    <input type="text" class="form-control" id='invlink{{ forloop.counter }}' value="{{locperm.get_invitation_link}}" aria-label="Invitation link for location {{locperm.location}}" >
-  </div>
-
+<div class="col-xl-5 col-lg-5">
+    <button type="button"  id='copybutton{{ forloop.counter }}'  data-toggle="tooltip" title="Copy to clipboard" onclick='copyclipboard{{ forloop.counter }}()' class="btn btn-secondary btn-sm"><i class="material-icons">file_copy</i>
+    </button>
+    <div id="shareRoundIcons{{forloop.counter}}"></div>
+</div>
 </div>
 
 
-<div class="col-xl-1 col-lg-1">
-    <button type="button"  id='copybutton{{ forloop.counter }}'  data-toggle="tooltip" title="Copy to clipboard" onclick='copyclipboard{{ forloop.counter }}()' class="btn btn-secondary btn-sm"><i class="material-icons">file_copy</i>
-    </button>
-
-      </div>
-
-
-<div class="col-xl-1 col-lg-1">
+{% comment %} <div class="col-xl-1 col-lg-1">
     <span data-toggle="modal" data-target="#socialmediamodal{{forloop.counter0}}">
 
     <button type="button" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Share"><i class="material-icons">share</i>
     </span>
-      </div>
+      </div> {% endcomment %}
     
 
 
-  </div>
 
 {% endfor %}
   
@@ -120,12 +119,18 @@
 
 <script src="{% static 'userhandling/lib/jquery/jquery.min.js' %}"></script>
 <script src= "{% static 'userhandling/lib/jssocials-1.4.0/jssocials.min.js' %}"></script>
+
+{% for locperm in locperms %}
 <script>
-    $("#share").jsSocials({
-        shares: ["email", "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon", "whatsapp"]
+    $("#shareRoundIcons{{forloop.counter}}").jsSocials({
+        showLabel: false,
+        showCount: false,
+        url: "{{locperm.get_invitation_link}}",
+        text: "Join me on Cinemaple with this invitation link!",
+        shares: ["email", "twitter", "facebook", "vkontakte", "linkedin", "pinterest", "stumbleupon", "whatsapp"]
     });
 </script>
-
+{% endfor %}
 <script>
 
 $(document).ready(function(){
@@ -182,59 +187,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
-
-
-{% for locperm in locperms %}
-
-
-<div id="socialmediamodal{{forloop.counter0}}" class="modal bs-example-modal-sm fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="container">
-        <div class="col-sm">
-            <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header" style = "margin:auto" style = "color:#af353b"><h4>Share your activation link for location {{locperm.location}}</h4></div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-xl-4 col-lg-4" style = "text-align:center">          
-                            <i class="em em-email" aria-role="presentation" aria-label="ENVELOPE" style = "font-size:26px"></i>                    
-                            {% send_email "Cinemaple Invitation Code"  "Join me on Cinemaple with using this invitation link: {{locperm.get_invitation_link}}." "Share via email" %}                                                                                                                               
-                        </div>                                                                                                  
-                        <div class="col-xl-4 col-lg-4" style = "text-align:center">                                                                         
-                            <img src="{% static 'userhandling/img/logos/logo_facebook.png' %}" alt="" title="" height="40">                                                
-                            {% post_to_facebook "{{locperm.get_invitation_link}}" "Post to Facebook" %}                      
-                        </div>                                                                                                                                                                                                                                                     
-                        <div class="col-xl-4 col-lg-4" style = "text-align:center">
-                            <img src="{% static 'userhandling/img/logos/logo_telegram.jpeg' %}" alt="" title="" height="40">
-                            {% post_to_telegram "Join me on Cinemaple with using this invitation link: {{locperm.get_invitation_link}}." %}                                                                  
-                        </div>
-                    </div>             
-                    <div class="row">                                                                                                                    
-                        <div class="col-xl-4 col-lg-4" style = "text-align:center">                        
-                            <img src="{% static 'userhandling/img/logos/logo_twitter.jpg' %}" alt="" title="" height="40">                                                
-                            {% post_to_twitter "Join me on Cinemaple with this invitation code: {{locperm.get_invitation_link}}."%}
-                        </div>
-                        {% comment %} <div class="col-xl-4 col-lg-4" style = "text-align:center">     
-                            <img src="{% static 'userhandling/img/logos/logo_linkedin.png' %}" alt="" title="" height="40">                                                                                                                                                                                                           
-                            {% post_to_linkedin "messaging" "Post to LinkedIn" %}                                                                    
-                        </div>                                                               
-                        <div class="col-xl-4 col-lg-4" style = "text-align:center">                                                                         
-                            <img src="{% static 'userhandling/img/logos/logo_reddit.png' %}" alt="" title="" height="40">                                                                                                                                                                                                           
-                            {% post_to_reddit "Join me on Cinemaple with this invitation code: {{loc_perm.get_invite_code}}." %}                                                                    
-                        </div> 
-                        {% endcomment %}                                                                         
-                    </div>
-                </div>                                                    
-                <div class="modal-footer"> 
-                <a class="btn-get-started" data-dismiss="modal" style = "margin:auto"><font color = #af353b>Close</font></a> 
-                </div>            
-            </div>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-
-    {% endfor %}
 
 {% endblock %}
 
