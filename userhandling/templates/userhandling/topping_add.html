@@ -113,7 +113,21 @@
 
 <form action="{{ request.path }}" method="post">
     {% csrf_token %}
-    {{ form }}
+
+    <ul  style="list-style: none;">
+        {% for choice in form.toppings.field.choices %}
+          <li>
+            <input type="checkbox" name="toppings" value="{{choice.0}}"
+              {% ifequal form.toppings.data choice.0 %} 
+                 checked="checked"
+              {% endifequal %}/>
+            <label for="">{{choice.1}}</label>
+         </li>
+        {% endfor %}
+        </ul>
+
+
+   
     <ul style="list-style: none;">
     <li><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#AddToppingModal">Add Topping</button>
     </li>
