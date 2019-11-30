@@ -19,7 +19,7 @@
         <h4 class="modal-title">Validation Successful!</h4>
       </div>
       <div class="modal-body">
-        <p class="text-center">You have sucessfully validated <b>{{email}}</b> and may now log in using your username <b>{{username}}</b>.</p>
+        <p class="text-center">You have successfully validated your email <b>{{email}}</b> and can now log in using your username <b>{{username}}</b> and password.</p>
       </div>
       <div class="modal-footer">
         <a href="{% url 'login' %}" class="btn btn-success btn-block">Login</a>
@@ -303,15 +303,19 @@
         <div class="row3" style = "margin-top:3%">
           <div class="col-lg-9 text-center text-lg-left">
             <h3 class="cta-title" style = "text-align:center">Subscribe Now</h3>
-            <p class="cta-text" style = "text-align:center"> Subscribe to cinemaple and receive information about Movie Nights organized in your area.</p>
+            <p class="cta-text" style = "text-align:center"> Subscribe to Cinemaple and receive information about Movie Nights organized in your area. For now, Cinemaple subscription can only be realized through an invitation link sent by another user. If you have received an invitation link that is not working, please reach out to us. </p>
+            <h3 class="cta-title" style = "text-align:center">Become a Host</h3>
+            <p class="cta-text" style = "text-align:center"> Become a Cinemaple Host and organize your own Movie Nights! </p>
+            <p style = "text-align:center;margin-top:-1%"> <a href = ""><button type="button" class="btn btn-primary"> Coming Soon</button></a> </p>
+
       <!--==========================
     Register Modal
     ============================-->
-          <div class="col-lg-3 cta-btn-container text-center">
+          {% comment %} <div class="col-lg-3 cta-btn-container text-center">
           <a href = "mailto:contact@cinemaple.com?subject=I%20want%20to%20join%20Cinemaple&amp;body=Hello,%20I%20would%20like%20to%20receive%20an%20invitation%20link%20for%20Cinemaple."><button type="button" class="btn btn-primary btn-lg"> Sign up now!</button></a>
           </div>
           </div>
-        </div>
+        </div> {% endcomment %}
 
       </div>
       <div class="container wow fadeInUp mt-5">
