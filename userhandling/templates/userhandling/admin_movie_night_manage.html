@@ -96,6 +96,7 @@
 <script>
   $(document).ready(function () {
     var table = $('#movienight_table').DataTable({
+      "order": [[ 2, "desc" ]],
       "ajax": {
         "url": "/api/movienights/?format=json",
         "dataSrc": function (json) {
