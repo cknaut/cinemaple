@@ -70,7 +70,7 @@
 </div>
 
 <div class="row4">
-    <div class="col-xl-7 col-lg-7" style = "margin-top:0">
+    <div class="col-xl-7 col-lg-7" style = "margin-top:-1%">
           <td class="align-middle">
       <div class="input-group">
       <input type="text" class="form-control" id='invlink{{ forloop.counter }}' value="{{locperm.get_invitation_link}}" aria-label="Invitation link for location {{locperm.location}}" >
@@ -144,7 +144,7 @@ $(function () {
         showCount: false,
         url: "{{locperm.get_invitation_link}}",
         text: "Join me on Cinemaple with this invitation link!",
-        shares: ["email", "twitter", "facebook", "vkontakte", "linkedin", "pinterest", "stumbleupon", "whatsapp"]
+        shares: ["email", "twitter", "facebook", "vkontakte", "linkedin", "whatsapp"]
     });
 
   
