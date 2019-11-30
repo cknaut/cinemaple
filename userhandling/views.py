@@ -31,6 +31,8 @@ import numpy as np
 from rest_framework import generics
 from django.template.loader import render_to_string
 import uuid
+from django.db.utils import OperationalError
+
 
 
 
@@ -941,10 +943,17 @@ class MovieNightEventViewSet(viewsets.ModelViewSet):
 
 class PastMovieNightEventViewSet(viewsets.ModelViewSet):
 
-    past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
-    queryset = MovieNightEvent.objects.filter(id__in=past_mn_id)
-    serializer_class = MovieNightEventSerializer
+     # in order to avoid problfrom django.db.utils import OperationalError
+ems arising from starting from scratch
+    try:
+        past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
+        queryset = MovieNightEvent.objects.filter(id__in=past_mn_id)
+        
+    except OperationalError:
+            queryset = MovieNightEvent.objects.filter(id=1)
+            pass
 
+    serializer_class = MovieNightEventSerializer
 
 def get_instantciated_movie_add_form(MovieNight):
     # Ugly way to initialize movieform

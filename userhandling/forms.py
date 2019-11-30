@@ -14,6 +14,8 @@ from django.forms import ModelForm, formset_factory
 from django.template.loader import render_to_string
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django.utils.translation import gettext_lazy as _
+from django.db.utils import OperationalError
+
 
 
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
@@ -270,8 +272,11 @@ class MoveNightForm(ModelForm):
             'date': _('Date:'),
         }
 
-        location_choices = [location.name for location in Location.objects.all()]
-        widgets = {
+        
+        # in order to avoid problems arising from starting from scratch
+        try:
+            location_choices = [location.name for location in Location.objects.all()]
+            widgets = {
             'date': DateTimePickerInput(),  # default date-format %m/%d/%Y will be used
             'description': forms.TextInput(attrs={"id": "tinymice"}),
             'motto': forms.TextInput(attrs={'placeholder': '', 'class': 'form-control input-perso'}),
@@ -279,6 +284,9 @@ class MoveNightForm(ModelForm):
             'location': forms.Select(choices = location_choices, attrs={'placeholder': '', 'class': 'form-control input-perso'}),
 
         }
+        except OperationalError:
+            pass
+        
 
 class MovieAddForm(forms.Form):
 
