@@ -80,9 +80,19 @@
 
 
 <div class="col-xl-5 col-lg-5">
+    <div class="row4">
+
+        <div class="col-xl-2 col-lg-2">
     <button type="button"  id='copybutton{{ forloop.counter }}'  data-toggle="tooltip" title="Copy to clipboard" onclick='copyclipboard{{ forloop.counter }}()' class="btn btn-secondary btn-sm"><i class="material-icons">file_copy</i>
     </button>
+  </div>
+
+  <div class="col-xl-10 col-lg-10">
     <div id="shareRoundIcons{{forloop.counter}}"></div>
+  </div>
+
+  </div>
+
 </div>
 </div>
 
@@ -117,11 +127,18 @@
 
 {% block js %}
 
-<script src="{% static 'userhandling/lib/jquery/jquery.min.js' %}"></script>
 <script src= "{% static 'userhandling/lib/jssocials-1.4.0/jssocials.min.js' %}"></script>
 
-{% for locperm in locperms %}
+
+
 <script>
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+{% for locperm in locperms %}
+
     $("#shareRoundIcons{{forloop.counter}}").jsSocials({
         showLabel: false,
         showCount: false,
@@ -129,13 +146,18 @@
         text: "Join me on Cinemaple with this invitation link!",
         shares: ["email", "twitter", "facebook", "vkontakte", "linkedin", "pinterest", "stumbleupon", "whatsapp"]
     });
+
+  
+    {% endfor %}
+
+   
+
+
 </script>
-{% endfor %}
 <script>
 
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();   
-});
+
+
 
 
   {% for locperm in locperms %}
