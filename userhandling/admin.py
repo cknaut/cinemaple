@@ -43,4 +43,9 @@ class UserAttendenceAdmin(admin.ModelAdmin):
 
 @admin.register(LocationPermission)
 class LocationPermissionAdmin(admin.ModelAdmin):
-     readonly_fields = ('id','invitation_code')
+     readonly_fields = ('id','invitation_code', 'rev_access_hash')
+
+
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+     readonly_fields = ('id',)
