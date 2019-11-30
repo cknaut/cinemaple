@@ -135,7 +135,8 @@ def activation(request, key):
             
             email = EmailMultiAlternatives(
                 subject, '', sender_name + " <" + sender_email + ">", recipients)
-            email.attach_alternative(content, "text/html")            
+            email.attach_alternative(content, "text/html")  
+            email.send()          
 
             # Todo: Avoid Multiplocation of index routine
             movienights = MovieNightEvent.objects.all()
