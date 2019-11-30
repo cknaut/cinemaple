@@ -103,6 +103,14 @@
                 <!-- Card Body -->
                 <div class="card-body">
 
+                        <div class="alert alert-secondary" role="alert"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                  Traditionally, Cinemaple Movie Nights start out with a crêpes feast. While the Hosts are in charge of diligently preparing the crêpes, Guests are asked to provide toppings.
+                                  Here, you can indicate which topping(s) you'll bring. You can either chose to select from the list of predefined options, or add your own topping choice to the list. In order to have a perfect topping balance, you can check out what other Guests will bring along. Yum!
+              </div>     
+
 <form action="{{ request.path }}" method="post">
     {% csrf_token %}
     {{ form }}
