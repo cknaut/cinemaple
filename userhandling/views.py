@@ -43,8 +43,7 @@ from django.db.utils import OperationalError
 # Render Index Page, manage register
 def index(request):
 
-
-    
+         
     movienights = MovieNightEvent.objects.all()
 
     past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
