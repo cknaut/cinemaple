@@ -943,8 +943,8 @@ class MovieNightEventViewSet(viewsets.ModelViewSet):
 
 class PastMovieNightEventViewSet(viewsets.ModelViewSet):
 
-     # in order to avoid problfrom django.db.utils import OperationalError
-ems arising from starting from scratch
+     # in order to avoid problems arising from starting from scratch
+
     try:
         past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
         queryset = MovieNightEvent.objects.filter(id__in=past_mn_id)
