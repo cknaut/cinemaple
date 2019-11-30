@@ -256,7 +256,9 @@ class PasswordResetForm(forms.Form):
         password2 = cleaned_data.get('password2')
 
         if password1 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match.")
+            self.add_error("password1", "Passwords don't match.")
+            self.add_error("password2", "Passwords don't match.")
+
 
         return cleaned_data
 
