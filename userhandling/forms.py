@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django.utils.translation import gettext_lazy as _
 from django.db.utils import OperationalError
+from django.contrib.auth.validators import UnicodeUsernameValidator
 
 class DivErrorList(ErrorList):
     def __str__(self):
@@ -23,11 +24,18 @@ class DivErrorList(ErrorList):
         if not self: return ''
         return ''.join(['<div class="errorlist">%s</div>' % e for e in self])
 
+
+
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
 class RegistrationForm(forms.Form):
     ''' Testing Flag used for calling form in testing setup in order to avoid recaptcha'''
-    username = forms.CharField(label="", widget=forms.TextInput(
-        attrs={'placeholder': 'Username', 'class': 'form-control input-perso'}), max_length=100)
+    username = forms.CharField(
+        label="", 
+        validators=[UnicodeUsernameValidator()], 
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Username', 'class': 'form-control input-perso'}), 
+        max_length=150)
+
     email = forms.EmailField(label="", widget=forms.EmailInput(attrs={
                              'placeholder': 'Email', 'class': 'form-control input-perso'}), max_length=100, error_messages={'invalid': ("Invalid Email.")})
     first_name = forms.CharField(label="", widget=forms.TextInput(
