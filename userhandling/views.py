@@ -12,8 +12,7 @@ import urllib
 import json
 import hashlib
 import random
-from .utils import Mailchimp, VerificationHash, badgify, check_ml_health
-from django.forms.utils import ErrorList
+from .utils import Mailchimp, VerificationHash, badgify, check_ml_health, send_role_change_email
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
     PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, PermissionsChangeForm, ProfileUpdateForm
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence, Location, LocationPermission
@@ -1402,6 +1401,10 @@ def change_role(request, user_id, locperm_id):
             location_permissions = user.profile.get_loc_perms_of_host(request.user)
 
             user_can_invite = locperm.can_invite()
+
+            # Notify user
+            if new_role == 'AM' or new_role == 'HO':
+                send_role_change_email(user, new_role, locperm.location)
 
             # #add invitation code if user changed from could invite to could not invite
             # if not user_could_invite and user_can_invite:

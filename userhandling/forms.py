@@ -328,7 +328,7 @@ class ToppingForm(forms.Form):
         self.fields['toppings'] = forms.MultipleChoiceField(
             choices=[(o.id, str(o.topping)) for o in available_topings],
             widget=(forms.CheckboxSelectMultiple(
-                attrs={"style": "list-style: none;"})),
+                attrs={"style": "list-style: none"})),
             label='Select topping to bring:'
         )
 

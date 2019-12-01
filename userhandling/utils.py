@@ -8,6 +8,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.utils import timezone
 from .models import Location
 
@@ -514,3 +515,32 @@ def check_ml_health(location_id):
         }
 
     return healthy, context
+
+
+def send_role_change_email(user, role, location):
+    # email triggered if user status is changed to AM or HO
+
+    sender_email = "info@cinemaple.com"
+    sender_name = "Cinemaple"
+    recipients = [user.email]
+
+
+    context_email = {
+        'firstname'    : user.first_name,
+        'location'      : location
+    }
+
+    if role == 'AM':
+        content = render_to_string("userhandling/emails/change_to_am.html", context_email)
+        subject = "User role for {} changed to Ambassador!".format(location)
+
+
+    elif role == 'HO':
+        content = render_to_string("userhandling/emails/change_to_ho.html", context_email)
+        subject = "User role for {} changed to Host!".format(location)
+
+
+    email = EmailMultiAlternatives(
+        subject, '', sender_name + " <" + sender_email + ">", recipients)
+    email.attach_alternative(content, "text/html")  
+    email.send()         
