@@ -3401,3 +3401,7 @@ img {
 .errorlist{
   color:black;
 }
+
+.errorlist-login{
+  color:white;
+}

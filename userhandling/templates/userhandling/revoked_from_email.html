@@ -49,7 +49,7 @@
                       <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                          <h6 class="m-0 font-weight-bold text-primary" id="page-top">Access Revoking Successfull</h6>
+                          <h6 class="m-0 font-weight-bold text-primary" id="page-top">Access Revoked Successful</h6>
                         </div>
                         <!-- Card Body -->
                         <div class="card-body">
@@ -61,7 +61,7 @@
                 
                             
                               <p> </p>You have successfully revoked access of user <span class="badge badge-secondary">{{locperm.user}}</span>  with email address  <span class="badge badge-secondary">{{locperm.user.email}}</span> .
-                               The user cannot sign up for Movie Nights anymore and will not recieve invitations for future Movie Nights. You can change the user's access anytime in the <a href="{% url 'view_invited' %}">here</a>.
+                               The user cannot sign up for Movie Nights anymore and will not receive invitations for future Movie Nights. You can change the user's access rights anytime <a href="{% url 'view_invited' %}">here</a>.
                               </p>
                               <a href="{% url 'index' %}" class="btn btn-primary" role="button">Back to Home</a>
 

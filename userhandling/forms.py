@@ -16,7 +16,12 @@ from bootstrap_datepicker_plus import DateTimePickerInput
 from django.utils.translation import gettext_lazy as _
 from django.db.utils import OperationalError
 
-
+class DivErrorList(ErrorList):
+    def __str__(self):
+        return self.as_divs()
+    def as_divs(self):
+        if not self: return ''
+        return ''.join(['<div class="errorlist">%s</div>' % e for e in self])
 
 # Code taken from https://stackoverflow.com/questions/24935271/django-custom-user-email-account-verification
 class RegistrationForm(forms.Form):
@@ -85,7 +90,7 @@ class RegistrationForm(forms.Form):
         password2 = cleaned_data.get('password2')
     
         if password1 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match.")
+            raise forms.ValidationError("Passwords do not match.")
 
         return cleaned_data
 
@@ -186,7 +191,7 @@ class LoginForm(forms.Form):
             raise forms.ValidationError(u'Invalid login data.')
 
         # Check if password mathes.
-        # NOoe that we return the same error message for every login error. This way, it is not possible to poll the site for existing usernames.
+        # Note that we return the same error message for every login error. This way, it is not possible to poll the site for existing usernames.
         if not user.check_password(password):
             raise forms.ValidationError(u'Invalid login data.')
 
@@ -235,16 +240,13 @@ class PasswordResetRequestForm(forms.Form):
                 }
             content = render_to_string("userhandling/emails/cinemaple_email_pw_reset.html", context_email)            
 
-            # content = "Hi " + user.first_name + \
-                # ", please reset your password using the following link: " + link
-
             email_send = EmailMultiAlternatives(
                 subject, '', sender_name + " <" + sender_email + ">", recipients)
             email_send.attach_alternative(content, "text/html")
             email_send.send()
         return email   
 
-class PasswordResetForm(forms.Form):
+class PasswordResetForm(forms.Form):   
     password1 = forms.CharField(label="", max_length=50, min_length=6,
                                 widget=forms.PasswordInput(attrs={'placeholder': 'New Password', 'class': 'form-control input-perso'}))
     password2 = forms.CharField(label="", max_length=50, min_length=6,
@@ -256,9 +258,10 @@ class PasswordResetForm(forms.Form):
         password2 = cleaned_data.get('password2')
 
         if password1 and password1 != password2:
-            self.add_error("password1", "Passwords don't match.")
-            self.add_error("password2", "Passwords don't match.")
-
+            # self.error_class=DivErrorList            
+            self.add_error("password1", 'Passwords do not match.')
+            self.add_error("password2", "Passwords do not match.")
+            # self.as_p()
 
         return cleaned_data
 

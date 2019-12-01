@@ -13,6 +13,7 @@ import json
 import hashlib
 import random
 from .utils import Mailchimp, VerificationHash, badgify, check_ml_health
+from django.forms.utils import ErrorList
 from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
     PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, PermissionsChangeForm, ProfileUpdateForm
 from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence, Location, LocationPermission
@@ -32,10 +33,6 @@ from rest_framework import generics
 from django.template.loader import render_to_string
 import uuid
 from django.db.utils import OperationalError
-
-
-
-
 
 # ....
 

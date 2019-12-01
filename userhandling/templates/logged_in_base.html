@@ -71,12 +71,12 @@ Header
           {% else %}
           <li class="menu" ><a href={% url 'faq' %}>FAQ</a></li>
         {% endif %}        
-        {% if navbar == "curr_mov_night"%}
+        {% if navbar == "curr_mov_night" and not movienight.get_status == "PAST"%}
           <li class="menu-active" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
           {% else %}
           <li class="menu" ><a href={% url 'curr_mov_nights' %}>Current Movie Night</a></li>
         {% endif %}
-        {% if navbar == "past_mov_nights"%}
+        {% if navbar == "past_mov_nights" or navbar == "curr_mov_night" and movienight.get_status == "PAST" %}
           <li class="menu-active" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
           {% else %}
           <li class="menu" ><a href={% url 'past_mov_nights' %}>Past Movie Nights</a></li>
