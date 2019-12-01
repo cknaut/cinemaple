@@ -714,10 +714,10 @@ def details_mov_nights(request, movienight_id, no_movie=False):
             toppings = movienight.get_user_topping_list(
                 request.user, 'primary')
 
-            # Check if there has been votes cast for this movienight (avoids scenario where user registeres too late and is only user)
-            num_voted_mn = movienight.get_num_voted()
-            if num_voted_mn > 0:
-                winning_movie, _, _ = movienight.get_winning_movie()
+        # Check if there has been votes cast for this movienight (avoids scenario where user registeres too late and is only user)
+        num_voted_mn = movienight.get_num_voted()
+        if num_voted_mn > 0:
+            winning_movie, _, _ = movienight.get_winning_movie()
 
         # if user has voted, show rating and toppings
         user_has_voted = movienight.user_has_voted(request.user)
@@ -1040,7 +1040,8 @@ def topping_add_movie_night(request, movienight_id):
         'form_brought_along': form_brought_along,
         'toppingaddform': toppingaddform,
         'voting_enabled': voting_enabled,
-        'second_load': second_load
+        'second_load': second_load,
+        "navbar": "curr_mov_night",
     }
     return render(request, 'userhandling/topping_add.html', context)
 
@@ -1159,6 +1160,7 @@ def count_votes(request, movienight_id):
         'winning_movie': winning_movie,
         'pairs_dict_movies': pairs_dict_movies.items(),
         'strong_pairs_dict_movies': strong_pairs_dict_movies.items(),
+        "navbar": "curr_mov_night",
     }
     return render(request, 'userhandling/vote_details.html', context)
 
