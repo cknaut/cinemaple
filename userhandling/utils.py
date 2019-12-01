@@ -466,10 +466,13 @@ def check_ml_health(location_id):
 
         users_not_in_mc = []
 
-        for email in user_emails:
-            if email not in members_list['emails_subscribed'] and  email not in members_list['emails_unsubscribed']:
-                users_not_in_mc.append(email)
+        # make sure we won't get an error if either unsubscribed or subscribed is emtpy
 
+        if not members_list=='':
+            for email in user_emails:
+                if email not in members_list['emails_subscribed'] and  email not in members_list['emails_unsubscribed']:
+                    users_not_in_mc.append(email)
+            
         users_not_in_mc_badged = [badgify(email, 'secondary') for email in users_not_in_mc]
 
         # users with revoked access
