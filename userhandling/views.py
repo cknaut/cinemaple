@@ -944,7 +944,7 @@ class PastMovieNightEventViewSet(viewsets.ModelViewSet):
     try:
         past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
         queryset = MovieNightEvent.objects.filter(id__in=past_mn_id)
-        
+        queryset = MovieNightEvent.objects.all().order_by('-date')
     except OperationalError:
             queryset = MovieNightEvent.objects.filter(id=1)
             pass
