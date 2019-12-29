@@ -1,11 +1,10 @@
-from .models import MovieNightEvent, Movie, UserAttendence, LocationPermission
-from rest_framework import serializers
-from django.utils import timezone
-from django.contrib.auth.models import User
-from .utils import badgify
-
-
 import pytz
+from django.contrib.auth.models import User
+from django.utils import timezone
+from rest_framework import serializers
+
+from .models import LocationPermission, Movie, MovieNightEvent, UserAttendence
+from .utils import badgify
 
 
 def strfdelta(tdelta, fmt):

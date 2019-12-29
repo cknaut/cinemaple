@@ -1,9 +1,9 @@
-from django.urls import path, re_path, include
 from django.contrib.auth import views as auth_views
+from django.urls import include, path, re_path
 from rest_framework import routers
 
-
 from . import views
+
 router = routers.DefaultRouter()
 router.register(r'movienights', views.MovieNightEventViewSet)
 router.register(r'movienights_past', views.PastMovieNightEventViewSet)

@@ -1,21 +1,25 @@
-from django.contrib.auth.forms import PasswordChangeForm
-from django import forms
 import datetime
-from django.utils import timezone
-from django.forms.utils import ErrorList
-from django.contrib.auth.models import User
-from .models import Profile, Location,  PasswordReset, MovieNightEvent, VotePreference, Topping, LocationPermission
+
+from bootstrap_datepicker_plus import DateTimePickerInput
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
+from django import forms
 from django.conf import settings
-from django.core.mail import EmailMessage, EmailMultiAlternatives
-from .utils import VerificationHash
-from django.forms import ModelForm, formset_factory
-from django.template.loader import render_to_string
-from bootstrap_datepicker_plus import DateTimePickerInput
-from django.utils.translation import gettext_lazy as _
-from django.db.utils import OperationalError
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.db.utils import OperationalError
+from django.forms import ModelForm, formset_factory
+from django.forms.utils import ErrorList
+from django.template.loader import render_to_string
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
+from .models import (Location, LocationPermission, MovieNightEvent,
+                     PasswordReset, Profile, Topping, VotePreference)
+from .utils import VerificationHash
+
 
 class DivErrorList(ErrorList):
     def __str__(self):

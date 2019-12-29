@@ -1,22 +1,24 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-import pytz
-from django.utils import timezone
+import random
 #from .utils import badgify 
 # from urllib.request import urlopen
 # from PIL import Image
 import time
-import random
-import numpy as np
 import uuid
+
+import numpy as np
+import pytz
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils import timezone
+from py3votecore.condorcet import CondorcetHelper
+from py3votecore.schulze_method import SchulzeMethod
+
+from .vote import get_pref_lists, prepare_voting_dict
 
 # import scipy.ndimage.gaussian_filter
 
-from py3votecore.schulze_method import SchulzeMethod
-from py3votecore.condorcet import CondorcetHelper
-from .vote import get_pref_lists, prepare_voting_dict
 
 
 
@@ -488,8 +490,3 @@ class MovienightTopping(models.Model):
 
     def __str__(self):
         return  self.topping.topping
-
-
-
-
-

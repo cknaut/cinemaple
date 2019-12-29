@@ -1,15 +1,17 @@
-from django.test import TestCase
-from django.shortcuts import get_object_or_404
-from .utils import Mailchimp
-from django.core import mail
-from django.contrib.auth.models import User
+import json
 import random
-import urllib, json
 import string
-from .forms import *
-from django.conf import settings
-import tmdbsimple as tmdb
+import urllib
 
+import tmdbsimple as tmdb
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core import mail
+from django.shortcuts import get_object_or_404
+from django.test import TestCase
+
+from .forms import *
+from .utils import Mailchimp
 
 # Test Mailchimp Class: Subscribe and unsubscribe test email
 

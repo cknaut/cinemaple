@@ -1,15 +1,17 @@
 # From https://www.codingforentrepreneurs.com/blog/mailchimp-integration/
 
 import hashlib
+import json
 import random
 import re
-import json
+
 import requests
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.template.loader import render_to_string
 from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.utils import timezone
+
 from .models import Location
 
 

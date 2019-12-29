@@ -1,10 +1,10 @@
 from django.contrib import admin
-from singlemodeladmin import SingleModelAdmin
 from django.contrib.auth.models import User
+from singlemodeladmin import SingleModelAdmin
 
-
-from .models import MovieNightEvent, Movie, Profile, PasswordReset, VotePreference, \
-     VotingParameters, Topping, MovienightTopping, UserAttendence, Location, LocationPermission
+from .models import (Location, LocationPermission, Movie, MovieNightEvent,
+                     MovienightTopping, PasswordReset, Profile, Topping,
+                     UserAttendence, VotePreference, VotingParameters)
 
 # Register your models here.
 #admin.site.register(MovieNightEvent)
