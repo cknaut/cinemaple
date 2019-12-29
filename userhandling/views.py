@@ -1,63 +1,56 @@
-from django.contrib.auth import update_session_auth_hash
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
-from django.utils import timezone
 import datetime
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
-from django.conf import settings
-from django.core.mail import EmailMessage, EmailMultiAlternatives
 import urllib
 import json
-import hashlib
 import random
-from .utils import Mailchimp, VerificationHash, badgify, check_ml_health, send_role_change_email
-from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
-    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm, MyPasswordChangeForm, PermissionsChangeForm, ProfileUpdateForm
-from .models import Movie, MovieNightEvent, Profile, PasswordReset, VotePreference, Topping, MovienightTopping, UserAttendence, Location, LocationPermission
-import tmdbsimple as tmdb
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import CreateView
 import requests
-from django.core import serializers
-from rest_framework import viewsets
-from .serializers import MovieNightEventSerializer, UserAttendenceSerializer, ProfileSerializer, LocationPermissionSerializer, RestrictedLocationPermissionSerializer
-from django.contrib.auth.decorators import user_passes_test
-from django.forms import formset_factory, modelformset_factory
-from rest_framework.permissions import IsAdminUser
 import numpy as np
-from rest_framework import generics
-from django.template.loader import render_to_string
 import uuid
+
+from rest_framework.permissions import IsAdminUser
+from rest_framework import viewsets, generics
+
+from django.contrib.auth import update_session_auth_hash, authenticate, login
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.utils import timezone
+from django.conf import settings
+from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.db.utils import OperationalError
 
-# ....
+from .utils import Mailchimp, VerificationHash, \
+    check_ml_health, send_role_change_email
+from .forms import RegistrationForm, LoginForm, PasswordResetRequestForm, \
+    PasswordResetForm, MoveNightForm, MovieAddForm, SneakymovienightIDForm, \
+    VotePreferenceForm, ToppingForm, AlreadyBroughtToppingForm, ToppingAddForm\
+    , MyPasswordChangeForm, PermissionsChangeForm, ProfileUpdateForm
+from .models import Movie, MovieNightEvent, Profile, PasswordReset, \
+    VotePreference, Topping, MovienightTopping, UserAttendence, \
+    LocationPermission
+from .serializers import MovieNightEventSerializer, \
+    UserAttendenceSerializer, LocationPermissionSerializer, \
+    RestrictedLocationPermissionSerializer
 
 
 # Render Index Page, manage register
 def index(request):
 
-         
-    movienights = MovieNightEvent.objects.all()
-
     past_mn_id = [mn.id for mn in MovieNightEvent.objects.all() if mn.get_status() == "PAST"]
     mn_in_past = MovieNightEvent.objects.filter(id__in=past_mn_id)
-    
+
     show_last = 5
     movienights_render = mn_in_past.order_by('-date')[:show_last]
 
     num_mn_past = len(mn_in_past)
     start_counter = num_mn_past - show_last
 
-
     # Total Runtime of all winner movies in past
     total_rt = 0
     for mn in mn_in_past:
-         _, _, runtime =  mn.get_winning_movie()
-         total_rt += runtime
-
+        _, _, runtime = mn.get_winning_movie()
+        total_rt += runtime
 
     # if request.user.is_authenticated:
     #     return redirect("curr_mov_nights")
