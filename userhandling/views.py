@@ -1521,3 +1521,6 @@ def view_invited(request):
     'locperms' : locperms,
     }
     return render(request, 'userhandling/view_invited.html', context)
+
+def foobar(request):
+    return None
