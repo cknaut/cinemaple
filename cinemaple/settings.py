@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import sys
+
 import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -22,10 +22,10 @@ SECRET_KEY = os.environ['SECRET_KEY_DJANGO']
 
 # Mailchimp keys
 
-MAILCHIMP_API_KEY           = os.environ['MAILCHIMP_API_KEY']
-MAILCHIMP_DATA_CENTER       = os.environ['MAILCHIMP_DATA_CENTER']
-MAILCHIMP_EMAIL_LIST_ID    = os.environ['MAILCHIMP_EMAIL_LIST_ID']
-MAILCHIMP_EMAIL_LIST_ID_TEST    = os.environ['MAILCHIMP_EMAIL_LIST_ID_TEST']
+MAILCHIMP_API_KEY = os.environ['MAILCHIMP_API_KEY']
+MAILCHIMP_DATA_CENTER = os.environ['MAILCHIMP_DATA_CENTER']
+MAILCHIMP_EMAIL_LIST_ID = os.environ['MAILCHIMP_EMAIL_LIST_ID']
+MAILCHIMP_EMAIL_LIST_ID_TEST = os.environ['MAILCHIMP_EMAIL_LIST_ID_TEST']
 
 # Mailgun keys
 MAILGUN_API_KEY = os.environ['MAILGUN_API_KEY']
@@ -48,7 +48,7 @@ EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
 MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
 
-DEFAULT_FROM_EMAIL  = 'admin@cinemaple.com'
+DEFAULT_FROM_EMAIL = 'admin@cinemaple.com'
 
 # automatically run in debug mode if in production
 environement = os.environ['DJANGO_ENV']
@@ -60,11 +60,7 @@ if environement == "DEBUG":
 elif environement == "PRODUCTION":
     DEBUG = False
 
-
-
-
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -104,9 +100,9 @@ ROOT_URLCONF = 'cinemaple.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [' ', 
-        os.path.join(BASE_DIR, 'userhandling/templates'),
-        ],
+        'DIRS': [' ',
+                 os.path.join(BASE_DIR, 'userhandling/templates'),
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,16 +134,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.\
+                UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.\
+                 MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.\
+                 CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.\
+                 NumericPasswordValidator',
     },
 ]
 
@@ -209,19 +209,14 @@ elif environement == "PRODUCTION":
 
 REST_FRAMEWORK = {
 
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_PAGINATION_CLASS': \
+        'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_PERMISSION_CLASSES': (
-    'rest_framework.permissions.IsAuthenticated',
-)
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
-#Prefixes for Mailchimp Tags
-
-MC_PREFIX_LOCPERMID  = "locpermid_"
-MC_PREFIX_HASACCESSID  = "hasaccessid_"
-
-
-
-
-
+# Prefixes for Mailchimp Tags
+MC_PREFIX_LOCPERMID = "locpermid_"
+MC_PREFIX_HASACCESSID = "hasaccessid_"

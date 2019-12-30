@@ -348,10 +348,10 @@ class MovieNightEvent(models.Model):
     def get_user_topping_list(self, user, badgestatus=None):
         _, toppings = self.get_user_info(user)
         if badgestatus is not None:
-            return ' '.join([badgify(str(Topping.topping), badgestatus)
-                            for Topping in toppings])
+            return ' '.join([badgify(str(topping.topping), badgestatus)
+                            for topping in toppings])
         else:
-            return ', '.join([str(Topping.topping) for Topping in toppings])
+            return ', '.join([str(topping.topping) for topping in toppings])
 
     def get_num_registered(self):
         uas = UserAttendence.objects.filter(movienight=self,

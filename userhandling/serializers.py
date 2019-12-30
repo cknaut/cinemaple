@@ -1,9 +1,8 @@
-import pytz
-from django.contrib.auth.models import User
 from django.utils import timezone
+import pytz
 from rest_framework import serializers
 
-from .models import LocationPermission, Movie, MovieNightEvent, UserAttendence
+from .models import LocationPermission, MovieNightEvent, UserAttendence
 from .utils import badgify
 
 
@@ -32,7 +31,8 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
         return MovieNight.get_num_registered()
 
     def get_movies(self, MovieNight):
-        return ', '.join([str(movie.title) for movie in MovieNight.MovieList.all()])
+        return ', '.join([str(movie.title)
+                         for movie in MovieNight.MovieList.all()])
 
     def get_status(self, MovieNight):
         return MovieNight.get_status()
@@ -59,17 +59,31 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
         date_boston_time = date.astimezone(boston_tz)
 
         if timedelta_secs > 0:
-            return date_boston_time.strftime(fmt) + " (" + strfdelta(timedelta, "In {days}d, {hours}hrs, {minutes}min") + ")"
+            return date_boston_time.strftime(fmt) + " (" + \
+                strfdelta(timedelta, "In {days}d, {hours}hrs, \
+                {minutes}min") + ")"
         else:
             timedelta = now - date
-            return date_boston_time.strftime(fmt) + " (" + strfdelta(timedelta, "{days}d, {hours}hrs, {minutes}min ago") + ")"
+            return date_boston_time.strftime(fmt) + " (" + \
+                strfdelta(timedelta, "{days}d, {hours}hrs, \
+                {minutes}min ago") + ")"
 
     class Meta:
         model = MovieNightEvent
         fields = (
-            'id', 'motto', 'date', "movies", "isdraft", "movies", "date_delta", "vote_enabled", "status", "reg_users", 'winning_movie', "rawdate"
+            'id',
+            'motto',
+            'date',
+            'movies',
+            'isdraft',
+            'movies',
+            'date_delta',
+            'vote_enabled',
+            'status',
+            'reg_users',
+            'winning_movie',
+            'rawdate'
         )
-
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -86,15 +100,19 @@ class ProfileSerializer(serializers.ModelSerializer):
         return Profile.invitation_key
 
     def get_is_invitor(self, Profile):
-        return Profile.is_invitor 
+        return Profile.is_invitor
 
     def get_join_date(self, Profile):
-        return Profile.user.date_joined 
+        return Profile.user.date_joined
 
     class Meta:
         model = UserAttendence
         fields = (
-            'id', 'firstlastname', 'is_invitor', "invitation_key", 'join_date'
+            'id',
+            'firstlastname',
+            'is_invitor',
+            'invitation_key',
+            'join_date'
         )
 
 
@@ -109,9 +127,8 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField()
     has_access = serializers.SerializerMethodField()
 
-
     def get_has_access(self, LocationPermission):
-        return (LocationPermission.revoked_access == False)
+        return (LocationPermission.revoked_access is False)
 
     def get_location(self, LocationPermission):
         return LocationPermission.location.name
@@ -120,26 +137,34 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
         return LocationPermission.user.username
 
     def get_firstlastname(self, LocationPermission):
-        return LocationPermission.user.first_name + " " + LocationPermission.user.last_name
+        return LocationPermission.user.first_name + " " \
+            + LocationPermission.user.last_name
 
     def get_role(self, LocationPermission):
-        return LocationPermission.get_role_display() 
+        return LocationPermission.get_role_display()
 
     def get_invitation_key(self, LocationPermission):
-        return LocationPermission.get_invite_code() 
+        return LocationPermission.get_invite_code()
 
     def get_join_date(self, LocationPermission):
-        return LocationPermission.user.date_joined 
+        return LocationPermission.user.date_joined
 
     def get_user_id(self, LocationPermission):
-        return LocationPermission.user.id 
+        return LocationPermission.user.id
 
     class Meta:
         model = LocationPermission
         fields = (
-            'id', 'location', 'username', "firstlastname", 'role', 'invitation_key', 'join_date', 'user_id', 'has_access'
+            'id',
+            'location',
+            'username',
+            'firstlastname',
+            'role',
+            'invitation_key',
+            'join_date',
+            'user_id',
+            'has_access'
         )
-
 
 
 class RestrictedLocationPermissionSerializer(serializers.ModelSerializer):
@@ -154,18 +179,25 @@ class RestrictedLocationPermissionSerializer(serializers.ModelSerializer):
     has_access = serializers.SerializerMethodField()
     revoke_access_hash = serializers.SerializerMethodField()
 
-
     def get_revoke_access_hash(self, LocationPermission):
 
         if LocationPermission.can_invite():
-            return "<button type='button' class='btn btn-secondary btn-sm' data-toggle='modal' data-target='#no_change_modal'>N/A</button>"
+            return "<button type='button' class='btn btn-secondary btn-sm' \
+                data-toggle='modal' data-target='#no_change_modal'>\
+                N/A</button>"
         elif not LocationPermission.revoked_access:
-            return "<a class='btn btn-danger btn-sm' href='/toggle_access_invite/" + LocationPermission.rev_access_hash + "' role='button'>Revoke Access</a>"
+            return "<a class='btn btn-danger btn-sm' \
+                href='/toggle_access_invite/" + \
+                LocationPermission.rev_access_hash + \
+                "' role='button'>Revoke Access</a>"
         else:
-            return "<a class='btn btn-success btn-sm' href='/toggle_access_invite/" + LocationPermission.rev_access_hash + "' role='button'>Grant Access</a>"
+            return "<a class='btn btn-success btn-sm' \
+                href='/toggle_access_invite/" + \
+                LocationPermission.rev_access_hash + \
+                "' role='button'>Grant Access</a>"
 
     def get_has_access(self, LocationPermission):
-        return (LocationPermission.revoked_access == False)
+        return (LocationPermission.revoked_access is False)
 
     def get_location(self, LocationPermission):
         return LocationPermission.location.name
@@ -174,22 +206,32 @@ class RestrictedLocationPermissionSerializer(serializers.ModelSerializer):
         return LocationPermission.user.username
 
     def get_firstlastname(self, LocationPermission):
-        return LocationPermission.user.first_name + " " + LocationPermission.user.last_name
+        return LocationPermission.user.first_name + " " \
+            + LocationPermission.user.last_name
 
     def get_role(self, LocationPermission):
-        return LocationPermission.get_role_display() 
+        return LocationPermission.get_role_display()
 
     def get_join_date(self, LocationPermission):
-        return LocationPermission.user.date_joined 
+        return LocationPermission.user.date_joined
 
     def get_user_id(self, LocationPermission):
-        return LocationPermission.user.id 
+        return LocationPermission.user.id
 
     class Meta:
         model = LocationPermission
         fields = (
-            'revoke_access_hash', 'id', 'location', 'username', "firstlastname", 'role', 'join_date', 'user_id', 'has_access'
+            'revoke_access_hash',
+            'id',
+            'location',
+            'username',
+            'firstlastname',
+            'role',
+            'join_date',
+            'user_id',
+            'has_access'
         )
+
 
 class UserAttendenceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -199,7 +241,8 @@ class UserAttendenceSerializer(serializers.ModelSerializer):
     firstlastname = serializers.SerializerMethodField()
 
     def get_firstlastname(self, UserAttendence):
-        return UserAttendence.user.first_name + " " + UserAttendence.user.last_name
+        return UserAttendence.user.first_name + " " \
+            + UserAttendence.user.last_name
 
     def get_reg_date(self, UserAttendence):
         date = UserAttendence.registered_at
@@ -212,10 +255,17 @@ class UserAttendenceSerializer(serializers.ModelSerializer):
         return UserAttendence.user.username
 
     def get_toppings(self, UserAttendence):
-        return ' '.join([badgify(o.topping.topping, 'primary') for o in UserAttendence.get_toppings()])
+        return ' '.join([badgify(o.topping.topping, 'primary')
+                        for o in UserAttendence.get_toppings()])
 
     class Meta:
         model = UserAttendence
         fields = (
-            'id', 'user', 'toppings', 'reg_date', "registration_complete", "movienight", 'firstlastname'
+            'id',
+            'user',
+            'toppings',
+            'reg_date',
+            'registration_complete',
+            'movienight',
+            'firstlastname'
         )

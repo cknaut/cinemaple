@@ -431,11 +431,11 @@ def add_movies_from_form(request, movienight, mov_id_add):
         # Try to get movie object of previously added, if not exists,
         # add object.
         try:
-            m = Movie.objects.get(prefformlist=data["id"])
+            m = Movie.objects.get(tmdbid=data["id"])
         except Movie.DoesNotExist:
             # create and svae movie object
-            m = Movie(prefformlist=data["id"])
-            m.prefformlist = data["id"]
+            m = Movie(tmdbid=data["id"])
+            m.tmdbid = data["id"]
             m.title = data["title"]
             m.year = data["Year"]
             m.director = data["Director"]
