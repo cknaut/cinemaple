@@ -71,7 +71,7 @@ def index(request):
     }
     return render(request, 'userhandling/index.html', context)
 
-# View called from activation email. Activate user if link didn't expire
+# View called from activation email. Activate user if link didn't expire \
 # (48h default), or offer to send a second link if the first expired.
 
 
@@ -150,12 +150,12 @@ def activation(request, key):
 
             successful_verified = True
             context = {
-                'successful_verified': successful_verified,
-                'email': profile.user.email,
-                'username': profile.user,
-                'movienights' : movienights_render,
-                'total_rt'  : total_rt,
-                'num_mn_past' : num_mn_past,
+                'successful_verified'   : successful_verified,
+                'email'                 : profile.user.email,
+                'username'              : profile.user,
+                'movienights'           : movienights_render,
+                'total_rt'              : total_rt,
+                'num_mn_past'           : num_mn_past,
                 'mn_start_counter'      : start_counter,
                 'num_show'              : show_last
             }
@@ -257,8 +257,8 @@ def my_login(request):
         form = LoginForm(request.POST)
         next_url = request.POST.get('next')
         if form.is_valid():
-            # At this point, the clean() fuction in the form already made sure
-            # that the user is valid and active.
+            # At this point, the clean() fuction in the form already made \
+            # sure that the user is valid and active.
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(username=username, password=password)
@@ -380,9 +380,9 @@ def password_reset(request, reset_key):
             return HttpResponse("Password reset link has already been used.")
 
     context = {
-        'form': form,
-        'successful_submit': successful_submit,
-        'reset_key': reset_key
+        'form'              : form,
+        'successful_submit' : successful_submit,
+        'reset_key'         : reset_key
     }
 
     return render(request, 'userhandling/password_reset.html', context)
@@ -431,11 +431,11 @@ def add_movies_from_form(request, movienight, mov_id_add):
         # Try to get movie object of previously added, if not exists,
         # add object.
         try:
-            m = Movie.objects.get(tmdbID=data["id"])
+            m = Movie.objects.get(prefformlist=data["id"])
         except Movie.DoesNotExist:
             # create and svae movie object
-            m = Movie(tmdbID=data["id"])
-            m.tmdbID = data["id"]
+            m = Movie(prefformlist=data["id"])
+            m.prefformlist = data["id"]
             m.title = data["title"]
             m.year = data["Year"]
             m.director = data["Director"]
@@ -953,7 +953,7 @@ def get_instantciated_movie_add_form(movienight):
     initial_dict = {}
     movielist = movienight.MovieList.all()
     for i, movie in enumerate(movielist):
-        initial_dict["movieID{}".format(i + 1)] = movie.tmdbID
+        initial_dict["movieID{}".format(i + 1)] = movie.prefformlist
 
     form2 = MovieAddForm(initial=initial_dict,
                          prefix="form2")  # An unbound for

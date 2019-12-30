@@ -209,7 +209,7 @@
 
 
   {% block moremodals %}
-  
+
 
   <!--Central Modal Small -->
   <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -535,7 +535,7 @@ function prep_movalerts(){
     movieid = "<strong> {{ movie.title }} </strong> ({{ movie.year }}), {{ movie.director }}, {{ movie.runtime}}"
 
     movietag_content.append(movieid);
-    button.val("{{ movie.tmdbID }}")
+    button.val("{{ movie.tmdbid }}")
     movie_tag.removeClass("invisible");
     movie_tag.addClass("visible");
 
@@ -549,7 +549,7 @@ function prep_movalerts(){
 $(document).ready(function() {
   prep_movalerts();
 
-  $(".movieclosebutton").unbind('click').click(function() {        
+  $(".movieclosebutton").unbind('click').click(function() {
         {% comment %} var id = $(this).attr('value'); {% endcomment %}
         {% comment %} movie_counter = movie_counter - 1 {% endcomment %}
         {% comment %} remove_and_reorder_movies(id) {% endcomment %}
