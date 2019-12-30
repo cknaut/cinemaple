@@ -122,7 +122,8 @@ def activation(request, key):
             }
             content = render_to_string(
                 "userhandling/emails/cinemaple_email_welcome.html",
-                context_email)
+                context_email
+            )
 
             email = EmailMultiAlternatives(
                 subject, '',
@@ -289,7 +290,7 @@ def password_reset_request(request):
     if request.method == 'POST':
         form = PasswordResetRequestForm(request.POST)
         if form.is_valid():
-            reset_email = form.populate_PasswordReset_send_email()
+            reset_email = form.populate_passwordreset_send_email()
             successful_submit = True
 
     context = {
@@ -492,7 +493,7 @@ def add_movie_night(request):
 
                 for i in range(1, num_formfields + 1):
                     # Look at correct formfield
-                    movie_id = form2.cleaned_data['movieID{}'.format(i)]
+                    movie_id = form2.cleaned_data['movieid{}'.format(i)]
                     # If not empty, generate
                     if movie_id != "":
                         mov_id_add.append(movie_id)
@@ -785,8 +786,10 @@ def gen_mn_email(request, movienight, type_email):
         'type'          : type_email,
     }
 
-    html_email = render_to_string("userhandling/emails/ \
-                 cinemaple_email_invite.html", context_email)
+    html_email = render_to_string(
+        "userhandling/emails/cinemaple_email_invite.html",
+        context_email
+    )
 
     return html_email
 
@@ -814,8 +817,11 @@ def preview_mn_email(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
 
     context_page = {
-        'email_html'    : gen_mn_email(request, movienight,
-                                       type_email='reminder'),
+        'email_html'    : gen_mn_email(
+            request,
+            movienight,
+            type_email='reminder'
+        ),
         'movienight'    : movienight,
     }
 
@@ -953,7 +959,7 @@ def get_instantciated_movie_add_form(movienight):
     initial_dict = {}
     movielist = movienight.MovieList.all()
     for i, movie in enumerate(movielist):
-        initial_dict["movieID{}".format(i + 1)] = movie.prefformlist
+        initial_dict["movieid{}".format(i + 1)] = movie.prefformlist
 
     form2 = MovieAddForm(initial=initial_dict,
                          prefix="form2")  # An unbound for
@@ -1055,7 +1061,7 @@ def rate_movie_night(request, movienight, user_attendence):
         if formset.is_valid():
             for form in formset:
                 movie = get_object_or_404(
-                    Movie, pk=form.cleaned_data['movieID'])
+                    Movie, pk=form.cleaned_data['movieid'])
 
                 # In case someone tampers with the hidden input field.
                 if movie not in movielist:
@@ -1083,7 +1089,7 @@ def rate_movie_night(request, movienight, user_attendence):
         formset = prefformlist(initial=[
             {'UserID': request.user.id,
              'movienightID': movienight.id,
-             'movieID': movie.id,
+             'movieid': movie.id,
              'name': movie.title
              } for movie in movielist
         ])

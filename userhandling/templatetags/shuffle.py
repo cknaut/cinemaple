@@ -1,4 +1,5 @@
 import random
+
 from django import template
 register = template.Library()
 
@@ -9,6 +10,7 @@ def shuffle(arg):
     aux = list(arg)[:]
     random.shuffle(aux)
     return aux
+
 
 @register.filter(name='subtract')
 def subtract(value, arg):

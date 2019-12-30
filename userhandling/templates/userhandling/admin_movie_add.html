@@ -531,7 +531,7 @@ function prep_movalerts(){
     movie_tag = $("#moviealert{{forloop.counter}}");
     button = $("#movieclosebutton{{forloop.counter}}");
     movietag_content = $("#movietag_content{{forloop.counter}}");
-    movieaddfield = "#id_form2-movieID{{forloop.counter}}";
+    movieaddfield = "#id_form2-movieid{{forloop.counter}}";
     movieid = "<strong> {{ movie.title }} </strong> ({{ movie.year }}), {{ movie.director }}, {{ movie.runtime}}"
 
     movietag_content.append(movieid);

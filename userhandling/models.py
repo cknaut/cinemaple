@@ -379,44 +379,53 @@ class MovieNightEvent(models.Model):
     def get_winning_movie(self):
 
         user_attendences = self.get_registered_userattend()
-        pref_orderings = get_pref_lists(user_attendences)
-        input_dict = prepare_voting_dict(pref_orderings)
 
-        vote_result = SchulzeMethod(input_dict,
-                                    ballot_notation=CondorcetHelper.
-                                    BALLOT_NOTATION_GROUPING).as_dict()
+        # Avoid rekursion error
+        if len(user_attendences) == 0:
+            winning_movie = None
+            vote_result = None
+            runtime = 0
+        else:
+            pref_orderings = get_pref_lists(user_attendences)
+            input_dict = prepare_voting_dict(pref_orderings)
 
-        # check for tied winners
-        try:
-            # take tied movies if exist
-            winner_movies_ids = vote_result["tied_winners"]
-            tied_winners = True
-        except KeyError:
-            winner_movies_id = vote_result["winner"]
-            tied_winners = False
+            vote_result = SchulzeMethod(input_dict,
+                                        ballot_notation=CondorcetHelper.
+                                        BALLOT_NOTATION_GROUPING).as_dict()
 
-        if tied_winners:
-            # we now randomly select one of the tied winners \
-            # by using a hashed random number
+            # check for tied winners
+            try:
+                # take tied movies if exist
+                winner_movies_ids = vote_result["tied_winners"]
+                tied_winners = True
+            except KeyError:
+                winner_movies_id = vote_result["winner"]
+                tied_winners = False
 
-            # convert set to list
-            winner_movies_ids = list(winner_movies_ids)
+            if tied_winners:
+                # we now randomly select one of the tied winners \
+                # by using a hashed random number
 
-            # order list in order to remove ambiguity in set to list conversion
-            winner_movies_ids.sort()
+                # convert set to list
+                winner_movies_ids = list(winner_movies_ids)
 
-            num_ties = len(winner_movies_ids)
+                # order list in order to remove \
+                #  ambiguity in set to list conversion
+                winner_movies_ids.sort()
 
-            # seeding random with the movienight id ensures randomness \
-            # between movienights and \
-            # consistent winner for a single movienight
-            random.seed(a=self.id, version=2)
-            winning_index = random.randint(0, num_ties - 1)
-            winner_movies_id = winner_movies_ids[winning_index]
+                num_ties = len(winner_movies_ids)
 
-        winning_movie = Movie.objects.get(pk=winner_movies_id)
+                # seeding random with the movienight id ensures randomness \
+                # between movienights and \
+                # consistent winner for a single movienight
+                random.seed(a=self.id, version=2)
+                winning_index = random.randint(0, num_ties - 1)
+                winner_movies_id = winner_movies_ids[winning_index]
 
-        runtime = winning_movie.get_runtime_int()
+            winning_movie = Movie.objects.get(pk=winner_movies_id)
+
+            runtime = winning_movie.get_runtime_int()
+
         return winning_movie, vote_result, runtime
 
     def rounddate(self, dt, roundto):

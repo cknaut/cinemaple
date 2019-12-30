@@ -120,7 +120,7 @@ function initiate_datatables_buttons() {
             return
         }
 
-        movieaddfield = "#id_form2-movieID" + movie_counter
+        movieaddfield = "#id_form2-movieid" + movie_counter
         $(movieaddfield).val(id);
         $("#advisealert").hide()
         $("#movieaddSuccess").modal();
@@ -173,7 +173,7 @@ function check_movie_input(id) {
     // after clicking the add movie button, check if movie id alreay enterd in a movie text field.
     error = false
     for (var i = 1; i < 10; i++) {
-        movieaddfield = "#id_form2-movieID" + i;
+        movieaddfield = "#id_form2-movieid" + i;
         if ($(movieaddfield).val() == id) {
             error = true
         }
@@ -192,7 +192,7 @@ function remove_and_reorder_movies(id) {
 
     // remove id
     for (var i = 1; i < 11; i++) {
-        movieaddfield = "#id_form2-movieID" + i;
+        movieaddfield = "#id_form2-movieid" + i;
         if ($(movieaddfield).val() == id) {
             $(movieaddfield).val("")
             pos_movie_removed = i
@@ -201,9 +201,9 @@ function remove_and_reorder_movies(id) {
 
     // move movies afer removed ID one up
     for (var i = pos_movie_removed; i < 11; i++) {
-        movieaddfield = "#id_form2-movieID" + i;
+        movieaddfield = "#id_form2-movieid" + i;
         next_index = i + 1
-        movieaddfield_next = "#id_form2-movieID" + next_index;
+        movieaddfield_next = "#id_form2-movieid" + next_index;
         next_val = $(movieaddfield_next).val()
         $(movieaddfield).val(next_val) //set value of next field))
     }
