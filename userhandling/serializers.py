@@ -7,10 +7,10 @@ from .utils import badgify
 
 
 def strfdelta(tdelta, fmt):
-    d = {"days": abs(tdelta.days)}
-    d["hours"], rem = divmod(tdelta.seconds, 3600)
-    d["minutes"], d["seconds"] = divmod(rem, 60)
-    return fmt.format(**d)
+    days = {"days": abs(tdelta.days)}
+    days["hours"], rem = divmod(tdelta.seconds, 3600)
+    days["minutes"], days["seconds"] = divmod(rem, 60)
+    return fmt.format(**days)
 
 
 class MovieNightEventSerializer(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
 
     def get_movies(self, movienight):
         return ', '.join([str(movie.title)
-                         for movie in movienight.MovieList.all()])
+                          for movie in movienight.MovieList.all()])
 
     def get_status(self, movienight):
         return movienight.get_status()
@@ -128,7 +128,7 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
     has_access = serializers.SerializerMethodField()
 
     def get_has_access(self, locationpermission):
-        return (locationpermission.revoked_access is False)
+        return locationpermission.revoked_access is False
 
     def get_location(self, locationpermission):
         return locationpermission.location.name
@@ -197,7 +197,7 @@ class RestrictedLocationPermissionSerializer(serializers.ModelSerializer):
                 "' role='button'>Grant Access</a>"
 
     def get_has_access(self, locationpermission):
-        return (locationpermission.revoked_access is False)
+        return locationpermission.revoked_access is False
 
     def get_location(self, locationpermission):
         return locationpermission.location.name
@@ -256,7 +256,7 @@ class UserAttendenceSerializer(serializers.ModelSerializer):
 
     def get_toppings(self, userattendence):
         return ' '.join([badgify(o.topping.topping, 'primary')
-                        for o in userattendence.get_toppings()])
+                         for o in userattendence.get_toppings()])
 
     class Meta:
         model = UserAttendence

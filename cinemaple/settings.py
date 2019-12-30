@@ -51,13 +51,13 @@ MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
 DEFAULT_FROM_EMAIL = 'admin@cinemaple.com'
 
 # automatically run in debug mode if in production
-environement = os.environ['DJANGO_ENV']
+ENVIRONEMENT = os.environ['DJANGO_ENV']
 
 
-if environement == "DEBUG":
+if ENVIRONEMENT == "DEBUG":
     DEBUG = True
     CORS_ORIGIN_ALLOW_ALL = True
-elif environement == "PRODUCTION":
+elif ENVIRONEMENT == "PRODUCTION":
     DEBUG = False
 
 ALLOWED_HOSTS = []
@@ -201,9 +201,9 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 CORS_ORIGIN_ALLOW_ALL = True
 
 
-if environement == "DEBUG":
+if ENVIRONEMENT == "DEBUG":
     SECURE_SSL_REDIRECT = False
-elif environement == "PRODUCTION":
+elif ENVIRONEMENT == "PRODUCTION":
     SECURE_SSL_REDIRECT = True
 
 

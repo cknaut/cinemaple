@@ -541,7 +541,7 @@ class ToppingAddForm(ModelForm):
 class MyPasswordChangeForm(PasswordChangeForm):
 
     def __init__(self, *args, **kwargs):
-        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+        super(MyPasswordChangeForm, self).__init__(*args, **kwargs)
 
         self.fields['old_password'].widget = forms.PasswordInput(
             attrs={
