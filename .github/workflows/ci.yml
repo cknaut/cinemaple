@@ -24,5 +24,6 @@ jobs:
         pip install -r dev-requirements.txt
         tox -e flake8lint
     - name: Lint with pylint
+      run: |
         pip install -r dev-requirements.txt
         tox -e pylint
