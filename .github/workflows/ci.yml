@@ -22,4 +22,7 @@ jobs:
     - name: Lint with flake8
       run: |
         pip install -r dev-requirements.txt
-        make lint
+        tox -e flake8lint
+    - name: Lint with pylint
+        pip install -r dev-requirements.txt
+        tox -e pylint
