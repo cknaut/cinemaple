@@ -4,14 +4,14 @@ from rest_framework import routers
 
 from . import views
 
-router = routers.DefaultRouter()
-router.register(r'movienights', views.MovieNightEventViewSet)
-router.register(r'movienights_past', views.PastMovieNightEventViewSet)
+ROUTER = routers.DefaultRouter()
+ROUTER.register(r'movienights', views.MovieNightEventViewSet)
+ROUTER.register(r'movienights_past', views.PastMovieNightEventViewSet)
 
 
 urlpatterns = [
     path('', views.index, name='index'),
-    re_path('^api/', include(router.urls)),
+    re_path('^api/', include(ROUTER.urls)),
     path('api/loc_prof_list/', views.ProfileList.as_view()),
     path('api/invite_list/', views.ProfileListInvite.as_view()),
     path('user_prefs/', views.user_prefs, name='user_prefs'),

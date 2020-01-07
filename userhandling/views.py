@@ -191,7 +191,7 @@ def new_activation_link(request, user_id):
             datas = {}
             datas['first_name'] = profile.user.first_name
             datas['email'] = profile.email_buffer
-            reset_email = form.send_activation_new_email()  # noqa: F841
+            reset_email = form.send_activation_new_email()  # noqa: F841  # pylint: disable=unused-variable
 
     return redirect('index')
 
@@ -949,7 +949,6 @@ class PastMovieNightEventViewSet(viewsets.ModelViewSet):
         # queryset = MovieNightEvent.objects.all().order_by('-date')
     except OperationalError:
         queryset = MovieNightEvent.objects.filter(id=1)
-        pass
 
     serializer_class = MovieNightEventSerializer
 

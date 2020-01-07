@@ -86,7 +86,7 @@ class LocationPermission(models.Model):
         return self.role in ('HO', 'AM')
 
     def is_host(self):
-        return self.role in ('HO')
+        return self.role in 'HO'
 
     def __str__(self):              # __unicode__ on Python 2
         return "{} / {} / {}".format(self.user.username,
@@ -177,7 +177,7 @@ class Profile(models.Model):
     # True if host for at least one locations, will be used \
     # to unlock all hidden urls
     def is_host(self):
-        if len(self.get_hosting_location_perms()) > 0:
+        if self.get_hosting_location_perms():
             return True
         else:
             return False
@@ -185,7 +185,7 @@ class Profile(models.Model):
     # True if can invite for at least one locations, will \
     # be used to unlock all hidden urls
     def is_inviter(self):
-        if len(self.get_invitable_location_perms()) > 0:
+        if self.get_invitable_location_perms():
             return True
         else:
             return False
@@ -195,13 +195,13 @@ class Profile(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(sender, instance, created, **kwargs): # pylint: disable=unused-argument
     if created:
         Profile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
+def save_user_profile(sender, instance, **kwargs): # pylint: disable=unused-argument
     instance.profile.save()
 
 
@@ -290,7 +290,7 @@ class MovieNightEvent(models.Model):
 
     def voting_enabled(self):
         vote_until_val = self.vote_until()
-        return (timezone.now() <= vote_until_val and self.is_active())
+        return timezone.now() <= vote_until_val and self.is_active()
 
     def is_in_future(self):
         return self.date > timezone.now()
@@ -316,19 +316,19 @@ class MovieNightEvent(models.Model):
             return "PAST"
 
     def user_has_registered(self, user):
-        ua = self.userattendence_set.filter(user=user)
-        if len(ua) == 0:
+        user_attendence = self.userattendence_set.filter(user=user)
+        if not user_attendence:
             return False
         else:
-            return ua[0].registration_complete
+            return user_attendence[0].registration_complete
 
     def get_user_info(self, user):
         # get list of VotePreference and MovienightTopping \
         # associated to user and movienight
         if self.user_has_registered(user):
-            ua = self.userattendence_set.filter(user=user)[0]
-            votes = ua.get_votes()
-            toppings = [u.topping for u in ua.get_toppings()]
+            user_attendence = self.userattendence_set.filter(user=user)[0]
+            votes = user_attendence.get_votes()
+            toppings = [u.topping for u in user_attendence.get_toppings()]
             return votes, toppings
         else:
             return None, None
@@ -338,7 +338,7 @@ class MovieNightEvent(models.Model):
         # if they register too late
         if self.user_has_registered(user):
             votes, _ = self.get_user_info(user)
-            if len(votes) == 0:
+            if not votes:
                 return False
             else:
                 return True
@@ -349,7 +349,7 @@ class MovieNightEvent(models.Model):
         _, toppings = self.get_user_info(user)
         if badgestatus is not None:
             return ' '.join([badgify(str(topping.topping), badgestatus)
-                            for topping in toppings])
+                             for topping in toppings])
         else:
             return ', '.join([str(topping.topping) for topping in toppings])
 
@@ -368,8 +368,8 @@ class MovieNightEvent(models.Model):
         uas = self.get_registered_userattend()
 
         num_voted_count = 0
-        for us in uas:
-            ua_user = us.user
+        for user_attendence in uas:
+            ua_user = user_attendence.user
             has_voted = self.user_has_voted(ua_user)
             if has_voted:
                 num_voted_count += 1
@@ -381,7 +381,7 @@ class MovieNightEvent(models.Model):
         user_attendences = self.get_registered_userattend()
 
         # Avoid rekursion error
-        if len(user_attendences) == 0:
+        if not user_attendences:
             winning_movie = None
             vote_result = None
             runtime = 0
@@ -428,15 +428,15 @@ class MovieNightEvent(models.Model):
 
         return winning_movie, vote_result, runtime
 
-    def rounddate(self, dt, roundto):
+    def rounddate(self, delta_t, roundto):
         # Need to round dates to 15 mins for Mailchimp
 
-        new_minutes = roundto * (dt.minute // roundto)
+        new_minutes = roundto * (delta_t.minute // roundto)
         new_seconds = 0
         new_microsecond = 0
 
-        newdate = dt.replace(minute=new_minutes, second=new_seconds,
-                             microsecond=new_microsecond)
+        newdate = delta_t.replace(minute=new_minutes, second=new_seconds,
+                                  microsecond=new_microsecond)
         return newdate
 
     def get_reminder_date(self):
@@ -494,7 +494,7 @@ class UserAttendence(models.Model):
         return self.movienighttopping_set.all()
 
     def has_voted(self):
-        if len(self.get_votes()) > 0:
+        if self.get_votes():
             return True
         else:
             return False

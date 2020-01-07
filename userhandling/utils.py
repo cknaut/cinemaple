@@ -87,8 +87,8 @@ def check_email(email):
 def get_subscriber_hash(member_email):
     check_email(member_email)
     member_email = member_email.lower().encode()
-    m = hashlib.md5(member_email)
-    return m.hexdigest()
+    md5 = hashlib.md5(member_email)
+    return md5.hexdigest()
 
 
 class Mailchimp(object):
@@ -127,12 +127,12 @@ class Mailchimp(object):
                 "LNAME": lastname
             }
         }
-        r = requests.post(
+        req = requests.post(
             endpoint,
             auth=("", MAILCHIMP_API_KEY),
             data=json.dumps(data)
         )
-        return r.status_code, r.json()
+        return req.status_code, req.json()
 
     def check_list_details(self, tag_id):
 
@@ -150,13 +150,13 @@ class Mailchimp(object):
                 tag_id=tag_id
             )
 
-        r = requests.get(
+        req = requests.get(
             endpoint,
             auth=("", MAILCHIMP_API_KEY),
             params=data
         )
 
-        return r.status_code, r.json()
+        return req.status_code, req.json()
 
     def search_tag(self, tag):
         # Looks up alrady defined tags and returns tag_id if it exists
@@ -165,13 +165,13 @@ class Mailchimp(object):
             "count" : "1000"
         }
 
-        r = requests.get(
+        req = requests.get(
             self.segment_endpoint,
             auth=("", MAILCHIMP_API_KEY),
             params=data
         )
 
-        res = r.json()
+        res = req.json()
         tag_dicts = res["segments"]
         num_tags = len(tag_dicts)
 
@@ -189,13 +189,13 @@ class Mailchimp(object):
             "static_segment": [],
         }
 
-        r = requests.post(
+        req = requests.post(
             self.segment_endpoint,
             auth=("", MAILCHIMP_API_KEY),
             data=json.dumps(data)
         )
 
-        res = r.json()
+        res = req.json()
         return res["id"]
 
     def create_or_retrieve_tag(self, tag):
@@ -217,13 +217,13 @@ class Mailchimp(object):
 
         endpoint = "{}/{}/members".format(self.segment_endpoint, tag_id)
 
-        r = requests.post(
+        req = requests.post(
             endpoint,
             auth=("", MAILCHIMP_API_KEY),
             data=json.dumps(data)
         )
 
-        return r.status_code, r.json()
+        return req.status_code, req.json()
 
     def untag(self, tag, email):
         tag_id = self.create_or_retrieve_tag(tag)
@@ -237,12 +237,12 @@ class Mailchimp(object):
                 sub_hash=subscriber_hash
             )
 
-        r = requests.delete(
+        req = requests.delete(
             endpoint,
             auth=("", MAILCHIMP_API_KEY)
         )
 
-        return r.status_code
+        return req.status_code
 
     def create_campaign(self, date, reply_to, subject_line,
                         preview_text, title, from_name, html_body,
@@ -279,13 +279,13 @@ class Mailchimp(object):
             }
         }
 
-        r = requests.post(
+        req = requests.post(
             campaigns_endpoint,
             auth=("", MAILCHIMP_API_KEY),
             data=json.dumps(data)
         )
 
-        campaign_id = r.json()['id']
+        campaign_id = req.json()['id']
 
         # upload html to campaign
         campaign_endpoint = '{campaigns_endpoint}/{campaign_id}'.format(
@@ -302,7 +302,7 @@ class Mailchimp(object):
         }
 
         # Retrieve HTML of Tempalte
-        r = requests.put(
+        req = requests.put(
             campaign_content_endpoint,
             auth=("", MAILCHIMP_API_KEY),
             data=json.dumps(data)
@@ -320,28 +320,14 @@ class Mailchimp(object):
             'schedule_time'  : date
         }
 
-        r = requests.post(
+        req = requests.post(
             campaign_scheduled_endpoint,
             auth=("", MAILCHIMP_API_KEY),
             data=json.dumps(data)
         )
 
-        return r.status_code
+        return req.status_code
 
-    ''''
-    "settings": {
-                            "subject_line"      : subject_line,
-                            "preview_text"      : preview_text,
-                            "from_name"         : from_name,
-                            "title"             : title,
-                            "reply_to"          : reply_to,
-                            "to_name"           : "*|FNAME|*",
-                            "template_id"       : template_id
-                    }
-
-                                data=json.dumps(data)
-    <td class="defaultText" mc:edit="body"></td>
-    '''
 
     def get_member_list(self, tag_id=None):
 
@@ -396,13 +382,13 @@ class Mailchimp(object):
             "status": self.check_valid_status(status)
         }
 
-        r = requests.put(
+        req = requests.put(
             endpoint,
             auth=("", MAILCHIMP_API_KEY),
             data=json.dumps(data)
         )
 
-        return r.status_code, r.json()
+        return req.status_code, req.json()
 
     def check_subscription_status(self, email):
         subscriber_hash = get_subscriber_hash(email)
@@ -413,12 +399,12 @@ class Mailchimp(object):
             sub_hash=subscriber_hash
         )
 
-        r = requests.get(
+        req = requests.get(
             endpoint,
             auth=("", MAILCHIMP_API_KEY)
         )
 
-        return r.status_code, r.json()
+        return req.status_code, req.json()
 
     def change_subscriber_email(self, old_email, newemail):
         subscriber_hash = get_subscriber_hash(old_email)
@@ -431,12 +417,12 @@ class Mailchimp(object):
         data = {
             "email_address": newemail,
         }
-        r = requests.put(
+        req = requests.put(
             endpoint,
             auth=("", MAILCHIMP_API_KEY),
             data=json.dumps(data)
         )
-        return r.status_code, r.json()
+        return req.status_code, req.json()
 
     def resubscribe(self, email):
         return self.change_subscription_status(email, status='subscribed')
@@ -449,8 +435,8 @@ class Mailchimp(object):
         endpoint = "{members_endpoint}/campaigns".format(
             members_endpoint=members_endpoint
         )
-        r = requests.get(endpoint)
-        return r.status_code, r.json()
+        req = requests.get(endpoint)
+        return req.status_code, req.json()
 
 
 class VerificationHash(object):
@@ -470,8 +456,8 @@ class VerificationHash(object):
     # Get Hasch by combining username, salt based on user creation, \
     # and secret salt
     def gen_pw_hash(self, username):
-        return hashlib.sha1((
-            self.salt + username + PW_RESET_SECRET_SALT).encode('utf-8')
+        return hashlib.sha1(
+            (self.salt + username + PW_RESET_SECRET_SALT).encode('utf-8')
         ).hexdigest()
 
     # Get Hasch by combining username, salt based on user creation, \
@@ -491,12 +477,12 @@ def check_ml_health(location_id):
     and unsubscribed ones) to registered users
     If not all cinemaple users are in  Mailchimp list, raise problem.
     """
-    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    mail_chimp = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
     location_tag = "{}{}".format(settings.MC_PREFIX_HASACCESSID, location_id)
-    location_tag_id = mc.create_or_retrieve_tag(location_tag)
+    location_tag_id = mail_chimp.create_or_retrieve_tag(location_tag)
     location = Location.objects.filter(pk=location_id)
 
-    status, members_list, mailchimp_id = mc.get_member_list(location_tag_id)
+    status, members_list, mailchimp_id = mail_chimp.get_member_list(location_tag_id)
 
     if status == 200:
         print(members_list)
@@ -543,7 +529,7 @@ def check_ml_health(location_id):
         emails_revoked = [badgify(user.email, 'secondary')
                           for user in users_revoked]
 
-        if len(users_not_in_mc_badged) != 0:
+        if users_not_in_mc_badged:
             healthy = False
             healthprint = badgify("Unhealthy", 'danger')
         else:
