@@ -26,29 +26,29 @@ class MovieNightEventSerializer(serializers.ModelSerializer):
 
     # We locally disable the no-self-use pylint errors which are thrown
     # due to the specific ways the Serializers are defined.
-    def get_rawdate(self, movienight): # pylint: disable=no-self-use
+    def get_rawdate(self, movienight):  # pylint: disable=no-self-use
         return movienight.date
 
-    def get_reg_users(self, movienight): # pylint: disable=no-self-use
+    def get_reg_users(self, movienight):  # pylint: disable=no-self-use
         return movienight.get_num_registered()
 
-    def get_movies(self, movienight): # pylint: disable=no-self-use
+    def get_movies(self, movienight):  # pylint: disable=no-self-use
         return ', '.join([str(movie.title)
                           for movie in movienight.MovieList.all()])
 
-    def get_status(self, movienight): # pylint: disable=no-self-use
+    def get_status(self, movienight):  # pylint: disable=no-self-use
         return movienight.get_status()
 
-    def get_vote_enabled(self, movienight): # pylint: disable=no-self-use
+    def get_vote_enabled(self, movienight):  # pylint: disable=no-self-use
         return movienight.voting_enabled()
 
-    def get_winning_movie(self, movienight): # pylint: disable=no-self-use
+    def get_winning_movie(self, movienight):  # pylint: disable=no-self-use
         winning_movie, _, _ = movienight.get_winning_movie()
         if winning_movie is None:
             return '-No votes yet-'
         return '{} ({})'.format(winning_movie.title, winning_movie.year)
 
-    def get_date_delta(self, movienight): # pylint: disable=no-self-use
+    def get_date_delta(self, movienight):  # pylint: disable=no-self-use
         date = movienight.date
         now = timezone.now()
         timedelta = date - now
@@ -94,16 +94,16 @@ class ProfileSerializer(serializers.ModelSerializer):
     invitation_key = serializers.SerializerMethodField()
     firstlastname = serializers.SerializerMethodField()
 
-    def get_firstlastname(self, profile): # pylint: disable=no-self-use
+    def get_firstlastname(self, profile):  # pylint: disable=no-self-use
         return profile.user.first_name + " " + profile.user.last_name
 
-    def get_invitation_key(self, profile): # pylint: disable=no-self-use
+    def get_invitation_key(self, profile):  # pylint: disable=no-self-use
         return profile.invitation_key
 
-    def get_is_invitor(self, profile): # pylint: disable=no-self-use
+    def get_is_invitor(self, profile):  # pylint: disable=no-self-use
         return profile.is_invitor
 
-    def get_join_date(self, profile): # pylint: disable=no-self-use
+    def get_join_date(self, profile):  # pylint: disable=no-self-use
         return profile.user.date_joined
 
     class Meta:
@@ -128,29 +128,35 @@ class LocationPermissionSerializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField()
     has_access = serializers.SerializerMethodField()
 
-    def get_has_access(self, locationpermission): # pylint: disable=no-self-use
+    def get_has_access(
+        self, locationpermission
+    ):  # pylint: disable=no-self-use
         return locationpermission.revoked_access is False
 
-    def get_location(self, locationpermission): # pylint: disable=no-self-use
+    def get_location(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.location.name
 
-    def get_username(self, locationpermission): # pylint: disable=no-self-use
+    def get_username(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.user.username
 
-    def get_firstlastname(self, locationpermission): # pylint: disable=no-self-use
+    def get_firstlastname(
+        self, locationpermission
+    ):  # pylint: disable=no-self-use
         return locationpermission.user.first_name + " " \
             + locationpermission.user.last_name
 
-    def get_role(self, locationpermission): # pylint: disable=no-self-use
+    def get_role(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.get_role_display()
 
-    def get_invitation_key(self, locationpermission): # pylint: disable=no-self-use
+    def get_invitation_key(
+        self, locationpermission
+    ):  # pylint: disable=no-self-use
         return locationpermission.get_invite_code()
 
-    def get_join_date(self, locationpermission): # pylint: disable=no-self-use
+    def get_join_date(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.user.date_joined
 
-    def get_user_id(self, locationpermission): # pylint: disable=no-self-use
+    def get_user_id(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.user.id
 
     class Meta:
@@ -180,7 +186,9 @@ class RestrictedLocationPermissionSerializer(serializers.ModelSerializer):
     has_access = serializers.SerializerMethodField()
     revoke_access_hash = serializers.SerializerMethodField()
 
-    def get_revoke_access_hash(self, locationpermission): # pylint: disable=no-self-use
+    def get_revoke_access_hash(
+        self, locationpermission
+    ):  # pylint: disable=no-self-use
 
         if locationpermission.can_invite():
             return "<button type='button' class='btn btn-secondary btn-sm' \
@@ -196,26 +204,30 @@ class RestrictedLocationPermissionSerializer(serializers.ModelSerializer):
             locationpermission.rev_access_hash + \
             "' role='button'>Grant Access</a>"
 
-    def get_has_access(self, locationpermission): # pylint: disable=no-self-use
+    def get_has_access(
+        self, locationpermission
+    ):  # pylint: disable=no-self-use
         return locationpermission.revoked_access is False
 
-    def get_location(self, locationpermission): # pylint: disable=no-self-use
+    def get_location(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.location.name
 
-    def get_username(self, locationpermission): # pylint: disable=no-self-use
+    def get_username(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.user.username
 
-    def get_firstlastname(self, locationpermission): # pylint: disable=no-self-use
+    def get_firstlastname(
+        self, locationpermission
+    ):  # pylint: disable=no-self-use
         return locationpermission.user.first_name + " " \
             + locationpermission.user.last_name
 
-    def get_role(self, locationpermission): # pylint: disable=no-self-use
+    def get_role(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.get_role_display()
 
-    def get_join_date(self, locationpermission): # pylint: disable=no-self-use
+    def get_join_date(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.user.date_joined
 
-    def get_user_id(self, locationpermission): # pylint: disable=no-self-use
+    def get_user_id(self, locationpermission):  # pylint: disable=no-self-use
         return locationpermission.user.id
 
     class Meta:
@@ -240,21 +252,21 @@ class UserAttendenceSerializer(serializers.ModelSerializer):
     reg_date = serializers.SerializerMethodField()
     firstlastname = serializers.SerializerMethodField()
 
-    def get_firstlastname(self, userattendence): # pylint: disable=no-self-use
+    def get_firstlastname(self, userattendence):  # pylint: disable=no-self-use
         return userattendence.user.first_name + " " \
             + userattendence.user.last_name
 
-    def get_reg_date(self, userattendence): # pylint: disable=no-self-use
+    def get_reg_date(self, userattendence):  # pylint: disable=no-self-use
         date = userattendence.registered_at
         boston_tz = pytz.timezone("America/New_York")
         fmt = "%B %d, %Y, %I:%M %p %Z%z"
         date_boston_time = date.astimezone(boston_tz).strftime(fmt)
         return date_boston_time
 
-    def get_user(self, userattendence): # pylint: disable=no-self-use
+    def get_user(self, userattendence):  # pylint: disable=no-self-use
         return userattendence.user.username
 
-    def get_toppings(self, userattendence): # pylint: disable=no-self-use
+    def get_toppings(self, userattendence):  # pylint: disable=no-self-use
         return ' '.join([badgify(o.topping.topping, 'primary')
                          for o in userattendence.get_toppings()])
 

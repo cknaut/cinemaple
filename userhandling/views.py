@@ -40,8 +40,9 @@ from .utils import (check_ml_health, Mailchimp, send_role_change_email,
 # Render Index Page, manage register
 def index(request):
 
-    past_mn_id = [mn.id for mn in MovieNightEvent.objects.all()
-                  if mn.get_status() == "PAST"]
+    past_mn_id = [movie_night.id for movie_night
+                  in MovieNightEvent.objects.all()
+                  if movie_night.get_status() == "PAST"]
     mn_in_past = MovieNightEvent.objects.filter(id__in=past_mn_id)
 
     show_last = 5
@@ -52,8 +53,8 @@ def index(request):
 
     # Total Runtime of all winner movies in past
     total_rt = 0
-    for mn in mn_in_past:
-        _, _, runtime = mn.get_winning_movie()
+    for movie_night in mn_in_past:
+        _, _, runtime = movie_night.get_winning_movie()
         total_rt += runtime
 
     # if request.user.is_authenticated:
@@ -90,9 +91,9 @@ def activation(request, key):
             profile.user.save()
 
             # Subscribe to Mailchimp list.
-            mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-            mc.add_email(profile.user.email, profile.user.first_name,
-                         profile.user.last_name)
+            mail_chimp = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+            mail_chimp.add_email(profile.user.email, profile.user.first_name,
+                                 profile.user.last_name)
 
             # Add tag to contact, this will define if
             # correct emails will be send.
@@ -109,8 +110,8 @@ def activation(request, key):
 
             for location_tag, has_access_tags in \
                     zip(location_tags, has_access_tags):
-                mc.add_tag_to_user(location_tag, profile.user.email)
-                mc.add_tag_to_user(has_access_tags, profile.user.email)
+                mail_chimp.add_tag_to_user(location_tag, profile.user.email)
+                mail_chimp.add_tag_to_user(has_access_tags, profile.user.email)
 
             sender_email = "info@cinemaple.com"
             sender_name = "Cinemaple"
@@ -133,8 +134,9 @@ def activation(request, key):
             email.send()
 
             # TODO: Avoid Multiplocation of index routine
-            past_mn_id = [mn.id for mn in MovieNightEvent.objects.all()
-                          if mn.get_status() == "PAST"]
+            past_mn_id = [movie_night.id for movie_night
+                          in MovieNightEvent.objects.all()
+                          if movie_night.get_status() == "PAST"]
             mn_in_past = MovieNightEvent.objects.filter(id__in=past_mn_id)
 
             show_last = 5
@@ -145,8 +147,8 @@ def activation(request, key):
 
             # Total Runtime of all winner movies in past
             total_rt = 0
-            for mn in mn_in_past:
-                _, _, runtime = mn.get_winning_movie()
+            for movie_night in mn_in_past:
+                _, _, runtime = movie_night.get_winning_movie()
                 total_rt += runtime
 
             successful_verified = True
@@ -174,8 +176,9 @@ def new_activation_link(request, user_id):
     if user is not None and not user.is_active:
 
         # We generate a random activation key
-        vh = VerificationHash()
-        datas['activation_key'] = vh.gen_ver_hash(datas['username'])
+        verification_hash = VerificationHash()
+        datas['activation_key'] = verification_hash.\
+            gen_ver_hash(datas['username'])
 
         # Update profile with new activation key and expiry data.
         profile = Profile.objects.get(user=user)
@@ -191,7 +194,7 @@ def new_activation_link(request, user_id):
             datas = {}
             datas['first_name'] = profile.user.first_name
             datas['email'] = profile.email_buffer
-            reset_email = form.send_activation_new_email()  # noqa: F841  # pylint: disable=unused-variable
+            reset_email = form.send_activation_new_email()  # noqa: F841, E501  # pylint: disable=unused-variable
 
     return redirect('index')
 
@@ -233,8 +236,9 @@ def registration(request, inv_code):
             # TODO: Check if user already exists
 
             # We generate a random activation key
-            vh = VerificationHash()
-            datas['activation_key'] = vh.gen_ver_hash(datas['username'])
+            verification_hash = VerificationHash()
+            datas['activation_key'] = verification_hash.\
+                gen_ver_hash(datas['username'])
 
             registration_form.send_activation_email(datas)
             registration_form.save(datas)  # Save the user and his profile
@@ -336,15 +340,15 @@ def password_reset(request, reset_key):
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
         if form.is_valid():
-            # get pw from form
-            pw = form.cleaned_data['password1']
+            # get password from form
+            password = form.cleaned_data['password1']
 
             # Retrieve user object and reset password.
             passwordresetobject = PasswordReset.objects.get(
                 reset_key=reset_key)
             username = passwordresetobject.username
             user = User.objects.get(username=username)
-            user.set_password(pw)
+            user.set_password(password)
             user.save()
 
             # Prevent this activation key from beeing reused.
@@ -432,24 +436,24 @@ def add_movies_from_form(request, movienight, mov_id_add):
         # Try to get movie object of previously added, if not exists,
         # add object.
         try:
-            m = Movie.objects.get(tmdbid=data["id"])
+            movie = Movie.objects.get(tmdbid=data["id"])
         except Movie.DoesNotExist:
             # create and svae movie object
-            m = Movie(tmdbid=data["id"])
-            m.tmdbid = data["id"]
-            m.title = data["title"]
-            m.year = data["Year"]
-            m.director = data["Director"]
-            m.producer = data["Producer"]
-            m.runtime = data["Runtime"]
-            m.actors = data["Actors"]
-            m.plot = data["Plot"]
-            m.country = data["Country"]
-            m.posterpath = data["poster_path"]
-            m.trailerlink = data["Trailerlink"]
-            m.save()
+            movie = Movie(tmdbid=data["id"])
+            movie.tmdbid = data["id"]
+            movie.title = data["title"]
+            movie.year = data["Year"]
+            movie.director = data["Director"]
+            movie.producer = data["Producer"]
+            movie.runtime = data["Runtime"]
+            movie.actors = data["Actors"]
+            movie.plot = data["Plot"]
+            movie.country = data["Country"]
+            movie.posterpath = data["poster_path"]
+            movie.trailerlink = data["Trailerlink"]
+            movie.save()
 
-        movienight.MovieList.add(m)
+        movienight.MovieList.add(movie)
 
 
 @user_passes_test(lambda u: u.is_staff)
@@ -467,15 +471,15 @@ def add_movie_night(request):
         movienightid = form3.data['form3-movienightid']
 
         if movienightid != "":
-            mn = get_object_or_404(MovieNightEvent, pk=movienightid)
-            voting_occured = mn.get_num_voted() > 0
+            movie_night = get_object_or_404(MovieNightEvent, pk=movienightid)
+            voting_occured = movie_night.get_num_voted() > 0
         else:
-            mn = MovieNightEvent()
+            movie_night = MovieNightEvent()
 
         form2 = MovieAddForm(request.POST, prefix="form2")
 
         form1 = MoveNightForm(request.POST, prefix="form1",
-                              instance=mn)  # An unbound form
+                              instance=movie_night)  # An unbound form
         if form1.is_valid() and form2.is_valid():  # All validation rules pass
             form1.save()  # This creates or updates the movienight
 
@@ -488,7 +492,7 @@ def add_movie_night(request):
 
                 # if change mode: first delete all movies
                 if movienightid != "":
-                    movielist = mn.MovieList.all()
+                    movielist = movie_night.MovieList.all()
                     movielist.delete()
 
                 for i in range(1, num_formfields + 1):
@@ -499,9 +503,9 @@ def add_movie_night(request):
                         mov_id_add.append(movie_id)
 
                 # Create and save movies objects
-                add_movies_from_form(request, mn, mov_id_add)
+                add_movies_from_form(request, movie_night, mov_id_add)
 
-            return redirect('/mov_night/{}'.format(mn.id))
+            return redirect('/mov_night/{}'.format(movie_night.id))
         else:
             return HttpResponse("Form not valid.")
     else:
@@ -724,7 +728,7 @@ def details_mov_nights(request, movienight_id, no_movie=False):
                 if len(ratingobject) > 1:
                     return HttpResponse("More than one vote for movie {} \
                                         found.".format(movie.title))
-                elif len(ratingobject) == 0:
+                elif not ratingobject:
                     return HttpResponse("No vote found for movie {}."
                                         .format(movie.title))
 
@@ -843,7 +847,7 @@ def schedule_email(request, movienight_id):
     loc_id = movienight.location.id
 
     # First Generate 2 Campaigns
-    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    mail_chimp = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
 
     reply_to = 'info@cinemaple.com'
     preview_text = 'We have a treat for you!'
@@ -855,12 +859,12 @@ def schedule_email(request, movienight_id):
     subject_line1 = 'Invitation for Movie Night: {}'.format(movienight.motto)
     subject_line2 = 'Reminder for Movie Night: {}'.format(movienight.motto)
 
-    res1 = mc.create_campaign(time_activation, reply_to, subject_line1,
-                              preview_text, title1, from_name,
-                              html_data_invitation, loc_id)
-    res2 = mc.create_campaign(time_reminder, reply_to, subject_line2,
-                              preview_text, title2, from_name,
-                              html_data_reminder, loc_id)
+    res1 = mail_chimp.create_campaign(time_activation, reply_to, subject_line1,
+                                      preview_text, title1, from_name,
+                                      html_data_invitation, loc_id)
+    res2 = mail_chimp.create_campaign(time_reminder, reply_to, subject_line2,
+                                      preview_text, title2, from_name,
+                                      html_data_reminder, loc_id)
 
     # Check if MC Statuscodes are ok
     if res1 == 204 and res2 == 204:
@@ -942,8 +946,9 @@ class PastMovieNightEventViewSet(viewsets.ModelViewSet):
     # in order to avoid problems arising from starting from scratch
 
     try:
-        past_mn_id = [mn.id for mn in MovieNightEvent.objects.all()
-                      if mn.get_status() == "PAST"]
+        past_mn_id = [movie_night.id for movie_night
+                      in MovieNightEvent.objects.all()
+                      if movie_night.get_status() == "PAST"]
 
         queryset = MovieNightEvent.objects.filter(id__in=past_mn_id)
         # queryset = MovieNightEvent.objects.all().order_by('-date')
@@ -977,7 +982,7 @@ def change_movie_night(request, movienight_id):
 
     form2, movielist = get_instantciated_movie_add_form(movienight)
     form3 = SneakymovienightIDForm(prefix="form3", initial={
-                                   "movienightid": movienight_id})
+        "movienightid": movienight_id})
     context = {
         'debug': settings.DEBUG,
         'form1': form1,
@@ -1007,11 +1012,11 @@ def topping_add_movie_night(request, movienight_id):
 
         if form.is_valid():
 
-            for id in form.cleaned_data['toppings']:
-                topping = get_object_or_404(Topping, pk=id)
-                mt = MovienightTopping(
+            for id_num in form.cleaned_data['toppings']:
+                topping = get_object_or_404(Topping, pk=id_num)
+                movienight_topping = MovienightTopping(
                     topping=topping, user_attendence=user_attendence)
-                mt.save()
+                movienight_topping.save()
 
             # active movinight
             user_attendence.registration_complete = True
@@ -1021,8 +1026,8 @@ def topping_add_movie_night(request, movienight_id):
 
         elif toppingaddform.is_valid():
 
-            t = Topping()
-            instanciated_form = ToppingAddForm(request.POST, instance=t)
+            topping = Topping()
+            instanciated_form = ToppingAddForm(request.POST, instance=topping)
             instanciated_form.save()
 
             # Update Add Form
@@ -1068,10 +1073,10 @@ def rate_movie_night(request, movienight, user_attendence):
                            not associated to the movienight \
                            you're voting for.")
 
-                vp = VotePreference(
+                vote_preference = VotePreference(
                     user_attendence=user_attendence, movie=movie)
-                vp.preference = form.cleaned_data['rating']
-                vp.save()
+                vote_preference.preference = form.cleaned_data['rating']
+                vote_preference.save()
 
             # Proceed to Toppings Add
             return redirect(topping_add_movie_night,
@@ -1121,25 +1126,27 @@ def reg_movie_night(request, movienight_id):
 
         # look for attendence object and create one if not found
         try:
-            ua = UserAttendence.objects.filter(
+            user_attendence = UserAttendence.objects.filter(
                 movienight=movienight, user=request.user)[0]
             # delete all votes
-            ua.get_votes().delete()
-        except ua.DoesNotExist:
-            ua = UserAttendence(movienight=movienight, user=request.user)
-            ua.save()
+            user_attendence.get_votes().delete()
+        except user_attendence.DoesNotExist:
+            user_attendence = UserAttendence(
+                movienight=movienight, user=request.user
+            )
+            user_attendence.save()
 
-        return rate_movie_night(request, movienight, ua)
+        return rate_movie_night(request, movienight, user_attendence)
 
 
 @login_required
 def ureg_movie_night(request, movienight_id):
     movienight = get_object_or_404(MovieNightEvent, pk=movienight_id)
-    ua = UserAttendence.objects.filter(
+    user_attendence = UserAttendence.objects.filter(
         movienight=movienight, user=request.user)[0]
 
     # remove user from attendence list, delete votes, delete toppings
-    ua.delete()
+    user_attendence.delete()
     return redirect(curr_mov_nights)
 
 
@@ -1223,9 +1230,9 @@ def change_profile(request):
                 user.profile.email_buffer = new_email
 
                 # We update activation key
-                vh = VerificationHash()
-                user.profile.activation_key = vh.gen_ver_hash(user.username
-                                                              + new_email)
+                verification_hash = VerificationHash()
+                user.profile.activation_key = verification_hash.\
+                    gen_ver_hash(user.username + new_email)
 
                 user.save()
                 user.profile.save()
@@ -1290,8 +1297,8 @@ def activate_emailupdate(request, key):
     profile.user.save()
 
     # Update Mailchimp
-    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
-    mc.change_subscriber_email(old_email, new_email)
+    mail_chimp = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    mail_chimp.change_subscriber_email(old_email, new_email)
 
     if request.user.is_authenticated:
         form = ProfileUpdateForm(instance=request.user)
@@ -1457,15 +1464,17 @@ def toggle_access_from_hash(rev_access_hash):
     locperm.save()
 
     # Update MC tag used to exclude revoked access users from mailings
-    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    mail_chimp = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
     has_access_tag = "{}{}".format(settings.MC_PREFIX_HASACCESSID,
                                    locperm.location.id)
 
     if not old_status:
         # if toggled from no revokec access to revoked access
-        mc.untag(has_access_tag, locperm.user.profile.user.email)
+        mail_chimp.untag(has_access_tag, locperm.user.profile.user.email)
     else:
-        mc.add_tag_to_user(has_access_tag, locperm.user.profile.user.email)
+        mail_chimp.add_tag_to_user(
+            has_access_tag, locperm.user.profile.user.email
+        )
     return 0
 
 # Called from manage user page accessible for hosts)
@@ -1514,12 +1523,12 @@ def revoke_access_from_email(request, rev_access_hash):
     locperm.save()
 
     # Update MC tag used to exclude revoked access users from mailings
-    mc = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
+    mail_chimp = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
 
     # if toggled from no revokec access to revoked access
     has_access_tag = "{}{}".format(settings.MC_PREFIX_HASACCESSID,
                                    locperm.location.id)
-    mc.untag(has_access_tag, locperm.user.profile.user.email)
+    mail_chimp.untag(has_access_tag, locperm.user.profile.user.email)
 
     context = {
         'navbar'    : 'invite',

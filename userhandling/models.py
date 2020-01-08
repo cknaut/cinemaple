@@ -195,13 +195,17 @@ class Profile(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs): # pylint: disable=unused-argument
+def create_user_profile(
+    sender, instance, created, **kwargs
+):  # pylint: disable=unused-argument
     if created:
         Profile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs): # pylint: disable=unused-argument
+def save_user_profile(
+    sender, instance, **kwargs
+):  # pylint: disable=unused-argument
     instance.profile.save()
 
 

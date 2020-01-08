@@ -80,7 +80,6 @@ if REV_USER_ACCESS_SECRET_SALT is None:
 def check_email(email):
     if not re.match(r".+@.+\..+", email):
         raise ValueError('String ' + email + ' is not a valid email address')
-    return
 
 
 # This makes a email hash which is required by the Mailchimp API
@@ -328,7 +327,6 @@ class Mailchimp(object):
 
         return req.status_code
 
-
     def get_member_list(self, tag_id=None):
 
         list_details = self.check_list_details(tag_id)
@@ -482,7 +480,9 @@ def check_ml_health(location_id):
     location_tag_id = mail_chimp.create_or_retrieve_tag(location_tag)
     location = Location.objects.filter(pk=location_id)
 
-    status, members_list, mailchimp_id = mail_chimp.get_member_list(location_tag_id)
+    status, members_list, mailchimp_id = mail_chimp.get_member_list(
+        location_tag_id
+    )
 
     if status == 200:
         print(members_list)
