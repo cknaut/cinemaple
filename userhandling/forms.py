@@ -122,8 +122,8 @@ class RegistrationForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data['username']
         try:
-            user = User.objects.get(username=username)
-        except user.DoesNotExist:
+            User.objects.get(username=username)
+        except User.DoesNotExist:
             return username
         raise forms.ValidationError(
             u'A user with username "%s" is already registered.' % username)
@@ -131,8 +131,8 @@ class RegistrationForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            user = User.objects.get(email=email)
-        except user.DoesNotExist:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
             return email
         raise forms.ValidationError(
             u'A user with email "%s" is already registered.' % email)
