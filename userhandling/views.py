@@ -963,7 +963,7 @@ def get_instantciated_movie_add_form(movienight):
     initial_dict = {}
     movielist = movienight.MovieList.all()
     for i, movie in enumerate(movielist):
-        initial_dict["movieid{}".format(i + 1)] = movie.prefformlist
+        initial_dict["movieid{}".format(i + 1)] = movie.tmdbid
 
     form2 = MovieAddForm(initial=initial_dict,
                          prefix="form2")  # An unbound for
