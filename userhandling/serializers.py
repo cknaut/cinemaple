@@ -195,14 +195,14 @@ class RestrictedLocationPermissionSerializer(serializers.ModelSerializer):
                 data-toggle='modal' data-target='#no_change_modal'>\
                 N/A</button>"
         if locationpermission.revoked_access:
-            return "<a class='btn btn-danger btn-sm' \
+            return "<a class='btn btn-success btn-sm' \
                 href='/toggle_access_invite/" + \
                 locationpermission.rev_access_hash + \
-                "' role='button'>Revoke Access</a>"
-        return "<a class='btn btn-success btn-sm' \
+                "' role='button'>Grant Access</a>"
+        return "<a class='btn btn-danger btn-sm' \
             href='/toggle_access_invite/" + \
             locationpermission.rev_access_hash + \
-            "' role='button'>Grant Access</a>"
+            "' role='button'>Revoke Access</a>"
 
     def get_has_access(
         self, locationpermission
