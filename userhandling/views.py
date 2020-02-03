@@ -208,7 +208,7 @@ def registration(request, inv_code):
             code_valid = True
         else:
             code_valid = False
-    except loc_p.DoesNotExist:
+    except LocationPermission.DoesNotExist:
         code_valid = False
 
     if not code_valid:
@@ -1130,7 +1130,7 @@ def reg_movie_night(request, movienight_id):
                 movienight=movienight, user=request.user)[0]
             # delete all votes
             user_attendence.get_votes().delete()
-        except user_attendence.DoesNotExist:
+        except IndexError:
             user_attendence = UserAttendence(
                 movienight=movienight, user=request.user
             )
