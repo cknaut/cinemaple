@@ -361,8 +361,8 @@ def password_reset(request, reset_key):
             recipients = [user.email]
 
             context_email = {
-                'username'          : request.user.username,
-                'firstname'          : request.user.first_name,
+                'username'          : user.username,
+                'firstname'          : user.first_name,
             }
 
             html_email = render_to_string(
