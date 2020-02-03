@@ -301,7 +301,7 @@ class LoginForm(forms.Form):
         # Check if user exists.
         try:
             user = User.objects.get(username=username)
-        except user.DoesNotExist:
+        except User.DoesNotExist:
             raise forms.ValidationError(u'Invalid login data.')
 
         # Check if password mathes.
