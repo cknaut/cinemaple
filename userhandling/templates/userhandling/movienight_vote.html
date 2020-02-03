@@ -27,68 +27,6 @@
 
 {% block moremodals %}
 
-<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Do you want to permanentely delete this movie night?</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger" id="deletbutton" href="">Delete</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="activatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Activating the movienight will send out invitation emails and opens the
-                poll.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" id="activatebutton" href="">Activate</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="disactivatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Deactivating the movienight will send out notifications to all registered
-                users.
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" id="dectivatebutton" href="">Deactivate</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <div class="modal fade" id="ConfirmVote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -182,6 +120,15 @@
                 <!-- Card Body -->
                 <div class="card-body">
 
+                        <div class="alert alert-secondary" role="alert">
+
+Please indicate your preferences for the upcoming Movie Night by rating the following movies on a scale from one to five. This rating is used to create your preference order, which is used by
+our voting algorithm to pick the winning movie. Please check the <a href="{% url 'faq' %}">FAQ</a> for more information on the voting method.</p>
+
+You can choose to rate all, some, or no movies at all. Unrated movies will be associated with the lowest rank in the preference order.
+              </div>
+
+
                     <div class="row3">
 
 
@@ -248,6 +195,7 @@
 
                                                     <div class="col-xl-3 col-lg-3  float-right">
                                                         {{ ab.1 }}
+                                                        <input type=hidden id="interim_score{{ forloop.counter0 }}"  value="0">
 
 
                                                         <span class="badge badge-pill badge-starvote">
@@ -428,7 +376,8 @@
 
         $('#star{{ forloop.counter0 }}').raty({
             starType: 'i',
-            target: "#id_form-{{ forloop.counter0 }}-rating",
+            target: '#interim_score{{ forloop.counter0 }}',
+            //target: "#id_form-{{ forloop.counter0 }}-rating",
             targetType: 'number',
             number: {{ forloop.counter0 }},
             click: function () {
@@ -450,18 +399,30 @@
 
         // Gets the video src from the data-src on each button
 
-        $('#votetrigger').click(function () {
-            if (voted_movs.length < {{num_movs }}) {
-                $("#notenoughvotes").modal();
-            } else {
-                $("#ConfirmVote").modal();
-            }
+        // $('#votetrigger').click(function () {
+        //     if (voted_movs.length < {{num_movs }}) {
+        //         $("#notenoughvotes").modal();
+        //     } else {
+        //         $("#ConfirmVote").modal();
+        //     }
 
+        // });
+
+        $('#votetrigger').click(function () {
+                $("#ConfirmVote").modal();
         });
 
 
         $(function () {
             $('body').on('click', '.odom-submit', function (e) {
+                // Copy score from interim field to form field
+                {% for i in looper %}
+                    score_to_set = $('#interim_score{{ forloop.counter0 }}').val();
+                    if (score_to_set == "") {
+                        score_to_set = 0
+                    };
+                    $('#id_form-{{ forloop.counter0 }}-rating').val(score_to_set);
+                {% endfor %}
                 $('#voteform').submit();
                 $('#ConfirmVote').modal('hide');
             });

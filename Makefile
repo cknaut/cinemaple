@@ -1,3 +1,3 @@
 .PHONY: lint-python
 lint:
-	tox -e lint
+	tox -e flake8lint

@@ -355,6 +355,8 @@ def password_reset(request, reset_key):
             passwordresetobject.reset_used = True
             passwordresetobject.save()
 
+
+
             # send confrmation email
             sender_email = "admin@cinemaple.com"
             sender_name = "Cinemaple"
@@ -1091,10 +1093,8 @@ def rate_movie_night(request, movienight, user_attendence):
                             movienight_id=movienight.id)
 
         formset = prefformlist(initial=[
-            {'UserID': request.user.id,
-             'movienightID': movienight.id,
-             'movieid': movie.id,
-             'name': movie.title
+            {'movieid': movie.id,
+             'rating': 0
              } for movie in movielist
         ])
 

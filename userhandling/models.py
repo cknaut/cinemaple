@@ -239,7 +239,10 @@ class Movie(models.Model):
     def get_runtime_int(self):
         runtime = self.runtime
         runtime = runtime.replace('min', '')
-        runtime_int = int(runtime)
+        try:
+            runtime_int = int(runtime)
+        except ValueError:
+            runtime_int = 90
         return runtime_int
 
     def __str__(self):
