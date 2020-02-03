@@ -1033,6 +1033,40 @@ def topping_add_movie_night(request, movienight_id):
             user_attendence.registration_complete = True
             user_attendence.save()
 
+            # send activation email
+
+            # retrieve toppings
+            toppings = movienight.get_user_topping_list(
+                request.user
+            )
+
+            sender_email = "info@cinemaple.com"
+            sender_name = "Cinemaple"
+            subject = "Movie Night registration confirmation"
+            recipients = [request.user.email]
+
+            context_email = {
+                'movienight'         : movienight,
+                'firstname'          : request.user.first_name,
+                'toppings'           : toppings
+            }
+
+            html_email = render_to_string(
+                "userhandling/emails/"
+                + "cinample_email_attendence_confirmation.html",
+                context_email
+            )
+
+            email = EmailMultiAlternatives(
+                subject,
+                '',
+                sender_name + " <" + sender_email + ">",
+                recipients
+            )
+
+            email.attach_alternative(html_email, "text/html")
+            email.send()
+
             return redirect(curr_mov_nights)
 
         elif toppingaddform.is_valid():

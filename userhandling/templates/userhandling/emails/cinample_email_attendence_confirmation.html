@@ -1,0 +1,39 @@
+{% extends "cinemaple_email_transactional.html" %}
+{% load static %}
+
+{% block message %}
+<b>
+<p>Hello {{ firstname }},</p>
+</b>
+
+
+
+<p>You have successfully registered for the upcoming Movie Night <b>{{movienight.motto}}</b> taking place at <b>{{movienight.location.print_address}}</b> at <b>{{movienight.date}}</b>  </p>
+
+<p> You have indicated that you'll contribute the following toppings: <b> {{toppings}}</b>.</p>
+
+
+<p> Hit the button below to review the movie selection: </p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnButtonBlock" style="min-width:100%;">
+    <tbody class="mcnButtonBlockOuter">
+        <tr>
+            <td style="padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top" align="center" class="mcnButtonBlockInner">
+                <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: separate !important;border-radius: 4px;background-color: #0069D9;">
+                    <tbody>
+                        <tr>
+                            <td align="center" valign="middle" class="mcnButtonContent" style="font-family: Arial; font-size: 16px; padding: 18px;">
+                                <a class="mcnButton " title="Current Movie Nights" href="https://www.cinemaple.com/curr_mov_nights" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">More Info</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p>We look forward to seeing you soon!</p>
+
+
+{% endblock %}
