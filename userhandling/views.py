@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.db.utils import OperationalError
 from django.forms import formset_factory
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -355,22 +355,31 @@ def password_reset(request, reset_key):
             passwordresetobject.reset_used = True
             passwordresetobject.save()
 
-
-
-            # send confrmation email
-            sender_email = "admin@cinemaple.com"
+            sender_email = "info@cinemaple.com"
             sender_name = "Cinemaple"
             subject = "Password successfully changed"
             recipients = [user.email]
-            content = "Hi " + user.first_name + \
-                ", you have successfully changed your password and can now \
-                login using the new password: http://www.cinemaple.com/login"
 
-            email_send = EmailMessage(
-                subject, content,
+            context_email = {
+                'username'          : request.user.username,
+                'firstname'          : request.user.first_name,
+            }
+
+            html_email = render_to_string(
+                "userhandling/emails/cinemaple_email_pw_reset_done.html",
+                context_email
+            )
+
+            email = EmailMultiAlternatives(
+                subject,
+                '',
                 sender_name + " <" + sender_email + ">",
-                recipients)
-            email_send.send()
+                recipients
+            )
+
+            email.attach_alternative(html_email, "text/html")
+            email.send()
+
             successful_submit = True
     else:
 
