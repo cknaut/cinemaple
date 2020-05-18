@@ -266,6 +266,22 @@ class VotingParameters(models.Model):
         return "Only instance of this model."
 
 
+class QuickPoll(models.Model):
+    motto = models.CharField(max_length=200)
+    description = models.TextField(max_length=10000)
+    MovieList = models.ManyToManyField(Movie, blank=True)
+
+    # Date added.
+    add_date = models.DateField(auto_now_add=True)
+
+    # Duration active.
+    duration = models.DurationField()
+
+    # Used for URL dispatching.
+    ref_code = models.UUIDField(null=False, editable=False)
+
+
+
 class MovieNightEvent(models.Model):
     motto = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
