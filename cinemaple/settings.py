@@ -9,12 +9,17 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+import warnings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY_DJANGO']
+SECRET_KEY = os.environ.get('SECRET_KEY_DJANGO', '')
+if not SECRET_KEY:
+    from django.core.management.utils import get_random_secret_key
+    SECRET_KEY = get_random_secret_key()
+    warnings.warn("SECRET_KEY_DJANGO not set – using a random key (sessions will reset on restart)")
 
 # Mailchimp keys (optional – if unset, mailing list features are disabled)
 MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', '')
@@ -26,18 +31,18 @@ MAILCHIMP_EMAIL_LIST_ID_TEST = os.environ.get('MAILCHIMP_EMAIL_LIST_ID_TEST', ''
 MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY', '')
 MAILGUN_DOMAIN_NAME = os.environ.get('MAILGUN_DOMAIN_NAME', '')
 
-# Recaptcha keys
-RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_SECRET_KEY']
-RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_SITE_KEY']
+# Recaptcha keys (required for registration forms; leave empty to skip captcha in dev)
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_SECRET_KEY', '')
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_SITE_KEY', '')
 
-# Secret SAlt for email registration
-EMAIL_VERIFICATION_SECRET_SALT = os.environ['EMAIL_VERIFICATION_SECRET_SALT']
-PW_RESET_SECRET_SALT = os.environ['PW_RESET_SECRET_SALT']
+# Secret salts for email verification and password reset
+EMAIL_VERIFICATION_SECRET_SALT = os.environ.get('EMAIL_VERIFICATION_SECRET_SALT', 'change-me')
+PW_RESET_SECRET_SALT = os.environ.get('PW_RESET_SECRET_SALT', 'change-me')
 
-REV_USER_ACCESS_SECRET_SALT = os.environ['REV_USER_ACCESS_SECRET_SALT']
+REV_USER_ACCESS_SECRET_SALT = os.environ.get('REV_USER_ACCESS_SECRET_SALT', 'change-me')
 
 # TMDb
-TMDB_API_KEY = os.environ['TMDB_API_KEY']
+TMDB_API_KEY = os.environ.get('TMDB_API_KEY', '')
 
 # Email: use Mailgun if configured and package installed, otherwise console (emails printed to logs)
 if MAILGUN_API_KEY and MAILGUN_DOMAIN_NAME:
@@ -54,7 +59,7 @@ else:
 DEFAULT_FROM_EMAIL = 'admin@cinemaple.com'
 
 # automatically run in debug mode if in production
-ENVIRONEMENT = os.environ['DJANGO_ENV']
+ENVIRONEMENT = os.environ.get('DJANGO_ENV', 'DEBUG')
 
 
 if ENVIRONEMENT == "DEBUG":
