@@ -41,11 +41,15 @@ REV_USER_ACCESS_SECRET_SALT = os.environ['REV_USER_ACCESS_SECRET_SALT']
 # TMDb
 TMDB_API_KEY = os.environ['TMDB_API_KEY']
 
-# Email: use Mailgun if configured, otherwise console (emails printed to logs)
+# Email: use Mailgun if configured and package installed, otherwise console (emails printed to logs)
 if MAILGUN_API_KEY and MAILGUN_DOMAIN_NAME:
-    EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-    MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
-    MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
+    try:
+        import django_mailgun  # noqa: F401
+        EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+        MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
+        MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
+    except ImportError:
+        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -83,7 +87,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_nose',
     'corsheaders',
-    'captcha',
+    'django_recaptcha',
     'bootstrap_datepicker_plus',
     'bootstrap3',
     'tinymce',
@@ -234,6 +238,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+
+# Django 3.2+: set default auto field to avoid warnings
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Prefixes for Mailchimp Tags
 MC_PREFIX_LOCPERMID = "locpermid_"
