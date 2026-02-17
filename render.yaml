@@ -1,0 +1,55 @@
+# Cinemaple – Render Blueprint (free tier)
+# See DEPLOYMENT.md and RENDER.md for full steps.
+
+databases:
+  - name: cinemaple-db
+    plan: free
+
+services:
+  - type: web
+    name: cinemaple
+    runtime: python
+    plan: free
+
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn cinemaple.wsgi"
+
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cinemaple-db
+          property: connectionString
+      - key: SECRET_KEY_DJANGO
+        generateValue: true
+      - key: DJANGO_ENV
+        value: PRODUCTION
+      # Required – add in Render Dashboard (sync: false so Blueprint won’t overwrite):
+      - key: RECAPTCHA_SECRET_KEY
+        sync: false
+      - key: RECAPTCHA_SITE_KEY
+        sync: false
+      - key: EMAIL_VERIFICATION_SECRET_SALT
+        sync: false
+      - key: PW_RESET_SECRET_SALT
+        sync: false
+      - key: REV_USER_ACCESS_SECRET_SALT
+        sync: false
+      - key: TMDB_API_KEY
+        sync: false
+      # Optional – leave empty to run without Mailchimp/Mailgun (emails to console, no mailing list):
+      - key: MAILCHIMP_API_KEY
+        sync: false
+      - key: MAILCHIMP_DATA_CENTER
+        sync: false
+      - key: MAILCHIMP_EMAIL_LIST_ID
+        sync: false
+      - key: MAILCHIMP_EMAIL_LIST_ID_TEST
+        sync: false
+      - key: MAILGUN_API_KEY
+        sync: false
+      - key: MAILGUN_DOMAIN_NAME
+        sync: false
+
+    domains:
+      - www.cinemaple.com
+      - cinemaple.com

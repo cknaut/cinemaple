@@ -3,7 +3,9 @@
 
 ## **Introduction**:
 
-Movie Nights are recurring events that need some organizational overhead, such as inviting people, selecting movies, and performing a movie survey. In a quest for a standalone solution not involving Facebook and Co., the goal is to develop a Web Application able to carry out this overhead. This project is deployed at [Cinemaple](https://www.cinemaple.com/)
+Movie Nights are recurring events that need some organizational overhead, such as inviting people, selecting movies, and performing a movie survey. In a quest for a standalone solution not involving Facebook and Co., the goal is to develop a Web Application able to carry out this overhead. This project is deployed at [Cinemaple](https://www.cinemaple.com/).
+
+**Deploy to Render (free tier):** see [RENDER.md](RENDER.md) for step-by-step instructions.
 
 
 ## **Contribute**:

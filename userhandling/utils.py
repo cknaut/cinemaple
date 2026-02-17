@@ -21,39 +21,23 @@ def badgify(string, badge_type):
     return badge_html
 
 
-# Mailchimp utils
-MAILCHIMP_API_KEY = getattr(settings, "MAILCHIMP_API_KEY", None)
-if MAILCHIMP_API_KEY is None:
-    raise NotImplementedError("MAILCHIMP_API_KEY must be set in the settings")
-
-MAILCHIMP_DATA_CENTER = getattr(settings, "MAILCHIMP_DATA_CENTER", None)
-
-if MAILCHIMP_DATA_CENTER is None:
-    raise NotImplementedError(
-        "MAILCHIMP_DATA_CENTER must be set in the settings, \
-        something like us17"
-    )
-
-MAILCHIMP_EMAIL_LIST_ID = getattr(settings, "MAILCHIMP_EMAIL_LIST_ID", None)
-
-if MAILCHIMP_EMAIL_LIST_ID is None:
-    raise NotImplementedError(
-        "MAILCHIMP_EMAIL_LIST_ID must be set in the settings"
-    )
-
-MAILCHIMP_EMAIL_LIST_ID_TEST = getattr(
-    settings,
-    "MAILCHIMP_EMAIL_LIST_ID",
-    None
+# Mailchimp utils (optional – if not set, a no-op Mailchimp is used)
+MAILCHIMP_API_KEY = getattr(settings, "MAILCHIMP_API_KEY", None) or ""
+MAILCHIMP_DATA_CENTER = getattr(settings, "MAILCHIMP_DATA_CENTER", None) or ""
+MAILCHIMP_EMAIL_LIST_ID = getattr(settings, "MAILCHIMP_EMAIL_LIST_ID", None) or ""
+MAILCHIMP_EMAIL_LIST_ID_TEST = (
+    getattr(settings, "MAILCHIMP_EMAIL_LIST_ID_TEST", None) or
+    getattr(settings, "MAILCHIMP_EMAIL_LIST_ID", None) or ""
 )
 
-if MAILCHIMP_EMAIL_LIST_ID_TEST is None:
-    raise NotImplementedError(
-        "MAILCHIMP_EMAIL_LIST_ID_TEST must be set in the settings"
-    )
+MAILCHIMP_ENABLED = bool(
+    MAILCHIMP_API_KEY and MAILCHIMP_DATA_CENTER and MAILCHIMP_EMAIL_LIST_ID
+)
 
-# Get secret salt used for hash generation for email reset
-EMAIL_VERIFICATION_SECRET_SALT = getattr(settings, "MAILCHIMP_API_KEY", None)
+# Get secret salt used for hash generation for email reset (required)
+EMAIL_VERIFICATION_SECRET_SALT = getattr(
+    settings, "EMAIL_VERIFICATION_SECRET_SALT", None
+)
 if EMAIL_VERIFICATION_SECRET_SALT is None:
     raise NotImplementedError(
         "EMAIL_VERIFICATION_SECRET_SALT must be set in the settings"
@@ -88,6 +72,34 @@ def get_subscriber_hash(member_email):
     member_email = member_email.lower().encode()
     md5 = hashlib.md5(member_email)
     return md5.hexdigest()
+
+
+class NoOpMailchimp(object):
+    """No-op Mailchimp when MAILCHIMP is not configured (no API keys)."""
+    def __init__(self, listid):
+        self.list_id = listid or ""
+
+    def add_email(self, email, firstname, lastname):
+        return 200, {}
+
+    def add_tag_to_user(self, tag, email):
+        return 200, {}
+
+    def untag(self, tag, email):
+        return 200
+
+    def create_or_retrieve_tag(self, tag):
+        return 0
+
+    def get_member_list(self, tag_id=None):
+        return 200, {"emails_subscribed": [], "emails_unsubscribed": []}, self.list_id
+
+    def change_subscriber_email(self, old_email, newemail):
+        return 200, {}
+
+    def create_campaign(self, date, reply_to, subject_line, preview_text,
+                       title, from_name, html_body, location_id):
+        return 204
 
 
 class Mailchimp(object):
@@ -437,6 +449,11 @@ class Mailchimp(object):
         return req.status_code, req.json()
 
 
+# Use no-op when Mailchimp is not configured
+if not MAILCHIMP_ENABLED:
+    Mailchimp = NoOpMailchimp  # noqa: F811
+
+
 class VerificationHash(object):
     def __init__(self):
         super(VerificationHash, self).__init__()
@@ -474,7 +491,27 @@ def check_ml_health(location_id):
     Compares listed members in the Mailchimp mailinglist (including subscribed
     and unsubscribed ones) to registered users
     If not all cinemaple users are in  Mailchimp list, raise problem.
+    When Mailchimp is not configured, returns a harmless context.
     """
+    if not MAILCHIMP_ENABLED:
+        location = Location.objects.filter(pk=location_id)
+        if not location:
+            return False, {}
+        context = {
+            'status': badgify("N/A", 'secondary'),
+            'location': location[0],
+            'statusok': True,
+            'mc_id': '—',
+            "emails_revoked": [],
+            "num_revoked": 0,
+            'subs': [],
+            'usubs': [],
+            'user_emails': [],
+            'users_not_in_mc': [],
+            'health': badgify("Mailchimp not configured", 'secondary'),
+        }
+        return True, context
+
     mail_chimp = Mailchimp(settings.MAILCHIMP_EMAIL_LIST_ID)
     location_tag = "{}{}".format(settings.MC_PREFIX_HASACCESSID, location_id)
     location_tag_id = mail_chimp.create_or_retrieve_tag(location_tag)

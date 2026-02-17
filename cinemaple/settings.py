@@ -12,24 +12,21 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-import django_heroku
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY_DJANGO']
 
-# Mailchimp keys
+# Mailchimp keys (optional – if unset, mailing list features are disabled)
+MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY', '')
+MAILCHIMP_DATA_CENTER = os.environ.get('MAILCHIMP_DATA_CENTER', '')
+MAILCHIMP_EMAIL_LIST_ID = os.environ.get('MAILCHIMP_EMAIL_LIST_ID', '')
+MAILCHIMP_EMAIL_LIST_ID_TEST = os.environ.get('MAILCHIMP_EMAIL_LIST_ID_TEST', '')
 
-MAILCHIMP_API_KEY = os.environ['MAILCHIMP_API_KEY']
-MAILCHIMP_DATA_CENTER = os.environ['MAILCHIMP_DATA_CENTER']
-MAILCHIMP_EMAIL_LIST_ID = os.environ['MAILCHIMP_EMAIL_LIST_ID']
-MAILCHIMP_EMAIL_LIST_ID_TEST = os.environ['MAILCHIMP_EMAIL_LIST_ID_TEST']
-
-# Mailgun keys
-MAILGUN_API_KEY = os.environ['MAILGUN_API_KEY']
-MAILGUN_DOMAIN_NAME = os.environ['MAILGUN_DOMAIN_NAME']
+# Mailgun keys (optional – if unset, email is sent via console backend / not sent)
+MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY', '')
+MAILGUN_DOMAIN_NAME = os.environ.get('MAILGUN_DOMAIN_NAME', '')
 
 # Recaptcha keys
 RECAPTCHA_PRIVATE_KEY = os.environ['RECAPTCHA_SECRET_KEY']
@@ -44,9 +41,13 @@ REV_USER_ACCESS_SECRET_SALT = os.environ['REV_USER_ACCESS_SECRET_SALT']
 # TMDb
 TMDB_API_KEY = os.environ['TMDB_API_KEY']
 
-EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
-MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
+# Email: use Mailgun if configured, otherwise console (emails printed to logs)
+if MAILGUN_API_KEY and MAILGUN_DOMAIN_NAME:
+    EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+    MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
+    MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEFAULT_FROM_EMAIL = 'admin@cinemaple.com'
 
@@ -60,7 +61,15 @@ if ENVIRONEMENT == "DEBUG":
 elif ENVIRONEMENT == "PRODUCTION":
     DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'www.cinemaple.com',
+    'cinemaple.com',
+    '.herokuapp.com',
+    '.onrender.com',
+]
+# Allow extra hosts from env (comma-separated) for other platforms
+if os.environ.get('ALLOWED_HOSTS_EXTRA'):
+    ALLOWED_HOSTS.extend(h.strip() for h in os.environ['ALLOWED_HOSTS_EXTRA'].split(','))
 
 # Application definition
 
@@ -120,6 +129,7 @@ WSGI_APPLICATION = 'cinemaple.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+import dj_database_url
 
 DATABASES = {
     'default': {
@@ -127,6 +137,11 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True,
+    )
 
 
 # Password validation
@@ -187,7 +202,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Define my home IP in order to use UserBasedExceptionMiddleware
 INTERNAL_IPS = ["84.254.94.123"]
 
-django_heroku.settings(locals())
+# Heroku-specific settings (ALLOWED_HOSTS, static, etc.) when running on Heroku
+if 'DYNO' in os.environ:
+    import django_heroku
+    django_heroku.settings(locals())
 
 
 LOGIN_REDIRECT_URL = '/curr_mov_nights'
