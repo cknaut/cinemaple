@@ -201,6 +201,7 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+WHITENOISE_MANIFEST_STRICT = False
 
 
 # Define my home IP in order to use UserBasedExceptionMiddleware
