@@ -34,8 +34,8 @@ tmdbsimple==2.9.1
 # Monitoring (optional)
 newrelic==10.0.0
 
-# setuptools needed by python-graph-core (pkg_resources)
-setuptools>=70
+# setuptools needed by python-graph-core (pkg_resources removed in v75+)
+setuptools>=70,<75
 
 # Dev/lint deps (also used by tox in CI)
 certifi==2024.12.14
