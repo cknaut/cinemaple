@@ -1,6 +1,6 @@
 import datetime
 
-from bootstrap_datepicker_plus import DateTimePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
 from django import forms

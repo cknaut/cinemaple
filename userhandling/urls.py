@@ -5,8 +5,8 @@ from rest_framework import routers
 from . import views
 
 ROUTER = routers.DefaultRouter()
-ROUTER.register(r'movienights', views.MovieNightEventViewSet)
-ROUTER.register(r'movienights_past', views.PastMovieNightEventViewSet)
+ROUTER.register(r'movienights', views.MovieNightEventViewSet, basename='movienightevent')
+ROUTER.register(r'movienights_past', views.PastMovieNightEventViewSet, basename='pastmovienightevent')
 
 
 urlpatterns = [
