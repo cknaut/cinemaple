@@ -27,10 +27,6 @@ MAILCHIMP_DATA_CENTER = os.environ.get('MAILCHIMP_DATA_CENTER', '')
 MAILCHIMP_EMAIL_LIST_ID = os.environ.get('MAILCHIMP_EMAIL_LIST_ID', '')
 MAILCHIMP_EMAIL_LIST_ID_TEST = os.environ.get('MAILCHIMP_EMAIL_LIST_ID_TEST', '')
 
-# Mailgun keys (optional – if unset, email is sent via console backend / not sent)
-MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY', '')
-MAILGUN_DOMAIN_NAME = os.environ.get('MAILGUN_DOMAIN_NAME', '')
-
 # Recaptcha keys (required for registration forms; leave empty to skip captcha in dev)
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_SECRET_KEY', '')
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_SITE_KEY', '')
@@ -44,19 +40,20 @@ REV_USER_ACCESS_SECRET_SALT = os.environ.get('REV_USER_ACCESS_SECRET_SALT', 'cha
 # TMDb
 TMDB_API_KEY = os.environ.get('TMDB_API_KEY', '')
 
-# Email: use Mailgun if configured and package installed, otherwise console (emails printed to logs)
-if MAILGUN_API_KEY and MAILGUN_DOMAIN_NAME:
-    try:
-        import django_mailgun  # noqa: F401
-        EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-        MAILGUN_ACCESS_KEY = MAILGUN_API_KEY
-        MAILGUN_SERVER_NAME = MAILGUN_DOMAIN_NAME
-    except ImportError:
-        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email: SMTP backend when EMAIL_HOST is set, otherwise console (printed to logs).
+# Works with any SMTP provider — set EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER,
+# EMAIL_HOST_PASSWORD, and EMAIL_USE_TLS via environment variables.
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
+if EMAIL_HOST:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-DEFAULT_FROM_EMAIL = 'admin@cinemaple.com'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'admin@cinemaple.com')
 
 # automatically run in debug mode if in production
 ENVIRONEMENT = os.environ.get('DJANGO_ENV', 'DEBUG')

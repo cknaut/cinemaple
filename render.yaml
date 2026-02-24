@@ -38,7 +38,7 @@ services:
         sync: false
       - key: TMDB_API_KEY
         sync: false
-      # Optional – leave empty to run without Mailchimp/Mailgun (emails to console, no mailing list):
+      # Optional – Mailchimp mailing list (leave unset to disable):
       - key: MAILCHIMP_API_KEY
         sync: false
       - key: MAILCHIMP_DATA_CENTER
@@ -47,9 +47,14 @@ services:
         sync: false
       - key: MAILCHIMP_EMAIL_LIST_ID_TEST
         sync: false
-      - key: MAILGUN_API_KEY
+      # Optional – SMTP email (leave unset for console output):
+      - key: EMAIL_HOST
         sync: false
-      - key: MAILGUN_DOMAIN_NAME
+      - key: EMAIL_PORT
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
         sync: false
 
     domains:
